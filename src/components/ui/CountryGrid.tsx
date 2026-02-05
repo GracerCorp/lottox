@@ -69,7 +69,7 @@ export function CountryGrid() {
             {/* Gloss Effect */}
             <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/80 to-transparent opacity-60" />
 
-            <div className="relative z-10 flex h-10 w-12 shrink-0 items-center justify-center rounded-md bg-white shadow-sm ring-1 ring-black/5 text-2xl">
+            <div className="relative z-10 flex h-10 w-12 shrink-0 items-center justify-center text-4xl">
               {country.flag}
             </div>
 

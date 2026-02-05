@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { LotteryCard } from "@/components/ui/LotteryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,27 @@ interface HeroCarouselProps {
 }
 
 export function HeroCarousel({ items }: HeroCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(1); // Default to second item (center)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startAutoScroll = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (!isPaused) {
+        handleNext();
+      }
+    }, 4000);
+  };
+
+  const stopAutoScroll = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  useEffect(() => {
+    startAutoScroll();
+    return () => stopAutoScroll();
+  }, [activeIndex, isPaused]);
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
@@ -33,8 +53,16 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
     setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
   };
 
+  // Pause on hover
+  const onMouseEnter = () => setIsPaused(true);
+  const onMouseLeave = () => setIsPaused(false);
+
   return (
-    <div className="relative w-full py-10 overflow-hidden">
+    <div
+      className="relative w-full py-10 overflow-hidden"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {/* Navigation - Absolute Center Vertical */}
       <button
         onClick={handlePrev}

@@ -1,8 +1,8 @@
-import { LotteryCard } from "@/components/ui/LotteryCard";
 import { HeroCarousel } from "@/components/ui/HeroCarousel";
 import { ResultsTable } from "@/components/ui/ResultsTable";
 import { CountryGrid } from "@/components/ui/CountryGrid";
-import { ChevronRight, Globe, Search } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
 
 export default function Home() {
   const featuredLotteries = [
@@ -77,6 +77,9 @@ export default function Home() {
         <div className="absolute inset-x-0 -top-40 z-0 h-[800px] w-full bg-nebula opacity-80 blur-3xl pointer-events-none mix-blend-screen" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-transparent blur-[100px] z-0 pointer-events-none" />
 
+        {/* Animated Flare Effect */}
+        <BackgroundFlare />
+
         <div className="container relative z-10 mx-auto">
           {/* Header */}
           <div className="mb-8 text-center">
@@ -116,11 +119,11 @@ export default function Home() {
                 </span>
                 <div className="flex items-center gap-2 border-l border-gray-300 pl-2">
                   {[
-                    { flag: "��", code: "th" },
+                    { flag: "🇹🇭", code: "th" },
                     { flag: "🇬🇧", code: "uk" },
-                    { flag: "��", code: "us" },
+                    { flag: "🇺🇸", code: "us" },
                     { flag: "🇯🇵", code: "jp" },
-                    { flag: "��", code: "au" },
+                    { flag: "🇦🇺", code: "au" },
                   ].map((item, i) => (
                     <button
                       key={i}
