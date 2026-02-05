@@ -1,101 +1,65 @@
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
 export function Footer() {
+  const links = [
+    "World Dashboard",
+    "Statistics",
+    "About",
+    "FAQ",
+    "Contact",
+    "Disclaimer",
+    "Terms",
+    "Privacy",
+    "API",
+  ];
+
   return (
-    <footer className="bg-navy-950 border-t border-white/10 pt-16 pb-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          {/* Brand Column */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-gold-400 to-gold-600 rounded-lg">
-                <Star className="text-navy-900 w-5 h-5 fill-current" />
-              </div>
-              <span className="text-2xl font-bold tracking-tight text-white">
-                LOTTO<span className="text-gold-400">X</span>
-              </span>
-            </Link>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              The Global Platform for Verified Lottery Results. Real-Time Data
-              from 50+ Countries. We are an information hub and do not sell
-              tickets.
-            </p>
+    <footer className="relative w-full overflow-hidden border-t border-white/5 bg-navy-950 pb-6 pt-10">
+      {/* Background noise */}
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02]" />
+
+      <div className="container relative z-10 mx-auto px-4">
+        {/* Why LOTTOX Section */}
+        <div className="flex flex-col items-center justify-between gap-8 rounded-2xl border border-white/5 bg-navy-900/50 p-8 backdrop-blur-sm md:flex-row">
+          <div>
+            <h3 className="text-2xl font-bold text-gray-200">Why LOTTOX?</h3>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Platform</h3>
-            <ul className="space-y-2">
-              {["Global Draws", "Results", "Statistics", "News"].map((item) => (
-                <li key={item}>
-                  <Link
-                    href="#"
-                    className="text-gray-400 hover:text-gold-400 text-sm transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Support</h3>
-            <ul className="space-y-2">
-              {["About Us", "Contact", "FAQ", "API Access"].map((item) => (
-                <li key={item}>
-                  <Link
-                    href="#"
-                    className="text-gray-400 hover:text-gold-400 text-sm transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Legal</h3>
-            <ul className="space-y-2">
-              {[
-                "Disclaimer",
-                "Terms of Service",
-                "Privacy Policy",
-                "Responsible Use",
-              ].map((item) => (
-                <li key={item}>
-                  <Link
-                    href="#"
-                    className="text-gray-400 hover:text-gold-400 text-sm transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="flex items-center gap-4 w-auto">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/10 text-gold-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <div className="max-w-md text-lg text-gray-400">
+              <span className="font-bold text-gold-400">
+                Global 100+ sources
+              </span>{" "}
+              providing platform with verified lottery results. Strict process
+              care with premium reliability and encryption technology.
+            </div>
           </div>
         </div>
 
-        {/* Disclaimer Section */}
-        <div className="border-t border-white/10 pt-8 mt-8">
-          <p className="text-xs text-gray-500 text-center max-w-4xl mx-auto mb-4">
-            Golden Disclaimer: LOTTOX is strictly an informational platform. We
-            are not affiliated with any official lottery organization. We do not
-            sell tickets or operate any gambling activities. Users should verify
-            all results with official sources.
-          </p>
-          <div className="flex justify-between items-center flex-col md:flex-row gap-4">
-            <p className="text-xs text-gray-500">
-              © 2024 LOTTOX. All rights reserved.
-            </p>
-            <div className="flex gap-4">
-              {/* Placeholder for Payment/Trust Icons if needed, or Social Icons */}
-            </div>
-          </div>
+        {/* Divider */}
+        <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+        {/* Bottom Navigation */}
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <nav className="flex flex-wrap justify-center gap-6 md:justify-start">
+            {links.map((link) => (
+              <Link
+                key={link}
+                href="#"
+                className="text-xs font-medium uppercase tracking-wider text-gray-500 hover:text-white transition-colors"
+              >
+                {link}
+              </Link>
+            ))}
+          </nav>
+
+          <button className="rounded-full border border-gold-500/30 bg-gold-500/10 px-6 py-2 text-xs font-bold text-gold-400 hover:bg-gold-500/20 hover:text-gold-300 transition-colors shadow-lg shadow-gold-900/20">
+            API Access
+          </button>
         </div>
       </div>
     </footer>
