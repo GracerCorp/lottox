@@ -32,18 +32,6 @@ export default function Home() {
         "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?q=80&w=600&auto=format&fit=crop", // USA City/Night
     },
     {
-      country: "Europe",
-      flag: "🇪🇺",
-      name: "EuroMillions",
-      jackpot: "€56 Million",
-      nextDraw: "Next draw: 1 day",
-      balls: [14, 30, 32, 44, 49],
-      bonusBall: 4,
-      color: "purple" as const,
-      bgImage:
-        "https://images.unsplash.com/photo-1531412501799-1b4c354ca957?q=80&w=1287&auto=format&fit=crop", // Europe
-    },
-    {
       country: "Japan",
       flag: "🇯🇵",
       name: "Lotto 6",
@@ -68,16 +56,16 @@ export default function Home() {
         "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=600&auto=format&fit=crop", // UK
     },
     {
-      country: "Brazil",
-      flag: "🇧🇷",
-      name: "Mega Sena",
-      jackpot: "R$ 8 Million",
+      country: "Australia",
+      flag: "🇦🇺",
+      name: "Powerball",
+      jackpot: "AU$30 Million",
       nextDraw: "Next draw: 4 days",
       balls: [5, 18, 29, 32, 55],
       bonusBall: 48,
       color: "gold" as const,
       bgImage:
-        "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=600&auto=format&fit=crop", // Brazil
+        "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=600&auto=format&fit=crop", // Australia
     },
   ];
 
@@ -128,12 +116,11 @@ export default function Home() {
                 </span>
                 <div className="flex items-center gap-2 border-l border-gray-300 pl-2">
                   {[
-                    { flag: "🇺🇸", code: "us" },
-                    { flag: "🇪🇺", code: "eu" },
+                    { flag: "��", code: "th" },
                     { flag: "🇬🇧", code: "uk" },
-                    { flag: "🇹🇭", code: "th" },
+                    { flag: "��", code: "us" },
                     { flag: "🇯🇵", code: "jp" },
-                    { flag: "🇧🇷", code: "br" },
+                    { flag: "��", code: "au" },
                   ].map((item, i) => (
                     <button
                       key={i}
