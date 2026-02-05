@@ -80,7 +80,7 @@ export default function Home() {
         <div className="container relative z-10 mx-auto">
           {/* Header */}
           <div className="mb-8 text-center">
-            <h1 className="text-5xl font-black tracking-tighter md:text-7xl lg:text-8xl">
+            <h1 className="text-4xl font-black tracking-tighter md:text-6xl lg:text-6xl font-medium">
               <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white via-blue-100 to-blue-300 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                 Worldwide Lottery Draws
               </span>
