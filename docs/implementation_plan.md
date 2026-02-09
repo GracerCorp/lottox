@@ -1,69 +1,68 @@
 # Implementation Plan - LOTTOX UI Overhaul & Features
 
 ## Goal Description
-Revise the `src/app` and creating components to match the "LOTTOX" design: a premium, dark-themed global lottery platform. The design emphasizes a "Navy & Gold" color palette, glassmorphism, and a clean, data-rich interface for lottery results.
+Enhance the "LOTTOX" web application to achieve a premium, dark-themed global lottery platform. The focus is on implementing high-end visual effects (Cosmic Theme, Spotlight Flares), advanced animations (Framer Motion), and a responsive, data-rich dashboard.
 
-## User Review Required
-> [!IMPORTANT]
-> This plan involves a complete rewrite of `src/app/page.tsx`. Current content will be replaced with the new dashboard.
-> I will assume standard "Inter" font and use the custom Tailwind configuration (`navy`, `gold`, `neon`) we just fixed.
+## Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS v4, Custom "Navy & Gold" Palette
+- **Animation**: Framer Motion (Complex transitions, Flares)
+- **Icons**: Lucide React
 
-## Proposed Changes
+## Implemented Components & Features
 
-### Layout & Global
-#### [MODIFY] [layout.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/app/layout.tsx)
-- Ensure background is set to `bg-navy-950` or `bg-navy-900`.
-- Add `Header` and `Footer` components permanently.
-- Add global "Cosmic" background effects (Nebula, Star field).
+### 1. Global Layout & Theme
+#### [COMPLETED] [layout.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/app/layout.tsx)
+- **Background**: Deep Navy (`bg-navy-900`) with global text styles.
+- **Font**: Inter (Standard).
+- **Structure**: Permanent `Header` and `Footer`.
 
-#### [NEW] [Header.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/layout/Header.tsx)
-- Navigation: Global Draws, Results, Statistics, News.
-- Actions: Language selector (EN), Sign In button.
+#### [COMPLETED] [Header.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/layout/Header.tsx)
+- **Design**: Glassmorphism with **Blur XL** and reduced opacity (40%) for a premium "frosted glass" look.
+- **Features**: 
+  - Sticky positioning.
+  - Logo with Gradient Gold glow.
+  - Navigation links (hover effects).
+  - Language & Sign In actions.
 
-#### [NEW] [Footer.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/layout/Footer.tsx)
-- Links: World Dashboard, About, FAQ, Contact, Disclaimer, Terms, Privacy, API.
-- Copyright & Disclaimer text.
-
-### Home Page (Dashboard)
+### 2. Home Page (Dashboard)
 #### [MODIFY] [page.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/app/page.tsx)
 - **Hero Section**:
-    - "Worldwide Lottery Draws" title with gradient text.
-    - **Action Bar**: Dual-capsule design (View All & Select Country).
-- **Featured Lotteries**: Carousel/grid of `LotteryCard` components.
-- **Results Feed**: `ResultsTable` displaying live global results.
-- **Country Selection**: `CountryGrid` section at the bottom.
+  - **Flare Effect**: `BackgroundFlare` component (Spotlight Animation).
+  - **Carousel**: `HeroCarousel` with 3D stacking effect.
+  - **Action Bar**: Dual-capsule design (View All & Select Country).
 
-### Feature Pages
-#### [NEW] [Thai Lotto Page](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/app/results/thai-lotto/page.tsx)
+#### [COMPLETED] [BackgroundFlare.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/BackgroundFlare.tsx)
+- **Effect**: "Moving Spotlight" animation.
+- **Implementation**: 
+  - Uses `framer-motion` for smooth, continuous looping.
+  - **Left Beam**: Blue/Cyan gradient sweeping left-to-right.
+  - **Right Beam**: Indigo/Violet gradient sweeping right-to-left.
+  - **Base Layer**: Wide moving nebula/aurora effect.
+  - **Visibility**: Tuned blend modes (`screen`, `plus-lighter`) ensuring visibility against dark backgrounds.
+
+#### [COMPLETED] [HeroCarousel.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/HeroCarousel.tsx)
+- **Display**: Featured lotteries (Powerball, Thai Lotto, etc.).
+- **Interaction**: Auto-playing carousel with 3D scaling for the active item.
+- **Visuals**: Unique background images per lottery (USA, Japan, UK scenes).
+
+#### [COMPLETED] [ResultsTable.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/ResultsTable.tsx)
+- **Data**: Mock live results for global lotteries.
+- **UI**: Clean table layout with flag icons and "View Result" buttons.
+
+#### [COMPLETED] [CountryGrid.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/CountryGrid.tsx)
+- **Layout**: Grid of major countries with lottery counts.
+- **Marketing**: "Why LOTTOX?" feature section.
+
+### 3. Feature Pages (Planned/In Progress)
+#### [TODO] [Thai Lotto Page](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/app/results/thai-lotto/page.tsx)
 - **Latest Draw Banner**: High-visibility winning numbers.
-- **Ticket Verification**: Interactive form for checking tickets.
-- **Results History**: Table of past draw results.
-- **Statistics Widget**: Next draw countdown and jackpot odds.
-
-### Components
-#### [NEW] [LotteryCard.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/LotteryCard.tsx)
-- Card component for featured lotteries (Name, Jackpot, "View Details" button).
-- Styling: Glassmorphism, Premium Gradients (Gold, Blue, Purple), Hover Glows.
-
-#### [NEW] [ResultsTable.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/ResultsTable.tsx)
-- Rows displaying: Flag, Lottery Name, Winning Numbers (balls), Jackpot Amount.
-- "Live" indicator.
-
-#### [NEW] [LotteryBall.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/LotteryBall.tsx)
-- Reusable component for drawing the numbered balls (Gold, Blue, plain styles).
-- 3D effects with shadows and shines.
-
-#### [NEW] [CountryGrid.tsx](file:///Users/apinan/.gemini/antigravity/scratch/lotto-x/src/components/ui/CountryGrid.tsx)
-- Grid of country flags with lottery counts.
-- "Why LOTTOX?" feature banner.
+- **Ticket Verification**: Input form.
+- **Results History**: Historical table.
 
 ## Verification Plan
 
-### Manual Verification
-- **Visual Check**: Run `bun dev` and open `http://localhost:3000`.
-- **Theme Check**: Verify `bg-navy-950` is active and text is readable (white/gold).
-- **Responsiveness**: Resize browser to check mobile view (cards stacking).
-- **Navigation**: Click nav items (Thai Lotto card -> Detail Page).
-
-### Automated Tests
-- None planned for this visual overhaul.
+### Visual Verification
+- **Spotlight Effect**: Verify that two distinct light beams (Blue & Purple) sweep across the Hero section.
+- **Header Blur**: Scroll down and verify that content behind the header is blurred (frosted effect).
+- **Responsive Design**: Check Carousel and Grid scaling on Mobile vs Desktop.

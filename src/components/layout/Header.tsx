@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Globe, Menu } from "lucide-react";
 
 export function Header() {
@@ -8,8 +9,13 @@ export function Header() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gold-400 to-gold-600 shadow-[0_0_10px_rgba(245,158,11,0.5)]">
-              <span className="font-bold text-navy-900">L</span>
+            <div className="relative h-10 w-10 overflow-hidden rounded-full shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+              <Image
+                src="/logo.png"
+                alt="LOTTOX Logo"
+                fill
+                className="object-cover"
+              />
             </div>
             <span className="text-xl font-bold tracking-wider text-white">
               LOTTO<span className="text-gold-500">X</span>

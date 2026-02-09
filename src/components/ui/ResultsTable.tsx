@@ -1,5 +1,6 @@
 import { LotteryBall } from "@/components/ui/LotteryBall";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { getFlagUrl } from "@/lib/flags";
 
 interface ResultRow {
   time: string;
@@ -16,7 +17,7 @@ export function ResultsTable() {
   const results: ResultRow[] = [
     {
       time: "10:59 PM",
-      flag: "🇺🇸",
+      flag: getFlagUrl("us"),
       country: "USA",
       name: "Powerball",
       balls: ["05", "12", "34", "41", "58"],
@@ -26,7 +27,7 @@ export function ResultsTable() {
     },
     {
       time: "07:30 PM",
-      flag: "🇬🇧",
+      flag: getFlagUrl("gb"),
       country: "UK",
       name: "National Lottery",
       balls: ["14", "30", "32", "44", "49"],
@@ -36,7 +37,7 @@ export function ResultsTable() {
     },
     {
       time: "02:30 PM",
-      flag: "🇹🇭",
+      flag: getFlagUrl("th"),
       country: "Thailand",
       name: "Thai Lotto",
       balls: ["4", "3", "5", "3", "9", "8"],
@@ -46,7 +47,7 @@ export function ResultsTable() {
     },
     {
       time: "06:30 PM",
-      flag: "🇯🇵",
+      flag: getFlagUrl("jp"),
       country: "Japan",
       name: "Lotto 6",
       balls: ["01", "05", "06", "13", "23"],
@@ -56,7 +57,7 @@ export function ResultsTable() {
     },
     {
       time: "08:45 PM",
-      flag: "🇦🇺",
+      flag: getFlagUrl("au"),
       country: "Australia",
       name: "Powerball",
       balls: ["01", "02", "07", "50", "57"],
@@ -107,7 +108,14 @@ export function ResultsTable() {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xl">{item.flag}</span>
+                    <div className="relative h-5 w-7 overflow-hidden rounded shadow-sm">
+                      <Image
+                        src={item.flag}
+                        alt={`${item.country} flag`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <span className="font-semibold text-white group-hover:text-gold-400 transition-colors">
                       {item.country} {item.name}
                     </span>

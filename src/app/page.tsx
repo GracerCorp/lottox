@@ -2,13 +2,15 @@ import { HeroCarousel } from "@/components/ui/HeroCarousel";
 import { ResultsTable } from "@/components/ui/ResultsTable";
 import { CountryGrid } from "@/components/ui/CountryGrid";
 import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
+import { getFlagUrl } from "@/lib/flags";
 
 export default function Home() {
   const featuredLotteries = [
     {
       country: "Thailand",
-      flag: "🇹🇭",
+      flag: getFlagUrl("th"),
       name: "Thai Lotto",
       jackpot: "30 Million ฿",
       nextDraw: "View Latest Draws",
@@ -21,7 +23,7 @@ export default function Home() {
     },
     {
       country: "USA",
-      flag: "🇺🇸",
+      flag: getFlagUrl("us"),
       name: "Powerball",
       jackpot: "$463 Million",
       nextDraw: "Next draw: 2 days",
@@ -33,7 +35,7 @@ export default function Home() {
     },
     {
       country: "Japan",
-      flag: "🇯🇵",
+      flag: getFlagUrl("jp"),
       name: "Lotto 6",
       jackpot: "¥400 Million",
       nextDraw: "Next draw: Today",
@@ -45,7 +47,7 @@ export default function Home() {
     },
     {
       country: "UK",
-      flag: "🇬🇧",
+      flag: getFlagUrl("gb"),
       name: "UK National",
       jackpot: "£9.5M",
       nextDraw: "Next draw: 3 days",
@@ -57,7 +59,7 @@ export default function Home() {
     },
     {
       country: "Australia",
-      flag: "🇦🇺",
+      flag: getFlagUrl("au"),
       name: "Powerball",
       jackpot: "AU$30 Million",
       nextDraw: "Next draw: 4 days",
@@ -119,20 +121,23 @@ export default function Home() {
                 </span>
                 <div className="flex items-center gap-2 border-l border-gray-300 pl-2">
                   {[
-                    { flag: "🇹🇭", code: "th" },
-                    { flag: "🇬🇧", code: "uk" },
-                    { flag: "🇺🇸", code: "us" },
-                    { flag: "🇯🇵", code: "jp" },
-                    { flag: "🇦🇺", code: "au" },
+                    { flag: "th", code: "th" },
+                    { flag: "gb", code: "uk" },
+                    { flag: "us", code: "us" },
+                    { flag: "jp", code: "jp" },
+                    { flag: "au", code: "au" },
                   ].map((item, i) => (
                     <button
                       key={i}
-                      className="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110 hover:shadow-md"
+                      className="relative h-6 w-8 overflow-hidden rounded shadow-md transition-transform hover:scale-110"
                       title={item.code}
                     >
-                      <span className="text-base leading-none text-xl">
-                        {item.flag}
-                      </span>
+                      <Image
+                        src={getFlagUrl(item.flag)}
+                        alt={`${item.code} flag`}
+                        fill
+                        className="object-cover"
+                      />
                     </button>
                   ))}
                 </div>

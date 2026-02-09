@@ -1,6 +1,5 @@
 import { LotteryBall } from "@/components/ui/LotteryBall";
 import { ChevronRight, Search, ShieldCheck } from "lucide-react";
-import Image from "next/image";
 
 export default function ThaiLottoPage() {
   const recentResults = [

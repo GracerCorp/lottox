@@ -1,13 +1,30 @@
 import { TicketVerifier } from "@/components/country/TicketVerifier";
 import { RecentDrawsTable } from "@/components/country/RecentDrawsTable";
-import { notFound } from "next/navigation";
+import Image from "next/image";
+import { getFlagUrl } from "@/lib/flags";
 
 // Mock Data Source
-const COUNTRY_DATA: Record<string, any> = {
+interface Draw {
+  date: string;
+  drawId: string;
+  numbers: string[];
+  topPrize: string;
+}
+
+interface CountryInfo {
+  name: string;
+  lottoName: string;
+  flag: string;
+  nextDraw: string;
+  jackpot: string;
+  draws: Draw[];
+}
+
+const COUNTRY_DATA: Record<string, CountryInfo> = {
   thailand: {
     name: "Thailand",
     lottoName: "Thai Lotto",
-    flag: "🇹🇭",
+    flag: getFlagUrl("th"),
     nextDraw: "May 1 - 2:30PM",
     jackpot: "6 Million ฿",
     draws: [
@@ -34,7 +51,7 @@ const COUNTRY_DATA: Record<string, any> = {
   usa: {
     name: "United States",
     lottoName: "Powerball",
-    flag: "🇺🇸",
+    flag: getFlagUrl("us"),
     nextDraw: "Tonight - 10:59PM",
     jackpot: "$463 Million",
     draws: [
@@ -81,7 +98,15 @@ export default async function CountryPage({ params }: PageProps) {
       {/* Country Header */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
         <div className="flex items-center gap-4">
-          <div className="text-6xl">{data.flag}</div>
+          <div className="relative h-16 w-24 overflow-hidden rounded-lg shadow-lg">
+            <Image
+              src={data.flag}
+              alt={`${data.name} flag`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 96px, 128px"
+            />
+          </div>
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
               {data.lottoName}

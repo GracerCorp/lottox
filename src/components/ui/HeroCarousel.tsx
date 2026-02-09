@@ -27,6 +27,14 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
   const [isPaused, setIsPaused] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+  };
+
   const startAutoScroll = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
@@ -43,15 +51,7 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
-  }, [activeIndex, isPaused]);
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
-  };
+  });
 
   // Pause on hover
   const onMouseEnter = () => setIsPaused(true);
@@ -95,27 +95,16 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
           // We want to show 5 items: -2, -1, 0, 1, 2
           if (Math.abs(distance) > 2) return null;
 
-          let scale = "scale-75 opacity-30 blur-[2px] z-0";
-          let translateX = "translate-x-0";
           let zIndex = "z-0";
 
           if (distance === 0) {
             // Active Center
-            scale =
-              "scale-100 opacity-100 blur-0 shadow-2xl ring-2 ring-gold-500/20 z-30";
-            translateX = "translate-x-0";
             zIndex = "z-30";
           } else if (Math.abs(distance) === 1) {
             // Immediate Neighbors (-1, 1)
-            scale = "scale-90 opacity-70 blur-0 z-20";
-            translateX =
-              distance > 0 ? "translate-x-[60%]" : "-translate-x-[60%]";
             zIndex = "z-20";
           } else if (Math.abs(distance) === 2) {
             // Outer Neighbors (-2, 2)
-            scale = "scale-[0.8] opacity-40 blur-[1px] z-10";
-            translateX =
-              distance > 0 ? "translate-x-[110%]" : "-translate-x-[110%]";
             zIndex = "z-10";
           }
 
@@ -127,7 +116,7 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
                 zIndex,
               )}
               style={{
-                transform: `translateX(${distance * 105}%) scale(${distance === 0 ? 1.1 : 1 - Math.abs(distance) * 0.15})`,
+                transform: `translateX(${distance * 85}%) scale(${distance === 0 ? 1.1 : 1 - Math.abs(distance) * 0.15})`,
                 opacity: distance === 0 ? 1 : 1 - Math.abs(distance) * 0.3,
                 filter:
                   distance === 0 ? "none" : `blur(${Math.abs(distance)}px)`,
@@ -141,7 +130,8 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
               >
                 <LotteryCard
                   {...item}
-                  className="h-[430px] w-full shadow-2xl"
+                  isActive={distance === 0}
+                  className="h-[430px] w-full"
                 />
                 {distance === 0 && (
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full h-20 bg-gold-500/20 blur-[50px] rounded-full z-[-1]" />

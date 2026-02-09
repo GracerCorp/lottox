@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
+import Image from "next/image";
 
 interface LotteryCardProps {
   name: string;
   country: string;
-  flag: string;
+  flag: string; // URL
   jackpot: string;
   nextDraw: string;
   gradientFrom: string;
@@ -41,7 +42,14 @@ export function LotteryCard({
         {/* Header */}
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{flag}</span>
+            <div className="relative h-6 w-8 overflow-hidden rounded shadow-sm">
+              <Image
+                src={flag}
+                alt={`${country} flag`}
+                fill
+                className="object-cover"
+              />
+            </div>
             <span className="text-sm font-semibold text-white/90 uppercase tracking-wider">
               {country}
             </span>

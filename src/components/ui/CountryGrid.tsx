@@ -1,50 +1,45 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { getFlagUrl } from "@/lib/flags";
 
 export function CountryGrid() {
   const countries = [
     {
       name: "Thailand",
-      flag: "🇹🇭",
+      flag: getFlagUrl("th"),
       count: "1 Lottery",
       gradient: "from-blue-900/40 to-red-900/40",
       href: "/results/thai-lotto",
     },
     {
       name: "UK",
-      flag: "🇬🇧",
+      flag: getFlagUrl("gb"),
       count: "5 Lotteries",
       gradient: "from-blue-900/40 to-red-900/40",
       href: "/results/uk",
     },
     {
       name: "USA",
-      flag: "🇺🇸",
+      flag: getFlagUrl("us"),
       count: "7 Lotteries",
       gradient: "from-blue-900/40 to-red-900/40",
       href: "/results/usa",
     },
     {
       name: "Japan",
-      flag: "🇯🇵",
+      flag: getFlagUrl("jp"),
       count: "2 Lotteries",
       gradient: "from-red-900/40 to-white/10",
       href: "/results/japan",
     },
     {
       name: "Australia",
-      flag: "🇦🇺",
+      flag: getFlagUrl("au"),
       count: "3 Lotteries",
       gradient: "from-blue-900/40 to-red-900/40",
       href: "/results/australia",
     },
-  ];
-
-  const benefits = [
-    "Global Access",
-    "Verified Results",
-    "Instant Notifications",
-    "Secure Platform",
   ];
 
   return (
@@ -64,13 +59,18 @@ export function CountryGrid() {
           <Link
             key={i}
             href={country.href}
-            className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/50 bg-gradient-to-b from-white via-gray-100 to-gray-300 p-3 shadow-md transition-all hover:-translate-y-1 hover:border-white hover:shadow-xl active:scale-95"
+            className="group relative flex items-center gap-3 opacity-60 hover:opacity-100 overflow-hidden rounded-xl border border-white/50 bg-gradient-to-b from-white via-gray-100 to-gray-300 p-3 shadow-md transition-all hover:-translate-y-1 hover:border-white hover:shadow-xl active:scale-95"
           >
             {/* Gloss Effect */}
             <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/80 to-transparent opacity-60" />
 
-            <div className="relative z-10 flex h-10 w-12 shrink-0 items-center justify-center text-4xl">
-              {country.flag}
+            <div className="relative z-10 flex h-8 w-10 shrink-0 items-center justify-center overflow-hidden rounded shadow-sm">
+              <Image
+                src={country.flag}
+                alt={`${country.name} flag`}
+                fill
+                className="object-cover"
+              />
             </div>
 
             <div className="relative z-10 text-left">
