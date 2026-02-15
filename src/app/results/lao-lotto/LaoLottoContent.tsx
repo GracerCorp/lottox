@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { newsArticles } from "@/lib/newsData";
+import { SubscribeButton } from "@/components/ui/SubscribeButton";
 
 /* ── SVG Search Icon ── */
 function SearchIcon({ className }: { className?: string }) {
@@ -134,6 +135,8 @@ export default function LaoLottoContent() {
             </div>
           </div>
         </div>
+
+        <SubscribeButton type="LAO" />
       </header>
 
       {/* Main Content Grid */}
@@ -391,10 +394,55 @@ export default function LaoLottoContent() {
               ))}
             </div>
           </section>
+
+          {/* Detailed Info */}
+          <section className="rounded-xl border border-white/10 bg-navy-900/50 p-6 md:p-8">
+            <h3 className="mb-4 text-xl font-bold text-emerald-400">
+              {t.staticParams.laoDetails.title}
+            </h3>
+            <p className="mb-6 text-gray-300 leading-relaxed">
+              {t.staticParams.laoDetails.desc}
+            </p>
+
+            <h4 className="mb-4 text-lg font-bold text-white border-l-4 border-emerald-500 pl-3">
+              {t.staticParams.laoDetails.prizesTitle}
+            </h4>
+            <ul className="space-y-4">
+              {t.staticParams.laoDetails.prizes.map((prize, i) => (
+                <li
+                  key={i}
+                  className="flex gap-3 text-gray-300 bg-navy-800/30 p-4 rounded-lg border border-white/5"
+                >
+                  <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+                  <span className="leading-relaxed">{prize}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
 
         {/* Right Sidebar */}
         <aside className="space-y-6">
+          {/* Sidebar: Lottery Checker (Added) */}
+          <div className="rounded-xl border border-emerald-500/20 bg-navy-800/30 p-6">
+            <h3 className="mb-4 text-center text-lg font-bold text-emerald-400">
+              {t.common.checkTicket}
+            </h3>
+            <div className="space-y-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={t.common.inputPlaceholder4}
+                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-emerald-500"
+                />
+              </div>
+              <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 py-3 text-lg font-bold text-white transition-all hover:scale-105 hover:bg-emerald-600">
+                <SearchIcon className="h-5 w-5" />
+                {t.common.checkBtn}
+              </button>
+            </div>
+          </div>
+
           {/* Info Card */}
           <div className="rounded-xl border border-emerald-500/20 bg-navy-800/30 p-6">
             <h3 className="mb-4 text-lg font-bold text-emerald-400">

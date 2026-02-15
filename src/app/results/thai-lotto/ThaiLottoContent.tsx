@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { newsArticles } from "@/lib/newsData";
+import { SubscribeButton } from "@/components/ui/SubscribeButton";
 
 /* ── SVG Search Icon ── */
 function SearchIcon({ className }: { className?: string }) {
@@ -346,7 +347,7 @@ export default function ThaiLottoContent() {
           </div>
           <div className="mt-3 flex items-center gap-3">
             <img
-              src="https://www.glo.or.th/_nuxt/img/glo_logo_public_header.f2e8bdc.svg"
+              src="https://upload.wikimedia.org/wikipedia/commons/2/21/GLO_Logo.svg"
               alt="GLO"
               className="h-10 w-auto brightness-0 invert opacity-80"
             />
@@ -358,6 +359,8 @@ export default function ThaiLottoContent() {
             </div>
           </div>
         </div>
+
+        <SubscribeButton type="THAI" />
       </header>
 
       {/* Main Content Grid */}

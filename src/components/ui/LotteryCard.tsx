@@ -91,7 +91,7 @@ export function LotteryCard({
             src={bgImage}
             alt=""
             fill
-            className="object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
+            className="object-cover opacity-80 transition-transform duration-700 group-hover:scale-110"
             unoptimized
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-600/50 to-transparent" />

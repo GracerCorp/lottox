@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LotteryResult {
+  id        Int      @id @default(autoincrement())
+  type      String   // "THAI" | "LAO"
+  date      String   // Store as YYYY-MM-DD or display format? Better YYYY-MM-DD for sorting
+  drawDate  DateTime // Actual date object for sorting
+  drawNo    String?
+  // Store all prize data as a JSON string to be flexible
+  // Example for Thai: { first: "123456", last2: "99", last3f: ["111", "222"], ... }
+  data      String   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscriber {
+  id        Int      @id @default(autoincrement())
+  email     String
+  type      String   // "THAI" | "LAO" | "ALL"
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

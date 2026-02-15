@@ -1,17 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   const links = [
-    "World Dashboard",
-    "Statistics",
-    "About",
-    "FAQ",
-    "Contact",
-    "Disclaimer",
-    "Terms",
-    "Privacy",
-    "API",
+    { title: t.footer.worldDashboard, href: "/global-draws" },
+    { title: t.footer.statistics, href: "/statistics" },
+    { title: t.footer.about, href: "/about" },
+    { title: t.footer.faq, href: "/faq" },
+    { title: t.footer.contact, href: "/contact" },
+    { title: t.footer.disclaimer, href: "/disclaimer" },
+    { title: t.footer.terms, href: "/terms" },
+    { title: t.footer.privacy, href: "/privacy" },
+    { title: t.footer.api, href: "/api-docs" },
   ];
 
   return (
@@ -23,7 +28,9 @@ export function Footer() {
         {/* Why LOTTOX Section */}
         <div className="flex flex-col items-center justify-between gap-8 rounded-2xl border border-white/5 bg-navy-900/50 p-8 backdrop-blur-sm md:flex-row">
           <div>
-            <h3 className="text-2xl font-bold text-gray-200">Why LOTTOX?</h3>
+            <h3 className="text-2xl font-bold text-gray-200">
+              {t.footer.whyTitle}
+            </h3>
           </div>
 
           <div className="flex items-center gap-4 w-auto">
@@ -32,10 +39,9 @@ export function Footer() {
             </div>
             <div className="max-w-md text-lg text-gray-400">
               <span className="font-bold text-gold-400">
-                Global 100+ sources
+                {t.footer.whyDesc1}
               </span>{" "}
-              providing platform with verified lottery results. Strict process
-              care with premium reliability and encryption technology.
+              {t.footer.whyDesc2}
             </div>
           </div>
         </div>
@@ -48,17 +54,17 @@ export function Footer() {
           <nav className="flex flex-wrap justify-center gap-6 md:justify-start">
             {links.map((link) => (
               <Link
-                key={link}
-                href="#"
+                key={link.title}
+                href={link.href}
                 className="text-xs font-medium uppercase tracking-wider text-gray-500 hover:text-white transition-colors"
               >
-                {link}
+                {link.title}
               </Link>
             ))}
           </nav>
 
           <button className="rounded-full border border-gold-500/30 bg-gold-500/10 px-6 py-2 text-xs font-bold text-gold-400 hover:bg-gold-500/20 hover:text-gold-300 transition-colors shadow-lg shadow-gold-900/20">
-            API Access
+            {t.footer.apiAccess}
           </button>
         </div>
       </div>

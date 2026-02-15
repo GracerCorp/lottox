@@ -19,27 +19,34 @@ export function HeroSection() {
     country: t.lottery.thai.country,
     flag: "https://flagcdn.com/w80/th.png",
     jackpot: "6,000,000 ฿",
-    nextDraw: t.common.updated,
+    nextDraw: "19/02/2026 16:00",
     gradientFrom: "from-blue-900",
     gradientTo: "to-red-900",
     href: "/results/thai-lotto",
-    bgImage: "/images/thai-lotto-bg.png",
+    bgImage: "https://images.unsplash.com/photo-1668107710159-10fbbab2a9dd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
 
   const LAO_LOTTO = {
     name: t.lottery.lao.subName,
     country: t.lottery.lao.country,
     flag: "https://flagcdn.com/w80/la.png",
-    jackpot: "6,000 LAK", // Multiplier
-    nextDraw: t.common.updated,
+    jackpot: "x6,000", // Multiplier
+    nextDraw: "19/02/2026 15:00",
     gradientFrom: "from-blue-800",
     gradientTo: "to-purple-900",
     href: "/results/lao-lotto",
-    bgImage: "/images/lao-lotto-bg.png",
+    bgImage: "https://images.unsplash.com/photo-1725017766702-2a2eff1228cd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
 
-  // Duplicate to create enough items for the carousel effect (4 items)
-  const items = [THAI_LOTTO, LAO_LOTTO, THAI_LOTTO, LAO_LOTTO];
+  // Duplicate to create enough items for the carousel effect (6 items for 2-1-2 layout)
+  const items = [
+    THAI_LOTTO,
+    LAO_LOTTO,
+    THAI_LOTTO,
+    LAO_LOTTO,
+    THAI_LOTTO,
+    LAO_LOTTO,
+  ];
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
@@ -80,7 +87,7 @@ export function HeroSection() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tight"
+            className="text-4xl md:text-6xl font-normal text-gray-50/80 mb-4 tracking-tight"
           >
             {t.hero.title}
           </motion.h1>
@@ -96,7 +103,7 @@ export function HeroSection() {
 
         {/* Carousel */}
         <div
-          className="relative w-full py-10 overflow-hidden"
+          className="relative w-full py-10"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
@@ -151,10 +158,14 @@ export function HeroSection() {
                     zIndex: 30 - Math.abs(distance) * 10,
                   }}
                 >
-                  <div className="transform transition-all duration-500 origin-center">
+                  <div className="transform transition-all duration-500 origin-center relative">
                     <LotteryCard {...item} hideResults={true} />
                     {distance === 0 && (
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full h-20 bg-gold-500/20 blur-[50px] rounded-full z-[-1]" />
+                      <>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gold-500/20 blur-[50px] rounded-full z-[-1] animate-pulse" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-blue-600/10 blur-[80px] rounded-full z-[-2]" />
+                        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[90%] h-24 bg-gold-500/15 blur-[40px] rounded-[100%] z-[-1]" />
+                      </>
                     )}
                   </div>
                 </div>

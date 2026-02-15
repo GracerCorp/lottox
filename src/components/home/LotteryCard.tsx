@@ -55,36 +55,21 @@ export function LotteryCard({
       </div>
 
       {/* Center Jackpot */}
-      {!hideResults && (
-        <div className="text-center py-4">
-          <div className="text-xs text-white/70 uppercase tracking-widest mb-1">
-            {t.hero.estimatedJackpot}
-          </div>
-          <div className="text-4xl font-black text-white drop-shadow-md">
-            {jackpot}
-          </div>
+      <div className="text-center py-4 flex-1 flex flex-col justify-center">
+        <div className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-2 drop-shadow-sm">
+          {t.hero.estimatedJackpot}
         </div>
-      )}
-
-      {/* Spacer if results hidden */}
-      {hideResults && <div className="flex-1" />}
-
-      {/* Footer */}
-      <div className="space-y-3">
-        {!hideResults && (
-          <div className="flex items-center justify-center gap-2 text-white/80 text-xs bg-black/20 py-1.5 px-3 rounded-full backdrop-blur-sm">
-            <Clock className="w-3 h-3" />
-            <span>{nextDraw}</span>
-          </div>
-        )}
-
-        <div className="w-full py-3 bg-white text-navy-900 font-bold rounded-xl transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg">
-          {t.hero.viewDetails} <ArrowRight className="w-4 h-4" />
+        <div className="text-4xl md:text-5xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight">
+          {jackpot}
         </div>
+      </div>
 
-        {/* Fallback button state for touch devices or before hover */}
-        <div className="w-full py-3 text-center text-white/60 text-sm group-hover:hidden">
-          {t.common.readMore}
+      {/* Footer information */}
+      <div className="flex flex-col items-center gap-3">
+        {/* Draw Date */}
+        <div className="flex items-center justify-center gap-2 text-white/90 text-sm font-medium bg-navy-900/40 py-2 px-4 rounded-full backdrop-blur-md border border-white/10 shadow-lg">
+          <Clock className="w-4 h-4 text-gold-400" />
+          <span>{nextDraw}</span>
         </div>
       </div>
     </div>

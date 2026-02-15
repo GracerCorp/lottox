@@ -37,7 +37,7 @@ function ThaiLottoJsonLd() {
     publisher: {
       "@type": "Organization",
       name: "LOTTOX",
-      logo: { "@type": "ImageObject", url: "https://lottox.com/logo.png" },
+      logo: { "@type": "ImageObject", url: "https://upload.wikimedia.org/wikipedia/commons/2/21/GLO_Logo.svg" },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
