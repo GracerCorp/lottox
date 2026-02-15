@@ -1,162 +1,143 @@
-import { LotteryBall } from "@/components/ui/LotteryBall";
+"use client";
+
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { getFlagUrl } from "@/lib/flags";
 
 interface ResultRow {
-  time: string;
+  date: string;
   flag: string;
   country: string;
   name: string;
-  balls: (string | number)[];
-  bonusBall?: string | number;
-  jackpot: string;
-  currency: string;
+  numbers: {
+    label: string;
+    value: string[];
+    prize: string;
+  }[];
+  id: "th" | "la";
 }
 
-export function ResultsTable() {
-  const results: ResultRow[] = [
+interface ResultsTableProps {
+  filter?: "all" | "th" | "la";
+}
+
+export function ResultsTable({ filter = "all" }: ResultsTableProps) {
+  const { t, language } = useLanguage();
+
+  const rawResults: ResultRow[] = [
     {
-      time: "10:59 PM",
-      flag: getFlagUrl("us"),
-      country: "USA",
-      name: "Powerball",
-      balls: ["05", "12", "34", "41", "58"],
-      bonusBall: "09",
-      jackpot: "$463 Million",
-      currency: "$",
-    },
-    {
-      time: "07:30 PM",
-      flag: getFlagUrl("gb"),
-      country: "UK",
-      name: "National Lottery",
-      balls: ["14", "30", "32", "44", "49"],
-      bonusBall: "04",
-      jackpot: "£9.5 Million",
-      currency: "£",
-    },
-    {
-      time: "02:30 PM",
+      id: "th",
+      date: language === "th" ? "16 ก.พ. 2569" : "16 Feb 2026",
       flag: getFlagUrl("th"),
-      country: "Thailand",
-      name: "Thai Lotto",
-      balls: ["4", "3", "5", "3", "9", "8"],
-      bonusBall: "469",
-      jackpot: "6 Million ฿",
-      currency: "฿",
+      country: t.lottery.thai.country,
+      name: t.lottery.thai.subName,
+      numbers: [
+        { label: t.results.prize1, value: ["987654"], prize: "6,000,000 ฿" },
+        {
+          label: t.results.prize3Front,
+          value: ["123", "456"],
+          prize: "4,000 ฿",
+        },
+        {
+          label: t.results.prize3Back,
+          value: ["789", "012"],
+          prize: "4,000 ฿",
+        },
+        { label: t.results.prize2, value: ["99"], prize: "2,000 ฿" },
+      ],
     },
     {
-      time: "06:30 PM",
-      flag: getFlagUrl("jp"),
-      country: "Japan",
-      name: "Lotto 6",
-      balls: ["01", "05", "06", "13", "23"],
-      bonusBall: "25",
-      jackpot: "¥400 Million",
-      currency: "¥",
-    },
-    {
-      time: "08:45 PM",
-      flag: getFlagUrl("au"),
-      country: "Australia",
-      name: "Powerball",
-      balls: ["01", "02", "07", "50", "57"],
-      bonusBall: "17",
-      jackpot: "AU$30 Million",
-      currency: "AU$",
+      id: "la",
+      date: language === "th" ? "13 ก.พ. 2569" : "13 Feb 2026",
+      country: t.lottery.lao.country,
+      name: t.lottery.lao.subName,
+      flag: getFlagUrl("la"),
+      numbers: [
+        { label: t.results.digit4, value: ["4045"], prize: "x6,000" },
+        { label: t.results.digit3, value: ["045"], prize: "x500" },
+        { label: t.results.digit2, value: ["45"], prize: "x60" },
+      ],
     },
   ];
 
+  const results =
+    filter === "all" ? rawResults : rawResults.filter((r) => r.id === filter);
+
   return (
-    <div className="rounded-xl border border-white/10 bg-navy-900/50 backdrop-blur-md bg-gradient-to-b">
+    <div className="rounded-xl border border-white/10 bg-navy-900/50 backdrop-blur-md overflow-hidden">
       {/* Table Header */}
-      <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold text-white">
-            Latest Global Results
-          </h2>
-          <span className="flex items-center gap-1.5 rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-semibold text-green-500">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
-            </span>
-            LIVE
-          </span>
-        </div>
-        <div className="text-sm text-gray-400">Updated: 3 min ago</div>
+      <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-white/5">
+        <h2 className="text-xl font-bold text-white">{t.results.latest}</h2>
+        <span className="text-sm text-gray-400">
+          {t.common.updated}:{" "}
+          {language === "th" ? "10 นาทีที่แล้ว" : "10 min ago"}
+        </span>
       </div>
 
-      {/* Table Content */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-white/5 text-xs uppercase text-gray-400">
-            <tr>
-              <th className="px-6 py-3 font-medium">Time</th>
-              <th className="px-6 py-3 font-medium">Lottery</th>
-              <th className="px-6 py-3 font-medium">Winning Numbers</th>
-              <th className="px-6 py-3 font-medium text-right">Jackpot</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {results.map((item, index) => (
-              <tr
-                key={index}
-                className="group transition-colors hover:bg-white/5"
+      <div className="flex flex-col">
+        {results.map((item, index) => (
+          <div
+            key={index}
+            className="group flex flex-col md:flex-row items-start md:items-center border-b border-white/5 last:border-0 p-6 gap-6 transition-colors hover:bg-white/5"
+          >
+            {/* Column 1: Date & Identity */}
+            <div className="flex items-center gap-4 w-full md:w-1/4 min-w-[200px]">
+              <div className="relative h-10 w-14 overflow-hidden rounded shadow-sm shrink-0">
+                <Image
+                  src={item.flag}
+                  alt={`${item.country} flag`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <div className="font-bold text-white text-lg">{item.name}</div>
+                <div className="text-sm text-gray-400">{item.date}</div>
+              </div>
+            </div>
+
+            {/* Column 2: Numbers & Prizes */}
+            <div className="flex-grow w-full">
+              <div
+                className={`grid gap-4 ${item.id === "th" ? "grid-cols-2 md:grid-cols-4" : "grid-cols-3"}`}
               >
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-400">
-                  {item.time}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-5 w-7 overflow-hidden rounded shadow-sm">
-                      <Image
-                        src={item.flag}
-                        alt={`${item.country} flag`}
-                        fill
-                        className="object-cover"
-                      />
+                {item.numbers.map((prize, pIndex) => (
+                  <div
+                    key={pIndex}
+                    className="flex flex-col items-center justify-center p-3 rounded-lg bg-navy-800/50 border border-white/5"
+                  >
+                    <span className="text-xs text-gray-400 mb-1">
+                      {prize.label}
+                    </span>
+                    <div className="flex gap-2 mb-1">
+                      {prize.value.map((val, vIndex) => (
+                        <span
+                          key={vIndex}
+                          className="text-xl md:text-2xl font-bold text-gold-400 tracking-wider"
+                        >
+                          {val}
+                        </span>
+                      ))}
                     </div>
-                    <span className="font-semibold text-white group-hover:text-gold-400 transition-colors">
-                      {item.country} {item.name}
+                    <span className="text-xs font-medium text-emerald-400">
+                      {prize.prize}
                     </span>
                   </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex flex-wrap gap-2">
-                    {item.balls.map((ball, i) => (
-                      <LotteryBall
-                        key={i}
-                        number={ball}
-                        size="sm"
-                        className="h-7 w-7 border-0 bg-navy-800 text-xs font-semibold text-white"
-                      />
-                    ))}
-                    {item.bonusBall && (
-                      <LotteryBall
-                        number={item.bonusBall}
-                        size="sm"
-                        color="gold"
-                        className="h-7 w-7 text-xs font-bold"
-                        isBonus
-                      />
-                    )}
-                  </div>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-right">
-                  <span className="font-bold text-gold-400">
-                    {item.jackpot}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {results.length === 0 && (
+          <div className="p-8 text-center text-gray-500">{t.common.error}</div>
+        )}
       </div>
 
-      {/* Footer / Pagination */}
-      <div className="border-t border-white/10 px-6 py-4 text-center">
+      {/* Footer */}
+      <div className="border-t border-white/10 px-6 py-4 text-center bg-white/5">
         <button className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
-          View All Results
+          {t.common.readMore}
         </button>
       </div>
     </div>

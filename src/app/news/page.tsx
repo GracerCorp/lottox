@@ -1,44 +1,48 @@
+"use client";
+
+import { newsArticles } from "@/lib/newsData";
+import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
+import Image from "next/image";
+import { Clock } from "lucide-react";
+
 export default function NewsPage() {
-  const articles = [
-    {
-      title: "Powerball Jackpot Hits $463 Million",
-      date: "April 20, 2024",
-      category: "USA",
-    },
-    {
-      title: "New Thai Lottery Rules for 2024",
-      date: "April 19, 2024",
-      category: "Thailand",
-    },
-    {
-      title: "EuroMillions Winner Claims Prize anonymously",
-      date: "April 18, 2024",
-      category: "Europe",
-    },
-  ];
+  const { t, language } = useLanguage();
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-white mb-8">Lottery News</h1>
-      <div className="grid gap-6">
-        {articles.map((news, i) => (
-          <div
-            key={i}
-            className="bg-navy-800 p-6 rounded-xl border border-white/5 hover:border-gold-500/20 transition-colors"
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="mb-8 text-3xl font-bold text-white">{t.news.title}</h1>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {newsArticles.map((news) => (
+          <Link
+            key={news.slug}
+            href={`/news/${news.slug}`}
+            className="group overflow-hidden rounded-xl border border-white/10 bg-navy-800/30 transition-all hover:-translate-y-1 hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/10"
           >
-            <div className="flex items-center gap-3 text-sm text-gray-400 mb-2">
-              <span className="text-gold-400 font-bold">{news.category}</span>
-              <span>•</span>
-              <span>{news.date}</span>
+            <div className="relative aspect-video w-full overflow-hidden">
+              <Image
+                src={news.image}
+                alt={language === "th" ? news.title : news.titleEn}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute top-2 right-2 rounded bg-gold-500 px-2 py-0.5 text-xs font-bold text-black">
+                {language === "th" ? news.category : news.categoryEn}
+              </div>
             </div>
-            <h2 className="text-xl font-bold text-white hover:text-gold-400 cursor-pointer">
-              {news.title}
-            </h2>
-            <p className="text-gray-400 mt-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
-          </div>
+            <div className="p-4">
+              <div className="mb-2 flex items-center gap-2 text-xs text-gray-400">
+                <Clock className="h-3.5 w-3.5" />
+                {news.date}
+              </div>
+              <h2 className="mb-2 text-lg font-bold text-white line-clamp-2 transition-colors group-hover:text-gold-400 leading-normal">
+                {language === "th" ? news.title : news.titleEn}
+              </h2>
+              <p className="text-sm text-gray-400 line-clamp-3">
+                {language === "th" ? news.excerpt : news.excerptEn}
+              </p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

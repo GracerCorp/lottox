@@ -1,10 +1,28 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Globe, Menu } from "lucide-react";
+import { Globe, Menu, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export function Header() {
+  const { t, language, toggleLanguage } = useLanguage();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const navItems = [
+    { label: t.header.home, href: "/" },
+    { label: t.header.results, href: "/global-draws" }, // Or just /results if that's preferred? The request said "Latest Global Result"
+    { label: t.header.news, href: "/news" },
+  ];
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-navy-950/40 backdrop-blur-xl supports-[backdrop-filter]:bg-navy-950/40">
+    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-navy-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-navy-950/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -25,36 +43,64 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {["Global Draws", "Results", "Statistics", "News"].map((item) => (
+          {navItems.map((item) => (
             <Link
-              key={item}
-              href={`/${item.toLowerCase().replace(" ", "-")}`}
-              className="text-md font-medium text-gray-300 transition-colors hover:text-gold-400"
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-gold-400",
+                pathname === item.href ? "text-gold-400" : "text-gray-300",
+              )}
             >
-              {item}
+              {item.label}
             </Link>
           ))}
         </nav>
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-md font-medium text-gray-300 hover:text-white">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 text-sm font-medium text-gray-300 transition-colors hover:text-white"
+          >
             <Globe className="h-4 w-4" />
-            <span>EN</span>
+            <span>{language.toUpperCase()}</span>
           </button>
 
-          <Link
-            href="/login"
-            className="hidden rounded-lg bg-navy-800 px-4 py-2 text-md font-semibold text-white transition-all hover:bg-navy-700 hover:shadow-lg md:block border border-white/10"
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden p-2 text-gray-300 hover:text-white"
           >
-            Sign in
-          </Link>
-
-          <button className="md:hidden p-2 text-gray-300">
-            <Menu className="h-6 w-6" />
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="border-t border-white/10 bg-navy-900 md:hidden">
+          <nav className="flex flex-col p-4 space-y-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-gold-400",
+                  pathname === item.href ? "text-gold-400" : "text-gray-300",
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
