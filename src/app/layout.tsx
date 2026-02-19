@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Thai } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ClientProviders } from "@/components/ClientProviders";
@@ -7,6 +7,11 @@ import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const notoSansThai = Noto_Sans_Thai({
+  subsets: ["thai"],
+  variable: "--font-noto-sans-thai",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "LOTTOX - ตรวจหวยออนไลน์ ผลหวยไทย หวยลาว งวดล่าสุด",
@@ -43,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="th" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans min-h-screen flex flex-col relative overflow-x-hidden`}
+        className={`${inter.variable} ${notoSansThai.variable} font-sans min-h-screen flex flex-col relative overflow-x-hidden`}
       >
         <ClientProviders>
           {/* Background Effects */}

@@ -5,8 +5,9 @@ import { getFlagUrl } from "@/lib/flags";
 import {
   ShieldCheck,
   Clock,
-  AlertTriangle,
   Award,
+  Search,
+  Newspaper,
   ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
@@ -14,113 +15,32 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { NewsSidebar } from "@/components/ui/NewsSidebar";
 import { SubscribeButton } from "@/components/ui/SubscribeButton";
-import { useApi } from "@/lib/hooks/useApi";
-import type { ResultsByTypeResponse, LaoResultData } from "@/lib/api-types";
+import { VietnamLottoDraw } from "@/data/vietnamData";
 
-/* -- SVG Search Icon -- */
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
+interface VietnamLottoDisplayProps {
+  lotteryType: "specific" | "special" | "normal" | "vip";
+  data: {
+    latest: VietnamLottoDraw;
+    history: VietnamLottoDraw[];
+    time: string;
+  };
 }
 
-/* -- SVG Newspaper Icon -- */
-function NewspaperIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
-      <path d="M18 14h-8" />
-      <path d="M15 18h-5" />
-      <path d="M10 6h8v4h-8V6Z" />
-    </svg>
-  );
-}
-
-/* -- Loading Skeleton -- */
-function LaoLottoSkeleton() {
-  return (
-    <div className="container mx-auto px-4 py-8 animate-pulse">
-      <div className="mb-8 h-20 rounded-lg bg-navy-800/50" />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          <div className="h-96 rounded-2xl bg-navy-800/50" />
-          <div className="h-48 rounded-xl bg-navy-800/50" />
-        </div>
-        <div className="space-y-6">
-          <div className="h-48 rounded-xl bg-navy-800/50" />
-          <div className="h-48 rounded-xl bg-navy-800/50" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function LaoLottoContent() {
+export default function VietnamLottoDisplay({
+  lotteryType,
+  data,
+}: VietnamLottoDisplayProps) {
   const { t, language } = useLanguage();
 
-  const { data, loading, error } = useApi<ResultsByTypeResponse>(
-    "/api/results/lao?limit=10",
-  );
+  const lottoInfo = t.lottery.vietnam[lotteryType];
+  const mainInfo = t.lottery.vietnam;
 
-  if (loading) return <LaoLottoSkeleton />;
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-8 text-center text-red-400">
-          Error loading Lao Lotto results: {error}
-        </div>
-      </div>
-    );
-  }
-
-  const latest = data?.latest;
-  const latestData = latest?.data as LaoResultData | undefined;
-  const historyItems = data?.history ?? [];
-
-  const latestDraw = {
-    date: latest?.dateDisplay || latest?.date || "-",
-    drawNo: latest?.drawNo || "-",
-    daysAgo: latest?.daysAgo || "-",
-    digit4: latestData?.digit4 || "-",
-    digit3: latestData?.digit3 || "-",
-    digit2: latestData?.digit2 || "-",
-    digit1: latestData?.digit1 || "-",
-    digit4Multiplier: latestData?.digit4Multiplier || "x6,000",
-    digit3Multiplier: latestData?.digit3Multiplier || "x500",
-    digit2Multiplier: latestData?.digit2Multiplier || "x60",
+  // Custom multipliers matching the static params or passed in
+  const multipliers = {
+    digit4: "x850",
+    digit3: "x120",
+    digit2: "x92",
   };
-
-  const recentResults = historyItems.map((item) => {
-    const d = item.data as LaoResultData;
-    return {
-      date: item.dateDisplay || item.date,
-      digit4: d?.digit4 || "-",
-      digit3: d?.digit3 || "-",
-      digit2: d?.digit2 || "-",
-    };
-  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -134,31 +54,33 @@ export default function LaoLottoContent() {
             <span className="text-gray-500">|</span>
             <span className="text-gray-400">
               <img
-                src={getFlagUrl("la")}
-                alt="Laos flag"
+                src={getFlagUrl("vn")}
+                alt="Vietnam flag"
                 className="mr-1.5 inline-block h-4 w-6 rounded-sm"
               />
-              {t.lottery.lao.country}
+              {mainInfo.country}
             </span>
+            <span className="text-gray-500">|</span>
+            <span className="text-gray-400">{lottoInfo.time}</span>
           </div>
           <div className="mt-3 flex items-center gap-3">
             <div className="flex h-10 w-16 items-center justify-center overflow-hidden rounded bg-red-800 shadow-sm">
               <img
-                src={getFlagUrl("la")}
-                alt="Laos flag"
+                src={getFlagUrl("vn")}
+                alt="Vietnam flag"
                 className="h-full w-full object-cover opacity-80"
               />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white sm:text-3xl">
-                {t.lottery.lao.name}
+                {lottoInfo.name}
               </h1>
-              <p className="text-xs text-gray-500">{t.lottery.lao.subName}</p>
+              <p className="text-xs text-gray-500">{lottoInfo.subName}</p>
             </div>
           </div>
         </div>
 
-        <SubscribeButton type="LAO" />
+        <SubscribeButton type={`VIETNAM_${lotteryType.toUpperCase()}`} />
       </header>
 
       {/* Main Content Grid */}
@@ -166,85 +88,96 @@ export default function LaoLottoContent() {
         {/* Left Column */}
         <div className="space-y-6 lg:col-span-2">
           {/* SECTION 1: Hero */}
-          <section className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 shadow-2xl">
-            <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />
-            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-teal-500/10 blur-3xl" />
+          <section className="relative overflow-hidden rounded-2xl border border-red-500/20 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 shadow-2xl">
+            <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-red-500/10 blur-3xl" />
+            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-orange-500/10 blur-3xl" />
 
             <div className="relative z-10 p-6 sm:p-8">
-              <div className="mb-2 text-center text-sm uppercase tracking-widest text-emerald-400">
-                {t.lottery.lao.subName}
+              <div className="mb-2 text-center text-sm uppercase tracking-widest text-red-400">
+                {lottoInfo.subName}
               </div>
               <div className="mb-4 flex flex-col items-center justify-center gap-2">
                 <div className="flex items-center gap-4">
                   <img
-                    src={getFlagUrl("la")}
-                    alt="Laos flag"
+                    src={getFlagUrl("vn")}
+                    alt="Vietnam flag"
                     className="inline-block h-10 w-10"
                   />
-                  <h2 className="bg-gradient-to-r from-emerald-300 to-emerald-600 bg-clip-text text-5xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-6xl text-center leading-tight">
-                    {t.lottery.lao.name}
+                  <h2 className="bg-gradient-to-r from-red-300 to-red-600 bg-clip-text text-5xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-6xl text-center leading-tight">
+                    {lottoInfo.name}
                   </h2>
                 </div>
               </div>
               <div className="mb-8 text-center text-sm text-gray-400">
-                {t.common.date} {latestDraw.date} | {latestDraw.drawNo} |{" "}
-                {latestDraw.daysAgo}
+                {t.common.date} {data.latest.date} | {data.latest.drawNo}
               </div>
 
-              {/* 4 Digit Prize */}
+              {/* 4 Digits Prize */}
               <div className="mb-8">
                 <div className="mb-4 text-center">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-5 py-2 text-sm font-bold uppercase tracking-wider text-emerald-400">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/15 px-5 py-2 text-sm font-bold uppercase tracking-wider text-red-400">
                     <Award className="h-4 w-4" />
                     {t.results.digit4}
-                    <span className="ml-2 text-white opacity-70">
-                      {t.common.pay} {latestDraw.digit4Multiplier}
-                    </span>
                   </span>
                 </div>
                 <div className="flex items-center justify-center gap-4 sm:gap-5">
-                  {latestDraw.digit4.split("").map((n, i) => (
+                  {data.latest.digit4.split("").map((n, i) => (
                     <LotteryBall
                       key={i}
                       number={n}
                       size="lg"
-                      color="emerald"
-                      className="h-20 w-20 text-5xl font-bold shadow-[0_0_20px_rgba(16,185,129,0.3)] sm:h-24 sm:w-24 sm:text-6xl"
+                      color="red"
+                      className="h-20 w-20 text-5xl font-bold shadow-[0_0_20px_rgba(239,68,68,0.3)] sm:h-24 sm:w-24 sm:text-6xl"
                     />
                   ))}
                 </div>
               </div>
 
-              {/* Lower Prizes */}
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-6 text-center transition-transform hover:scale-105">
-                  <div className="mb-3 text-sm font-bold uppercase tracking-wider text-emerald-400">
-                    {t.results.digit3}
+              {/* Lower Prizes Grid */}
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* 3 Digits Top */}
+                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-4 text-center transition-transform hover:scale-105">
+                  <div className="mb-2 text-xs font-bold uppercase tracking-wider text-red-400">
+                    {t.results.digit3Top}
                   </div>
-                  <div className="font-mono text-5xl font-bold tracking-widest text-white">
-                    {latestDraw.digit3}
+                  <div className="font-mono text-4xl font-bold tracking-widest text-white">
+                    {data.latest.digit3}
                   </div>
-                  <div className="mt-2 text-sm text-emerald-400">
-                    {t.common.pay} {latestDraw.digit3Multiplier}
+                  <div className="mt-1 text-xs text-red-400">
+                    {multipliers.digit3}
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-emerald-500/20 bg-navy-800/60 p-6 text-center transition-transform hover:scale-105">
-                  <div className="mb-3 text-sm font-bold uppercase tracking-wider text-emerald-400">
-                    {t.results.digit2}
+                {/* 2 Digits Top */}
+                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-4 text-center transition-transform hover:scale-105">
+                  <div className="mb-2 text-xs font-bold uppercase tracking-wider text-red-400">
+                    {t.results.digit2Top}
                   </div>
-                  <div className="font-mono text-5xl font-bold tracking-widest text-white">
-                    {latestDraw.digit2}
+                  <div className="font-mono text-4xl font-bold tracking-widest text-white">
+                    {data.latest.digit2}
                   </div>
-                  <div className="mt-2 text-sm text-emerald-400">
-                    {t.common.pay} {latestDraw.digit2Multiplier}
+                  <div className="mt-1 text-xs text-red-400">
+                    {multipliers.digit2}
+                  </div>
+                </div>
+
+                {/* 2 Digits Bottom */}
+                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-4 text-center transition-transform hover:scale-105">
+                  <div className="mb-2 text-xs font-bold uppercase tracking-wider text-red-400">
+                    {t.results.digit2Bottom}
+                  </div>
+                  <div className="font-mono text-4xl font-bold tracking-widest text-white">
+                    {data.latest.digit2Bottom}
+                  </div>
+                  <div className="mt-1 text-xs text-red-400">
+                    {multipliers.digit2}
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Pay Rate Table */}
+          {/* Pay Rate Table - Update Labels */}
           <section className="rounded-xl border border-white/10 bg-navy-900/50">
             <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">
@@ -254,28 +187,24 @@ export default function LaoLottoContent() {
             <div className="divide-y divide-white/5">
               {[
                 {
-                  label: t.results.digit4,
-                  multiplier: latestDraw.digit4Multiplier,
-                  example:
-                    language === "th"
-                      ? "ซื้อ 1,000 กีบ ได้ 6,000,000 กีบ"
-                      : "Buy 1,000 KIP, win 6,000,000 KIP",
+                  label: t.results.digit3Top,
+                  multiplier: "850 : 1",
+                  example: "บาทละ 850",
                 },
                 {
-                  label: t.results.digit3,
-                  multiplier: latestDraw.digit3Multiplier,
-                  example:
-                    language === "th"
-                      ? "ซื้อ 1,000 กีบ ได้ 500,000 กีบ"
-                      : "Buy 1,000 KIP, win 500,000 KIP",
+                  label: "3 ตัวโต๊ด",
+                  multiplier: "120 : 1",
+                  example: "บาทละ 120",
                 },
                 {
-                  label: t.results.digit2,
-                  multiplier: latestDraw.digit2Multiplier,
-                  example:
-                    language === "th"
-                      ? "ซื้อ 1,000 กีบ ได้ 60,000 กีบ"
-                      : "Buy 1,000 KIP, win 60,000 KIP",
+                  label: t.results.digit2Top,
+                  multiplier: "92 : 1",
+                  example: "บาทละ 92",
+                },
+                {
+                  label: t.results.digit2Bottom,
+                  multiplier: "92 : 1",
+                  example: "บาทละ 92",
                 },
               ].map((rate, i) => (
                 <div
@@ -283,12 +212,12 @@ export default function LaoLottoContent() {
                   className="flex flex-col items-start justify-between gap-2 px-6 py-4 sm:flex-row sm:items-center"
                 >
                   <div>
-                    <div className="text-lg font-bold text-emerald-400">
+                    <div className="text-lg font-bold text-red-400">
                       {rate.label}
                     </div>
                     <div className="text-sm text-gray-400">{rate.example}</div>
                   </div>
-                  <div className="rounded-full bg-emerald-500/10 px-4 py-1 font-mono text-xl font-bold text-emerald-300">
+                  <div className="rounded-full bg-red-500/10 px-4 py-1 font-mono text-xl font-bold text-red-300">
                     {rate.multiplier}
                   </div>
                 </div>
@@ -299,18 +228,18 @@ export default function LaoLottoContent() {
           {/* Checker */}
           <section className="rounded-xl border border-white/10 bg-navy-800/50 p-6 backdrop-blur-md">
             <h3 className="mb-4 text-lg font-bold text-white">
-              {t.common.checkLaoResult}
+              {t.common.checkResult}
             </h3>
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="relative flex-1">
                 <input
                   type="text"
                   placeholder={t.common.searchPlaceholder}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-lg text-white outline-none focus:border-emerald-500"
+                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-lg text-white outline-none focus:border-red-500"
                 />
               </div>
-              <button className="flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-8 py-3 text-lg font-bold text-white transition-all hover:bg-emerald-600 hover:scale-105">
-                <SearchIcon className="h-5 w-5" />
+              <button className="flex items-center justify-center gap-2 rounded-lg bg-red-500 px-8 py-3 text-lg font-bold text-white transition-all hover:bg-red-600 hover:scale-105">
+                <Search className="h-5 w-5" />
                 {t.common.checkBtn}
               </button>
             </div>
@@ -324,7 +253,7 @@ export default function LaoLottoContent() {
               </h3>
             </div>
 
-            {/* Desktop Table */}
+            {/* Desktop Table - Bigger Fonts */}
             <div className="hidden overflow-x-auto lg:block">
               <table className="w-full text-left">
                 <thead className="bg-white/5 text-xs uppercase text-gray-400">
@@ -334,15 +263,18 @@ export default function LaoLottoContent() {
                       {t.results.digit4}
                     </th>
                     <th className="px-6 py-4 font-medium">
-                      {t.results.digit3}
+                      {t.results.digit3Top}
                     </th>
                     <th className="px-6 py-4 font-medium">
-                      {t.results.digit2}
+                      {t.results.digit2Top}
+                    </th>
+                    <th className="px-6 py-4 font-medium">
+                      {t.results.digit2Bottom}
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
-                  {recentResults.map((row, i) => (
+                  {data.history.map((row, i) => (
                     <tr
                       key={i}
                       className={`group hover:bg-white/5 ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
@@ -351,18 +283,23 @@ export default function LaoLottoContent() {
                         {row.date}
                       </td>
                       <td className="px-6 py-5">
-                        <div className="font-mono text-2xl font-bold tracking-widest text-emerald-400">
+                        <div className="font-mono text-2xl font-bold tracking-widest text-red-400">
                           {row.digit4}
                         </div>
                       </td>
                       <td className="px-6 py-5">
-                        <div className="font-mono text-2xl font-bold tracking-widest text-emerald-300">
+                        <div className="font-mono text-2xl font-bold tracking-widest text-red-300">
                           {row.digit3}
                         </div>
                       </td>
                       <td className="px-6 py-5">
                         <div className="font-mono text-2xl font-bold tracking-widest text-white">
                           {row.digit2}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="font-mono text-2xl font-bold tracking-widest text-white">
+                          {row.digit2Bottom}
                         </div>
                       </td>
                     </tr>
@@ -373,7 +310,7 @@ export default function LaoLottoContent() {
 
             {/* Mobile Card */}
             <div className="divide-y divide-white/5 lg:hidden">
-              {recentResults.map((row, i) => (
+              {data.history.map((row, i) => (
                 <div
                   key={i}
                   className={`space-y-3 px-6 py-5 ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
@@ -382,33 +319,41 @@ export default function LaoLottoContent() {
                     <span className="font-mono text-sm text-gray-500">
                       {row.date}
                     </span>
-                    <span className="text-sm font-bold text-emerald-500">
-                      Laos
+                    <span className="text-sm font-bold text-red-500">
+                      {lottoInfo.name}
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div className="col-span-2">
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
                         {t.results.digit4}
                       </div>
-                      <div className="font-mono text-xl font-bold text-emerald-400">
+                      <div className="font-mono text-xl font-bold text-red-400">
                         {row.digit4}
                       </div>
                     </div>
                     <div>
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
-                        {t.results.digit3}
+                        {t.results.digit3Top}
                       </div>
-                      <div className="font-mono text-xl font-bold text-emerald-300">
+                      <div className="font-mono text-xl font-bold text-red-300">
                         {row.digit3}
                       </div>
                     </div>
                     <div>
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
-                        {t.results.digit2}
+                        {t.results.digit2Top}
                       </div>
                       <div className="font-mono text-xl font-bold text-white">
                         {row.digit2}
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
+                        {t.results.digit2Bottom}
+                      </div>
+                      <div className="font-mono text-xl font-bold text-white">
+                        {row.digit2Bottom}
                       </div>
                     </div>
                   </div>
@@ -419,24 +364,24 @@ export default function LaoLottoContent() {
 
           {/* Detailed Info */}
           <section className="rounded-xl border border-white/10 bg-navy-900/50 p-6 md:p-8">
-            <h3 className="mb-4 text-xl font-bold text-emerald-400">
-              {t.staticParams.laoDetails.title}
+            <h3 className="mb-4 text-xl font-bold text-red-400">
+              {t.staticParams.vietnamDetails.title}
             </h3>
             <p className="mb-6 text-gray-300 leading-relaxed">
-              {t.staticParams.laoDetails.desc}
+              {t.staticParams.vietnamDetails.desc}
             </p>
 
-            <h4 className="mb-4 text-lg font-bold text-white border-l-4 border-emerald-500 pl-3">
-              {t.staticParams.laoDetails.prizesTitle}
+            <h4 className="mb-4 text-lg font-bold text-white border-l-4 border-red-500 pl-3">
+              {t.staticParams.vietnamDetails.prizesTitle}
             </h4>
             <ul className="space-y-4">
-              {t.staticParams.laoDetails.prizes.map(
+              {t.staticParams.vietnamDetails.prizes.map(
                 (prize: string, i: number) => (
                   <li
                     key={i}
                     className="flex gap-3 text-gray-300 bg-navy-800/30 p-4 rounded-lg border border-white/5"
                   >
-                    <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+                    <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-red-500" />
                     <span className="leading-relaxed">{prize}</span>
                   </li>
                 ),
@@ -448,8 +393,8 @@ export default function LaoLottoContent() {
         {/* Right Sidebar */}
         <aside className="space-y-6">
           {/* Sidebar: Lottery Checker */}
-          <div className="rounded-xl border border-emerald-500/20 bg-navy-800/30 p-6">
-            <h3 className="mb-4 text-center text-lg font-bold text-emerald-400">
+          <div className="rounded-xl border border-red-500/20 bg-navy-800/30 p-6">
+            <h3 className="mb-4 text-center text-lg font-bold text-red-400">
               {t.common.checkTicket}
             </h3>
             <div className="space-y-4">
@@ -457,47 +402,46 @@ export default function LaoLottoContent() {
                 <input
                   type="text"
                   placeholder={t.common.inputPlaceholder4}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-emerald-500"
+                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-red-500"
                 />
               </div>
-              <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 py-3 text-lg font-bold text-white transition-all hover:scale-105 hover:bg-emerald-600">
-                <SearchIcon className="h-5 w-5" />
+              <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-500 py-3 text-lg font-bold text-white transition-all hover:scale-105 hover:bg-red-600">
+                <Search className="h-5 w-5" />
                 {t.common.checkBtn}
               </button>
             </div>
           </div>
 
           {/* Info Card */}
-          <div className="rounded-xl border border-emerald-500/20 bg-navy-800/30 p-6">
-            <h3 className="mb-4 text-lg font-bold text-emerald-400">
+          <div className="rounded-xl border border-red-500/20 bg-navy-800/30 p-6">
+            <h3 className="mb-4 text-lg font-bold text-red-400">
               {t.common.info}
             </h3>
             <div className="space-y-4 text-base">
               <div className="flex justify-between">
                 <span className="text-gray-400">{t.common.drawSchedule}</span>
                 <span className="text-right text-white">
-                  จันทร์, พุธ, ศุกร์
-                  <br />
-                  เวลา 20:30 น.
+                  ทุกวัน <br /> เวลา {lottoInfo.time} น.
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">{t.common.type}</span>
-                <span className="text-white">หวยดิจิทัล</span>
+                <span className="text-white">{lottoInfo.name}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">{t.common.currency}</span>
-                <span className="text-white">{t.common.kip}</span>
+                <span className="text-white">VND (ดง)</span>
               </div>
             </div>
           </div>
 
           {/* News Sidebar with Images */}
           <NewsSidebar
-            accentColor="emerald"
-            icon={<NewspaperIcon className="h-4 w-4 text-emerald-400" />}
+            accentColor="red"
+            icon={<Newspaper className="h-4 w-4 text-red-400" />}
           />
 
+          {/* Links to Other Lotteries */}
           <div className="rounded-xl border border-white/10 bg-navy-800/30 p-6">
             <h3 className="mb-4 text-lg font-bold text-white">
               {t.common.otherLottery}
@@ -518,6 +462,28 @@ export default function LaoLottoContent() {
                   <div className="text-left font-semibold text-white">
                     {t.lottery.thai.name}
                     <div className="text-xs font-normal text-gray-500">GLO</div>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-500" />
+              </Link>
+
+              <Link
+                href="/results/lao-lotto"
+                className="flex w-full items-center justify-between rounded-lg border border-white/5 bg-navy-900 p-3 transition-colors hover:border-white/20"
+              >
+                <div className="flex items-center gap-3">
+                  <Image
+                    src={getFlagUrl("la")}
+                    alt="Lao flag"
+                    width={28}
+                    height={20}
+                    className="rounded shadow-sm"
+                  />
+                  <div className="text-left font-semibold text-white">
+                    {t.lottery.lao.name}
+                    <div className="text-xs font-normal text-gray-500">
+                      {t.lottery.lao.subName}
+                    </div>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-gray-500" />

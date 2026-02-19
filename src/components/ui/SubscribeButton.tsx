@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SubscribeButtonProps {
-  type: "THAI" | "LAO";
+  type: string;
 }
 
 export function SubscribeButton({ type }: SubscribeButtonProps) {

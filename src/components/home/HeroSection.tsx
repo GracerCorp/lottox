@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { LotteryCard } from "@/components/home/LotteryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getFlagUrl } from "@/lib/flags";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 
@@ -23,7 +24,8 @@ export function HeroSection() {
     gradientFrom: "from-blue-900",
     gradientTo: "to-red-900",
     href: "/results/thai-lotto",
-    bgImage: "https://images.unsplash.com/photo-1668107710159-10fbbab2a9dd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    bgImage:
+      "https://images.unsplash.com/photo-1668107710159-10fbbab2a9dd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
 
   const LAO_LOTTO = {
@@ -35,16 +37,30 @@ export function HeroSection() {
     gradientFrom: "from-blue-800",
     gradientTo: "to-purple-900",
     href: "/results/lao-lotto",
-    bgImage: "https://images.unsplash.com/photo-1725017766702-2a2eff1228cd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    bgImage:
+      "https://images.unsplash.com/photo-1725017766702-2a2eff1228cd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  };
+
+  const VIETNAM_LOTTO = {
+    name: t.lottery.vietnam.subName,
+    country: t.lottery.vietnam.country,
+    flag: getFlagUrl("vn"),
+    jackpot: "x850",
+    nextDraw: "19/02/2026 18:30",
+    gradientFrom: "from-red-900",
+    gradientTo: "to-orange-900",
+    href: "/results/vietnam-lotto",
+    bgImage:
+      "https://images.unsplash.com/photo-1555921015-5532091f6026?q=80&w=1287&auto=format&fit=crop",
   };
 
   // Duplicate to create enough items for the carousel effect (6 items for 2-1-2 layout)
   const items = [
     THAI_LOTTO,
+    VIETNAM_LOTTO,
     LAO_LOTTO,
     THAI_LOTTO,
-    LAO_LOTTO,
-    THAI_LOTTO,
+    VIETNAM_LOTTO,
     LAO_LOTTO,
   ];
 

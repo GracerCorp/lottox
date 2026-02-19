@@ -11,12 +11,13 @@ import { cn } from "@/lib/utils";
 
 export default function Home() {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"all" | "th" | "la">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "th" | "la" | "vn">("all");
 
   const tabs = [
     { id: "all", label: t.selector.all, flag: null },
     { id: "th", label: t.selector.thai, flag: getFlagUrl("th") },
     { id: "la", label: t.selector.lao, flag: getFlagUrl("la") },
+    { id: "vn", label: t.selector.vietnam, flag: getFlagUrl("vn") },
   ];
 
   return (
@@ -37,7 +38,9 @@ export default function Home() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as "all" | "th" | "la")}
+                onClick={() =>
+                  setActiveTab(tab.id as "all" | "th" | "la" | "vn")
+                }
                 className={cn(
                   "flex items-center gap-2 px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
                   activeTab === tab.id

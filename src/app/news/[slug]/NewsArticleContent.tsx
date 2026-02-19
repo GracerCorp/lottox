@@ -1,25 +1,78 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { newsArticles, type NewsArticle } from "@/lib/newsData";
+import { useApi } from "@/lib/hooks/useApi";
+import type { NewsListResponse } from "@/lib/api-types";
+import { newsArticles as fallbackNewsArticles } from "@/lib/newsData";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, ChevronLeft } from "lucide-react";
 
+interface ArticleProps {
+  slug: string;
+  title: string;
+  titleEn?: string;
+  content: string;
+  contentEn?: string;
+  image: string;
+  date: string;
+  category: string;
+  categoryEn?: string;
+  author: string;
+  source?: string;
+  isLocal?: boolean;
+}
+
 export default function NewsArticleContent({
   article,
 }: {
-  article: NewsArticle;
+  article: ArticleProps;
 }) {
   const { t, language } = useLanguage();
 
-  const relatedArticles = newsArticles
-    .filter((a) => a.slug !== article.slug)
-    .slice(0, 3);
+  // Fetch related articles from API
+  const { data: newsData } = useApi<NewsListResponse>(
+    `/api/news?lang=${language}&limit=4`,
+  );
 
-  const title = language === "th" ? article.title : article.titleEn;
-  const content = language === "th" ? article.content : article.contentEn;
-  const category = language === "th" ? article.category : article.categoryEn;
+  const title =
+    language === "th" ? article.title : article.titleEn || article.title;
+  const content =
+    language === "th" ? article.content : article.contentEn || article.content;
+  const category =
+    language === "th"
+      ? article.category
+      : article.categoryEn || article.category;
+
+  // Related articles: from API or fallback
+  let relatedArticles: {
+    slug: string;
+    title: string;
+    image: string;
+    date: string;
+  }[] = [];
+
+  if (newsData?.articles && newsData.articles.length > 0) {
+    relatedArticles = newsData.articles
+      .filter((a) => a.slug !== article.slug)
+      .slice(0, 3)
+      .map((a) => ({
+        slug: a.slug,
+        title: a.title,
+        image: a.image,
+        date: a.date,
+      }));
+  } else {
+    relatedArticles = fallbackNewsArticles
+      .filter((a) => a.slug !== article.slug)
+      .slice(0, 3)
+      .map((a) => ({
+        slug: a.slug,
+        title: language === "th" ? a.title : a.titleEn,
+        image: a.image,
+        date: a.date,
+      }));
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -34,21 +87,23 @@ export default function NewsArticleContent({
 
       <article className="mx-auto max-w-3xl">
         {/* Hero Image */}
-        <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl sm:h-80 md:h-96">
-          <Image
-            src={article.image}
-            alt={title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <span className="mb-2 inline-block rounded bg-gold-500/90 px-2.5 py-1 text-xs font-bold text-black">
-              {category}
-            </span>
+        {article.image && (
+          <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl sm:h-80 md:h-96">
+            <Image
+              src={article.image}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <span className="mb-2 inline-block rounded bg-gold-500/90 px-2.5 py-1 text-xs font-bold text-black">
+                {category}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Title */}
         <h1 className="mb-4 text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
@@ -63,12 +118,14 @@ export default function NewsArticleContent({
               {t.news.publishedAt} {article.date}
             </span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-600">|</span>
-            <span>
-              {t.news.source}: {article.source}
-            </span>
-          </div>
+          {article.source && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-gray-600">|</span>
+              <span>
+                {t.news.source}: {article.source}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -135,22 +192,24 @@ export default function NewsArticleContent({
               href={`/news/${news.slug}`}
               className="group overflow-hidden rounded-xl border border-white/5 bg-navy-800 transition-all hover:border-gold-500/20"
             >
-              <div className="relative h-36 w-full overflow-hidden">
-                <Image
-                  src={news.image}
-                  alt={language === "th" ? news.title : news.titleEn}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-800 via-transparent to-transparent" />
-              </div>
+              {news.image && (
+                <div className="relative h-36 w-full overflow-hidden">
+                  <Image
+                    src={news.image}
+                    alt={news.title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-800 via-transparent to-transparent" />
+                </div>
+              )}
               <div className="p-4">
                 <div className="mb-1 flex items-center gap-1.5 text-xs text-gray-500">
                   <Clock className="h-3 w-3" />
                   <span>{news.date}</span>
                 </div>
                 <h3 className="text-sm font-bold text-gray-300 line-clamp-2 group-hover:text-gold-400 transition-colors">
-                  {language === "th" ? news.title : news.titleEn}
+                  {news.title}
                 </h3>
               </div>
             </Link>

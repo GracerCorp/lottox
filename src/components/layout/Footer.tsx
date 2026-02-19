@@ -25,24 +25,20 @@ export function Footer() {
       <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02]" />
 
       <div className="container relative z-10 mx-auto px-4">
-        {/* Why LOTTOX Section */}
-        <div className="flex flex-col items-center justify-between gap-8 rounded-2xl border border-white/5 bg-navy-900/50 p-8 backdrop-blur-sm md:flex-row">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-200">
+        {/* Why LOTTOX Section - Compact Version */}
+        <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-white/5 bg-navy-900/50 px-6 py-4 backdrop-blur-sm md:flex-row">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500/10 text-gold-400">
+              <ShieldCheck className="h-4 w-4" />
+            </div>
+            <h3 className="text-base font-bold text-gray-200 whitespace-nowrap">
               {t.footer.whyTitle}
             </h3>
           </div>
 
-          <div className="flex items-center gap-4 w-auto">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/10 text-gold-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <div className="max-w-md text-lg text-gray-400">
-              <span className="font-bold text-gold-400">
-                {t.footer.whyDesc1}
-              </span>{" "}
-              {t.footer.whyDesc2}
-            </div>
+          <div className="text-sm text-gray-400 md:text-right">
+            <span className="font-bold text-gold-400">{t.footer.whyDesc1}</span>{" "}
+            {t.footer.whyDesc2}
           </div>
         </div>
 

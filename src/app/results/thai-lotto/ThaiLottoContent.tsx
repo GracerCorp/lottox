@@ -6,10 +6,12 @@ import { ShieldCheck, Trophy, Clock, AlertTriangle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { newsArticles } from "@/lib/newsData";
+import { NewsSidebar } from "@/components/ui/NewsSidebar";
 import { SubscribeButton } from "@/components/ui/SubscribeButton";
+import { useApi } from "@/lib/hooks/useApi";
+import type { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
 
-/* ── SVG Search Icon ── */
+/* -- SVG Search Icon -- */
 function SearchIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -28,7 +30,7 @@ function SearchIcon({ className }: { className?: string }) {
   );
 }
 
-/* ── SVG Newspaper Icon ── */
+/* -- SVG Newspaper Icon -- */
 function NewspaperIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -49,226 +51,7 @@ function NewspaperIcon({ className }: { className?: string }) {
   );
 }
 
-/* ── Mock data ── */
-const latestDraw = {
-  date: "1 กุมภาพันธ์ 2569",
-  drawNo: "#39/2569",
-  daysAgo: "3 วันที่แล้ว",
-  firstPrize: "174629",
-  firstPrizeAmount: "6,000,000",
-  front3: ["917", "195"],
-  front3Amount: "4,000",
-  back3: ["408", "041"],
-  back3Amount: "4,000",
-  last2: "48",
-  last2Amount: "2,000",
-  adjacent: ["174628", "174630"],
-  adjacentAmount: "100,000",
-  prize2: ["048036", "374502", "602910", "679914", "889775"],
-  prize2Amount: "200,000",
-  prize3: [
-    "145551",
-    "167591",
-    "216443",
-    "236455",
-    "319246",
-    "428751",
-    "479569",
-    "586374",
-    "592665",
-    "893288",
-  ],
-  prize3Amount: "80,000",
-  prize4: [
-    "004427",
-    "242652",
-    "266256",
-    "297562",
-    "391432",
-    "538731",
-    "613010",
-    "695755",
-    "771134",
-    "839220",
-    "048178",
-    "242893",
-    "275320",
-    "326375",
-    "407126",
-    "542764",
-    "630109",
-    "710588",
-    "796321",
-    "866166",
-    "192972",
-    "246525",
-    "282059",
-    "328346",
-    "423483",
-    "600759",
-    "633827",
-    "718890",
-    "804105",
-    "870519",
-    "208769",
-    "247143",
-    "287243",
-    "350883",
-    "427968",
-    "604778",
-    "651287",
-    "736797",
-    "808594",
-    "963842",
-    "241852",
-    "249030",
-    "287292",
-    "377600",
-    "469942",
-    "609198",
-    "655598",
-    "755949",
-    "811271",
-    "993587",
-  ],
-  prize4Amount: "40,000",
-  prize5: [
-    "000575",
-    "054754",
-    "225058",
-    "296996",
-    "383514",
-    "476748",
-    "562923",
-    "664084",
-    "768482",
-    "874265",
-    "001748",
-    "069035",
-    "237806",
-    "299277",
-    "383649",
-    "493820",
-    "591145",
-    "674634",
-    "795361",
-    "891763",
-    "004032",
-    "089447",
-    "251893",
-    "306934",
-    "393701",
-    "529898",
-    "618658",
-    "678358",
-    "798378",
-    "892661",
-    "005170",
-    "090116",
-    "260267",
-    "307310",
-    "396449",
-    "532159",
-    "632552",
-    "681109",
-    "817156",
-    "902162",
-    "015930",
-    "103304",
-    "260592",
-    "312009",
-    "423344",
-    "537830",
-    "632576",
-    "681325",
-    "832668",
-    "927213",
-    "028288",
-    "103742",
-    "264668",
-    "337975",
-    "426735",
-    "539052",
-    "634513",
-    "688316",
-    "835232",
-    "944716",
-    "036929",
-    "118346",
-    "266525",
-    "363371",
-    "454523",
-    "544055",
-    "635894",
-    "736785",
-    "841210",
-    "958247",
-    "039168",
-    "120536",
-    "268024",
-    "378697",
-    "472821",
-    "544162",
-    "642707",
-    "752340",
-    "845518",
-    "961591",
-    "049866",
-    "211832",
-    "271442",
-    "379999",
-    "473151",
-    "560604",
-    "649677",
-    "764377",
-    "865332",
-    "969437",
-    "054311",
-    "222763",
-    "274462",
-    "380022",
-    "475522",
-    "560970",
-    "651872",
-    "764459",
-    "867328",
-    "983524",
-  ],
-  prize5Amount: "20,000",
-};
-
-const recentResults = [
-  {
-    date: "16 เม.ย. 67",
-    firstPrize: "435580",
-    last3f: "238",
-    last3b: "469",
-    last2: "80",
-  },
-  {
-    date: "1 เม.ย. 67",
-    firstPrize: "633792",
-    last3f: "238",
-    last3b: "792",
-    last2: "92",
-  },
-  {
-    date: "16 มี.ค. 67",
-    firstPrize: "236285",
-    last3f: "362",
-    last3b: "285",
-    last2: "85",
-  },
-  {
-    date: "1 มี.ค. 67",
-    firstPrize: "091203",
-    last3f: "912",
-    last3b: "203",
-    last2: "03",
-  },
-];
-
-/* ── Components ── */
+/* -- Components -- */
 function PrizeGrid({
   numbers,
   columns = 5,
@@ -312,7 +95,7 @@ function PrizeSectionHeader({
     <div className="flex flex-col gap-2 border-b border-gold-500/20 bg-gradient-to-r from-gold-500/10 to-transparent px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
       <h3 className="text-xl font-bold text-gold-400">{title}</h3>
       <div className="text-sm text-gray-400">
-        {count} รางวัล {t.common.perPrize}{" "}
+        {count} {t.common.perPrize}{" "}
         <span className="font-bold text-gold-300">
           {amount} {t.common.baht}
         </span>
@@ -321,10 +104,85 @@ function PrizeSectionHeader({
   );
 }
 
-/* ── Main Content ── */
+/* -- Loading Skeleton -- */
+function ThaiLottoSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-8 animate-pulse">
+      <div className="mb-8 h-20 rounded-lg bg-navy-800/50" />
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="h-96 rounded-2xl bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-navy-800/50" />
+        </div>
+        <div className="space-y-6">
+          <div className="h-48 rounded-xl bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-navy-800/50" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* -- Main Content -- */
 export default function ThaiLottoContent() {
   const { t, language } = useLanguage();
-  const sidebarNews = newsArticles.slice(0, 5);
+
+  const { data, loading, error } = useApi<ResultsByTypeResponse>(
+    "/api/results/thai?limit=10",
+  );
+
+  if (loading) return <ThaiLottoSkeleton />;
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-8 text-center text-red-400">
+          Error loading Thai Lotto results: {error}
+        </div>
+      </div>
+    );
+  }
+
+  // Use API data, fallback to sensible defaults
+  const latest = data?.latest;
+  const latestData = latest?.data as ThaiResultData | undefined;
+  const historyItems = data?.history ?? [];
+
+  const latestDraw = {
+    date: latest?.dateDisplay || latest?.date || "-",
+    drawNo: latest?.drawNo || "-",
+    daysAgo: latest?.daysAgo || "-",
+    firstPrize: latestData?.firstPrize || "-",
+    firstPrizeAmount: latestData?.firstPrizeAmount || "6,000,000",
+    front3: latestData?.front3 || [],
+    front3Amount: latestData?.front3Amount || "4,000",
+    back3: latestData?.back3 || [],
+    back3Amount: latestData?.back3Amount || "4,000",
+    last2: latestData?.last2 || "-",
+    last2Amount: latestData?.last2Amount || "2,000",
+    adjacent: latestData?.adjacent || [],
+    adjacentAmount: latestData?.adjacentAmount || "100,000",
+    prize2: latestData?.prize2 || [],
+    prize2Amount: latestData?.prize2Amount || "200,000",
+    prize3: latestData?.prize3 || [],
+    prize3Amount: latestData?.prize3Amount || "80,000",
+    prize4: latestData?.prize4 || [],
+    prize4Amount: latestData?.prize4Amount || "40,000",
+    prize5: latestData?.prize5 || [],
+    prize5Amount: latestData?.prize5Amount || "20,000",
+  };
+
+  const recentResults = historyItems.map((item) => {
+    const d = item.data as ThaiResultData;
+    return {
+      date: item.dateDisplay || item.date,
+      firstPrize: d?.firstPrize || "-",
+      last3f: d?.front3?.[0] || "-",
+      last3b: d?.back3?.[0] || "-",
+      last2: d?.last2 || "-",
+    };
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -497,43 +355,45 @@ export default function ThaiLottoContent() {
           {[
             {
               title: t.results.prize2rank,
-              count: 5,
+              count: latestDraw.prize2.length || 5,
               amount: latestDraw.prize2Amount,
               numbers: latestDraw.prize2,
             },
             {
               title: t.results.prize3rank,
-              count: 10,
+              count: latestDraw.prize3.length || 10,
               amount: latestDraw.prize3Amount,
               numbers: latestDraw.prize3,
             },
             {
               title: t.results.prize4rank,
-              count: 50,
+              count: latestDraw.prize4.length || 50,
               amount: latestDraw.prize4Amount,
               numbers: latestDraw.prize4,
             },
             {
               title: t.results.prize5rank,
-              count: 100,
+              count: latestDraw.prize5.length || 100,
               amount: latestDraw.prize5Amount,
               numbers: latestDraw.prize5,
             },
-          ].map((prize, i) => (
-            <section
-              key={i}
-              className="overflow-hidden rounded-xl border border-white/10 bg-navy-900/50"
-            >
-              <PrizeSectionHeader
-                title={prize.title}
-                count={prize.count}
-                amount={prize.amount}
-              />
-              <PrizeGrid numbers={prize.numbers} columns={5} />
-            </section>
-          ))}
+          ]
+            .filter((prize) => prize.numbers.length > 0)
+            .map((prize, i) => (
+              <section
+                key={i}
+                className="overflow-hidden rounded-xl border border-white/10 bg-navy-900/50"
+              >
+                <PrizeSectionHeader
+                  title={prize.title}
+                  count={prize.count}
+                  amount={prize.amount}
+                />
+                <PrizeGrid numbers={prize.numbers} columns={5} />
+              </section>
+            ))}
 
-          {/* SECTION 6: Lottery Checker (UPDATED) */}
+          {/* SECTION 6: Lottery Checker */}
           <section className="rounded-xl border border-white/10 bg-navy-800/50 p-6 backdrop-blur-md">
             <h3 className="mb-4 text-lg font-bold text-white">
               {t.common.checkResult}
@@ -678,7 +538,7 @@ export default function ThaiLottoContent() {
             </div>
           </section>
 
-          {/* SECTION 8: Disclaimer (Placeholder text not in dictionary, skipping or keeping hardcoded is usually fine for legal text, but better to translate. Using hardcoded Thai as fallback since I didn't add it) */}
+          {/* SECTION 8: Disclaimer */}
           <section className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
             <div className="flex items-start gap-3">
               <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
@@ -692,7 +552,7 @@ export default function ThaiLottoContent() {
 
         {/* Right Column (Sidebar) */}
         <aside className="space-y-6">
-          {/* Sidebar: Lottery Checker (UPDATED) */}
+          {/* Sidebar: Lottery Checker */}
           <div className="rounded-xl border border-gold-500/20 bg-navy-800/30 p-6">
             <h3 className="mb-4 text-center text-lg font-bold text-gold-400">
               {t.common.checkTicket}
@@ -727,44 +587,10 @@ export default function ThaiLottoContent() {
           </div>
 
           {/* Sidebar: News with images */}
-          <div className="overflow-hidden rounded-xl border border-white/10 bg-navy-800/30">
-            <div className="flex items-center gap-2 border-b border-white/10 px-5 py-3">
-              <NewspaperIcon className="h-4 w-4 text-gold-400" />
-              <h3 className="text-lg font-bold text-white">
-                {t.common.newsTitle}
-              </h3>
-            </div>
-            <div className="divide-y divide-white/5">
-              {sidebarNews.map((news, i) => (
-                <Link
-                  key={i}
-                  href={`/news/${news.slug}`}
-                  className={`flex gap-3 px-4 py-4 transition-colors hover:bg-white/5 ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
-                >
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg">
-                    <Image
-                      src={news.image}
-                      alt={language === "th" ? news.title : news.titleEn}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1 flex flex-col justify-center">
-                    <span className="mb-1 inline-block rounded bg-gold-500/10 px-1.5 py-0.5 text-xs font-semibold text-gold-400 w-fit">
-                      {language === "th" ? news.category : news.categoryEn}
-                    </span>
-                    <h4 className="text-sm font-bold text-gray-200 line-clamp-2 leading-snug">
-                      {language === "th" ? news.title : news.titleEn}
-                    </h4>
-                    <div className="mt-1 flex items-center gap-1 text-[11px] text-gray-500">
-                      <Clock className="h-3 w-3" />
-                      {news.date}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+          <NewsSidebar
+            accentColor="gold"
+            icon={<NewspaperIcon className="h-4 w-4 text-gold-400" />}
+          />
 
           {/* Sidebar: Stats */}
           <div className="rounded-xl border border-white/10 bg-navy-800/30 p-6">
@@ -789,24 +615,20 @@ export default function ThaiLottoContent() {
             </div>
           </div>
 
-          {/* Sidebar: Past draw links */}
+          {/* Sidebar: Past draw links - Generated from history */}
           <div className="rounded-xl border border-white/10 bg-navy-800/30 p-6">
             <h3 className="mb-4 text-lg font-bold text-white">
               {t.common.historyTitle}
             </h3>
             <div className="space-y-2">
-              {[
-                "งวด 16 ก.พ. 69",
-                "งวด 1 ก.พ. 69",
-                "งวด 17 ม.ค. 69",
-                "งวด 30 ธ.ค. 68",
-              ].map((text, i) => (
+              {historyItems.slice(0, 5).map((item, i) => (
                 <Link
                   key={i}
                   href="#"
                   className="block rounded bg-white/5 px-3 py-2 text-sm text-gray-300 transition-colors hover:bg-white/10 hover:text-gold-400"
                 >
-                  {text}
+                  {language === "th" ? "งวด " : "Draw "}
+                  {item.dateDisplay || item.date}
                 </Link>
               ))}
             </div>

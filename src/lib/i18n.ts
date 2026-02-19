@@ -71,6 +71,31 @@ export const dictionary = {
         subName: "Lao Pattana Lotto",
         country: "Laos",
       },
+      vietnam: {
+        name: "หวยฮานอย",
+        subName: "Hanoi Lottery",
+        country: "Vietnam",
+        specific: {
+          name: "ฮานอยเฉพาะกิจ",
+          subName: "Hanoi Specific",
+          time: "16:30",
+        },
+        special: {
+          name: "ฮานอยพิเศษ",
+          subName: "Hanoi Special",
+          time: "17:30",
+        },
+        normal: {
+          name: "ฮานอยปกติ",
+          subName: "Hanoi Normal",
+          time: "18:30",
+        },
+        vip: {
+          name: "ฮานอยวีไอพี",
+          subName: "Hanoi VIP",
+          time: "19:30",
+        },
+      },
     },
     news: {
       title: "ข่าวสาร",
@@ -96,11 +121,15 @@ export const dictionary = {
       digit4: "เลข 4 ตัว",
       digit3: "เลข 3 ตัว",
       digit2: "เลข 2 ตัว",
+      digit3Top: "เลข 3 ตัวบน",
+      digit2Top: "เลข 2 ตัวบน",
+      digit2Bottom: "เลข 2 ตัวล่าง",
     },
     selector: {
       all: "ทั้งหมด",
       thai: "ไทย",
       lao: "ลาว",
+      vietnam: "เวียดนาม",
     },
     footer: {
       worldDashboard: "แดชบอร์ดทั่วโลก",
@@ -369,6 +398,19 @@ export const dictionary = {
           "ถูกนามสัตว์ 3 หมายเลข จะได้เงินรางวัลตามที่ซื้อคูณด้วย 2,000 ตัวอย่างเช่น ซื้อ 1,000 กีบ จะได้ 2,000,000 กีบ และถ้าซื้อ 5,000 กีบ จะได้ 10,000,000 กีบ",
         ],
       },
+      vietnamDetails: {
+        title: "รายละเอียดผลหวยฮานอย",
+        desc: "หวยฮานอย หรือ หวยเวียดนาม เป็นหวยที่อิงการออกรางวัลจากผลการออกรางวัลฉลากกินแบ่งของประเทศเวียดนาม โดยจะมีการออกรางวัลทุกวัน",
+        prizesTitle: "เงินรางวัลโดยประมาณ",
+        prizes: [
+          "3 ตัวบน จ่าย 850 : 1",
+          "3 ตัวโต๊ด จ่าย 120 : 1",
+          "2 ตัวบน จ่าย 92 : 1",
+          "2 ตัวล่าง จ่าย 92 : 1",
+          "วิ่งบน จ่าย 3.2 : 1",
+          "วิ่งล่าง จ่าย 4.2 : 1",
+        ],
+      },
     },
   },
   en: {
@@ -440,9 +482,34 @@ export const dictionary = {
         country: "Thailand",
       },
       lao: {
-        name: "Lao Development Lottery",
+        name: "Lao Pattana Lottery",
         subName: "Lao Pattana Lotto",
         country: "Laos",
+      },
+      vietnam: {
+        name: "Vietnam Lottery",
+        subName: "Hanoi Lottery",
+        country: "Vietnam",
+        specific: {
+          name: "Hanoi Specific",
+          subName: "Hanoi Specific",
+          time: "16:30",
+        },
+        special: {
+          name: "Hanoi Special",
+          subName: "Hanoi Special",
+          time: "17:30",
+        },
+        normal: {
+          name: "Hanoi Normal",
+          subName: "Hanoi Normal",
+          time: "18:30",
+        },
+        vip: {
+          name: "Hanoi VIP",
+          subName: "Hanoi VIP",
+          time: "19:30",
+        },
       },
     },
     news: {
@@ -469,11 +536,15 @@ export const dictionary = {
       digit4: "4 Digits",
       digit3: "3 Digits",
       digit2: "2 Digits",
+      digit3Top: "3 Digits Upper",
+      digit2Top: "2 Digits Upper",
+      digit2Bottom: "2 Digits Lower",
     },
     selector: {
       all: "All",
       thai: "Thai",
       lao: "Lao",
+      vietnam: "Vietnam",
     },
     footer: {
       worldDashboard: "World Dashboard",
@@ -739,6 +810,19 @@ export const dictionary = {
           "1 Animal Match: Get your bet amount back (Refund).",
           "2 Animal Matches: Win 20x your bet. Example: Buy 1,000 LAK, get 20,000 LAK. Buy 5,000 LAK, get 100,000 LAK.",
           "3 Animal Matches: Win 2,000x your bet. Example: Buy 1,000 LAK, get 2,000,000 LAK. Buy 5,000 LAK, get 10,000,000 LAK.",
+        ],
+      },
+      vietnamDetails: {
+        title: "Hanoi Lottery Details",
+        desc: "Hanoi Lottery or Vietnam Lottery is based on the lottery results from Vietnam. Draws take place daily.",
+        prizesTitle: "Estimated Prize Rates",
+        prizes: [
+          "3 Digits Upper: Pays 850 : 1",
+          "3 Digits Tood: Pays 120 : 1",
+          "2 Digits Upper: Pays 92 : 1",
+          "2 Digits Lower: Pays 92 : 1",
+          "Running Upper: Pays 3.2 : 1",
+          "Running Lower: Pays 4.2 : 1",
         ],
       },
     },

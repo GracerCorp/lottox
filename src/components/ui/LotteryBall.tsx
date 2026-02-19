@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 interface LotteryBallProps {
   number: string | number;
-  color?: "gold" | "blue" | "gray" | "emerald";
+  color?: "gold" | "blue" | "gray" | "emerald" | "red";
   size?: "sm" | "md" | "lg";
   className?: string;
   isBonus?: boolean;
@@ -32,6 +32,7 @@ export function LotteryBall({
     gray: "bg-navy-700 text-white border-navy-600",
     emerald:
       "bg-gradient-to-br from-emerald-400 to-emerald-700 text-white border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.4)]",
+    red: "bg-gradient-to-br from-red-500 to-red-700 text-white border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]",
   };
 
   return (
