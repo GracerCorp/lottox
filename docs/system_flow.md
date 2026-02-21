@@ -1,55 +1,58 @@
-# System Flow - API Integration
+# System Flow: LOTTOX
 
-```
-Client (Browser)
-   |
-   | fetch("/api/results/latest")
-   | fetch("/api/results/thai")
-   | fetch("/api/results/lao")
-   | fetch("/api/results/global")
-   | fetch("/api/check")
-   | fetch("/api/news")
-   | fetch("/api/statistics")
-   | fetch("/api/countries")
-   |
-   v
-Self API (Next.js API Routes)
-   |  src/app/api/results/latest/route.ts
-   |  src/app/api/results/[type]/route.ts
-   |  src/app/api/results/global/route.ts
-   |  src/app/api/check/route.ts
-   |  src/app/api/news/route.ts
-   |  src/app/api/statistics/route.ts
-   |  src/app/api/countries/route.ts
-   |
-   | Authorization: Bearer <API_KEY from .env>
-   |
-   v
-External API (https://lotto-x-cms.vercel.app/api)
-   |  /results/latest
-   |  /results/{type}
-   |  /results/global
-   |  /check
-   |  /news
-   |  /statistics/overview
-   |  /countries
-   |
-   v
-Database (Lotto-X CMS)
-```
+## 1. User Journey
 
-## Data Flow
+### 1.1 Home Page (Global Hub)
+- **Entry Point**: User lands on `/`.
+- **Actions**:
+    - View featured lotteries (Hero Carousel).
+    - Check latest results via ticker.
+    - Select a country to view specific lotteries.
+    - Navigate to Global Draws or News.
 
-1. **Client -> Self API**: Frontend components use `useApi` hook to call internal API routes (no API key needed from browser).
-2. **Self API -> External API**: `src/lib/api-client.ts` adds `Authorization: Bearer <API_KEY>` from `.env` and proxies the request.
-3. **External API -> Self API**: Response is forwarded back to the client.
-4. **Caching**: Each endpoint uses Next.js `revalidate` for appropriate cache durations (60s for results, 1h for countries/stats, 5m for news).
+### 1.2 Country Page
+- **Route**: `/[country]`
+- **Description**: Displays summary of lotteries in a specific country.
+- **Components**:
+    - `CountryHeader`: Flag, name, jackpot info.
+    - `RecentDrawsTable`: List of recent results for lotteries in that country.
+    - `TicketVerifier`: To check winning numbers.
+- **Data**: Fetches country-specific data (e.g., `thailand`, `usa`).
 
-## Key Files
+### 1.3 Lottery Detail Page (Dynamic)
+- **Route**: `/[country]/[lottery]`
+- **Description**: Detailed view of a specific lottery (e.g., Thai Lotto, Powerball).
+- **Components**:
+    - `LotteryHeader`: Name, next draw countdown.
+    - `DrawResult`: Specific drawing results (balls, prizes).
+    - `PrizeBreakdown`: Detailed prize table.
+    - `HistoryList`: List of past draws.
+- **Data**: Fetches specific lottery data based on `lottery` slug.
 
-| File | Purpose |
-|---|---|
-| `src/lib/api-client.ts` | Centralized fetch wrapper for External API |
-| `src/lib/api-types.ts` | TypeScript type definitions |
-| `src/lib/hooks/useApi.ts` | React hook for client-side data fetching |
-| `src/app/api/*/route.ts` | Next.js API route handlers (proxy) |
+### 1.4 Previous Result Page (Dynamic)
+- **Route**: `/[country]/[lottery]/[date]`
+- **Description**: Historical result for a specific date/draw.
+- **Components**:
+    - `DrawResult`: The specific result.
+    - `PrizeBreakdown`: Prize table for that draw.
+- **Data**: Fetches historical data based on `date` and `lottery`.
+
+## 2. API Structure
+
+### 2.1 Internal API Routes
+- `GET /api/results/[country]`: Get country overview.
+- `GET /api/results/[country]/[lottery]`: Get lottery details and latest result.
+- `GET /api/results/[country]/[lottery]/history`: Get historical results.
+- `GET /api/results/[country]/[lottery]/[date]`: Get specific draw result.
+
+## 3. Data Flow
+1. **User Request**: User navigates to `/[country]/[lottery]`.
+2. **Page Layer**: `page.tsx` receives `params` (`country`, `lottery`).
+3. **Data Fetching**: Calls API endpoint or internal service to get data.
+4. **Rendering**: Passes data to `LotteryDetailContent` component.
+5. **Display**: Renders the UI with the fetched data.
+
+## 4. Key Components
+- `LotteryBall`: Renders a single lottery ball.
+- `PrizeGrid`: Renders a grid of numbers (e.g., for 2-digit/3-digit prizes).
+- `TicketVerifier`: Input form to check numbers.

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface DrawResult {
   date: string;
   drawId: string;
@@ -7,22 +9,37 @@ interface DrawResult {
   topPrize: string;
 }
 
+interface RecentDrawsTableProps {
+  country: string;
+  draws: DrawResult[];
+  countrySlug?: string;
+  lotterySlug?: string;
+}
+
 export function RecentDrawsTable({
   country,
   draws,
-}: {
-  country: string;
-  draws: DrawResult[];
-}) {
+  countrySlug,
+  lotterySlug,
+}: RecentDrawsTableProps) {
   return (
     <div className="bg-navy-800 rounded-2xl border border-white/10 overflow-hidden shadow-xl mt-8">
       <div className="p-6 border-b border-white/5 flex justify-between items-center">
         <h3 className="text-lg font-bold text-white">
           Recent Official Results
         </h3>
-        <button className="text-sm text-gold-400 hover:text-white transition-colors">
-          View All Archive
-        </button>
+        {countrySlug && lotterySlug ? (
+          <Link
+            href={`/${countrySlug}/${lotterySlug}`}
+            className="text-sm text-gold-400 hover:text-white transition-colors"
+          >
+            View All Archive
+          </Link>
+        ) : (
+          <button className="text-sm text-gold-400 hover:text-white transition-colors">
+            View All Archive
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left">

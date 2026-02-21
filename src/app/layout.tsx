@@ -52,13 +52,15 @@ export default function RootLayout({
       >
         <ClientProviders>
           {/* Background Effects */}
-          <div className="fixed inset-0 z-[-1] bg-navy-950">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,11,26,1),rgba(0,0,0,0))]" />
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02]" />
-            {/* Stars Mockup (CSS) */}
-            <div className="absolute top-10 left-1/4 h-1 w-1 rounded-full bg-white opacity-40 shadow-[0_0_10px_white]" />
-            <div className="absolute top-40 right-1/3 h-0.5 w-0.5 rounded-full bg-gold-300 opacity-60 shadow-[0_0_8px_gold]" />
-            <div className="absolute bottom-1/4 left-1/3 h-1 w-1 rounded-full bg-blue-300 opacity-30 shadow-[0_0_12px_blue]" />
+          <div className="fixed inset-0 z-[-1] bg-gray-50 dark:bg-navy-950 transition-colors duration-300">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,255,255,1),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(6,11,26,1),rgba(0,0,0,0))]" />
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay" />
+            {/* Stars Mockup (CSS) - Only visible in dark mode */}
+            <div className="hidden dark:block">
+              <div className="absolute top-10 left-1/4 h-1 w-1 rounded-full bg-white opacity-40 shadow-[0_0_10px_white]" />
+              <div className="absolute top-40 right-1/3 h-0.5 w-0.5 rounded-full bg-gold-300 opacity-60 shadow-[0_0_8px_gold]" />
+              <div className="absolute bottom-1/4 left-1/3 h-1 w-1 rounded-full bg-blue-300 opacity-30 shadow-[0_0_12px_blue]" />
+            </div>
           </div>
 
           <Header />

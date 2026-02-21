@@ -1,71 +1,68 @@
 import { TicketVerifier } from "@/components/country/TicketVerifier";
-import { RecentDrawsTable } from "@/components/country/RecentDrawsTable";
 import Image from "next/image";
 import { getFlagUrl } from "@/lib/flags";
+import Link from "next/link";
+import { ArrowRight, Trophy } from "lucide-react";
 
-// Mock Data Source
-interface Draw {
-  date: string;
-  drawId: string;
-  numbers: string[];
-  topPrize: string;
+// Mock Data Source - In real app, this would be fetched from API based on country
+interface LotteryConfig {
+  name: string;
+  slug: string;
+  nextDraw: string;
+  jackpot: string;
+  type: "Lotto" | "Raffle" | "Scratch";
 }
 
 interface CountryInfo {
   name: string;
-  lottoName: string;
   flag: string;
-  nextDraw: string;
-  jackpot: string;
-  draws: Draw[];
+  lotteries: LotteryConfig[];
 }
 
 const COUNTRY_DATA: Record<string, CountryInfo> = {
   thailand: {
     name: "Thailand",
-    lottoName: "Thai Lotto",
     flag: getFlagUrl("th"),
-    nextDraw: "May 1 - 2:30PM",
-    jackpot: "6 Million ฿",
-    draws: [
+    lotteries: [
       {
-        date: "16.04.24",
-        drawId: "#39/2567",
-        numbers: ["4", "3", "5", "5", "8"],
-        topPrize: "6 Million B",
-      },
-      {
-        date: "01.04.24",
-        drawId: "#38/2567",
-        numbers: ["6", "3", "3", "7", "9", "238"],
-        topPrize: "6 Million B",
-      },
-      {
-        date: "16.03.24",
-        drawId: "#37/2567",
-        numbers: ["2", "3", "6", "2", "8", "79"],
-        topPrize: "6 Million B",
+        name: "Thai Lotto",
+        slug: "thai-lotto",
+        nextDraw: "16 Feb",
+        jackpot: "6 Million ฿",
+        type: "Lotto",
       },
     ],
   },
   usa: {
     name: "United States",
-    lottoName: "Powerball",
     flag: getFlagUrl("us"),
-    nextDraw: "Tonight - 10:59PM",
-    jackpot: "$463 Million",
-    draws: [
+    lotteries: [
       {
-        date: "Apr 29",
-        drawId: "",
-        numbers: ["12", "34", "45", "55", "58", "20"],
-        topPrize: "$463M",
+        name: "Powerball",
+        slug: "powerball",
+        nextDraw: "Wed & Sat",
+        jackpot: "$463 Million",
+        type: "Lotto",
       },
       {
-        date: "Apr 27",
-        drawId: "",
-        numbers: ["05", "12", "34", "41", "58", "09"],
-        topPrize: "$450M",
+        name: "Mega Millions",
+        slug: "mega-millions",
+        nextDraw: "Tue & Fri",
+        jackpot: "$200 Million",
+        type: "Lotto",
+      },
+    ],
+  },
+  vietnam: {
+    name: "Vietnam",
+    flag: getFlagUrl("vn"),
+    lotteries: [
+      {
+        name: "Vietnam Hanoi",
+        slug: "vietnam-hanoi",
+        nextDraw: "Daily",
+        jackpot: "Variable",
+        type: "Lotto",
       },
     ],
   },
@@ -76,19 +73,23 @@ interface PageProps {
 }
 
 export default async function CountryPage({ params }: PageProps) {
-  // Await the params to resolve the Promise
   const resolvedParams = await params;
   const countryKey = resolvedParams.country.toLowerCase();
   const data = COUNTRY_DATA[countryKey];
 
   if (!data) {
-    // Basic fallback for unconfigured countries
     return (
       <div className="container mx-auto px-4 py-20 text-center">
         <h1 className="text-4xl font-bold text-white mb-4">
           Results for {resolvedParams.country}
         </h1>
         <p className="text-gray-400">Detailed data coming soon.</p>
+        <Link
+          href="/"
+          className="text-gold-400 hover:underline mt-4 inline-block"
+        >
+          Return Home
+        </Link>
       </div>
     );
   }
@@ -96,7 +97,7 @@ export default async function CountryPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Country Header */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-gray-200 dark:border-white/10 pb-8">
         <div className="flex items-center gap-4">
           <div className="relative h-16 w-24 overflow-hidden rounded-lg shadow-lg">
             <Image
@@ -108,70 +109,112 @@ export default async function CountryPage({ params }: PageProps) {
             />
           </div>
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
-              {data.lottoName}
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white drop-shadow-lg">
+              {data.name} Lottery
             </h1>
-            <p className="text-gray-400 text-lg">
-              Official Lottery Results & Statistics
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
+              Official Results & Statistics
             </p>
-          </div>
-        </div>
-        <div className="bg-gradient-to-r from-gold-600 to-gold-400 p-1 rounded-xl shadow-lg shadow-gold-500/20">
-          <div className="bg-navy-900 rounded-lg px-8 py-4 text-center">
-            <div className="text-sm text-gray-400 uppercase tracking-wider mb-1">
-              Next Jackpot
-            </div>
-            <div className="text-3xl font-black text-white">{data.jackpot}</div>
-            <div className="text-xs text-green-400 mt-1 font-mono">
-              Next Draw: {data.nextDraw}
-            </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <TicketVerifier country={data.name} />
-          <RecentDrawsTable country={data.name} draws={data.draws} />
+        {/* Main Content: List of Lotteries */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+              <Trophy className="text-gold-500 dark:text-gold-400 h-6 w-6" />
+              Available Lotteries
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.lotteries.map((lotto) => (
+                <Link
+                  key={lotto.slug}
+                  href={`/${countryKey}/${lotto.slug}`}
+                  className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-navy-800 dark:to-navy-900 p-6 transition-all hover:-translate-y-1 hover:border-gold-500/50 hover:shadow-xl hover:shadow-gold-500/10 shadow-sm"
+                >
+                  <div className="absolute inset-0 bg-gold-400/0 transition-colors group-hover:bg-gold-500/5 dark:group-hover:bg-gold-400/5" />
+                  <div className="relative z-10">
+                    <span className="inline-block rounded-full bg-gray-100 dark:bg-white/5 px-3 py-1 text-xs font-medium text-gold-600 dark:text-gold-400 mb-3 border border-gray-200 dark:border-white/10">
+                      {lotto.type}
+                    </span>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-gold-600 dark:group-hover:text-gold-300 transition-colors">
+                      {lotto.name}
+                    </h3>
+                    <div className="space-y-2 mb-6">
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Next Draw:{" "}
+                        <span className="text-gray-900 dark:text-white font-medium">
+                          {lotto.nextDraw}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Jackpot:{" "}
+                        <span className="text-green-600 dark:text-green-400 font-bold">
+                          {lotto.jackpot}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm font-bold text-gold-600 dark:text-gold-400">
+                      View Results{" "}
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Ticket Verifier */}
+          <div className="mt-12">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              Check Your Tickets
+            </h2>
+            <TicketVerifier country={data.name} />
+          </div>
         </div>
 
         {/* Sidebar Stats */}
-        <div className="space-y-6">
-          <div className="bg-navy-800 p-6 rounded-2xl border border-white/5">
-            <h3 className="font-bold text-white mb-4">Stats Overview</h3>
+        <aside className="space-y-6">
+          <div className="bg-white dark:bg-navy-800 p-6 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm">
+            <h3 className="font-bold text-gray-900 dark:text-white mb-4">
+              Country Stats
+            </h3>
             <div className="space-y-4 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-400">Odds of Winning:</span>
-                <span className="text-white">1 in 1,000,000</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  Total Lotteries:
+                </span>
+                <span className="text-gray-900 dark:text-white font-medium">
+                  {data.lotteries.length}
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Smallest Jackpot:</span>
-                <span className="text-white">2 Million</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Most Frequent Number:</span>
-                <span className="text-gold-400 font-mono">79</span>
+              <div className="p-4 bg-gray-50 dark:bg-navy-900/50 rounded-lg border border-gray-200 dark:border-white/5 mt-4">
+                <p className="text-center text-gray-500 dark:text-gray-400 italic text-xs">
+                  "Lottery is a tax on people who are bad at math, but a dream
+                  for those who need hope."
+                </p>
               </div>
             </div>
-            <button className="w-full mt-6 py-2 bg-navy-700 hover:bg-navy-600 text-gold-400 border border-gold-500/20 rounded-lg transition-colors">
-              View Detailed Statistics
-            </button>
           </div>
 
           {/* Promo Card */}
-          <div className="bg-gradient-to-br from-purple-900 to-blue-900 p-6 rounded-2xl border border-white/10 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 p-6 rounded-2xl border border-purple-200 dark:border-white/10 relative overflow-hidden shadow-sm">
             <div className="relative z-10">
-              <h3 className="font-bold text-white mb-2">Get Data API</h3>
-              <p className="text-sm text-gray-300 mb-4">
+              <h3 className="font-bold text-purple-900 dark:text-white mb-2">
+                Get Data API
+              </h3>
+              <p className="text-sm text-purple-700 dark:text-gray-300 mb-4">
                 Integrate these results into your own application with our
                 robust API.
               </p>
-              <button className="text-sm bg-white text-navy-900 px-4 py-2 rounded-lg font-bold hover:bg-gold-400 transition-colors">
+              <button className="text-sm bg-white text-purple-900 dark:text-navy-900 px-4 py-2 rounded-lg font-bold hover:bg-gold-400 transition-colors shadow-sm">
                 Get Access
               </button>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

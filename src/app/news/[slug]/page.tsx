@@ -22,7 +22,7 @@ export async function generateMetadata({
     const article = await apiClient.getNewsDetail(slug, "th");
     title = article.title;
     excerpt = article.content?.slice(0, 160) || "";
-    image = article.image;
+    image = article.image || getArticleBySlug(slug)?.image || "";
   } catch {
     const local = getArticleBySlug(slug);
     if (local) {

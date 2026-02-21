@@ -3,16 +3,28 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+import { z } from "zod";
+
+const bodySchema = z.object({
+  email: z.string().email("Invalid email address"),
+  type: z.string().min(1, "Type is required"),
+});
+
 export async function POST(request: Request) {
   try {
-    const { email, type } = await request.json();
+    const body = await request.json();
 
-    if (!email || !type) {
+    // Validate body
+    const validation = bodySchema.safeParse(body);
+
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "Missing email or type" },
+        { error: validation.error.issues[0].message },
         { status: 400 },
       );
     }
+
+    const { email, type } = validation.data;
 
     // Upsert subscriber
     const subscriber = await prisma.subscriber.create({

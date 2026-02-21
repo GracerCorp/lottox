@@ -56,12 +56,15 @@ export default function NewsArticleContent({
     relatedArticles = newsData.articles
       .filter((a) => a.slug !== article.slug)
       .slice(0, 3)
-      .map((a) => ({
-        slug: a.slug,
-        title: a.title,
-        image: a.image,
-        date: a.date,
-      }));
+      .map((a) => {
+        const fallback = fallbackNewsArticles.find((fa) => fa.slug === a.slug);
+        return {
+          slug: a.slug,
+          title: a.title,
+          image: a.image || fallback?.image || "",
+          date: a.date,
+        };
+      });
   } else {
     relatedArticles = fallbackNewsArticles
       .filter((a) => a.slug !== article.slug)
@@ -87,10 +90,16 @@ export default function NewsArticleContent({
 
       <article className="mx-auto max-w-3xl">
         {/* Hero Image */}
-        {article.image && (
+        {(article.image ||
+          fallbackNewsArticles.find((a) => a.slug === article.slug)?.image) && (
           <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl sm:h-80 md:h-96">
             <Image
-              src={article.image}
+              src={
+                article.image ||
+                fallbackNewsArticles.find((a) => a.slug === article.slug)
+                  ?.image ||
+                ""
+              }
               alt={title}
               fill
               className="object-cover"

@@ -144,6 +144,7 @@ class ApiClient {
       limit?: number;
       category?: string;
       lang?: string;
+      search?: string;
     } = {},
   ) {
     return this.fetch<{
