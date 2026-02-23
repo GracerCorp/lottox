@@ -9,6 +9,8 @@ import {
   SearchIcon,
   ShieldCheck,
   AlertTriangle,
+  Ticket,
+  CalendarDays,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
@@ -241,25 +243,92 @@ export default function LotteryDetail({
             ))}
 
           {/* Inline Lottery Checker */}
-          <section className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/50 p-6 backdrop-blur-md shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
-              {t.common.checkResult}
-            </h3>
-            <div className="flex flex-col gap-4 md:flex-row">
-              <select className="flex-1 rounded-lg border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-gold-500">
-                <option>{t.common.selectType}</option>
-              </select>
-              <div className="relative flex-[2]">
-                <input
-                  type="text"
-                  placeholder={t.common.inputPlaceholder}
-                  className="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-gold-500"
-                />
+          <section className="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/80 p-6 backdrop-blur-md shadow-lg">
+            {/* Background design elements */}
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold-400/5 blur-[80px]"></div>
+            <div className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-blue-500/5 blur-[80px]"></div>
+
+            <div className="relative z-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-500/20 text-gold-500">
+                    <SearchIcon className="h-4 w-4" />
+                  </div>
+                  {t.common.checkResult}
+                </h3>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  {t.common.checkResultDesc}
+                </p>
               </div>
-              <button className="flex items-center justify-center gap-2 rounded-lg bg-gold-500 px-8 py-3 font-bold text-white dark:text-black transition-all hover:bg-gold-400 hover:scale-105 shadow-md hover:shadow-lg">
-                <SearchIcon className="h-5 w-5" />
-                {t.common.checkBtn}
-              </button>
+            </div>
+
+            <div className="relative z-10 space-y-5">
+              <div className="flex flex-col gap-4 md:flex-row">
+                {/* Draw Date Selection */}
+                <div className="flex-1">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    {t.common.drawDate}
+                  </label>
+                  <div className="relative">
+                    <select className="w-full appearance-none rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-10 text-gray-900 dark:text-white outline-none transition-all focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20">
+                      <option value="">
+                        {t.common.latestDraw} (
+                        {latest?.dateDisplay ||
+                          latest?.date ||
+                          t.common.current}
+                        )
+                      </option>
+                      {historyItems.slice(0, 5).map((item, idx) => (
+                        <option key={idx} value={item.date}>
+                          {item.dateDisplay || item.date}
+                        </option>
+                      ))}
+                    </select>
+                    <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                      <svg
+                        className="h-4 w-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ticket Input */}
+                <div className="flex-[2]">
+                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    {t.common.yourTicketNumber}
+                  </label>
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      placeholder={`${t.common.inputPlaceholder} ${t.common.ticketExample}`}
+                      className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20"
+                    />
+                    <Ticket className="absolute left-4 h-5 w-5 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Area */}
+              <div className="flex flex-col-reverse items-center justify-between gap-4 border-t border-gray-100 dark:border-white/5 pt-5 sm:flex-row">
+                <button className="text-sm font-medium text-gray-500 transition-colors hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400">
+                  {t.common.addMoreTickets}
+                </button>
+                <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 px-8 py-3.5 font-bold text-white shadow-lg shadow-gold-500/25 transition-all hover:scale-[1.02] hover:shadow-gold-500/40 active:scale-95 sm:w-auto">
+                  <SearchIcon className="h-5 w-5" />
+                  {t.common.checkBtn}
+                </button>
+              </div>
             </div>
           </section>
 

@@ -1,4 +1,4 @@
-import { ApiClient } from "./src/lib/api-client"
+// Removed invalid ApiClient import
 
 async function run() {
   const { apiClient } = await import("./src/lib/api-client");

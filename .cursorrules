@@ -10,3 +10,27 @@
 8. **Emojis**: Do not use emoji icons in the code, comments, or UI unless explicitly required by the design.
 9. **Version Control**: After editing the project, always commit the code.
 10. **Context7 Usage**: When asked about Library APIs/documentation, Framework setup/configuration, Code examples for external packages, How to use a specific library feature, or Web scraping, automatically use the Context7 MCP to fetch current documentation.
+
+## Latest Best Practices & Framework Skills
+
+11. **Next.js (App Router)**:
+    - Default to using the App Router (`app` directory) and React Server Components.
+    - Colocate data fetching logic within Server Components using `fetch` with `cache: 'no-store'` or `cache: 'force-cache'` as appropriate instead of older patterns like `getServerSideProps`.
+    - Keep Client Components minimal by pushing data fetching and heavy logic to Server Components.
+
+12. **React 19 (Server Actions & Hooks)**:
+    - Utilize Server Functions in forms seamlessly by passing them to a form's `action` prop.
+    - Use the new `useActionState` hook to automatically manage form submissions, pending states (`isPending`), and server response states seamlessly within functional components.
+
+13. **Tailwind CSS v4**:
+    - Build interfaces rapidly using a utility-first methodology with Tailwind CSS v4.
+    - Avoid ad-hoc CSS unless strictly necessary; leverage Tailwind's flexible configuration and generated utility classes to maintain zero-runtime overhead styling.
+
+14. **shadcn/ui**:
+    - Use shadcn/ui to build accessible, beautifully designed, and customizable UI components using Radix UI and Tailwind CSS.
+    - Compose and modify the copied components directly in the codebase for maximum control over the UI design system.
+
+15. **Prisma & PostgreSQL**:
+    - Always initialize a global Prisma Client instance in development to avoid opening too many connections during hot reloads.
+    - When generating the Prisma Client, use the exact pattern: `const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });` alongside the `@prisma/adapter-pg` package.
+    - CRITICAL: When using custom output directories for Prisma Client in Next.js, ensure imports end with `/client` (e.g., `import { PrismaClient } from "../app/generated/prisma/client"`).

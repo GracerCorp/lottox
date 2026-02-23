@@ -1,32 +1,295 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model LotteryResult {
-  id        Int      @id @default(autoincrement())
-  type      String   // "THAI" | "LAO"
-  date      String   // Store as YYYY-MM-DD or display format? Better YYYY-MM-DD for sorting
-  drawDate  DateTime // Actual date object for sorting
-  drawNo    String?
-  // Store all prize data as a JSON string to be flexible
-  // Example for Thai: { first: "123456", last2: "99", last3f: ["111", "222"], ... }
-  data      String   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              user    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_userId_user_id_fk")
+
+  @@id([provider, providerAccountId], map: "account_provider_providerAccountId_pk")
 }
 
-model Subscriber {
-  id        Int      @id @default(autoincrement())
-  email     String
-  type      String   // "THAI" | "LAO" | "ALL"
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
+model admins {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique(map: "admins_email_unique")
+  password   String
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  role       String    @default("editor")
+}
+
+model ai_usage_logs {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  provider      String
+  model         String
+  input_tokens  Int       @default(0)
+  output_tokens Int       @default(0)
+  total_tokens  Int       @default(0)
+  cost          String    @default("0")
+  context       String?
+  metadata      Json?
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model api_keys {
+  id           String    @id
+  owner_id     String
+  label        String
+  key_prefix   String?
+  scope        String?   @default("read-only")
+  token_hash   String?
+  last_used_at DateTime? @db.Timestamp(6)
+  revoked_at   DateTime? @db.Timestamp(6)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model articles {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String
+  slug         String        @unique(map: "articles_slug_unique")
+  excerpt      String?
+  content      Json
+  cover_image  String?
+  author_id    String?
+  published    Boolean?      @default(false)
+  published_at DateTime?     @db.Timestamp(6)
+  tags         String[]
+  created_at   DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?     @default(now()) @db.Timestamp(6)
+  lottery_id   Int?
+  summary      String?
+  view_count   Int?          @default(0)
+  full_content String?
+  images       String[]
+  user         user?         @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
+  lottery_jobs lottery_jobs? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
+
+  @@index([author_id])
+  @@index([published_at])
+}
+
+model background_jobs {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type        String
+  payload     Json
+  status      String    @default("pending")
+  attempts    Int?      @default(0)
+  last_error  String?
+  next_run_at DateTime? @default(now()) @db.Timestamp(6)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model banners {
+  id                Int              @id @default(autoincrement())
+  image_url         String
+  ai_prompt         String?
+  lottery_result_id Int?
+  is_active         Boolean          @default(true)
+  created_at        DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?        @db.Timestamp(6)
+  lottery_results   lottery_results? @relation(fields: [lottery_result_id], references: [id], onUpdate: NoAction, map: "banners_lottery_result_id_lottery_results_id_fk")
+}
+
+model countries {
+  id            Int            @id @default(autoincrement())
+  code          String         @unique(map: "countries_code_unique")
+  name          String
+  flag          String?
+  draw_schedule String?
+  odds          String?
+  is_active     Boolean?       @default(true)
+  created_at    DateTime?      @default(now()) @db.Timestamp(6)
+  lottery_jobs  lottery_jobs[]
+}
+
+model email_logs {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id         String?
+  recipient_email String
+  subject         String
+  type            String    @default("welcome")
+  provider        String?
+  status          String    @default("sent")
+  error_message   String?
+  metadata        Json?
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  user            user?     @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "email_logs_user_id_user_id_fk")
+
+  @@index([created_at])
+  @@index([type])
+  @@index([user_id])
+}
+
+model gamification_logs {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String?
+  action     String
+  points     Int
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  user       user?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "gamification_logs_user_id_user_id_fk")
+
+  @@index([user_id, created_at], map: "gamification_logs_user_created_idx")
+  @@index([user_id])
+}
+
+model lottery_jobs {
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  url                   String
+  cron_schedule         String
+  status                String                  @default("active")
+  created_at            DateTime?               @default(now()) @db.Timestamp(6)
+  country_id            Int?
+  articles              articles[]
+  countries             countries?              @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_jobs_country_id_countries_id_fk")
+  lottery_results       lottery_results[]
+  lottery_subscriptions lottery_subscriptions[]
+}
+
+model lottery_prizes {
+  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lottery_result_id Int
+  category          String
+  prize_name        String
+  prize_amount      Int             @default(0)
+  prize_count       Int             @default(0)
+  winning_numbers   Json
+  order             Int?            @default(0)
+  created_at        DateTime?       @default(now()) @db.Timestamp(6)
+  lottery_results   lottery_results @relation(fields: [lottery_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_prizes_lottery_result_id_lottery_results_id_fk")
+}
+
+model lottery_results {
+  id             Int              @id @default(autoincrement())
+  draw_date      String
+  draw_period    String?
+  full_data      Json
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  lottery_id     Int?
+  notified_at    DateTime?        @db.Timestamp(6)
+  banners        banners[]
+  lottery_prizes lottery_prizes[]
+  lottery_jobs   lottery_jobs?    @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
+
+  @@index([draw_date], map: "draw_date_idx")
+  @@index([lottery_id, draw_date], map: "lottery_draw_date_idx")
+}
+
+model lottery_subscriptions {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String
+  lottery_id   Int
+  created_at   DateTime?    @default(now()) @db.Timestamp(6)
+  lottery_jobs lottery_jobs @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
+  user         user         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_user_id_user_id_fk")
+
+  @@index([user_id, lottery_id], map: "user_lottery_idx")
+}
+
+model notifications {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String?
+  type       String?
+  content    String
+  read       Boolean?  @default(false)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  user       user?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notifications_user_id_user_id_fk")
+
+  @@index([user_id])
+}
+
+model platform_settings {
+  key         String    @id
+  value       String
+  description String?
+  is_public   Boolean?  @default(false)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model session {
+  sessionToken String   @id
+  userId       String
+  expires      DateTime @db.Timestamp(6)
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "session_userId_user_id_fk")
+}
+
+model subscriptions {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id            String?
+  stripe_id          String?   @unique(map: "subscriptions_stripe_id_unique")
+  status             String?
+  current_period_end DateTime? @db.Timestamp(6)
+  user               user?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
+}
+
+model user {
+  id                    String                  @id
+  name                  String?
+  email                 String                  @unique(map: "user_email_unique")
+  emailVerified         DateTime?               @db.Timestamp(6)
+  image                 String?
+  points_balance        Int?                    @default(0)
+  password              String?
+  phone_number          String?
+  country_code          String?
+  date_of_birth         DateTime?               @db.Timestamp(6)
+  is_active             Boolean?                @default(true)
+  last_sign_in_at       DateTime?               @db.Timestamp(6)
+  last_sign_in_method   String?
+  push_subscriptions    Json?                   @default("[]")
+  username              String?                 @unique(map: "user_username_unique")
+  title                 String?
+  first_name            String?
+  last_name             String?
+  gender                String?
+  citizen_id            String?
+  is_identity_verified  Boolean?                @default(false)
+  created_at            DateTime?               @default(now()) @db.Timestamp(6)
+  account               account[]
+  articles              articles[]
+  email_logs            email_logs[]
+  gamification_logs     gamification_logs[]
+  lottery_subscriptions lottery_subscriptions[]
+  notifications         notifications[]
+  session               session[]
+  subscriptions         subscriptions[]
+  user_addresses        user_addresses[]
+}
+
+model user_addresses {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String
+  label         String    @default("Home")
+  address_line1 String
+  subdistrict   String?
+  district      String?
+  province      String?
+  zip_code      String?
+  is_default    Boolean?  @default(false)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  user          user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_addresses_user_id_user_id_fk")
+
+  @@index([user_id])
+}
+
+model verificationToken {
+  identifier String
+  token      String
+  expires    DateTime @db.Timestamp(6)
+
+  @@id([identifier, token], map: "verificationToken_identifier_token_pk")
 }

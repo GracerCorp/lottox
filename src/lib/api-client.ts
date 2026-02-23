@@ -1,93 +1,68 @@
 import { NextResponse } from "next/server";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.API_BASE_URL ||
-  "https://lotto-x-cms.vercel.app/api";
-const API_KEY = process.env.API_KEY;
-
-type RequestOptions = {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  body?: any;
-  headers?: Record<string, string>;
-  params?: Record<string, string | number | boolean | undefined>;
-  cache?: RequestCache;
-  next?: NextFetchRequestConfig;
-};
+import { prisma } from "./prisma";
+import type { Prisma } from "@prisma/client";
 
 class ApiClient {
-  private async fetch<T>(
-    endpoint: string,
-    options: RequestOptions = {},
-  ): Promise<T> {
-    const { method = "GET", body, headers = {}, params, cache, next } = options;
-
-    const url = new URL(`${API_BASE_URL}${endpoint}`);
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined) {
-          url.searchParams.append(key, String(value));
-        }
-      });
-    }
-
-    const requestHeaders: Record<string, string> = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${API_KEY}`,
-      ...headers,
-    };
-
-    try {
-      const response = await fetch(url.toString(), {
-        method,
-        headers: requestHeaders,
-        body: body ? JSON.stringify(body) : undefined,
-        cache,
-        next,
-      });
-
-      if (!response.ok) {
-        // Try to parse error message from response
-        try {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message ||
-              errorData.error ||
-              `API Error: ${response.status} ${response.statusText}`,
-          );
-        } catch (jsonError) {
-          throw new Error(
-            `API Error: ${response.status} ${response.statusText}`,
-          );
-        }
-      }
-
-      const data = await response.json();
-      return data as T;
-    } catch (error) {
-      console.error(`API Request Failed: ${method} ${endpoint}`, error);
-      throw error;
-    }
-  }
-
   // --- Public Spec API Methods ---
 
   // Results
   async getLatestResults(type?: string) {
-    return this.fetch<{ results: any[] }>("/results/latest", {
-      params: { type },
-      next: { revalidate: 60 }, // Cache for 1 minute
+    const whereClause: Prisma.lottery_resultsWhereInput = {};
+    if (type) {
+      whereClause.lottery_jobs = {
+        name: {
+          equals: type,
+          mode: "insensitive",
+        },
+      };
+    }
+
+    const latestResults = await prisma.lottery_results.findMany({
+      where: whereClause,
+      orderBy: { draw_date: "desc" },
+      take: 10,
+      include: {
+        lottery_jobs: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
+
+    return { results: latestResults };
   }
 
   async getResultsByType(type: string, limit: number = 10, offset: number = 0) {
-    return this.fetch<{ latest: any; history: any[]; total: number }>(
-      `/results/${type}`,
-      {
-        params: { limit, offset },
-        next: { revalidate: 60 },
+    const whereClause: Prisma.lottery_resultsWhereInput = {
+      lottery_jobs: {
+        name: {
+          equals: type,
+          mode: "insensitive",
+        },
       },
-    );
+    };
+
+    const [total, results] = await prisma.$transaction([
+      prisma.lottery_results.count({ where: whereClause }),
+      prisma.lottery_results.findMany({
+        where: whereClause,
+        orderBy: { draw_date: "desc" },
+        take: limit,
+        skip: offset,
+        include: {
+          lottery_jobs: {
+            select: { name: true },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      latest: results.length > 0 ? results[0] : null,
+      history: results,
+      total,
+    };
   }
 
   async getGlobalResults(params: {
@@ -97,47 +72,159 @@ class ApiClient {
     period?: string;
     date?: string;
   }) {
-    return this.fetch<{
-      draws: any[];
-      total: number;
-      page: number;
-      totalPages: number;
-    }>("/results/global", {
-      params,
-      next: { revalidate: 60 },
-    });
+    const { page = 1, limit = 10, country, period, date } = params;
+    const offset = (page - 1) * limit;
+
+    const whereClause: Prisma.lottery_resultsWhereInput = {};
+    if (country) {
+      whereClause.lottery_jobs = {
+        countries: {
+          code: {
+            equals: country,
+            mode: "insensitive",
+          },
+        },
+      };
+    }
+    if (date) {
+      whereClause.draw_date = date; // Or however dates are tracked exactly
+    }
+    if (period) {
+      whereClause.draw_period = period;
+    }
+
+    const [total, results] = await prisma.$transaction([
+      prisma.lottery_results.count({ where: whereClause }),
+      prisma.lottery_results.findMany({
+        where: whereClause,
+        orderBy: { draw_date: "desc" },
+        take: limit,
+        skip: offset,
+        include: {
+          lottery_jobs: {
+            include: {
+              countries: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      draws: results,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   // Check Number
   async checkNumber(number: string, type: string, drawDate?: string) {
-    return this.fetch<{
-      win: boolean;
-      prize?: string;
-      prizeLabel?: string;
-      amount?: string;
-      drawDate: string;
-      drawNo: string;
-    }>("/check", {
-      params: { number, type, drawDate },
-      cache: "no-store", // Do not cache checks
+    // Basic implementation since we lack all specific parsing details.
+    // Assuming full_data JSON has properties we need, or check against lottery_prizes.
+    // For now we will try checking lottery_prizes.
+
+    // Find the relevant result first
+    const resultWhere: Prisma.lottery_resultsWhereInput = {
+      lottery_jobs: {
+        name: { equals: type, mode: "insensitive" },
+      },
+    };
+    if (drawDate) {
+      resultWhere.draw_date = drawDate;
+    }
+
+    const latestResult = await prisma.lottery_results.findFirst({
+      where: resultWhere,
+      orderBy: { draw_date: "desc" },
+      include: {
+        lottery_prizes: true,
+      },
     });
+
+    if (!latestResult) {
+      return {
+        win: false,
+        drawDate: drawDate || "Unknown",
+        drawNo: "Unknown",
+      };
+    }
+
+    let isWin = false;
+    let winPrize = "";
+    let amount = 0;
+
+    for (const prize of latestResult.lottery_prizes) {
+      // winning_numbers is likely an array in JSON or string
+      const numbers: any = prize.winning_numbers;
+      if (Array.isArray(numbers) && numbers.includes(number)) {
+        isWin = true;
+        winPrize = prize.prize_name;
+        amount = prize.prize_amount;
+        break;
+      } else if (typeof numbers === "string" && numbers === number) {
+        isWin = true;
+        winPrize = prize.prize_name;
+        amount = prize.prize_amount;
+        break;
+      }
+    }
+
+    return {
+      win: isWin,
+      prize: isWin ? winPrize : undefined,
+      prizeLabel: isWin ? winPrize : undefined,
+      amount: amount > 0 ? amount.toString() : undefined,
+      drawDate: latestResult.draw_date,
+      drawNo: latestResult.draw_period || "",
+    };
   }
 
   // Countries
   async getCountries() {
-    return this.fetch<{ countries: any[] }>("/countries", {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+    const countriesList = await prisma.countries.findMany({
+      where: { is_active: true },
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: { lottery_jobs: true },
+        },
+      },
     });
+    return { countries: countriesList };
   }
 
   async getCountryDraws(code: string, limit: number = 10) {
-    return this.fetch<{ country: any; draws: any[] }>(
-      `/countries/${code}/draws`,
-      {
-        params: { limit },
-        next: { revalidate: 60 },
+    const countryInfo = await prisma.countries.findUnique({
+      where: { code: code.toUpperCase() },
+      include: {
+        lottery_jobs: {
+          include: {
+            lottery_results: {
+              orderBy: { draw_date: "desc" },
+              take: 1,
+            },
+          },
+        },
       },
-    );
+    });
+
+    if (!countryInfo) {
+      throw new Error("Country not found");
+    }
+
+    const jobIds = countryInfo.lottery_jobs.map((j) => j.id);
+
+    const draws = await prisma.lottery_results.findMany({
+      where: { lottery_id: { in: jobIds } },
+      orderBy: { draw_date: "desc" },
+      take: limit,
+      include: {
+        lottery_jobs: true,
+      },
+    });
+
+    return { country: countryInfo, draws };
   }
 
   // News
@@ -150,56 +237,100 @@ class ApiClient {
       search?: string;
     } = {},
   ) {
-    return this.fetch<{
-      articles: any[];
-      total: number;
-      page: number;
-      totalPages: number;
-    }>("/news", {
-      params,
-      next: { revalidate: 300 }, // Cache for 5 mins
-    });
+    const { page = 1, limit = 10, category, search } = params;
+    const offset = (page - 1) * limit;
+
+    const where: Prisma.articlesWhereInput = {
+      published: true,
+    };
+
+    if (category) {
+      // Based on schema, tags are String[] arrays, we can look within them or use a dedicated column if exists (schema lacks simple category)
+      where.tags = {
+        has: category,
+      };
+    }
+
+    if (search) {
+      where.title = { contains: search, mode: "insensitive" };
+    }
+
+    const [total, articles] = await prisma.$transaction([
+      prisma.articles.count({ where }),
+      prisma.articles.findMany({
+        where,
+        orderBy: { published_at: "desc" },
+        take: limit,
+        skip: offset,
+      }),
+    ]);
+
+    return {
+      articles,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async getNewsDetail(slug: string, lang?: string) {
-    return this.fetch<{
-      slug: string;
-      title: string;
-      content: string;
-      image: string;
-      date: string;
-      category: string;
-      author: string;
-      source: string;
-      related: string[];
-    }>(`/news/${slug}`, {
-      params: { lang },
-      next: { revalidate: 300 },
+    const article = await prisma.articles.findUnique({
+      where: { slug },
+      include: {
+        user: {
+          select: { name: true },
+        },
+      },
     });
+
+    if (!article) {
+      throw new Error("Article not found");
+    }
+
+    return {
+      slug: article.slug,
+      title: article.title,
+      content:
+        typeof article.content === "string"
+          ? article.content
+          : JSON.stringify(article.content),
+      image:
+        article.cover_image ||
+        (article.images.length > 0 ? article.images[0] : ""),
+      date:
+        article.published_at?.toISOString() ||
+        article.created_at?.toISOString() ||
+        "",
+      category: article.tags.length > 0 ? article.tags[0] : "",
+      author: article.user?.name || "Admin",
+      source: "LottoX",
+      related: [],
+    };
   }
 
   // Statistics
   async getStatsOverview() {
-    return this.fetch<{
-      totalJackpotsTracked: string;
-      activeLotteries: number;
-      upcomingDraws24h: number;
-      totalCountries: number;
-    }>("/statistics/overview", {
-      next: { revalidate: 3600 },
-    });
+    const [totalResults, activeLottos, countries] = await prisma.$transaction([
+      prisma.lottery_results.count(),
+      prisma.lottery_jobs.count({ where: { status: "active" } }),
+      prisma.countries.count({ where: { is_active: true } }),
+    ]);
+
+    return {
+      totalJackpotsTracked: totalResults.toString(), // Approximation based on DB counts
+      activeLotteries: activeLottos,
+      upcomingDraws24h: 0, // Need schedule implementation logic to calc properly
+      totalCountries: countries,
+    };
   }
 
   async getStatsFrequency(type: string, draws: number = 30, position?: string) {
-    return this.fetch<{
-      type: string;
-      draws: number;
-      frequency: any;
-      trends: any;
-    }>("/statistics/frequency", {
-      params: { type, draws, position },
-      next: { revalidate: 3600 },
-    });
+    return {
+      type,
+      draws,
+      frequency: {}, // Needs complex aggregation logic over JSON fields
+      trends: {},
+    };
   }
 }
 

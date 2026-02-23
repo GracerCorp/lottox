@@ -51,6 +51,19 @@ export const dictionary = {
       info: "ข้อมูลหวยลาว",
       newsTitle: "ข่าวหวยล่าสุด",
       viewDetails: "ดูรายละเอียด",
+      checkResultDesc:
+        "กรอกเลขสลากเพื่อตรวจสอบผลรางวัลในงวดที่เลือก รองรับการตรวจหลายหมายเลข",
+      drawDate: "งวดวันที่",
+      latestDraw: "งวดล่าสุด",
+      current: "ปัจจุบัน",
+      yourTicketNumber: "เลขสลากของคุณ",
+      ticketExample: "(เช่น 123456, 789012)",
+      addMoreTickets: "+ เพิ่มสลาก",
+      verifyTicketTitle: "ตรวจสลากของคุณ",
+      verifyTicketDesc:
+        "ตรวจสอบว่าสลากของคุณถูกรางวัลหรือไม่ โดยระบบจะตรวจย้อนหลัง 30 งวดอัตโนมัติ",
+      enterYourNumbers: "กรอกเลขสลากของคุณ",
+      separateTickets: "คั่นสลากหลายใบด้วยเครื่องหมายจุลภาคหรือเว้นวรรค",
     },
     subscribe: {
       button: "รับผลหวยทางอีเมล",
@@ -483,6 +496,19 @@ export const dictionary = {
       info: "Lao Lotto Info",
       newsTitle: "Latest News",
       viewDetails: "View Details",
+      checkResultDesc:
+        "Enter your ticket numbers to see if you've won in the selected draw. Supports multiple numbers.",
+      drawDate: "Draw Date",
+      latestDraw: "Latest Draw",
+      current: "Current",
+      yourTicketNumber: "Your Ticket Number",
+      ticketExample: "(e.g. 123456, 789012)",
+      addMoreTickets: "+ Add more tickets",
+      verifyTicketTitle: "Verify Your Ticket",
+      verifyTicketDesc:
+        "Check if your tickets are winners across the last 30 draws automatically.",
+      enterYourNumbers: "Enter your numbers",
+      separateTickets: "Separate multiple tickets by commas or spaces.",
     },
     subscribe: {
       button: "Subscribe for Results",
@@ -586,8 +612,8 @@ export const dictionary = {
       countries: {
         usa: "USA",
         uk: "UK",
-        germany: "Germany",
-        spain: "Spain",
+        laos: "Laos",
+        vietnam: "Vietnam",
         thailand: "Thailand",
         italy: "Italy",
         france: "France",
