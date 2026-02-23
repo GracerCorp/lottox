@@ -4,7 +4,6 @@ import { LotteryBall } from "@/components/ui/LotteryBall";
 import { getFlagUrl } from "@/lib/flags";
 import {
   ShieldCheck,
-  Clock,
   Award,
   Search,
   Newspaper,
@@ -30,7 +29,7 @@ export default function VietnamLottoDisplay({
   lotteryType,
   data,
 }: VietnamLottoDisplayProps) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
 
   const lottoInfo = t.lottery.vietnam[lotteryType];
   const mainInfo = t.lottery.vietnam;
@@ -53,9 +52,11 @@ export default function VietnamLottoDisplay({
             </span>
             <span className="text-gray-500">|</span>
             <span className="text-gray-400">
-              <img
+              <Image
                 src={getFlagUrl("vn")}
                 alt="Vietnam flag"
+                width={24}
+                height={16}
                 className="mr-1.5 inline-block h-4 w-6 rounded-sm"
               />
               {mainInfo.country}
@@ -65,9 +66,11 @@ export default function VietnamLottoDisplay({
           </div>
           <div className="mt-3 flex items-center gap-3">
             <div className="flex h-10 w-16 items-center justify-center overflow-hidden rounded bg-red-800 shadow-sm">
-              <img
+              <Image
                 src={getFlagUrl("vn")}
                 alt="Vietnam flag"
+                width={64}
+                height={40}
                 className="h-full w-full object-cover opacity-80"
               />
             </div>
@@ -98,9 +101,11 @@ export default function VietnamLottoDisplay({
               </div>
               <div className="mb-4 flex flex-col items-center justify-center gap-2">
                 <div className="flex items-center gap-4">
-                  <img
+                  <Image
                     src={getFlagUrl("vn")}
                     alt="Vietnam flag"
+                    width={40}
+                    height={40}
                     className="inline-block h-10 w-10"
                   />
                   <h2 className="bg-gradient-to-r from-red-300 to-red-600 bg-clip-text text-5xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-6xl text-center leading-tight">

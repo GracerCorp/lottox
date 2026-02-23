@@ -37,7 +37,6 @@ export async function GET(request: NextRequest) {
       page,
       limit,
       category,
-      lang,
       search,
     });
     return NextResponse.json(data);

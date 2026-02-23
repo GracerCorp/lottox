@@ -175,7 +175,7 @@ export function HeroSection() {
                   }}
                 >
                   <div className="transform transition-all duration-500 origin-center relative">
-                    <LotteryCard {...item} hideResults={true} />
+                    <LotteryCard {...item} />
                     {distance === 0 && (
                       <>
                         {/* Aura Border */}

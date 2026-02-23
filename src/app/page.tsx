@@ -1,24 +1,20 @@
-"use client";
-
 import { HeroSection } from "@/components/home/HeroSection";
-import { ResultsTable } from "@/components/ui/ResultsTable";
 import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
 import { CountryListSection } from "@/components/home/CountryListSection";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useState } from "react";
-import Image from "next/image";
+import { HomeResultsSection } from "@/components/home/HomeResultsSection";
+import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getFlagUrl } from "@/lib/flags";
-import { cn } from "@/lib/utils";
 
-export default function Home() {
-  const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"all" | "th" | "la" | "vn">("all");
+export default async function Home() {
+  const countries = await getActiveCountries();
 
   const tabs = [
-    { id: "all", label: t.selector.all, flag: null },
-    { id: "th", label: t.selector.thai, flag: getFlagUrl("th") },
-    { id: "la", label: t.selector.lao, flag: getFlagUrl("la") },
-    { id: "vn", label: t.selector.vietnam, flag: getFlagUrl("vn") },
+    { id: "all", label: "all", flag: null },
+    ...countries.map((c) => ({
+      id: c.code.toLowerCase(), // Maps TH -> th, LA -> la
+      label: c.code.toLowerCase(), // We use the ID as a translation key inside HomeResultsSection
+      flag: c.flag || getFlagUrl(c.code.toLowerCase()) || null,
+    })),
   ];
 
   return (
@@ -32,42 +28,7 @@ export default function Home() {
       <HeroSection />
 
       {/* Results Section with Country Tabs */}
-      <section className="container mx-auto px-4">
-        {/* Country Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="flex p-1 bg-white/50 dark:bg-navy-900/50 backdrop-blur-md rounded-full border border-gray-200 dark:border-white/10">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() =>
-                  setActiveTab(tab.id as "all" | "th" | "la" | "vn")
-                }
-                className={cn(
-                  "flex items-center gap-2 px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
-                  activeTab === tab.id
-                    ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5",
-                )}
-              >
-                {tab.flag && (
-                  <div className="relative h-4 w-6 overflow-hidden rounded shadow-sm">
-                    <Image
-                      src={tab.flag}
-                      alt={`${tab.label} flag`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Results Table */}
-        <ResultsTable filter={activeTab} />
-      </section>
+      <HomeResultsSection tabs={tabs} />
 
       {/* Country List Section */}
       <CountryListSection />

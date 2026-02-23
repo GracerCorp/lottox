@@ -1,10 +1,11 @@
 "use client";
 
+import type React from "react";
 import { BarChart3, TrendingUp, PieChart } from "lucide-react";
 import { useApi } from "@/lib/hooks/useApi";
 import type { StatsOverviewResponse } from "@/lib/api-types";
 
-function ClockIcon(props: any) {
+function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

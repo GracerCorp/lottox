@@ -2,7 +2,7 @@
 
 import { LotteryBall } from "@/components/ui/LotteryBall";
 import { getFlagUrl } from "@/lib/flags";
-import { ShieldCheck, Trophy, Clock, AlertTriangle } from "lucide-react";
+import { ShieldCheck, Trophy, AlertTriangle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -195,18 +195,22 @@ export default function ThaiLottoContent() {
             </span>
             <span className="text-gray-300 dark:text-gray-500">|</span>
             <span className="text-gray-600 dark:text-gray-400">
-              <img
+              <Image
                 src={getFlagUrl("TH")}
                 alt="Thailand flag"
+                width={24}
+                height={16}
                 className="mr-1.5 inline-block h-4 w-6 rounded-sm"
               />
               {t.lottery.thai.country}
             </span>
           </div>
           <div className="mt-3 flex items-center gap-3">
-            <img
+            <Image
               src="https://upload.wikimedia.org/wikipedia/commons/2/21/GLO_Logo.svg"
               alt="GLO"
+              width={40}
+              height={40}
               className="h-10 w-auto brightness-0 invert opacity-80"
             />
             <div>
@@ -236,9 +240,11 @@ export default function ThaiLottoContent() {
               </div>
               <div className="mb-4 flex flex-col items-center justify-center gap-2">
                 <div className="flex items-center gap-4">
-                  <img
+                  <Image
                     src={getFlagUrl("TH")}
                     alt="Thailand flag"
+                    width={40}
+                    height={40}
                     className="inline-block h-10 w-10"
                   />
                   <h2 className="bg-gradient-to-r from-gold-300 to-gold-600 bg-clip-text text-5xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-6xl text-center leading-tight">
@@ -488,9 +494,11 @@ export default function ThaiLottoContent() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={getFlagUrl("TH")}
                         alt="TH"
+                        width={24}
+                        height={16}
                         className="h-4 w-6 rounded-sm"
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white">

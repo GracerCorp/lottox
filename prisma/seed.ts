@@ -26,7 +26,34 @@ async function main() {
     },
   });
 
-  // Ensure there are some lottery jobs
+  // Ensure there are some lotteries metadata
+  let thaiLottoMetadata = await prisma.lotteries.upsert({
+    where: { slug: "thai-lotto" },
+    update: {},
+    create: {
+      name: "Thai Lotto",
+      slug: "thai-lotto",
+      country_id: thaiCountry.id,
+      jackpot: "6 Million ฿",
+      next_draw: "16 Feb",
+      type: "Lotto",
+    },
+  });
+
+  let laoLottoMetadata = await prisma.lotteries.upsert({
+    where: { slug: "lao-lotto" },
+    update: {},
+    create: {
+      name: "Lao Lotto",
+      slug: "lao-lotto",
+      country_id: laoCountry.id,
+      jackpot: "Variable",
+      next_draw: "Monday, Wednesday, Friday",
+      type: "Lotto",
+    },
+  });
+
+  // Ensure there are some lottery jobs (cron jobs)
   let thaiLottoJob = await prisma.lottery_jobs.findFirst({
     where: { name: "THAI", country_id: thaiCountry.id },
   });

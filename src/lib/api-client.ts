@@ -30,7 +30,22 @@ class ApiClient {
       },
     });
 
-    return { results: latestResults };
+    const formatResult = (res: {
+      id: number;
+      draw_date: string;
+      draw_period: string | null;
+      full_data: unknown;
+      lottery_jobs: { name: string } | null;
+    }) => ({
+      id: res.id,
+      type: res.lottery_jobs?.name || type,
+      date: res.draw_date,
+      drawDate: res.draw_date,
+      drawNo: res.draw_period || "",
+      data: res.full_data,
+    });
+
+    return { results: latestResults.map(formatResult) };
   }
 
   async getResultsByType(type: string, limit: number = 10, offset: number = 0) {
@@ -58,9 +73,25 @@ class ApiClient {
       }),
     ]);
 
+    const formatResult = (res: {
+      id: number;
+      draw_date: string;
+      draw_period: string | null;
+      full_data: unknown;
+      lottery_jobs: { name: string } | null;
+    }) => ({
+      id: res.id,
+      type: res.lottery_jobs?.name || type,
+      date: res.draw_date,
+      dateDisplay: res.draw_date,
+      drawNo: res.draw_period || "",
+      daysAgo: "", // Can calculate if needed
+      data: res.full_data,
+    });
+
     return {
-      latest: results.length > 0 ? results[0] : null,
-      history: results,
+      latest: results.length > 0 ? formatResult(results[0]) : null,
+      history: results.map(formatResult),
       total,
     };
   }
@@ -156,7 +187,7 @@ class ApiClient {
 
     for (const prize of latestResult.lottery_prizes) {
       // winning_numbers is likely an array in JSON or string
-      const numbers: any = prize.winning_numbers;
+      const numbers: unknown = prize.winning_numbers;
       if (Array.isArray(numbers) && numbers.includes(number)) {
         isWin = true;
         winPrize = prize.prize_name;
@@ -227,13 +258,11 @@ class ApiClient {
     return { country: countryInfo, draws };
   }
 
-  // News
   async getNews(
     params: {
       page?: number;
       limit?: number;
       category?: string;
-      lang?: string;
       search?: string;
     } = {},
   ) {
@@ -324,7 +353,7 @@ class ApiClient {
     };
   }
 
-  async getStatsFrequency(type: string, draws: number = 30, position?: string) {
+  async getStatsFrequency(type: string, draws: number = 30) {
     return {
       type,
       draws,

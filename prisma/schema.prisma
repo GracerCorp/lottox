@@ -113,7 +113,22 @@ model countries {
   odds          String?
   is_active     Boolean?       @default(true)
   created_at    DateTime?      @default(now()) @db.Timestamp(6)
+  lotteries     lotteries[]
   lottery_jobs  lottery_jobs[]
+}
+
+model lotteries {
+  id            Int             @id @default(autoincrement())
+  country_id    Int
+  name          String
+  slug          String          @unique
+  type          String          @default("Lotto") // Lotto, Raffle, Scratch, etc.
+  jackpot       String?         // Optional visual display
+  next_draw     String?         // Optional visual display
+  is_active     Boolean         @default(true)
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  countries     countries       @relation(fields: [country_id], references: [id], onDelete: Cascade)
+  // Optionally, later link lottery_results to this table instead of jobs, but for now just metadata
 }
 
 model email_logs {

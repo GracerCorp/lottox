@@ -29,10 +29,20 @@ export function useApi<T>(url: string | null, options?: RequestInit) {
         throw new Error(`API Error: ${response.status}`);
       }
       const json = await response.json();
+      console.log("[useApi Debug]", url, json);
       setState({ data: json as T, loading: false, error: null });
-    } catch (err: any) {
-      setState({ data: null, loading: false, error: err.message });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setState({ data: null, loading: false, error: err.message });
+      } else {
+        setState({
+          data: null,
+          loading: false,
+          error: "An unknown error occurred",
+        });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   useEffect(() => {

@@ -102,7 +102,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
   const slug = resolvedParams.slug;
 
   // Try API first
-  let articleData: any = null;
+  let articleData: unknown = null;
   try {
     articleData = await apiClient.getNewsDetail(slug, "th");
   } catch {
@@ -134,8 +134,8 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <ArticleJsonLd article={articleData} />
-      <NewsArticleContent article={articleData} />
+      <ArticleJsonLd article={articleData as any} />
+      <NewsArticleContent article={articleData as any} />
     </>
   );
 }

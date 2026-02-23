@@ -31,23 +31,34 @@ interface ResultRow {
 }
 
 interface ResultsTableProps {
-  filter?: "all" | "th" | "la" | "vn";
+  filter?: string;
 }
 
-function isThaiData(data: any): data is ThaiResultData {
-  return data && "firstPrize" in data;
+function isThaiData(data: unknown): data is ThaiResultData {
+  return typeof data === "object" && data !== null && "firstPrize" in data;
 }
 
-function isLaoData(data: any): data is LaoResultData {
-  return data && "digit4" in data && "digit4Multiplier" in data;
+function isLaoData(data: unknown): data is LaoResultData {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "digit4" in data &&
+    "digit4Multiplier" in data
+  );
 }
 
-function isVietnamData(data: any): data is VietnamResultData {
-  return data && "digit4" in data && "digit2Bottom" in data;
+function isVietnamData(data: unknown): data is VietnamResultData {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "digit4" in data &&
+    "digit2Bottom" in data
+  );
 }
 
 function mapApiResultToRow(
   result: LatestResult,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: any,
   language: string,
 ): ResultRow | null {

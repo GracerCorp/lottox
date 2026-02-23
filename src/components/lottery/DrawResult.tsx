@@ -36,7 +36,7 @@ export function DrawResult({
   drawId,
   firstPrize,
   firstPrizeAmount,
-  prizes = [],
+  // prizes = [],
   front3 = [],
   front3Amount,
   back3 = [],

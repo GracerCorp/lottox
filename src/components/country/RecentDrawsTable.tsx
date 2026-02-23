@@ -17,7 +17,6 @@ interface RecentDrawsTableProps {
 }
 
 export function RecentDrawsTable({
-  country,
   draws,
   countrySlug,
   lotterySlug,

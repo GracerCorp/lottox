@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useApi } from "@/lib/hooks/useApi";
 import { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
 import { getFlagUrl } from "@/lib/flags";
+import Image from "next/image";
 
 interface LotteryDetailProps {
   country: string;
@@ -130,11 +131,20 @@ export default function LotteryDetail({
     lotteryName: lotteryName,
     date: latest?.dateDisplay || latest?.date || "-",
     drawId: latest?.drawNo || "-",
-    firstPrize: latestData?.firstPrize || "-",
+    firstPrize:
+      (latestData as { first?: string })?.first ||
+      latestData?.firstPrize ||
+      "-",
     firstPrizeAmount: latestData?.firstPrizeAmount || "Prize",
-    front3: latestData?.front3,
+    front3: (
+      (latestData as { last3f?: (string | number)[] })?.last3f ||
+      latestData?.front3
+    )?.map(String),
     front3Amount: latestData?.front3Amount,
-    back3: latestData?.back3,
+    back3: (
+      (latestData as { last3b?: (string | number)[] })?.last3b ||
+      latestData?.back3
+    )?.map(String),
     back3Amount: latestData?.back3Amount,
     last2: latestData?.last2,
     last2Amount: latestData?.last2Amount,
@@ -143,10 +153,10 @@ export default function LotteryDetail({
   };
 
   const recentResults = historyItems.map((item) => {
-    const d = item.data as ThaiResultData;
+    const d = item.data as ThaiResultData & { first?: string };
     return {
       date: item.dateDisplay || item.date,
-      firstPrize: d?.firstPrize || "-",
+      firstPrize: d?.first || d?.firstPrize || "-",
       last3f: d?.front3?.[0] || "-",
       last3b: d?.back3?.[0] || "-",
       last2: d?.last2 || "-",
@@ -164,9 +174,11 @@ export default function LotteryDetail({
             </span>
             <span className="text-gray-500">|</span>
             <span className="dark:text-gray-400 text-gray-600 flex items-center">
-              <img
+              <Image
                 src={getFlagUrl(countryCode)}
                 alt={`${country} flag`}
+                width={24}
+                height={16}
                 className="mr-1.5 inline-block h-4 w-6 rounded-sm shadow-sm"
               />
               {country}
@@ -404,9 +416,11 @@ export default function LotteryDetail({
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={getFlagUrl(countryCode)}
                         alt={countryCode}
+                        width={24}
+                        height={16}
                         className="h-4 w-6 rounded-sm shadow-sm"
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white">

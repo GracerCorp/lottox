@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
@@ -28,8 +28,7 @@ export function LotteryCard({
   gradientTo,
   href = "#",
   bgImage,
-  hideResults = false,
-}: LotteryCardProps & { hideResults?: boolean }) {
+}: LotteryCardProps) {
   const { t } = useLanguage();
 
   const CardContent = (

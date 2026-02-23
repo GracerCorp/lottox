@@ -112,7 +112,7 @@ export function ResultsTable() {
           <div className="flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-green-500" />
             <h2 className="text-xl font-mono uppercase tracking-widest text-green-500">
-              Market Data <span className="text-gray-600">//</span> Global
+              Market Data <span className="text-gray-600">{`//`}</span> Global
               Lottery Index
             </h2>
           </div>
