@@ -178,9 +178,11 @@ export function HeroSection() {
                     <LotteryCard {...item} hideResults={true} />
                     {distance === 0 && (
                       <>
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gold-500/20 blur-[50px] rounded-full z-[-1] animate-pulse" />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-blue-600/10 blur-[80px] rounded-full z-[-2]" />
-                        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-[90%] h-24 bg-gold-500/15 blur-[40px] rounded-[100%] z-[-1]" />
+                        {/* Aura Border */}
+                        <div className="absolute inset-x-0 inset-y-0 rounded-2xl border-2 border-gold-400/80 shadow-[0_0_20px_rgba(250,204,21,0.6),inset_0_0_20px_rgba(250,204,21,0.4)] pointer-events-none z-10" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] bg-gold-400/40 dark:bg-gold-500/30 blur-[60px] rounded-[100%] z-[-1] animate-pulse" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] bg-gold-500/20 dark:bg-gold-600/20 blur-[100px] rounded-[100%] z-[-2]" />
+                        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[100%] h-32 bg-gold-400/40 dark:bg-gold-500/30 blur-[50px] rounded-[100%] z-[-1]" />
                       </>
                     )}
                   </div>

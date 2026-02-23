@@ -149,13 +149,13 @@ export const dictionary = {
     },
     countryList: {
       title: "เลือกประเทศของคุณ",
-      seeAll: "ดูประเทศทั้งหมด >",
+      seeAll: "ดูประเทศทั้งหมด",
       lotteries: "รายการ",
       countries: {
         usa: "สหรัฐอเมริกา",
         uk: "สหราชอาณาจักร",
-        germany: "เยอรมนี",
-        spain: "สเปน",
+        laos: "ลาว",
+        vietnam: "เวียดนาม",
         thailand: "ไทย",
         italy: "อิตาลี",
         france: "ฝรั่งเศส",
@@ -581,7 +581,7 @@ export const dictionary = {
     },
     countryList: {
       title: "Choose Your Country",
-      seeAll: "See All Countries >",
+      seeAll: "See All Countries",
       lotteries: "Lotteries",
       countries: {
         usa: "USA",

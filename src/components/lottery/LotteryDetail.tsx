@@ -161,7 +161,7 @@ export default function LotteryDetail({
               <ShieldCheck className="h-3.5 w-3.5" /> {t.header.verified}
             </span>
             <span className="text-gray-500">|</span>
-            <span className="text-gray-400 flex items-center">
+            <span className="dark:text-gray-400 text-gray-600 flex items-center">
               <img
                 src={getFlagUrl(countryCode)}
                 alt={`${country} flag`}

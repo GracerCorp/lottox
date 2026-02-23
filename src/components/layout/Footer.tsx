@@ -34,7 +34,7 @@ export function Footer() {
             <h3 className="text-base font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
               {t.footer.whyTitle}
             </h3>
-          </div>e
+          </div>
 
           <div className="text-sm dark:text-gray-400 text-gray-600 md:text-right">
             <span className="font-bold dark:text-gold-400 text-gold-600">{t.footer.whyDesc1}</span>{" "}
