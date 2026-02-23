@@ -7,6 +7,13 @@ interface SubscribeButtonProps {
   type: string;
 }
 
+// Map lottery type string -> lotteryId number (matches DB lottery_jobs)
+const LOTTERY_ID_MAP: Record<string, number> = {
+  THAI: 1,
+  LAO: 2,
+  VIETNAM: 3,
+};
+
 export function SubscribeButton({ type }: SubscribeButtonProps) {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,12 +40,14 @@ export function SubscribeButton({ type }: SubscribeButtonProps) {
     e.preventDefault();
     if (!email) return;
 
+    const lotteryId = LOTTERY_ID_MAP[type.toUpperCase()] ?? 1;
+
     setStatus("sending");
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, type }),
+        body: JSON.stringify({ email, lotteryId }),
       });
 
       if (res.ok) {

@@ -8,13 +8,22 @@ import { getFlagUrl } from "@/lib/flags";
 export default async function Home() {
   const countries = await getActiveCountries();
 
+  // Deduplicate by country code to prevent React duplicate key errors
+  const seen = new Set<string>();
   const tabs = [
     { id: "all", label: "all", flag: null },
-    ...countries.map((c) => ({
-      id: c.code.toLowerCase(), // Maps TH -> th, LA -> la
-      label: c.code.toLowerCase(), // We use the ID as a translation key inside HomeResultsSection
-      flag: c.flag || getFlagUrl(c.code.toLowerCase()) || null,
-    })),
+    ...countries
+      .filter((c) => {
+        const key = c.code.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map((c) => ({
+        id: c.code.toLowerCase(),
+        label: c.code.toLowerCase(),
+        flag: c.flag || getFlagUrl(c.code.toLowerCase()) || null,
+      })),
   ];
 
   return (

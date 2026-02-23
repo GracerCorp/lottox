@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 
 import { z } from "zod";
 
+const EXTERNAL_API = "https://apidev.lottox.today";
+
 const bodySchema = z.object({
   email: z.string().email("Invalid email address"),
-  type: z.string().min(1, "Type is required"),
+  lotteryId: z.number().int().positive("lotteryId must be a positive integer"),
 });
 
 export async function POST(request: Request) {
@@ -22,51 +23,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, type } = validation.data;
-    const normalizedType = type.toUpperCase();
+    const { email, lotteryId } = validation.data;
 
-    // 1. Find or create the user basic record based on email
-    let user = await prisma.user.findUnique({
-      where: { email },
+    // Proxy to external API
+    const res = await fetch(`${EXTERNAL_API}/api/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, lotteryId }),
     });
 
-    // We mock an ID for new users because `user.id` is a String standard usually driven by NextAuth
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          id: crypto.randomUUID(),
-          email: email,
-          name: email.split("@")[0],
-          is_active: true,
-        },
-      });
-    }
+    const data = await res.json().catch(() => ({}));
 
-    // 2. Find the lottery job
-    const lotteryJob = await prisma.lottery_jobs.findFirst({
-      where: { name: { equals: normalizedType, mode: "insensitive" } },
-    });
-
-    if (!lotteryJob) {
+    if (!res.ok) {
       return NextResponse.json(
-        { error: `Lottery type ${type} not supported` },
-        { status: 400 },
+        { error: data?.message || "Subscription failed" },
+        { status: res.status },
       );
-    }
-
-    // 3. Upsert subscription
-    // Check if subscription exists
-    const existingSub = await prisma.lottery_subscriptions.findFirst({
-      where: { user_id: user.id, lottery_id: lotteryJob.id },
-    });
-
-    if (!existingSub) {
-      await prisma.lottery_subscriptions.create({
-        data: {
-          user_id: user.id,
-          lottery_id: lotteryJob.id,
-        },
-      });
     }
 
     return NextResponse.json({
