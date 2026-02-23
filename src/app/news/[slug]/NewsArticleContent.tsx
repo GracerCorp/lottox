@@ -139,44 +139,60 @@ export default function NewsArticleContent({
 
         {/* Content */}
         <div className="prose-custom mb-12">
-          {content.split("\n").map((paragraph, i) => {
-            if (paragraph.trim() === "") return null;
-            // Lines starting with - as list items
-            if (paragraph.trim().startsWith("- ")) {
-              return (
-                <div
-                  key={i}
-                  className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
-                >
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-400" />
-                  <span>{paragraph.trim().slice(2)}</span>
-                </div>
-              );
+          {(() => {
+            try {
+              if (
+                content.trim().startsWith("{") ||
+                content.trim().startsWith("[")
+              ) {
+                const parsed = JSON.parse(content);
+                if (parsed.type === "doc") {
+                  return <TipTapRenderer node={parsed} />;
+                }
+              }
+            } catch (e) {
+              // Not JSON, fallback
             }
-            // Lines with number prefix as list items
-            if (/^\d+\.\s/.test(paragraph.trim())) {
+
+            return content.split("\n").map((paragraph, i) => {
+              if (paragraph.trim() === "") return null;
+              // Lines starting with - as list items
+              if (paragraph.trim().startsWith("- ")) {
+                return (
+                  <div
+                    key={i}
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
+                  >
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-400" />
+                    <span>{paragraph.trim().slice(2)}</span>
+                  </div>
+                );
+              }
+              // Lines with number prefix as list items
+              if (/^\d+\.\s/.test(paragraph.trim())) {
+                return (
+                  <div
+                    key={i}
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
+                  >
+                    <span className="mt-0.5 shrink-0 text-gold-400 font-bold text-sm">
+                      {paragraph.trim().split(".")[0]}.
+                    </span>
+                    <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
+                  </div>
+                );
+              }
+              // Regular paragraphs
               return (
-                <div
+                <p
                   key={i}
-                  className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
+                  className="mb-4 text-base leading-relaxed text-gray-300 sm:text-lg"
                 >
-                  <span className="mt-0.5 shrink-0 text-gold-400 font-bold text-sm">
-                    {paragraph.trim().split(".")[0]}.
-                  </span>
-                  <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
-                </div>
+                  {paragraph.trim()}
+                </p>
               );
-            }
-            // Regular paragraphs
-            return (
-              <p
-                key={i}
-                className="mb-4 text-base leading-relaxed text-gray-300 sm:text-lg"
-              >
-                {paragraph.trim()}
-              </p>
-            );
-          })}
+            });
+          })()}
         </div>
 
         {/* Disclaimer */}
@@ -227,4 +243,110 @@ export default function NewsArticleContent({
       </section>
     </div>
   );
+}
+
+function TipTapRenderer({ node }: { node: any }) {
+  if (!node) return null;
+
+  if (node.type === "text") {
+    let el = <>{node.text}</>;
+    if (node.marks) {
+      node.marks.forEach((mark: any) => {
+        if (mark.type === "bold") el = <strong key="bold">{el}</strong>;
+        if (mark.type === "italic") el = <em key="italic">{el}</em>;
+        if (mark.type === "underline") el = <u key="underline">{el}</u>;
+        if (mark.type === "strike") el = <s key="strike">{el}</s>;
+        if (mark.type === "link")
+          el = (
+            <a
+              key="link"
+              href={mark.attrs.href}
+              target={mark.attrs.target}
+              rel="noopener noreferrer"
+              className="text-gold-400 hover:text-gold-300 underline"
+            >
+              {el}
+            </a>
+          );
+      });
+    }
+    return el;
+  }
+
+  const renderChildren = () => {
+    return (node.content || []).map((child: any, idx: number) => (
+      <TipTapRenderer key={idx} node={child} />
+    ));
+  };
+
+  switch (node.type) {
+    case "doc":
+      return <>{renderChildren()}</>;
+    case "paragraph":
+      return (
+        <p className="mb-4 text-base leading-relaxed text-gray-300 sm:text-lg">
+          {renderChildren()}
+        </p>
+      );
+    case "heading":
+      const level = node.attrs?.level || 2;
+      const Tag = `h${level}` as any;
+      const sizeClasses: Record<number, string> = {
+        1: "text-3xl sm:text-4xl",
+        2: "text-2xl sm:text-3xl",
+        3: "text-xl sm:text-2xl",
+        4: "text-lg sm:text-xl",
+        5: "text-base sm:text-lg",
+        6: "text-base",
+      };
+      return (
+        <Tag
+          className={`mb-4 mt-8 font-bold text-white ${sizeClasses[level] || sizeClasses[2]}`}
+        >
+          {renderChildren()}
+        </Tag>
+      );
+    case "bulletList":
+      return (
+        <ul className="mb-6 ml-6 list-disc text-gray-300 space-y-2">
+          {renderChildren()}
+        </ul>
+      );
+    case "orderedList":
+      return (
+        <ol className="mb-6 ml-6 list-decimal text-gray-300 space-y-2">
+          {renderChildren()}
+        </ol>
+      );
+    case "listItem":
+      return <li>{renderChildren()}</li>;
+    case "image":
+      return (
+        <div className="my-6 relative w-full h-auto overflow-hidden rounded-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={node.attrs?.src}
+            alt={node.attrs?.alt || ""}
+            className="w-full h-auto object-cover"
+          />
+          {node.attrs?.title && (
+            <p className="mt-2 text-center text-sm text-gray-400">
+              {node.attrs.title}
+            </p>
+          )}
+        </div>
+      );
+    case "blockquote":
+      return (
+        <blockquote className="border-l-4 border-gold-500 bg-navy-800/50 p-4 my-6 italic text-gray-300 rounded-r-lg">
+          {renderChildren()}
+        </blockquote>
+      );
+    case "horizontalRule":
+      return <hr className="my-8 border-white/10" />;
+    case "hardBreak":
+      return <br />;
+    default:
+      return <>{renderChildren()}</>;
+  }
 }

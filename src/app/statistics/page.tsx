@@ -50,7 +50,7 @@ export default function StatisticsPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-white mb-8">
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
         Lottery Statistics & Analytics
       </h1>
 
@@ -58,27 +58,31 @@ export default function StatisticsPage() {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className={`bg-navy-800 p-6 rounded-2xl border border-white/5 flex items-center gap-4 ${loading ? "animate-pulse" : ""}`}
+            className={`bg-white dark:bg-navy-800 p-6 rounded-2xl border border-gray-200 dark:border-white/5 flex items-center gap-4 shadow-sm ${loading ? "animate-pulse" : ""}`}
           >
             <div
-              className={`w-12 h-12 rounded-full bg-white/5 flex items-center justify-center ${stat.color}`}
+              className={`w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center ${stat.color}`}
             >
               <stat.icon className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <div className="text-sm text-gray-400">{stat.label}</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {stat.value}
+              </div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {stat.label}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-navy-800 rounded-3xl p-8 border border-white/5 text-center py-20">
-        <PieChart className="w-20 h-20 text-navy-600 mx-auto mb-6" />
-        <h2 className="text-2xl font-bold text-white mb-2">
+      <div className="bg-white dark:bg-navy-800 rounded-3xl p-8 border border-gray-200 dark:border-white/5 text-center py-20 shadow-sm">
+        <PieChart className="w-20 h-20 text-blue-500 dark:text-navy-600 mx-auto mb-6" />
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Advanced Analytics Coming Soon
         </h2>
-        <p className="text-gray-400 max-w-md mx-auto">
+        <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
           We are building AI-powered prediction models and hot/cold number
           tracking for over 50 lotteries. Stay tuned!
         </p>

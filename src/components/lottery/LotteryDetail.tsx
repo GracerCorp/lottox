@@ -92,16 +92,16 @@ export default function LotteryDetail({
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8 animate-pulse">
-        <div className="mb-8 h-20 rounded-lg bg-navy-800/50" />
+        <div className="mb-8 h-20 rounded-lg bg-gray-200 dark:bg-navy-800/50" />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
-            <div className="h-96 rounded-2xl bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-navy-800/50" />
+            <div className="h-96 rounded-2xl bg-gray-200 dark:bg-navy-800/50" />
+            <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
+            <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
           </div>
           <div className="space-y-6">
-            <div className="h-48 rounded-xl bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-navy-800/50" />
+            <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
+            <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function LotteryDetail({
         </div>
 
         {/* Subscribe Button - could be parameterized */}
-        <button className="bg-navy-900/10 dark:bg-white/10 hover:bg-navy-900/20 dark:hover:bg-white/20 text-navy-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+        <button className="bg-gray-200/50 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
           Subscribe needed
         </button>
       </header>

@@ -108,16 +108,16 @@ function PrizeSectionHeader({
 function ThaiLottoSkeleton() {
   return (
     <div className="container mx-auto px-4 py-8 animate-pulse">
-      <div className="mb-8 h-20 rounded-lg bg-navy-800/50" />
+      <div className="mb-8 h-20 rounded-lg bg-gray-200 dark:bg-navy-800/50" />
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <div className="h-96 rounded-2xl bg-navy-800/50" />
-          <div className="h-48 rounded-xl bg-navy-800/50" />
-          <div className="h-48 rounded-xl bg-navy-800/50" />
+          <div className="h-96 rounded-2xl bg-gray-200 dark:bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
         </div>
         <div className="space-y-6">
-          <div className="h-48 rounded-xl bg-navy-800/50" />
-          <div className="h-48 rounded-xl bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
+          <div className="h-48 rounded-xl bg-gray-200 dark:bg-navy-800/50" />
         </div>
       </div>
     </div>
@@ -226,7 +226,7 @@ export default function ThaiLottoContent() {
         {/* Left Column */}
         <div className="space-y-6 lg:col-span-2">
           {/* SECTION 1: Hero */}
-          <section className="relative overflow-hidden rounded-2xl border border-gold-500/20 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 shadow-2xl">
+          <section className="relative overflow-hidden rounded-2xl border border-gold-500/20 bg-gradient-to-br from-white via-gray-50 to-white dark:from-navy-900 dark:via-navy-800 dark:to-navy-900 shadow-2xl">
             <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-gold-500/10 blur-3xl" />
             <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-neon-blue/10 blur-3xl" />
 
@@ -246,7 +246,7 @@ export default function ThaiLottoContent() {
                   </h2>
                 </div>
               </div>
-              <div className="mb-8 text-center text-sm text-gray-400">
+              <div className="mb-8 text-center text-sm text-gray-500 dark:text-gray-400">
                 {t.common.date} {latestDraw.date} | {latestDraw.drawNo} |{" "}
                 {latestDraw.daysAgo}
               </div>
@@ -257,7 +257,7 @@ export default function ThaiLottoContent() {
                   <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/15 px-5 py-2 text-sm font-bold uppercase tracking-wider text-gold-400">
                     <Trophy className="h-4 w-4" />
                     {t.results.prize1} ({t.common.perPrize}{" "}
-                    <span className="text-white ml-1">
+                    <span className="text-gray-900 dark:text-white ml-1">
                       {latestDraw.firstPrizeAmount} {t.common.baht})
                     </span>
                   </span>
@@ -277,72 +277,72 @@ export default function ThaiLottoContent() {
 
               {/* 3-digit / 2-digit / adjacent */}
               <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-5 text-center transition-transform hover:scale-105">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 p-5 text-center transition-transform hover:scale-105 shadow-sm">
+                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Front}
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     {latestDraw.front3.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-2xl font-bold tracking-widest text-white"
+                        className="font-mono text-2xl font-bold tracking-widest text-gray-900 dark:text-white"
                       >
                         {num}
                       </span>
                     ))}
-                    <span className="mt-1 text-[10px] text-gold-400">
+                    <span className="mt-1 text-[10px] text-gold-600 dark:text-gold-400">
                       {latestDraw.front3Amount} {t.common.baht}
                     </span>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-5 text-center transition-transform hover:scale-105">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 p-5 text-center transition-transform hover:scale-105 shadow-sm">
+                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Back}
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     {latestDraw.back3.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-2xl font-bold tracking-widest text-white"
+                        className="font-mono text-2xl font-bold tracking-widest text-gray-900 dark:text-white"
                       >
                         {num}
                       </span>
                     ))}
-                    <span className="mt-1 text-[10px] text-gold-400">
+                    <span className="mt-1 text-[10px] text-gold-600 dark:text-gold-400">
                       {latestDraw.back3Amount} {t.common.baht}
                     </span>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-gold-500/20 bg-navy-800/60 p-5 text-center transition-transform hover:scale-105">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gold-400">
+                <div className="rounded-xl border border-gold-500/20 bg-white dark:bg-navy-800/60 p-5 text-center transition-transform hover:scale-105 shadow-sm">
+                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
                     {t.results.prize2}
                   </div>
                   <div className="flex flex-col items-center gap-2">
-                    <span className="font-mono text-4xl font-bold tracking-widest text-gold-400">
+                    <span className="font-mono text-4xl font-bold tracking-widest text-gold-600 dark:text-gold-400">
                       {latestDraw.last2}
                     </span>
-                    <span className="mt-1 text-[10px] text-white">
+                    <span className="mt-1 text-[10px] text-gray-900 dark:text-white">
                       {latestDraw.last2Amount} {t.common.baht}
                     </span>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-navy-800/60 p-5 text-center transition-transform hover:scale-105">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 p-5 text-center transition-transform hover:scale-105 shadow-sm">
+                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.common.adjacent}
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     {latestDraw.adjacent.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-lg font-bold tracking-widest text-white sm:text-lg"
+                        className="font-mono text-lg font-bold tracking-widest text-gray-900 dark:text-white sm:text-lg"
                       >
                         {num}
                       </span>
                     ))}
-                    <span className="mt-1 text-[10px] text-gold-400">
+                    <span className="mt-1 text-[10px] text-gold-600 dark:text-gold-400">
                       {latestDraw.adjacentAmount} {t.common.baht}
                     </span>
                   </div>
