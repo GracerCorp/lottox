@@ -147,6 +147,23 @@ export const dictionary = {
         "แพลตฟอร์มที่ให้บริการผลรางวัลที่ตรวจสอบได้ กระบวนการที่เข้มงวดด้วยความน่าเชื่อถือระดับพรีเมียมและการเข้ารหัสความปลอดภัย",
       apiAccess: "เข้าถึง API",
     },
+    countryList: {
+      title: "เลือกประเทศของคุณ",
+      seeAll: "ดูประเทศทั้งหมด >",
+      lotteries: "รายการ",
+      countries: {
+        usa: "สหรัฐอเมริกา",
+        uk: "สหราชอาณาจักร",
+        germany: "เยอรมนี",
+        spain: "สเปน",
+        thailand: "ไทย",
+        italy: "อิตาลี",
+        france: "ฝรั่งเศส",
+        japan: "ญี่ปุ่น",
+        australia: "ออสเตรเลีย",
+        brazil: "บราซิล",
+      },
+    },
     staticParams: {
       about: {
         title: "เกี่ยวกับ LOTTOX",
@@ -561,6 +578,23 @@ export const dictionary = {
       whyDesc2:
         "providing platform with verified lottery results. Strict process care with premium reliability and encryption technology.",
       apiAccess: "API Access",
+    },
+    countryList: {
+      title: "Choose Your Country",
+      seeAll: "See All Countries >",
+      lotteries: "Lotteries",
+      countries: {
+        usa: "USA",
+        uk: "UK",
+        germany: "Germany",
+        spain: "Spain",
+        thailand: "Thailand",
+        italy: "Italy",
+        france: "France",
+        japan: "Japan",
+        australia: "Australia",
+        brazil: "Brazil",
+      },
     },
     staticParams: {
       about: {

@@ -29,15 +29,15 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-gray-200 dark:border-white/5 bg-white dark:bg-navy-900/50 px-6 py-4 backdrop-blur-sm md:flex-row shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500/10 text-gold-400">
-              <ShieldCheck className="h-4 w-4" />
+              <ShieldCheck className="h-4 w-4 dark:text-gold-400 text-gold-600" />
             </div>
             <h3 className="text-base font-bold text-gray-900 dark:text-gray-200 whitespace-nowrap">
               {t.footer.whyTitle}
             </h3>
-          </div>
+          </div>e
 
-          <div className="text-sm text-gray-400 md:text-right">
-            <span className="font-bold text-gold-400">{t.footer.whyDesc1}</span>{" "}
+          <div className="text-sm dark:text-gray-400 text-gray-600 md:text-right">
+            <span className="font-bold dark:text-gold-400 text-gold-600">{t.footer.whyDesc1}</span>{" "}
             {t.footer.whyDesc2}
           </div>
         </div>
@@ -59,7 +59,7 @@ export function Footer() {
             ))}
           </nav>
 
-          <button className="rounded-full border border-gold-500/30 bg-gold-500/10 px-6 py-2 text-xs font-bold text-gold-400 hover:bg-gold-500/20 hover:text-gold-300 transition-colors shadow-lg shadow-gold-900/20">
+          <button className="rounded-full border border-gold-500/30 bg-gold-500/10 px-6 py-2 text-xs font-bold dark:text-gold-400 text-gold-600 hover:bg-gold-500/20 hover:text-gold-300 transition-colors shadow-lg shadow-gold-900/20">
             {t.footer.apiAccess}
           </button>
         </div>

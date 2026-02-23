@@ -3,6 +3,7 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { ResultsTable } from "@/components/ui/ResultsTable";
 import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
+import { CountryListSection } from "@/components/home/CountryListSection";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import Image from "next/image";
@@ -67,6 +68,9 @@ export default function Home() {
         {/* Results Table */}
         <ResultsTable filter={activeTab} />
       </section>
+
+      {/* Country List Section */}
+      <CountryListSection />
     </div>
   );
 }
