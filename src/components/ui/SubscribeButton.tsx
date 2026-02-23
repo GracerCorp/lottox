@@ -60,7 +60,7 @@ export function SubscribeButton({ type }: SubscribeButtonProps) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:bg-blue-500/10 hover:text-white"
+        className="flex items-center gap-2 rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-white shadow-sm"
       >
         {/* Bell SVG */}
         <svg
@@ -81,8 +81,8 @@ export function SubscribeButton({ type }: SubscribeButtonProps) {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-xl border border-white/10 bg-navy-900/95 p-4 shadow-2xl backdrop-blur-md">
-          <h4 className="mb-3 text-sm font-bold text-white">
+        <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/95 p-4 shadow-2xl backdrop-blur-md">
+          <h4 className="mb-3 text-sm font-bold text-gray-900 dark:text-white">
             {t.subscribe.title}
           </h4>
 
@@ -108,7 +108,7 @@ export function SubscribeButton({ type }: SubscribeButtonProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t.subscribe.placeholder}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-gray-500 outline-none transition-colors focus:border-blue-500/50 focus:bg-blue-500/5"
+                className="w-full rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-gray-500 outline-none transition-colors focus:border-blue-500/50 focus:bg-blue-50 dark:focus:bg-blue-500/5"
               />
               <button
                 type="submit"

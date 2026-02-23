@@ -34,10 +34,10 @@ export function LotteryCard({
   isActive = false,
 }: LotteryCardProps) {
   const gradients = {
-    gold: "from-navy-900 via-navy-800 to-gold-900/20 border-gold-500/50 hover:border-gold-400 shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_0_rgba(245,158,11,0.5)]",
-    blue: "from-navy-900 via-navy-800 to-blue-900/20 border-blue-500/50 hover:border-blue-400 shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)] hover:shadow-[0_0_50px_0_rgba(59,130,246,0.5)]",
+    gold: "from-white via-amber-50 to-amber-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-gold-900/20 border-amber-200 dark:border-gold-500/50 hover:border-amber-400 dark:hover:border-gold-400 shadow-[0_0_30px_-5px_rgba(245,158,11,0.1)] dark:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_0_rgba(245,158,11,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(245,158,11,0.5)]",
+    blue: "from-white via-blue-50 to-blue-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-blue-900/20 border-blue-200 dark:border-blue-500/50 hover:border-blue-400 dark:hover:border-blue-400 shadow-[0_0_30px_-5px_rgba(59,130,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)] hover:shadow-[0_0_50px_0_rgba(59,130,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(59,130,246,0.5)]",
     purple:
-      "from-navy-900 via-navy-800 to-purple-900/20 border-purple-500/50 hover:border-purple-400 shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_0_rgba(139,92,246,0.5)]",
+      "from-white via-purple-50 to-purple-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-purple-900/20 border-purple-200 dark:border-purple-500/50 hover:border-purple-400 dark:hover:border-purple-400 shadow-[0_0_30px_-5px_rgba(139,92,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_0_rgba(139,92,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(139,92,246,0.5)]",
   };
 
   const glowColors = {
@@ -60,9 +60,9 @@ export function LotteryCard({
   };
 
   const jackpotColors = {
-    gold: "text-gradient-gold",
-    blue: "text-blue-200",
-    purple: "text-purple-200",
+    gold: "text-amber-600 dark:text-gradient-gold",
+    blue: "text-blue-600 dark:text-blue-200",
+    purple: "text-purple-600 dark:text-purple-200",
   };
 
   return (
@@ -111,7 +111,7 @@ export function LotteryCard({
       {/* Header */}
       <div className="relative z-10 flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-200 group-hover:text-gray-100">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
             <div className="relative h-5 w-8 overflow-hidden rounded shadow-sm">
               <Image
                 src={flag}
@@ -127,8 +127,8 @@ export function LotteryCard({
             className={cn(
               "mt-2 text-2xl font-black tracking-tight transition-colors",
               isActive
-                ? "text-gold-200"
-                : "text-white group-hover:text-gold-200",
+                ? "text-amber-600 dark:text-gold-200"
+                : "text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-gold-200",
             )}
           >
             {name}
@@ -138,7 +138,7 @@ export function LotteryCard({
 
       {/* Jackpot */}
       <div className="relative z-10 mt-8">
-        <div className="text-xs font-bold uppercase tracking-widest text-gray-300">
+        <div className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-300">
           Esminated Jackpot
         </div>
         <div
@@ -152,7 +152,7 @@ export function LotteryCard({
         >
           {jackpot}
         </div>
-        <div className="mt-2 flex items-center gap-2 text-xs font-medium text-gray-400">
+        <div className="mt-2 flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
           {nextDraw}
         </div>
@@ -166,7 +166,7 @@ export function LotteryCard({
             number={num}
             size="sm"
             color="gray"
-            className="border-white/10 bg-navy-950/50"
+            className="border-gray-200 dark:border-white/10 bg-white dark:bg-navy-950/50"
           />
         ))}
         {bonusBall && (
@@ -180,10 +180,10 @@ export function LotteryCard({
       </div>
 
       {/* Action */}
-      <div className="relative z-10 mt-8 border-t border-white/5 pt-4">
-        <div className="flex items-center justify-between text-sm font-semibold text-white/80 transition-colors group-hover:text-white">
+      <div className="relative z-10 mt-8 border-t border-gray-200 dark:border-white/5 pt-4">
+        <div className="flex items-center justify-between text-sm font-semibold text-gray-700 dark:text-white/80 transition-colors group-hover:text-gray-900 dark:group-hover:text-white">
           <span>View Details</span>
-          <ArrowRight className="h-4 w-4 text-gold-500 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="h-4 w-4 text-gold-600 dark:text-gold-500 transition-transform group-hover:translate-x-1" />
         </div>
       </div>
     </Link>

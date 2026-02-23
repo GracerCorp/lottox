@@ -66,13 +66,13 @@ export function HeroCarousel({ items }: HeroCarouselProps) {
       {/* Navigation - Absolute Center Vertical */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 md:left-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-white/10 bg-navy-900/50 p-3 text-white backdrop-blur-md transition-all hover:bg-navy-800 hover:scale-110"
+        className="absolute left-4 md:left-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-navy-900/50 p-3 text-gray-900 dark:text-white backdrop-blur-md transition-all hover:bg-white dark:hover:bg-navy-800 hover:scale-110 shadow-sm"
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-4 md:right-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-white/10 bg-navy-900/50 p-3 text-white backdrop-blur-md transition-all hover:bg-navy-800 hover:scale-110"
+        className="absolute right-4 md:right-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-navy-900/50 p-3 text-gray-900 dark:text-white backdrop-blur-md transition-all hover:bg-white dark:hover:bg-navy-800 hover:scale-110 shadow-sm"
       >
         <ChevronRight className="h-6 w-6" />
       </button>

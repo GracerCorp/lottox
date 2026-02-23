@@ -8,7 +8,7 @@ export default function TermsPage() {
   const terms = t.staticParams.terms;
 
   return (
-    <div className="container mx-auto px-4 py-12 text-white">
+    <div className="container mx-auto px-4 py-12 text-gray-900 dark:text-white">
       <div className="max-w-3xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -28,12 +28,12 @@ export default function TermsPage() {
             (section: { title: string; content: string }, index: number) => (
               <div
                 key={index}
-                className="p-6 rounded-xl bg-navy-900/50 border border-white/10 backdrop-blur-sm hover:border-purple-500/20 transition-colors"
+                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm hover:border-purple-500/50 dark:hover:border-purple-500/20 transition-colors shadow-sm"
               >
-                <h2 className="text-xl font-semibold text-purple-400 mb-3">
+                <h2 className="text-xl font-semibold text-purple-600 dark:text-purple-400 mb-3">
                   {section.title}
                 </h2>
-                <p className="text-gray-300 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   {section.content}
                 </p>
               </div>

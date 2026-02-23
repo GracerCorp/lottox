@@ -103,7 +103,7 @@ export function HeroSection() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-normal text-gray-50/80 mb-4 tracking-tight"
+            className="text-4xl md:text-6xl font-normal text-gray-900 dark:text-gray-50/80 mb-4 tracking-tight"
           >
             {t.hero.title}
           </motion.h1>
@@ -111,7 +111,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-gray-400 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
           >
             {t.hero.subtitle}
           </motion.p>
@@ -126,13 +126,13 @@ export function HeroSection() {
           {/* Navigation */}
           <button
             onClick={handlePrev}
-            className="absolute left-2 md:left-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-white/10 bg-navy-900/50 p-3 text-white backdrop-blur-md transition-all hover:bg-navy-800 hover:scale-110"
+            className="absolute left-2 md:left-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-navy-900/50 p-3 text-gray-900 dark:text-white backdrop-blur-md transition-all hover:bg-white dark:hover:bg-navy-800 hover:scale-110 shadow-sm"
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-2 md:right-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-white/10 bg-navy-900/50 p-3 text-white backdrop-blur-md transition-all hover:bg-navy-800 hover:scale-110"
+            className="absolute right-2 md:right-10 top-1/2 z-40 -translate-y-1/2 rounded-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-navy-900/50 p-3 text-gray-900 dark:text-white backdrop-blur-md transition-all hover:bg-white dark:hover:bg-navy-800 hover:scale-110 shadow-sm"
           >
             <ChevronRight className="h-6 w-6" />
           </button>

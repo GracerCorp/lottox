@@ -235,7 +235,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-lg bg-navy-900/50 h-16"
+            className="animate-pulse rounded-lg bg-gray-200 dark:bg-navy-900/50 h-16"
           />
         ))}
       </div>
@@ -244,7 +244,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-6 text-center text-sm text-red-400">
+      <div className="rounded-lg border border-red-500/30 bg-red-50 dark:bg-red-500/5 p-6 text-center text-sm text-red-600 dark:text-red-400">
         {t.common.error}: {error}
       </div>
     );
@@ -257,7 +257,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
       ))}
 
       {results.length === 0 && (
-        <div className="rounded-lg border border-white/10 bg-navy-900/50 p-6 text-center text-sm text-gray-500">
+        <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 p-6 text-center text-sm text-gray-500 dark:text-gray-400 shadow-sm">
           {t.common.error}
         </div>
       )}
@@ -279,7 +279,7 @@ function SingleLineRow({ item }: { item: ResultRow }) {
       <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-blue-500/20 opacity-40 transition-opacity duration-200 group-hover:opacity-70" />
 
       {/* Row content */}
-      <div className="relative flex items-center gap-4 rounded-lg bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5">
+      <div className="relative flex items-center gap-4 rounded-lg border border-gray-100 dark:border-transparent bg-white dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm">
         {/* Flag + name */}
         <div className="flex items-center gap-2.5 sm:min-w-[180px]">
           <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">
@@ -291,7 +291,7 @@ function SingleLineRow({ item }: { item: ResultRow }) {
             />
           </div>
           <div className="min-w-0">
-            <span className="text-md font-semibold leading-tight text-white">
+            <span className="text-md font-semibold leading-tight text-gray-900 dark:text-white">
               {item.name}
             </span>
             <span className="ml-2 hidden text-[14px] text-gray-500 sm:inline">
@@ -301,7 +301,7 @@ function SingleLineRow({ item }: { item: ResultRow }) {
         </div>
 
         {/* Divider */}
-        <div className="h-6 w-px shrink-0 bg-white/10" />
+        <div className="h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
 
         {/* Main prize */}
         {mainPrize && (
@@ -312,12 +312,12 @@ function SingleLineRow({ item }: { item: ResultRow }) {
             {mainPrize.value.map((v, i) => (
               <span
                 key={i}
-                className="bg-gradient-to-b from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
+                className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
               >
                 {v}
               </span>
             ))}
-            <span className="text-[14px] font-semibold text-emerald-400 sm:text-xs">
+            <span className="text-[14px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
               {mainPrize.prize}
             </span>
           </div>
@@ -325,7 +325,7 @@ function SingleLineRow({ item }: { item: ResultRow }) {
 
         {/* Divider */}
         {subPrizes.length > 0 && (
-          <div className="hidden h-6 w-px shrink-0 bg-white/10 md:block" />
+          <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
         )}
 
         {/* Sub prizes inline */}
@@ -337,15 +337,15 @@ function SingleLineRow({ item }: { item: ResultRow }) {
                 {prize.value.map((val, vi) => (
                   <span
                     key={vi}
-                    className="text-md font-bold tracking-wide text-white/80"
+                    className="text-md font-bold tracking-wide text-gray-700 dark:text-white/80"
                   >
                     {val}
                   </span>
                 ))}
-                <span className="text-[14px] text-emerald-400/70">
+                <span className="text-[14px] text-emerald-600 dark:text-emerald-400/70">
                   {prize.prize}
                 </span>
-                <div className="hidden h-6 w-px shrink-0 bg-white/10 md:block" />
+                <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
               </div>
             ))}
           </div>

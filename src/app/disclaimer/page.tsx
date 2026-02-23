@@ -8,7 +8,7 @@ export default function DisclaimerPage() {
   const disclaimer = t.staticParams.disclaimer;
 
   return (
-    <div className="container mx-auto px-4 py-12 text-white">
+    <div className="container mx-auto px-4 py-12 text-gray-900 dark:text-white">
       <div className="max-w-3xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -23,10 +23,10 @@ export default function DisclaimerPage() {
         </div>
 
         {/* Important Notice */}
-        <div className="p-5 rounded-xl border border-red-500/30 bg-red-500/5">
+        <div className="p-5 rounded-xl border border-red-500/30 bg-red-50 dark:bg-red-500/5 shadow-sm">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-red-300 font-medium">
+            <AlertCircle className="w-6 h-6 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-red-700 dark:text-red-300 font-medium">
               {disclaimer.importantNotice}
             </p>
           </div>
@@ -38,17 +38,17 @@ export default function DisclaimerPage() {
             (section: { title: string; content: string }, index: number) => (
               <div
                 key={index}
-                className="p-6 rounded-xl bg-navy-900/50 border border-white/10 backdrop-blur-sm"
+                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm"
               >
                 <div className="flex items-start gap-4">
                   <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-500/10 text-red-400 text-sm font-bold mt-0.5">
                     {index + 1}
                   </span>
                   <div>
-                    <h2 className="text-xl font-semibold text-white mb-3">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                       {section.title}
                     </h2>
-                    <p className="text-gray-300 leading-relaxed">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                       {section.content}
                     </p>
                   </div>

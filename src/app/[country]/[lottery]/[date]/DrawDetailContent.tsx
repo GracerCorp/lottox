@@ -35,7 +35,7 @@ export default function DrawDetailContent({
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-20 text-center text-white">
+      <div className="container mx-auto px-4 py-20 text-center text-gray-900 dark:text-white">
         Loading draw details...
       </div>
     );
@@ -45,11 +45,11 @@ export default function DrawDetailContent({
     // Return a basic placeholder if API fails or not impl yet
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="rounded-2xl border border-white/10 bg-navy-900 p-8 text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">
+        <div className="rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900 p-8 text-center shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Results for {date}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-500 dark:text-gray-400">
             Could not load specific results for this date (API: {endpoint})
           </p>
         </div>
@@ -65,10 +65,10 @@ export default function DrawDetailContent({
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           {country} - {lottery}
         </h1>
-        <p className="text-gray-400">Draw Date: {date}</p>
+        <p className="text-gray-500 dark:text-gray-400">Draw Date: {date}</p>
       </div>
 
       <DrawResult

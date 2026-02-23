@@ -4,10 +4,10 @@ export default function GlobalDrawsPage() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-10 text-center">
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           Global Lottery Results
         </h1>
-        <p className="text-gray-400 max-w-2xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           Real-time updates from 50+ countries. Filter by date, country, or
           lottery type.
         </p>
@@ -16,7 +16,7 @@ export default function GlobalDrawsPage() {
       <DashboardTable />
 
       <div className="mt-12 text-center">
-        <button className="text-gray-500 hover:text-white transition-colors text-sm">
+        <button className="text-gray-600 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
           Load more results...
         </button>
       </div>

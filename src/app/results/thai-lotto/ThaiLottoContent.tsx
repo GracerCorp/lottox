@@ -137,7 +137,7 @@ export default function ThaiLottoContent() {
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-8 text-center text-red-400">
+        <div className="rounded-lg border border-red-500/30 bg-red-50 dark:bg-red-500/5 p-8 text-center text-red-600 dark:text-red-400 shadow-sm">
           Error loading Thai Lotto results: {error}
         </div>
       </div>
@@ -190,11 +190,11 @@ export default function ThaiLottoContent() {
       <header className="mb-8 flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between">
         <div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="flex items-center gap-1 rounded-full bg-green-500/10 px-2.5 py-1 text-green-400 font-semibold">
+            <span className="flex items-center gap-1 rounded-full bg-green-100 dark:bg-green-500/10 px-2.5 py-1 text-green-700 dark:text-green-400 font-semibold">
               <ShieldCheck className="h-3.5 w-3.5" /> {t.header.verified}
             </span>
-            <span className="text-gray-500">|</span>
-            <span className="text-gray-400">
+            <span className="text-gray-300 dark:text-gray-500">|</span>
+            <span className="text-gray-600 dark:text-gray-400">
               <img
                 src={getFlagUrl("TH")}
                 alt="Thailand flag"
@@ -210,7 +210,7 @@ export default function ThaiLottoContent() {
               className="h-10 w-auto brightness-0 invert opacity-80"
             />
             <div>
-              <h1 className="text-2xl font-bold text-white sm:text-3xl">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
                 {t.lottery.thai.name}
               </h1>
               <p className="text-xs text-gray-500">{t.lottery.thai.subName}</p>
@@ -382,7 +382,7 @@ export default function ThaiLottoContent() {
             .map((prize, i) => (
               <section
                 key={i}
-                className="overflow-hidden rounded-xl border border-white/10 bg-navy-900/50"
+                className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm"
               >
                 <PrizeSectionHeader
                   title={prize.title}
@@ -394,19 +394,19 @@ export default function ThaiLottoContent() {
             ))}
 
           {/* SECTION 6: Lottery Checker */}
-          <section className="rounded-xl border border-white/10 bg-navy-800/50 p-6 backdrop-blur-md">
-            <h3 className="mb-4 text-lg font-bold text-white">
+          <section className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/50 p-6 backdrop-blur-md shadow-sm">
+            <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
               {t.common.checkResult}
             </h3>
             <div className="flex flex-col gap-4 md:flex-row">
-              <select className="flex-1 rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-white outline-none focus:border-gold-500">
+              <select className="flex-1 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-gold-500/50 dark:focus:border-gold-500 transition-colors">
                 <option>{t.common.selectType}</option>
               </select>
               <div className="relative flex-[2]">
                 <input
                   type="text"
                   placeholder={t.common.inputPlaceholder}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-white outline-none focus:border-gold-500"
+                  className="w-full rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-gold-500/50 dark:focus:border-gold-500 transition-colors"
                 />
               </div>
               <button className="flex items-center justify-center gap-2 rounded-lg bg-gold-500 px-8 py-3 font-bold text-black transition-all hover:bg-gold-400 hover:scale-105">
@@ -417,15 +417,17 @@ export default function ThaiLottoContent() {
           </section>
 
           {/* SECTION 7: Past Results */}
-          <section className="overflow-hidden rounded-xl border border-white/10 bg-navy-900/50">
-            <div className="border-b border-white/10 px-6 py-4">
-              <h3 className="font-bold text-white">{t.results.history}</h3>
+          <section className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm">
+            <div className="border-b border-gray-200 dark:border-white/10 px-6 py-4">
+              <h3 className="font-bold text-gray-900 dark:text-white">
+                {t.results.history}
+              </h3>
             </div>
 
             {/* Desktop Table */}
             <div className="hidden overflow-x-auto lg:block">
               <table className="w-full text-left">
-                <thead className="bg-white/5 text-[10px] uppercase text-gray-400">
+                <thead className="bg-gray-50 dark:bg-white/5 text-[10px] uppercase text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-transparent">
                   <tr>
                     <th className="px-4 py-3 font-medium">{t.common.date}</th>
                     <th className="px-4 py-3 font-medium">
@@ -442,32 +444,32 @@ export default function ThaiLottoContent() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-gray-100 dark:divide-white/5">
                   {recentResults.map((row, i) => (
                     <tr
                       key={i}
-                      className={`group hover:bg-white/5 ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
+                      className={`group hover:bg-gray-50 dark:hover:bg-white/5 transition-colors ${i % 2 === 1 ? "bg-gray-50/50 dark:bg-white/[0.02]" : ""}`}
                     >
-                      <td className="px-4 py-4 font-mono text-sm tabular-nums text-gray-400">
+                      <td className="px-4 py-4 font-mono text-sm tabular-nums text-gray-600 dark:text-gray-400">
                         {row.date}
                       </td>
                       <td className="px-4 py-4">
-                        <div className="font-mono text-xl font-bold tracking-[0.3em] text-white">
+                        <div className="font-mono text-xl font-bold tracking-[0.3em] text-gray-900 dark:text-white">
                           {row.firstPrize}
                         </div>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="rounded border border-blue-500/20 bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-300">
+                        <span className="rounded border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-700 dark:text-blue-300">
                           {row.last3f}
                         </span>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="rounded border border-blue-500/20 bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-300">
+                        <span className="rounded border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-700 dark:text-blue-300">
                           {row.last3b}
                         </span>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="rounded border border-gold-500/20 bg-gold-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-gold-400">
+                        <span className="rounded border border-amber-200 dark:border-gold-500/20 bg-amber-50 dark:bg-gold-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-amber-700 dark:text-gold-400">
                           {row.last2}
                         </span>
                       </td>
@@ -478,11 +480,11 @@ export default function ThaiLottoContent() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="divide-y divide-white/5 lg:hidden">
+            <div className="divide-y divide-gray-100 dark:divide-white/5 lg:hidden">
               {recentResults.map((row, i) => (
                 <div
                   key={i}
-                  className={`space-y-3 px-5 py-4 ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
+                  className={`space-y-3 px-5 py-4 ${i % 2 === 1 ? "bg-gray-50/50 dark:bg-white/[0.02]" : ""}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -491,7 +493,7 @@ export default function ThaiLottoContent() {
                         alt="TH"
                         className="h-4 w-6 rounded-sm"
                       />
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
                         Thai Lotto
                       </span>
                     </div>
@@ -503,7 +505,7 @@ export default function ThaiLottoContent() {
                     <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
                       {t.results.prize1}
                     </div>
-                    <div className="font-mono text-2xl font-bold tracking-[0.3em] text-white">
+                    <div className="font-mono text-2xl font-bold tracking-[0.3em] text-gray-900 dark:text-white">
                       {row.firstPrize}
                     </div>
                   </div>
@@ -512,7 +514,7 @@ export default function ThaiLottoContent() {
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
                         {t.results.prize3Front}
                       </div>
-                      <span className="block w-full rounded border border-blue-500/20 bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-300 text-center">
+                      <span className="block w-full rounded border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-700 dark:text-blue-300 text-center">
                         {row.last3f}
                       </span>
                     </div>
@@ -520,7 +522,7 @@ export default function ThaiLottoContent() {
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
                         {t.results.prize3Back}
                       </div>
-                      <span className="block w-full rounded border border-blue-500/20 bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-300 text-center">
+                      <span className="block w-full rounded border border-blue-200 dark:border-blue-500/20 bg-blue-50 dark:bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-700 dark:text-blue-300 text-center">
                         {row.last3b}
                       </span>
                     </div>
@@ -528,7 +530,7 @@ export default function ThaiLottoContent() {
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
                         {t.results.prize2}
                       </div>
-                      <span className="block w-full rounded border border-gold-500/20 bg-gold-500/20 px-2 py-1 font-mono text-lg font-bold text-gold-400 text-center">
+                      <span className="block w-full rounded border border-amber-200 dark:border-gold-500/20 bg-amber-50 dark:bg-gold-500/20 px-2 py-1 font-mono text-lg font-bold text-amber-700 dark:text-gold-400 text-center">
                         {row.last2}
                       </span>
                     </div>
@@ -553,8 +555,8 @@ export default function ThaiLottoContent() {
         {/* Right Column (Sidebar) */}
         <aside className="space-y-6">
           {/* Sidebar: Lottery Checker */}
-          <div className="rounded-xl border border-gold-500/20 bg-navy-800/30 p-6">
-            <h3 className="mb-4 text-center text-lg font-bold text-gold-400">
+          <div className="rounded-xl border border-gray-200 dark:border-gold-500/20 bg-white dark:bg-navy-800/30 p-6 shadow-sm">
+            <h3 className="mb-4 text-center text-lg font-bold text-gray-900 dark:text-gold-400">
               {t.common.checkTicket}
             </h3>
             <div className="space-y-4">
@@ -562,21 +564,21 @@ export default function ThaiLottoContent() {
                 <input
                   type="text"
                   placeholder={t.common.inputPlaceholder1}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-gold-500"
+                  className="w-full rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-center text-lg text-gray-900 dark:text-white outline-none focus:border-gold-500/50 dark:focus:border-gold-500 transition-colors"
                 />
               </div>
               <div className="relative">
                 <input
                   type="text"
                   placeholder={t.common.inputPlaceholder2}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-gold-500"
+                  className="w-full rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-center text-lg text-gray-900 dark:text-white outline-none focus:border-gold-500/50 dark:focus:border-gold-500 transition-colors"
                 />
               </div>
               <div className="relative">
                 <input
                   type="text"
                   placeholder={t.common.inputPlaceholder3}
-                  className="w-full rounded-lg border border-white/10 bg-navy-900 px-4 py-3 text-center text-lg text-white outline-none focus:border-gold-500"
+                  className="w-full rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900 px-4 py-3 text-center text-lg text-gray-900 dark:text-white outline-none focus:border-gold-500/50 dark:focus:border-gold-500 transition-colors"
                 />
               </div>
               <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-gold-500 py-3 text-lg font-bold text-black transition-all hover:scale-105 hover:bg-gold-400">
@@ -593,31 +595,41 @@ export default function ThaiLottoContent() {
           />
 
           {/* Sidebar: Stats */}
-          <div className="rounded-xl border border-white/10 bg-navy-800/30 p-6">
-            <h3 className="mb-4 text-lg font-bold text-white">
+          <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 p-6 shadow-sm">
+            <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
               {t.common.stats}
             </h3>
             <div className="space-y-4">
               <div className="flex justify-between text-base">
-                <span className="text-gray-400">{t.common.nextDraw}</span>
-                <span className="font-bold text-gold-400">
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t.common.nextDraw}
+                </span>
+                <span className="font-bold text-amber-600 dark:text-gold-400">
                   16 ก.พ. 69 - 14:30 น.
                 </span>
               </div>
               <div className="flex justify-between text-base">
-                <span className="text-gray-400">{t.common.odds}</span>
-                <span className="text-white">1 ใน 1,000,000</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t.common.odds}
+                </span>
+                <span className="text-gray-900 dark:text-white">
+                  1 ใน 1,000,000
+                </span>
               </div>
               <div className="flex justify-between text-base">
-                <span className="text-gray-400">{t.common.totalPrize}</span>
-                <span className="text-white">~72 ล้านบาท/งวด</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {t.common.totalPrize}
+                </span>
+                <span className="text-gray-900 dark:text-white">
+                  ~72 ล้านบาท/งวด
+                </span>
               </div>
             </div>
           </div>
 
           {/* Sidebar: Past draw links - Generated from history */}
-          <div className="rounded-xl border border-white/10 bg-navy-800/30 p-6">
-            <h3 className="mb-4 text-lg font-bold text-white">
+          <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 p-6 shadow-sm">
+            <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
               {t.common.historyTitle}
             </h3>
             <div className="space-y-2">
@@ -625,7 +637,7 @@ export default function ThaiLottoContent() {
                 <Link
                   key={i}
                   href="#"
-                  className="block rounded bg-white/5 px-3 py-2 text-sm text-gray-300 transition-colors hover:bg-white/10 hover:text-gold-400"
+                  className="block rounded bg-gray-50 dark:bg-white/5 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 transition-colors hover:bg-gray-100 dark:hover:bg-white/10 hover:text-amber-600 dark:hover:text-gold-400"
                 >
                   {language === "th" ? "งวด " : "Draw "}
                   {item.dateDisplay || item.date}

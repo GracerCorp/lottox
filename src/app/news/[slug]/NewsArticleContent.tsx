@@ -115,12 +115,12 @@ export default function NewsArticleContent({
         )}
 
         {/* Title */}
-        <h1 className="mb-4 text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">
+        <h1 className="mb-4 text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
           {title}
         </h1>
 
         {/* Meta */}
-        <div className="mb-8 flex flex-wrap items-center gap-4 border-b border-white/10 pb-6 text-sm text-gray-400">
+        <div className="mb-8 flex flex-wrap items-center gap-4 border-b border-gray-200 dark:border-white/10 pb-6 text-sm text-gray-600 dark:text-gray-400">
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4" />
             <span>
@@ -161,9 +161,9 @@ export default function NewsArticleContent({
                 return (
                   <div
                     key={i}
-                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
                   >
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-400" />
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-600 dark:bg-gold-400" />
                     <span>{paragraph.trim().slice(2)}</span>
                   </div>
                 );
@@ -173,9 +173,9 @@ export default function NewsArticleContent({
                 return (
                   <div
                     key={i}
-                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-300"
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
                   >
-                    <span className="mt-0.5 shrink-0 text-gold-400 font-bold text-sm">
+                    <span className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400 font-bold text-sm">
                       {paragraph.trim().split(".")[0]}.
                     </span>
                     <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
@@ -186,7 +186,7 @@ export default function NewsArticleContent({
               return (
                 <p
                   key={i}
-                  className="mb-4 text-base leading-relaxed text-gray-300 sm:text-lg"
+                  className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg"
                 >
                   {paragraph.trim()}
                 </p>
@@ -196,8 +196,8 @@ export default function NewsArticleContent({
         </div>
 
         {/* Disclaimer */}
-        <div className="mb-12 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
-          <p className="text-sm leading-relaxed text-gray-300">
+        <div className="mb-12 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/5 p-5 shadow-sm">
+          <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
             {language === "th"
               ? "ข้อมูลในบทความนี้เป็นเพียงข้อมูลอ้างอิง ไม่ได้รับประกันผลรางวัล กรุณาตรวจสอบจากแหล่งข้อมูลทางการเสมอ"
               : "The information in this article is for reference only and does not guarantee results. Please always verify from official sources."}
@@ -207,7 +207,7 @@ export default function NewsArticleContent({
 
       {/* Related News */}
       <section className="mx-auto max-w-3xl">
-        <h2 className="mb-6 text-xl font-bold text-white">
+        <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
           {t.news.relatedNews}
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -215,7 +215,7 @@ export default function NewsArticleContent({
             <Link
               key={news.slug}
               href={`/news/${news.slug}`}
-              className="group overflow-hidden rounded-xl border border-white/5 bg-navy-800 transition-all hover:border-gold-500/20"
+              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/5 bg-white dark:bg-navy-800 transition-all hover:border-gold-500/50 dark:hover:border-gold-500/20 shadow-sm"
             >
               {news.image && (
                 <div className="relative h-36 w-full overflow-hidden">
@@ -233,7 +233,7 @@ export default function NewsArticleContent({
                   <Clock className="h-3 w-3" />
                   <span>{news.date}</span>
                 </div>
-                <h3 className="text-sm font-bold text-gray-300 line-clamp-2 group-hover:text-gold-400 transition-colors">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-300 line-clamp-2 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
                   {news.title}
                 </h3>
               </div>
@@ -284,7 +284,7 @@ function TipTapRenderer({ node }: { node: any }) {
       return <>{renderChildren()}</>;
     case "paragraph":
       return (
-        <p className="mb-4 text-base leading-relaxed text-gray-300 sm:text-lg">
+        <p className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
           {renderChildren()}
         </p>
       );
@@ -301,20 +301,20 @@ function TipTapRenderer({ node }: { node: any }) {
       };
       return (
         <Tag
-          className={`mb-4 mt-8 font-bold text-white ${sizeClasses[level] || sizeClasses[2]}`}
+          className={`mb-4 mt-8 font-bold text-gray-900 dark:text-white ${sizeClasses[level] || sizeClasses[2]}`}
         >
           {renderChildren()}
         </Tag>
       );
     case "bulletList":
       return (
-        <ul className="mb-6 ml-6 list-disc text-gray-300 space-y-2">
+        <ul className="mb-6 ml-6 list-disc text-gray-700 dark:text-gray-300 space-y-2">
           {renderChildren()}
         </ul>
       );
     case "orderedList":
       return (
-        <ol className="mb-6 ml-6 list-decimal text-gray-300 space-y-2">
+        <ol className="mb-6 ml-6 list-decimal text-gray-700 dark:text-gray-300 space-y-2">
           {renderChildren()}
         </ol>
       );
@@ -338,12 +338,12 @@ function TipTapRenderer({ node }: { node: any }) {
       );
     case "blockquote":
       return (
-        <blockquote className="border-l-4 border-gold-500 bg-navy-800/50 p-4 my-6 italic text-gray-300 rounded-r-lg">
+        <blockquote className="border-l-4 border-gold-500 bg-gray-50 dark:bg-navy-800/50 p-4 my-6 italic text-gray-700 dark:text-gray-300 rounded-r-lg">
           {renderChildren()}
         </blockquote>
       );
     case "horizontalRule":
-      return <hr className="my-8 border-white/10" />;
+      return <hr className="my-8 border-gray-200 dark:border-white/10" />;
     case "hardBreak":
       return <br />;
     default:

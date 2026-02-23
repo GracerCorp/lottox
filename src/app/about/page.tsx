@@ -20,7 +20,7 @@ export default function AboutPage() {
   const about = t.staticParams.about;
 
   return (
-    <div className="container mx-auto px-4 py-12 text-white">
+    <div className="container mx-auto px-4 py-12 text-gray-900 dark:text-white">
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -34,13 +34,15 @@ export default function AboutPage() {
         </div>
 
         {/* Intro */}
-        <div className="p-8 rounded-2xl bg-navy-900/50 border border-white/10 backdrop-blur-sm">
-          <p className="text-lg text-gray-300 leading-relaxed">{about.intro}</p>
+        <div className="p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
+          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            {about.intro}
+          </p>
         </div>
 
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-2xl bg-navy-900/50 border border-gold-500/20 backdrop-blur-sm">
+          <div className="p-8 rounded-2xl border border-gold-500/30 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-gold-500/10 text-gold-400">
                 <Target className="w-6 h-6" />
@@ -49,10 +51,12 @@ export default function AboutPage() {
                 {about.missionTitle}
               </h2>
             </div>
-            <p className="text-gray-300 leading-relaxed">{about.mission}</p>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {about.mission}
+            </p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-navy-900/50 border border-purple-500/20 backdrop-blur-sm">
+          <div className="p-8 rounded-2xl border border-purple-500/30 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
                 <Eye className="w-6 h-6" />
@@ -61,7 +65,9 @@ export default function AboutPage() {
                 {about.visionTitle}
               </h2>
             </div>
-            <p className="text-gray-300 leading-relaxed">{about.vision}</p>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {about.vision}
+            </p>
           </div>
         </div>
 
@@ -77,17 +83,17 @@ export default function AboutPage() {
                 return (
                   <div
                     key={index}
-                    className="p-6 rounded-xl bg-navy-900/50 border border-white/10 hover:border-gold-500/30 transition-colors group"
+                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 hover:border-gold-500/50 dark:hover:border-gold-500/30 transition-colors group shadow-sm"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 rounded-lg bg-gold-500/10 text-gold-400 group-hover:bg-gold-500/20 transition-colors">
                         <Icon className="w-5 h-5" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {feature.title}
                       </h3>
                     </div>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                       {feature.desc}
                     </p>
                   </div>
@@ -109,15 +115,17 @@ export default function AboutPage() {
                 return (
                   <div
                     key={index}
-                    className="p-6 rounded-xl bg-navy-900/50 border border-white/10 text-center"
+                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 text-center shadow-sm"
                   >
                     <div className="inline-flex p-3 rounded-full bg-emerald-500/10 text-emerald-400 mb-4">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">
+                    <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                       {value.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{value.desc}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      {value.desc}
+                    </p>
                   </div>
                 );
               },
