@@ -52,7 +52,7 @@ export function Header() {
                 "text-sm font-medium transition-colors hover:text-gold-500 dark:hover:text-gold-400",
                 pathname === item.href
                   ? "text-gold-600 dark:text-gold-400"
-                  : "text-gray-600 dark:text-gray-300",
+                  : "text-gray-600 dark:text-gray-500",
               )}
             >
               {item.label}

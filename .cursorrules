@@ -1,0 +1,12 @@
+# LOTTOX AI Agent Rules
+
+1. **Save Artifacts with Project**: Save all Implementation Plan, Walkthrough, System Flow, etc. files within the project folder (e.g., in a `.gemini_docs` or similar directory).
+2. **System Flow Documentation**: Create a System Flow file for every application and adjust it to present the system design accurately.
+3. **Linting**: Always check for Lint errors and warnings in the code and fix them proactively.
+4. **Code Cleanliness**: Clean unused code. Do not leave commented-out blocks or unused variables.
+5. **Language Preference**: Prefer answering in the Thai Language.
+6. **Architecture**: Prefer to use Clean Architecture principles for coding.
+7. **Mockup Data**: Each page must have mockup data. Always create the necessary data structures/mockups required by each page document.
+8. **Emojis**: Do not use emoji icons in the code, comments, or UI unless explicitly required by the design.
+9. **Version Control**: After editing the project, always commit the code.
+10. **Context7 Usage**: When asked about Library APIs/documentation, Framework setup/configuration, Code examples for external packages, How to use a specific library feature, or Web scraping, automatically use the Context7 MCP to fetch current documentation.
