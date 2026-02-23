@@ -21,20 +21,16 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Load saved preference or default to TH
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("language") as Language;
-      if (saved && (saved === "th" || saved === "en")) {
-        return saved;
-      }
-    }
-    return "th";
-  });
+  // Always start with "th" for consistent SSR — sync from localStorage after mount
+  const [language, setLanguageState] = useState<Language>("th");
 
-  // The initial state handles loading from localStorage.
-  // We can keep an effect just to set the HTML lang attribute on mount if needed,
-  // but it's not strictly necessary.
+  useEffect(() => {
+    const saved = localStorage.getItem("language") as Language;
+    if (saved && (saved === "th" || saved === "en")) {
+      setLanguageState(saved);
+    }
+  }, []);
+
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
