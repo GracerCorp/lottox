@@ -30,7 +30,7 @@ class ApiClient {
     if (type) {
       const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
       if (countryCode) {
-        whereClause.lottery_jobs = {
+        whereClause.lottery = {
           countries: {
             code: { equals: countryCode, mode: "insensitive" },
           },
@@ -43,7 +43,7 @@ class ApiClient {
       orderBy: { draw_date: "desc" },
       take: 10,
       include: {
-        lottery_jobs: {
+        lottery: {
           select: {
             name: true,
             countries: { select: { code: true } },
@@ -57,13 +57,12 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery_jobs: { name: string; countries: { code: string } | null } | null;
+      lottery: { name: string; countries: { code: string } | null } | null;
     }) => {
-      const countryCode =
-        res.lottery_jobs?.countries?.code?.toLowerCase() || "";
+      const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
       return {
         id: res.id,
-        type: COUNTRY_TO_TYPE[countryCode] || type || res.lottery_jobs?.name,
+        type: COUNTRY_TO_TYPE[countryCode] || type || res.lottery?.name,
         date: res.draw_date,
         drawDate: res.draw_date,
         drawNo: res.draw_period || "",
@@ -78,7 +77,7 @@ class ApiClient {
     const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
     const whereClause: Prisma.lottery_resultsWhereInput = countryCode
       ? {
-          lottery_jobs: {
+          lottery: {
             countries: {
               code: { equals: countryCode, mode: "insensitive" },
             },
@@ -94,7 +93,7 @@ class ApiClient {
         take: limit,
         skip: offset,
         include: {
-          lottery_jobs: {
+          lottery: {
             select: {
               name: true,
               countries: { select: { code: true } },
@@ -109,9 +108,9 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery_jobs: { name: string; countries: { code: string } | null } | null;
+      lottery: { name: string; countries: { code: string } | null } | null;
     }) => {
-      const cc = res.lottery_jobs?.countries?.code?.toLowerCase() || "";
+      const cc = res.lottery?.countries?.code?.toLowerCase() || "";
       return {
         id: res.id,
         type: COUNTRY_TO_TYPE[cc] || type,
@@ -142,7 +141,7 @@ class ApiClient {
 
     const whereClause: Prisma.lottery_resultsWhereInput = {};
     if (country) {
-      whereClause.lottery_jobs = {
+      whereClause.lottery = {
         countries: {
           code: {
             equals: country,
@@ -166,7 +165,7 @@ class ApiClient {
         take: limit,
         skip: offset,
         include: {
-          lottery_jobs: {
+          lottery: {
             include: {
               countries: true,
             },
@@ -193,7 +192,7 @@ class ApiClient {
     const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
     const resultWhere: Prisma.lottery_resultsWhereInput = countryCode
       ? {
-          lottery_jobs: {
+          lottery: {
             countries: {
               code: { equals: countryCode, mode: "insensitive" },
             },
@@ -290,7 +289,7 @@ class ApiClient {
       orderBy: { draw_date: "desc" },
       take: limit,
       include: {
-        lottery_jobs: true,
+        lottery: true,
       },
     });
 
@@ -380,7 +379,7 @@ class ApiClient {
   async getStatsOverview() {
     const [totalResults, activeLottos, countries] = await prisma.$transaction([
       prisma.lottery_results.count(),
-      prisma.lottery_jobs.count({ where: { status: "active" } }),
+      prisma.lotteries.count({ where: { is_active: true } }),
       prisma.countries.count({ where: { is_active: true } }),
     ]);
 

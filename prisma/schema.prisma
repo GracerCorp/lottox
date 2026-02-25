@@ -76,7 +76,7 @@ model articles {
   full_content String?
   images       String[]
   user         user?      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
-  lottery_jobs lotteries? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
+  lottery      lotteries? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
 
   @@index([author_id])
   @@index([published_at])
@@ -198,7 +198,7 @@ model lottery_results {
   notified_at    DateTime?        @db.Timestamp(6)
   banners        banners[]
   lottery_prizes lottery_prizes[]
-  lottery_jobs   lotteries?       @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
+  lottery        lotteries?       @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
 
   @@index([draw_date], map: "draw_date_idx")
   @@index([lottery_id, draw_date], map: "lottery_draw_date_idx")
@@ -209,8 +209,8 @@ model lottery_subscriptions {
   user_id      String
   lottery_id   Int
   created_at   DateTime? @default(now()) @db.Timestamp(6)
-  lottery_jobs lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
-  user         user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_user_id_user_id_fk")
+  lottery      lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
+  user         user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
 
   @@index([user_id, lottery_id], map: "user_lottery_idx")
 }
