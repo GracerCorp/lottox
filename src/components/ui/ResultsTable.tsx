@@ -34,8 +34,14 @@ interface ResultsTableProps {
   filter?: string;
 }
 
-function isThaiData(data: unknown): data is ThaiResultData {
-  return typeof data === "object" && data !== null && "firstPrize" in data;
+function isThaiData(
+  data: unknown,
+): data is ThaiResultData & { first?: string } {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    ("firstPrize" in data || "first" in data)
+  );
 }
 
 function isLaoData(data: unknown): data is LaoResultData {
@@ -43,7 +49,8 @@ function isLaoData(data: unknown): data is LaoResultData {
     typeof data === "object" &&
     data !== null &&
     "digit4" in data &&
-    "digit4Multiplier" in data
+    "digit3" in data &&
+    !("digit2Bottom" in data)
   );
 }
 
@@ -81,7 +88,7 @@ function mapApiResultToRow(
       flag: getFlagUrl("th"),
       country: t.lottery.thai.country,
       name: t.lottery.thai.subName,
-      href: "/results/thai-lotto",
+      href: "/th/thai-lotto",
       numbers: [
         {
           label: t.results.prize1,
@@ -116,7 +123,7 @@ function mapApiResultToRow(
       flag: getFlagUrl("la"),
       country: t.lottery.lao.country,
       name: t.lottery.lao.subName,
-      href: "/results/lao-lotto",
+      href: "/la/lao-lotto",
       numbers: [
         {
           label: t.results.digit4,
@@ -160,7 +167,7 @@ function mapApiResultToRow(
       flag: getFlagUrl("vn"),
       country: t.lottery?.vietnam?.country || "Vietnam",
       name: subtypeMap[type] || t.lottery?.vietnam?.country || "Vietnam",
-      href: `/results/vietnam-lotto/${subtypePath[type] || "specific"}`,
+      href: `/vn/${subtypePath[type] ? `hanoi-${subtypePath[type]}` : "hanoi-specific"}`,
       numbers: [
         {
           label: t.results?.digit4 || "4 Digits",
@@ -194,7 +201,7 @@ function mapApiResultToRow(
       flag: getFlagUrl("vn"),
       country: t.lottery?.vietnam?.country || "Vietnam",
       name: t.lottery?.vietnam?.specific?.name || "Vietnam Lottery",
-      href: "/results/vietnam-lotto/specific",
+      href: "/vn/hanoi-specific",
       numbers: [
         {
           label: t.results?.digit4 || "4 Digits",

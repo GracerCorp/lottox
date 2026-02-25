@@ -10,14 +10,14 @@ export function CountryGrid() {
       nameLocal: "ไทย",
       flag: getFlagUrl("th"),
       count: "สลากกินแบ่งรัฐบาล",
-      href: "/results/thai-lotto",
+      href: "/th/thai-lotto",
     },
     {
       name: "Laos",
       nameLocal: "ลาว",
       flag: getFlagUrl("la"),
       count: "หวยลาวพัฒนา",
-      href: "/results/lao-lotto",
+      href: "/la/lao-lotto",
     },
   ];
 

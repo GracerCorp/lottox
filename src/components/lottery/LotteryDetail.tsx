@@ -125,41 +125,40 @@ export default function LotteryDetail({
   const historyItems = data?.history ?? [];
   const latestData = latest?.data as ThaiResultData | undefined;
 
-  // Map data to DrawResult props
+  // Map data to DrawResult props - handle both DB field names (first/last3f/last3b) and legacy (firstPrize/front3/back3)
+  const rawData = latestData as Record<string, unknown> | undefined;
   const drawResultProps = {
     country: country,
     lotteryName: lotteryName,
     date: latest?.dateDisplay || latest?.date || "-",
     drawId: latest?.drawNo || "-",
     firstPrize:
-      (latestData as { first?: string })?.first ||
-      latestData?.firstPrize ||
-      "-",
-    firstPrizeAmount: latestData?.firstPrizeAmount || "Prize",
+      (rawData?.first as string) || (rawData?.firstPrize as string) || "-",
+    firstPrizeAmount: (rawData?.firstPrizeAmount as string) || "Prize",
     front3: (
-      (latestData as { last3f?: (string | number)[] })?.last3f ||
-      latestData?.front3
+      (rawData?.last3f as (string | number)[]) ||
+      (rawData?.front3 as (string | number)[])
     )?.map(String),
-    front3Amount: latestData?.front3Amount,
+    front3Amount: rawData?.front3Amount as string | undefined,
     back3: (
-      (latestData as { last3b?: (string | number)[] })?.last3b ||
-      latestData?.back3
+      (rawData?.last3b as (string | number)[]) ||
+      (rawData?.back3 as (string | number)[])
     )?.map(String),
-    back3Amount: latestData?.back3Amount,
-    last2: latestData?.last2,
-    last2Amount: latestData?.last2Amount,
-    adjacent: latestData?.adjacent,
-    adjacentAmount: latestData?.adjacentAmount,
+    back3Amount: rawData?.back3Amount as string | undefined,
+    last2: rawData?.last2 as string | undefined,
+    last2Amount: rawData?.last2Amount as string | undefined,
+    adjacent: rawData?.adjacent as string[] | undefined,
+    adjacentAmount: rawData?.adjacentAmount as string | undefined,
   };
 
   const recentResults = historyItems.map((item) => {
-    const d = item.data as ThaiResultData & { first?: string };
+    const d = item.data as unknown as Record<string, unknown>;
     return {
       date: item.dateDisplay || item.date,
-      firstPrize: d?.first || d?.firstPrize || "-",
-      last3f: d?.front3?.[0] || "-",
-      last3b: d?.back3?.[0] || "-",
-      last2: d?.last2 || "-",
+      firstPrize: (d?.first as string) || (d?.firstPrize as string) || "-",
+      last3f: ((d?.last3f as string[]) || (d?.front3 as string[]))?.[0] || "-",
+      last3b: ((d?.last3b as string[]) || (d?.back3 as string[]))?.[0] || "-",
+      last2: (d?.last2 as string) || "-",
     };
   });
 
@@ -507,7 +506,7 @@ export default function LotteryDetail({
               {historyItems.slice(0, 5).map((item, i) => (
                 <Link
                   key={i}
-                  href={`/${countryCode === "th" ? "thailand/thai-lotto" : country.toLowerCase().replace(" ", "-")}/${lotterySlug}/${item.date}`}
+                  href={`/${countryCode}/${lotterySlug}/${item.date}`}
                   className="block rounded bg-gray-100 dark:bg-white/5 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 transition-colors hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gold-600 dark:hover:text-gold-400"
                 >
                   {language === "th" ? "งวด " : "Draw "}
