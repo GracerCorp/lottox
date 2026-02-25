@@ -22,7 +22,7 @@ export default async function Home() {
       .map((c) => ({
         id: c.code.toLowerCase(),
         label: c.code.toLowerCase(),
-        flag: c.flag || getFlagUrl(c.code.toLowerCase()) || null,
+        flag: getFlagUrl(c.code.toLowerCase()), // always use URL, not DB emoji
       })),
   ];
 
