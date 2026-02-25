@@ -1,9 +1,13 @@
 import { prisma } from "@/lib/prisma";
 
+/** Country codes that have a live results page */
+export const SUPPORTED_COUNTRY_CODES = ["TH", "LA", "VN"] as const;
+
 export async function getActiveCountries() {
   const countries = await prisma.countries.findMany({
     where: {
       is_active: true,
+      code: { in: [...SUPPORTED_COUNTRY_CODES] },
     },
     include: {
       lottery_jobs: {
@@ -13,7 +17,7 @@ export async function getActiveCountries() {
       },
     },
     orderBy: {
-      id: "asc", // or name: "asc"
+      id: "asc",
     },
   });
 
