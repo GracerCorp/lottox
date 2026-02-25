@@ -20,7 +20,7 @@ interface PrizeItem {
   isMain?: boolean;
 }
 
-interface ResultRow {
+export interface ResultRow {
   date: string;
   flag: string;
   country: string;
@@ -91,7 +91,7 @@ function isNewVietnamData(data: unknown): boolean {
   );
 }
 
-function mapApiResultToRow(
+export function mapApiResultToRow(
   result: LatestResult,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   t: any,

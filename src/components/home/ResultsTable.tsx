@@ -1,109 +1,39 @@
 "use client";
 
-import { ArrowUpRight, TrendingUp, MoreHorizontal } from "lucide-react";
+import { useApi } from "@/lib/hooks/useApi";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { mapApiResultToRow } from "@/components/ui/ResultsTable";
+import type { LatestResultsResponse } from "@/lib/api-types";
+import { ArrowUpRight, TrendingUp } from "lucide-react";
 
 export function ResultsTable() {
-  const results = [
-    {
-      country: "USA",
-      code: "US-PB",
-      name: "Powerball",
-      numbers: "12 34 45 55 58",
-      special: "20",
-      jackpot: "463.00 M",
-      currency: "USD",
-      change: "+2.4%",
-      trend: "up",
-    },
-    {
-      country: "EUR",
-      code: "EU-EM",
-      name: "EuroMillions",
-      numbers: "02 10 26 32 45",
-      special: "05",
-      jackpot: "56.00 M",
-      currency: "EUR",
-      change: "+1.1%",
-      trend: "up",
-    },
-    {
-      country: "VNM",
-      code: "VN-HN",
-      name: "Hanoi Lotto",
-      numbers: "8825 825 25",
-      special: "5",
-      jackpot: "x850",
-      currency: "VND",
-      change: "+0.5%",
-      trend: "up",
-    },
-    {
-      country: "USA",
-      code: "US-MM",
-      name: "Mega Millions",
-      numbers: "05 13 24 31 58",
-      special: "17",
-      jackpot: "202.00 M",
-      currency: "USD",
-      change: "+5.8%",
-      trend: "up",
-    },
-    {
-      country: "JPN",
-      code: "JP-L6",
-      name: "Lotto 6",
-      numbers: "01 05 06 13 23 29",
-      special: "25",
-      jackpot: "400.00 M",
-      currency: "JPY",
-      change: "+0.5%",
-      trend: "up",
-    },
-    {
-      country: "CAN",
-      code: "CA-649",
-      name: "Lotto 6/49",
-      numbers: "04 19 22 27 29 40",
-      special: "25",
-      jackpot: "10.00 M",
-      currency: "CAD",
-      change: "-1.2%",
-      trend: "down",
-    },
-    {
-      country: "UK",
-      code: "UK-NL",
-      name: "National Lottery",
-      numbers: "11 14 25 34 44",
-      special: "21",
-      jackpot: "9.50 M",
-      currency: "GBP",
-      change: "+0.8%",
-      trend: "up",
-    },
-    {
-      country: "BRA",
-      code: "BR-MS",
-      name: "Mega Sena",
-      numbers: "05 22 29 32 55 48",
-      special: null,
-      jackpot: "8.00 M",
-      currency: "BRL",
-      change: "0.0%",
-      trend: "neutral",
-    },
-    {
-      country: "AUS",
-      code: "AU-PB",
-      name: "Powerball",
-      numbers: "01 02 07 50 57 58",
-      special: "17",
-      jackpot: "30.00 M",
-      currency: "AUD",
-      change: "+3.2%",
-      trend: "up",
-    },
-  ];
+  const { t, language } = useLanguage();
+  const { data, loading, error } = useApi<LatestResultsResponse>(
+    "/api/results/latest",
+  );
+
+  const results =
+    data?.results
+      ?.map((res) => {
+        const row = mapApiResultToRow(res, t, language);
+        if (!row) return null;
+
+        const mainPrize = row.numbers.find((n) => n.isMain) || row.numbers[0];
+        const specialPrize = row.numbers.find((n) => !n.isMain);
+
+        return {
+          country: row.id.toUpperCase(),
+          code: `${row.id.toUpperCase()}-${row.name.substring(0, 3).toUpperCase()}`,
+          name: row.name,
+          numbers: mainPrize?.value?.join(" ") || "-",
+          special: specialPrize?.value?.join(" ") || "-",
+          jackpot: mainPrize?.prize || "-",
+          currency: row.id === "th" ? "THB" : row.id === "la" ? "LAK" : "VND",
+          change: "+0.0%",
+          trend: "neutral",
+        };
+      })
+      .filter(Boolean) || [];
 
   return (
     <section className="py-12 bg-[#0a0f1c]">
@@ -143,52 +73,75 @@ export function ResultsTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
-                {results.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-gray-800/30 transition-colors group cursor-pointer text-gray-300"
-                  >
-                    <td className="p-3 text-center">
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full mx-auto ${row.trend === "up" ? "bg-green-500" : row.trend === "down" ? "bg-red-500" : "bg-gray-500"}`}
-                      ></div>
-                    </td>
-                    <td className="p-3">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-cyan-400 group-hover:text-cyan-300">
-                          {row.code}
-                        </span>
-                        <span className="text-[10px] text-gray-600 uppercase">
-                          {row.name}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-3 tracking-wider text-gray-400 group-hover:text-white transition-colors">
-                      {row.numbers}
-                    </td>
-                    <td className="p-3 text-right text-gold-500 group-hover:text-yellow-300">
-                      {row.special || "-"}
-                    </td>
-                    <td className="p-3 text-right">
-                      <div className="flex flex-col items-end">
-                        <span className="font-bold text-white group-hover:text-green-400 transition-colors">
-                          {row.jackpot}
-                        </span>
-                        <span className="text-[10px] text-gray-600">
-                          {row.currency}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className={`p-3 text-right ${row.change.startsWith("+") ? "text-green-500" : row.change.startsWith("-") ? "text-red-500" : "text-gray-500"}`}
-                    >
-                      {row.change}
-                    </td>
-                    <td className="p-3 text-right text-gray-600 group-hover:text-white">
-                      <ArrowUpRight className="w-4 h-4 ml-auto" />
+                {loading && (
+                  <tr>
+                    <td colSpan={7} className="p-4 text-center text-gray-500">
+                      Loading market data...
                     </td>
                   </tr>
-                ))}
+                )}
+                {error && (
+                  <tr>
+                    <td colSpan={7} className="p-4 text-center text-red-500">
+                      Error loading data: {error}
+                    </td>
+                  </tr>
+                )}
+                {!loading && !error && results.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="p-4 text-center text-gray-500">
+                      No market data available.
+                    </td>
+                  </tr>
+                )}
+                {!loading &&
+                  !error &&
+                  results.map((row: any, idx: number) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-gray-800/30 transition-colors group cursor-pointer text-gray-300"
+                    >
+                      <td className="p-3 text-center">
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full mx-auto ${row.trend === "up" ? "bg-green-500" : row.trend === "down" ? "bg-red-500" : "bg-gray-500"}`}
+                        ></div>
+                      </td>
+                      <td className="p-3">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-cyan-400 group-hover:text-cyan-300">
+                            {row.code}
+                          </span>
+                          <span className="text-[10px] text-gray-600 uppercase">
+                            {row.name}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="p-3 tracking-wider text-gray-400 group-hover:text-white transition-colors">
+                        {row.numbers}
+                      </td>
+                      <td className="p-3 text-right text-gold-500 group-hover:text-yellow-300">
+                        {row.special || "-"}
+                      </td>
+                      <td className="p-3 text-right">
+                        <div className="flex flex-col items-end">
+                          <span className="font-bold text-white group-hover:text-green-400 transition-colors">
+                            {row.jackpot}
+                          </span>
+                          <span className="text-[10px] text-gray-600">
+                            {row.currency}
+                          </span>
+                        </div>
+                      </td>
+                      <td
+                        className={`p-3 text-right ${row.change.startsWith("+") ? "text-green-500" : row.change.startsWith("-") ? "text-red-500" : "text-gray-500"}`}
+                      >
+                        {row.change}
+                      </td>
+                      <td className="p-3 text-right text-gray-600 group-hover:text-white">
+                        <ArrowUpRight className="w-4 h-4 ml-auto" />
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
