@@ -218,7 +218,7 @@ class ApiClient {
       orderBy: { name: "asc" },
       include: {
         _count: {
-          select: { lottery_jobs: true },
+          select: { lotteries: true },
         },
       },
     });
@@ -229,7 +229,7 @@ class ApiClient {
     const countryInfo = await prisma.countries.findUnique({
       where: { code: code.toUpperCase() },
       include: {
-        lottery_jobs: {
+        lotteries: {
           include: {
             lottery_results: {
               orderBy: { draw_date: "desc" },
@@ -244,10 +244,10 @@ class ApiClient {
       throw new Error("Country not found");
     }
 
-    const jobIds = countryInfo.lottery_jobs.map((j) => j.id);
+    const lotteryIds = countryInfo.lotteries.map((l) => l.id);
 
     const draws = await prisma.lottery_results.findMany({
-      where: { lottery_id: { in: jobIds } },
+      where: { lottery_id: { in: lotteryIds } },
       orderBy: { draw_date: "desc" },
       take: limit,
       include: {

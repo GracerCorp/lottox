@@ -10,9 +10,16 @@ export async function getActiveCountries() {
       code: { in: [...SUPPORTED_COUNTRY_CODES] },
     },
     include: {
-      lottery_jobs: {
+      lotteries: {
         where: {
-          status: "active",
+          is_active: true,
+        },
+        include: {
+          lottery_jobs: {
+            where: {
+              status: "active",
+            },
+          },
         },
       },
     },
