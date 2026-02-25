@@ -428,7 +428,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
   return (
     <div className="flex flex-col gap-2">
       {results.map((item) => (
-        <SingleLineRow key={item.id} item={item} />
+        <SingleLineRow key={`${item.id}-${item.name}`} item={item} />
       ))}
 
       {results.length === 0 && (

@@ -52,13 +52,7 @@ class ApiClient {
       },
     });
 
-    const formatResult = (res: {
-      id: number;
-      draw_date: string;
-      draw_period: string | null;
-      full_data: unknown;
-      lottery: { name: string; countries: { code: string } | null } | null;
-    }) => {
+    const formatResult = (res: any) => {
       const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
       return {
         id: res.id,
@@ -103,13 +97,7 @@ class ApiClient {
       }),
     ]);
 
-    const formatResult = (res: {
-      id: number;
-      draw_date: string;
-      draw_period: string | null;
-      full_data: unknown;
-      lottery: { name: string; countries: { code: string } | null } | null;
-    }) => {
+    const formatResult = (res: any) => {
       const cc = res.lottery?.countries?.code?.toLowerCase() || "";
       return {
         id: res.id,
