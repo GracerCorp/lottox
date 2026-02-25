@@ -81,7 +81,7 @@ function mapApiResultToRow(
   );
 
   if (type === "THAI" && isThaiData(result.data)) {
-    const d = result.data;
+    const d = result.data as unknown as Record<string, unknown>;
     return {
       id: "th",
       date: dateStr,
@@ -92,24 +92,28 @@ function mapApiResultToRow(
       numbers: [
         {
           label: t.results.prize1,
-          value: [d.firstPrize],
-          prize: `${d.firstPrizeAmount || "6,000,000"} B`,
+          value: [(d.first as string) || (d.firstPrize as string) || "-"],
+          prize: `${(d.firstPrizeAmount as string) || "6,000,000"} B`,
           isMain: true,
         },
         {
           label: t.results.prize3Front,
-          value: d.front3 || [],
-          prize: `${d.front3Amount || "4,000"} B`,
+          value: ((d.last3f as string[]) || (d.front3 as string[]) || []).map(
+            String,
+          ),
+          prize: `${(d.front3Amount as string) || "4,000"} B`,
         },
         {
           label: t.results.prize3Back,
-          value: d.back3 || [],
-          prize: `${d.back3Amount || "4,000"} B`,
+          value: ((d.last3b as string[]) || (d.back3 as string[]) || []).map(
+            String,
+          ),
+          prize: `${(d.back3Amount as string) || "4,000"} B`,
         },
         {
           label: t.results.prize2,
-          value: [d.last2 || ""],
-          prize: `${d.last2Amount || "2,000"} B`,
+          value: [(d.last2 as string) || "-"],
+          prize: `${(d.last2Amount as string) || "2,000"} B`,
         },
       ],
     };

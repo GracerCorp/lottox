@@ -6,14 +6,19 @@ import { ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getFlagUrl } from "@/lib/flags";
 
-export function CountryListSection() {
-  const { t } = useLanguage();
+export interface CountryListItem {
+  id: string;
+  name: string;
+  count: number;
+  flag: string;
+}
 
-  const countries = [
-    { id: "thailand", count: 1, flag: "th" },
-    { id: "laos", count: 1, flag: "la" },
-    { id: "vietnam", count: 1, flag: "vn" },
-  ];
+export function CountryListSection({
+  countries = [],
+}: {
+  countries?: CountryListItem[];
+}) {
+  const { t } = useLanguage();
 
   return (
     <section className="container mx-auto px-4 mb-20 relative z-10 w-full max-w-8xl">
@@ -52,11 +57,9 @@ export function CountryListSection() {
 
             <div className="flex flex-col min-w-0">
               <span className="font-bold text-sm md:text-base text-gray-900 dark:text-gray-800 truncate">
-                {
-                  t.countryList.countries[
-                    country.id as keyof typeof t.countryList.countries
-                  ]
-                }
+                {t.countryList.countries[
+                  country.id as keyof typeof t.countryList.countries
+                ] || country.name}
               </span>
               <span className="text-[10px] md:text-xs text-gray-500 dark:text-gray-800 truncate">
                 {country.count} {t.countryList.lotteries}

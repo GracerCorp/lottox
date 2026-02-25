@@ -8,68 +8,42 @@ import { getFlagUrl } from "@/lib/flags";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 
-export function HeroSection() {
+export interface HeroItem {
+  id: string;
+  name: string;
+  country: string;
+  flag: string;
+  jackpot: string;
+  nextDraw: string;
+  gradientFrom: string;
+  gradientTo: string;
+  href: string;
+  bgImage: string;
+}
+
+export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Define lotteries
-  const THAI_LOTTO = {
-    name: t.lottery.thai.subName,
-    country: t.lottery.thai.country,
-    flag: "https://flagcdn.com/w80/th.png",
-    jackpot: "6,000,000 ฿",
-    nextDraw: "19/02/2026 16:00",
-    gradientFrom: "from-blue-900",
-    gradientTo: "to-red-900",
-    href: "/th/thai-lotto",
-    bgImage:
-      "https://images.unsplash.com/photo-1668107710159-10fbbab2a9dd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  };
-
-  const LAO_LOTTO = {
-    name: t.lottery.lao.subName,
-    country: t.lottery.lao.country,
-    flag: "https://flagcdn.com/w80/la.png",
-    jackpot: "x6,000", // Multiplier
-    nextDraw: "19/02/2026 15:00",
-    gradientFrom: "from-blue-800",
-    gradientTo: "to-purple-900",
-    href: "/la/lao-lotto",
-    bgImage:
-      "https://images.unsplash.com/photo-1725017766702-2a2eff1228cd?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  };
-
-  const VIETNAM_LOTTO = {
-    name: t.lottery.vietnam.subName,
-    country: t.lottery.vietnam.country,
-    flag: getFlagUrl("vn"),
-    jackpot: "x850",
-    nextDraw: "19/02/2026 18:30",
-    gradientFrom: "from-red-900",
-    gradientTo: "to-orange-900",
-    href: "/vn",
-    bgImage:
-      "https://images.unsplash.com/photo-1555921015-5532091f6026?q=80&w=1287&auto=format&fit=crop",
-  };
-
   // Duplicate to create enough items for the carousel effect (6 items for 2-1-2 layout)
-  const items = [
-    THAI_LOTTO,
-    VIETNAM_LOTTO,
-    LAO_LOTTO,
-    THAI_LOTTO,
-    VIETNAM_LOTTO,
-    LAO_LOTTO,
-  ];
+  const displayItems =
+    items.length > 0
+      ? Array(Math.max(1, Math.ceil(6 / items.length)))
+          .fill(items)
+          .flat()
+          .slice(0, Math.max(6, items.length))
+      : [];
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+    if (displayItems.length === 0) return;
+    setActiveIndex((prev) => (prev === 0 ? displayItems.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+    if (displayItems.length === 0) return;
+    setActiveIndex((prev) => (prev === displayItems.length - 1 ? 0 : prev + 1));
   };
 
   const startAutoScroll = () => {
@@ -139,9 +113,14 @@ export function HeroSection() {
 
           {/* Track */}
           <div className="flex h-[450px] items-center justify-center w-full">
-            {items.map((item, index) => {
+            {displayItems.length === 0 && (
+              <div className="text-gray-500">
+                {t.common?.error || "No data"}
+              </div>
+            )}
+            {displayItems.map((item, index) => {
               let distance = 0;
-              const total = items.length;
+              const total = displayItems.length;
               const diff = (index - activeIndex + total) % total;
 
               if (diff > total / 2) {

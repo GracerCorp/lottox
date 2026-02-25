@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "pub-30fe322d5c6d410ca680bca1d0764bd5.r2.dev",
       },
+      {
+        protocol: "https",
+        hostname: "s.isanook.com",
+      },
+      {
+        protocol: "http",
+        hostname: "s.isanook.com",
+      },
     ],
   },
 };
