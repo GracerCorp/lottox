@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 /** Country codes that have a live results page */
-export const SUPPORTED_COUNTRY_CODES = ["TH", "LA", "VN"] as const;
+export const SUPPORTED_COUNTRY_CODES = ["th", "la", "vn"] as const;
 
 export async function getActiveCountries() {
   const countries = await prisma.countries.findMany({
@@ -32,9 +32,9 @@ export async function getActiveCountries() {
 }
 
 export async function getLotteriesByCountry(countryCode: string) {
-  const country = await prisma.countries.findUnique({
+  const country = await prisma.countries.findFirst({
     where: {
-      code: countryCode.toUpperCase(),
+      code: { equals: countryCode, mode: "insensitive" },
     },
     include: {
       lotteries: {

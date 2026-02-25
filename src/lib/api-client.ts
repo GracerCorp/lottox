@@ -2,6 +2,25 @@ import { NextResponse } from "next/server";
 import { prisma } from "./prisma";
 import type { Prisma } from "@prisma/client";
 
+/** Map API type strings to DB country codes */
+const TYPE_TO_COUNTRY: Record<string, string> = {
+  thai: "th",
+  lao: "la",
+  laos: "la",
+  vietnam: "vn",
+  vietnam_specific: "vn",
+  vietnam_special: "vn",
+  vietnam_normal: "vn",
+  vietnam_vip: "vn",
+};
+
+/** Map country code to display type used by frontend */
+const COUNTRY_TO_TYPE: Record<string, string> = {
+  th: "THAI",
+  la: "LAO",
+  vn: "VIETNAM",
+};
+
 class ApiClient {
   // --- Public Spec API Methods ---
 
@@ -9,12 +28,14 @@ class ApiClient {
   async getLatestResults(type?: string) {
     const whereClause: Prisma.lottery_resultsWhereInput = {};
     if (type) {
-      whereClause.lottery_jobs = {
-        name: {
-          equals: type,
-          mode: "insensitive",
-        },
-      };
+      const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+      if (countryCode) {
+        whereClause.lottery_jobs = {
+          countries: {
+            code: { equals: countryCode, mode: "insensitive" },
+          },
+        };
+      }
     }
 
     const latestResults = await prisma.lottery_results.findMany({
@@ -25,6 +46,7 @@ class ApiClient {
         lottery_jobs: {
           select: {
             name: true,
+            countries: { select: { code: true } },
           },
         },
       },
@@ -35,28 +57,34 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery_jobs: { name: string } | null;
-    }) => ({
-      id: res.id,
-      type: res.lottery_jobs?.name || type,
-      date: res.draw_date,
-      drawDate: res.draw_date,
-      drawNo: res.draw_period || "",
-      data: res.full_data,
-    });
+      lottery_jobs: { name: string; countries: { code: string } | null } | null;
+    }) => {
+      const countryCode =
+        res.lottery_jobs?.countries?.code?.toLowerCase() || "";
+      return {
+        id: res.id,
+        type: COUNTRY_TO_TYPE[countryCode] || type || res.lottery_jobs?.name,
+        date: res.draw_date,
+        drawDate: res.draw_date,
+        drawNo: res.draw_period || "",
+        data: res.full_data,
+      };
+    };
 
     return { results: latestResults.map(formatResult) };
   }
 
   async getResultsByType(type: string, limit: number = 10, offset: number = 0) {
-    const whereClause: Prisma.lottery_resultsWhereInput = {
-      lottery_jobs: {
-        name: {
-          equals: type,
-          mode: "insensitive",
-        },
-      },
-    };
+    const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+    const whereClause: Prisma.lottery_resultsWhereInput = countryCode
+      ? {
+          lottery_jobs: {
+            countries: {
+              code: { equals: countryCode, mode: "insensitive" },
+            },
+          },
+        }
+      : {};
 
     const [total, results] = await prisma.$transaction([
       prisma.lottery_results.count({ where: whereClause }),
@@ -67,7 +95,10 @@ class ApiClient {
         skip: offset,
         include: {
           lottery_jobs: {
-            select: { name: true },
+            select: {
+              name: true,
+              countries: { select: { code: true } },
+            },
           },
         },
       }),
@@ -78,16 +109,19 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery_jobs: { name: string } | null;
-    }) => ({
-      id: res.id,
-      type: res.lottery_jobs?.name || type,
-      date: res.draw_date,
-      dateDisplay: res.draw_date,
-      drawNo: res.draw_period || "",
-      daysAgo: "", // Can calculate if needed
-      data: res.full_data,
-    });
+      lottery_jobs: { name: string; countries: { code: string } | null } | null;
+    }) => {
+      const cc = res.lottery_jobs?.countries?.code?.toLowerCase() || "";
+      return {
+        id: res.id,
+        type: COUNTRY_TO_TYPE[cc] || type,
+        date: res.draw_date,
+        dateDisplay: res.draw_date,
+        drawNo: res.draw_period || "",
+        daysAgo: "",
+        data: res.full_data,
+      };
+    };
 
     return {
       latest: results.length > 0 ? formatResult(results[0]) : null,
@@ -156,11 +190,16 @@ class ApiClient {
     // For now we will try checking lottery_prizes.
 
     // Find the relevant result first
-    const resultWhere: Prisma.lottery_resultsWhereInput = {
-      lottery_jobs: {
-        name: { equals: type, mode: "insensitive" },
-      },
-    };
+    const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+    const resultWhere: Prisma.lottery_resultsWhereInput = countryCode
+      ? {
+          lottery_jobs: {
+            countries: {
+              code: { equals: countryCode, mode: "insensitive" },
+            },
+          },
+        }
+      : {};
     if (drawDate) {
       resultWhere.draw_date = drawDate;
     }
@@ -226,8 +265,8 @@ class ApiClient {
   }
 
   async getCountryDraws(code: string, limit: number = 10) {
-    const countryInfo = await prisma.countries.findUnique({
-      where: { code: code.toUpperCase() },
+    const countryInfo = await prisma.countries.findFirst({
+      where: { code: { equals: code, mode: "insensitive" } },
       include: {
         lotteries: {
           include: {

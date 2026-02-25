@@ -4,64 +4,67 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Let's first make sure there are core active countries set up
-  let thaiCountry = await prisma.countries.upsert({
-    where: { code: "TH" },
+  const thaiCountry = await prisma.countries.upsert({
+    where: { code: "th" },
     update: {},
     create: {
-      code: "TH",
+      code: "th",
       name: "Thailand",
-      flag: "🇹🇭",
+      flag: "https://flagcdn.com/w320/th.png",
       is_active: true,
     },
   });
 
-  let laoCountry = await prisma.countries.upsert({
-    where: { code: "LA" },
+  const laoCountry = await prisma.countries.upsert({
+    where: { code: "la" },
     update: {},
     create: {
-      code: "LA",
+      code: "la",
       name: "Laos",
-      flag: "🇱🇦",
+      flag: "https://flagcdn.com/w320/la.png",
       is_active: true,
     },
   });
 
   // Ensure there are some lotteries metadata
-  let thaiLottoMetadata = await prisma.lotteries.upsert({
-    where: { slug: "thai-lotto" },
-    update: {},
-    create: {
-      name: "Thai Lotto",
-      slug: "thai-lotto",
-      country_id: thaiCountry.id,
-      jackpot: "6 Million ฿",
-      next_draw: "16 Feb",
-      type: "Lotto",
-    },
+  // Use findFirst + create pattern since there's no unique slug field
+  let thaiLottoMetadata = await prisma.lotteries.findFirst({
+    where: { name: "Thai Lotto", country_id: thaiCountry.id },
   });
+  if (!thaiLottoMetadata) {
+    thaiLottoMetadata = await prisma.lotteries.create({
+      data: {
+        name: "Thai Lotto",
+        country_id: thaiCountry.id,
+        currency: "THB",
+        is_active: true,
+      },
+    });
+  }
 
-  let laoLottoMetadata = await prisma.lotteries.upsert({
-    where: { slug: "lao-lotto" },
-    update: {},
-    create: {
-      name: "Lao Lotto",
-      slug: "lao-lotto",
-      country_id: laoCountry.id,
-      jackpot: "Variable",
-      next_draw: "Monday, Wednesday, Friday",
-      type: "Lotto",
-    },
+  let laoLottoMetadata = await prisma.lotteries.findFirst({
+    where: { name: "Lao Lotto", country_id: laoCountry.id },
   });
+  if (!laoLottoMetadata) {
+    laoLottoMetadata = await prisma.lotteries.create({
+      data: {
+        name: "Lao Lotto",
+        country_id: laoCountry.id,
+        currency: "LAK",
+        is_active: true,
+      },
+    });
+  }
 
   // Ensure there are some lottery jobs (cron jobs)
   let thaiLottoJob = await prisma.lottery_jobs.findFirst({
-    where: { name: "THAI", country_id: thaiCountry.id },
+    where: { name: "THAI", lottery_id: thaiLottoMetadata.id },
   });
   if (!thaiLottoJob) {
     thaiLottoJob = await prisma.lottery_jobs.create({
       data: {
         name: "THAI",
-        country_id: thaiCountry.id,
+        lottery_id: thaiLottoMetadata.id,
         url: "https://example.com/thai",
         cron_schedule: "0 16 1,16 * *",
       },
@@ -69,48 +72,60 @@ async function main() {
   }
 
   // Insert some basic results matching the new schema
-  // We use stringified JSON for full_data
-  await prisma.lottery_results.create({
-    data: {
-      lottery_id: thaiLottoJob.id,
-      draw_date: "2026-02-16",
-      draw_period: "#40/2569",
-      full_data: {
-        first: "123456",
-        last2: "99",
-        last3f: ["111", "222"],
-        last3b: ["333", "444"],
-        adjacent: ["123455", "123457"],
-      },
-    },
+  // lottery_results.lottery_id -> lotteries.id
+  const existingThaiResult = await prisma.lottery_results.findFirst({
+    where: { lottery_id: thaiLottoMetadata.id, draw_date: "2026-02-16" },
   });
 
+  if (!existingThaiResult) {
+    await prisma.lottery_results.create({
+      data: {
+        lottery_id: thaiLottoMetadata.id,
+        draw_date: "2026-02-16",
+        draw_period: "#40/2569",
+        full_data: {
+          first: "123456",
+          last2: "99",
+          last3f: ["111", "222"],
+          last3b: ["333", "444"],
+          adjacent: ["123455", "123457"],
+        },
+      },
+    });
+  }
+
   let laoLottoJob = await prisma.lottery_jobs.findFirst({
-    where: { name: "LAO", country_id: laoCountry.id },
+    where: { name: "LAO", lottery_id: laoLottoMetadata.id },
   });
   if (!laoLottoJob) {
     laoLottoJob = await prisma.lottery_jobs.create({
       data: {
         name: "LAO",
-        country_id: laoCountry.id,
+        lottery_id: laoLottoMetadata.id,
         url: "https://example.com/lao",
         cron_schedule: "30 20 * * 1,3,5",
       },
     });
   }
 
-  await prisma.lottery_results.create({
-    data: {
-      lottery_id: laoLottoJob.id,
-      draw_date: "2026-02-13",
-      draw_period: "#18/2569",
-      full_data: {
-        digit4: "4045",
-        digit3: "045",
-        digit2: "45",
-      },
-    },
+  const existingLaoResult = await prisma.lottery_results.findFirst({
+    where: { lottery_id: laoLottoMetadata.id, draw_date: "2026-02-13" },
   });
+
+  if (!existingLaoResult) {
+    await prisma.lottery_results.create({
+      data: {
+        lottery_id: laoLottoMetadata.id,
+        draw_date: "2026-02-13",
+        draw_period: "#18/2569",
+        full_data: {
+          digit4: "4045",
+          digit3: "045",
+          digit2: "45",
+        },
+      },
+    });
+  }
 
   console.log("Seed data inserted with new schema!");
 }
