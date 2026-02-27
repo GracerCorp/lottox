@@ -1,0 +1,223 @@
+# Database Detail - Lottery Tables
+
+เอกสารนี้อธิบายโครงสร้างและข้อมูลของตาราง `countries`, `lotteries`, และ `result_verifications` ซึ่งเป็นตารางหลักสำหรับระบบ Lottery
+
+> อัปเดตล่าสุด: 2026-02-27
+
+---
+
+## ER Diagram (ความสัมพันธ์ระหว่างตาราง)
+
+```mermaid
+erDiagram
+    countries ||--o{ lotteries : "has many"
+    countries ||--o{ lottery_results : "has many"
+    lotteries ||--o{ lottery_results : "has many"
+    lottery_results ||--o{ result_verifications : "lottery_result_id"
+    lottery_results ||--o{ result_verifications : "compared_result_id"
+    admins ||--o{ result_verifications : "verified_by"
+
+    countries {
+        int id PK
+        string code UK
+        string name
+        string flag
+        string draw_schedule
+        string odds
+        boolean is_active
+        timestamp created_at
+    }
+
+    lotteries {
+        int id PK
+        string name
+        string logo
+        string currency
+        boolean is_active
+        int country_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    lottery_results {
+        int id PK
+        string draw_date
+        string draw_period
+        json full_data
+        json data
+        int lottery_id FK
+        int country_id FK
+        string validation_status
+        json validation_errors
+        timestamp validated_at
+        timestamp notified_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    result_verifications {
+        int id PK
+        int lottery_result_id FK
+        int compared_result_id FK
+        string status
+        int match_percentage
+        json diff_details
+        int verified_by FK
+        string notes
+        json chosen_data
+        string chosen_source
+        timestamp created_at
+        timestamp updated_at
+        timestamp verified_at
+    }
+```
+
+---
+
+## 1. ตาราง `countries`
+
+### คำอธิบาย
+เก็บข้อมูลประเทศที่มีหวย (Lottery) ในระบบ ทำหน้าที่เป็นตาราง Master สำหรับจัดกลุ่มหวยตามประเทศ
+
+### โครงสร้างคอลัมน์
+
+| คอลัมน์ | ชนิดข้อมูล | Nullable | Default | คำอธิบาย |
+|---|---|---|---|---|
+| `id` | Integer | NO | autoincrement | Primary Key |
+| `code` | String | NO | - | รหัสประเทศ (Unique) เช่น `th`, `la`, `vn` |
+| `name` | String | NO | - | ชื่อประเทศภาษาอังกฤษ |
+| `flag` | String | YES | - | URL ของรูปธงชาติ |
+| `draw_schedule` | String | YES | - | ตารางการออกรางวัล |
+| `odds` | String | YES | - | อัตราเดิมพัน |
+| `is_active` | Boolean | YES | `true` | สถานะใช้งาน |
+| `created_at` | Timestamp | YES | `now()` | วันที่สร้าง |
+
+### ความสัมพันธ์
+- **Has Many** `lotteries` -- ประเทศหนึ่งมีหวยได้หลายชนิด
+- **Has Many** `lottery_results` -- ประเทศหนึ่งมีผลรางวัลได้หลายรายการ
+
+### Indexes
+- `countries_code_unique` -- Unique index บน `code`
+
+### ข้อมูลปัจจุบัน (3 รายการ)
+
+| id | code | name | flag | draw_schedule | odds | is_active | created_at |
+|---|---|---|---|---|---|---|---|
+| 1 | `th` | Thailand | `https://flagcdn.com/w80/th.png` | (ว่าง) | (ว่าง) | true | 2026-02-23 |
+| 2 | `la` | Laos | `https://flagcdn.com/w80/la.png` | (ว่าง) | (ว่าง) | true | 2026-02-25 |
+| 3 | `vn` | Vietnam | `https://flagcdn.com/w80/vn.png` | (ว่าง) | (ว่าง) | true | 2026-02-25 |
+
+---
+
+## 2. ตาราง `lotteries`
+
+### คำอธิบาย
+เก็บข้อมูลประเภทหวยแต่ละชนิดที่ระบบรองรับ แต่ละหวยจะสังกัดอยู่ในประเทศใดประเทศหนึ่ง
+
+### โครงสร้างคอลัมน์
+
+| คอลัมน์ | ชนิดข้อมูล | Nullable | Default | คำอธิบาย |
+|---|---|---|---|---|
+| `id` | Integer | NO | autoincrement | Primary Key |
+| `name` | String | NO | - | ชื่อหวย เช่น "Government Lottery Office (GLO)" |
+| `logo` | String | YES | - | URL โลโก้ของหวย (R2 Storage) |
+| `currency` | String | YES | `THB` | สกุลเงิน |
+| `is_active` | Boolean | YES | `true` | สถานะใช้งาน |
+| `country_id` | Integer | YES | - | FK ไปยัง `countries.id` |
+| `created_at` | Timestamp | YES | `now()` | วันที่สร้าง |
+| `updated_at` | Timestamp | YES | - | วันที่อัปเดตล่าสุด |
+
+### ความสัมพันธ์
+- **Belongs To** `countries` -- ผ่าน `country_id` -> `countries.id`
+- **Has Many** `lottery_results` -- หวยหนึ่งชนิดมีผลรางวัลได้หลายรายการ
+- **Has Many** `lottery_jobs` -- มี scraping jobs
+- **Has Many** `articles` -- มีบทความที่เกี่ยวข้อง
+- **Has Many** `lottery_subscriptions` -- มีผู้ติดตาม
+
+### Foreign Keys
+- `lotteries_country_id_countries_id_fk` -- `country_id` -> `countries.id` (ON DELETE: NoAction)
+
+### ข้อมูลปัจจุบัน (2 รายการ)
+
+| id | name | logo | currency | is_active | country_id | result_count |
+|---|---|---|---|---|---|---|
+| 1 | Government Lottery Office (GLO) | `.../a8c1e842...svg` | THB | true | 1 (Thailand) | 455 |
+| 5 | Lao Development | `.../9f0183fb...png` | THB | true | 2 (Laos) | 304 |
+
+> **หมายเหตุ:** ยังไม่มี lottery สำหรับประเทศ Vietnam (country_id = 3)
+
+---
+
+## 3. ตาราง `result_verifications`
+
+### คำอธิบาย
+เก็บข้อมูลการตรวจสอบความถูกต้องของผลรางวัลหวย ใช้ในกระบวนการ Verification ว่าผลรางวัลที่ดึงมาจาก scraping ถูกต้องหรือไม่ สามารถเปรียบเทียบผลรางวัล 2 รายการเข้าด้วยกัน (primary vs compared)
+
+### โครงสร้างคอลัมน์
+
+| คอลัมน์ | ชนิดข้อมูล | Nullable | Default | คำอธิบาย |
+|---|---|---|---|---|
+| `id` | Integer | NO | autoincrement | Primary Key |
+| `lottery_result_id` | Integer | NO | - | FK ไปยัง `lottery_results.id` (ผลรางวัลหลัก) |
+| `compared_result_id` | Integer | YES | - | FK ไปยัง `lottery_results.id` (ผลรางวัลที่ใช้เปรียบเทียบ) |
+| `status` | String | NO | `pending` | สถานะการตรวจสอบ: `pending`, `verified` |
+| `match_percentage` | Integer | YES | - | เปอร์เซ็นต์ความตรงกันของผลรางวัล |
+| `diff_details` | Json | YES | `{}` | รายละเอียดความแตกต่าง |
+| `verified_by` | Integer | YES | - | FK ไปยัง `admins.id` (ผู้ตรวจสอบ) |
+| `notes` | String | YES | - | หมายเหตุเพิ่มเติม |
+| `chosen_data` | Json | YES | - | ข้อมูลที่เลือกใช้เป็นผลลัพธ์สุดท้าย |
+| `chosen_source` | String | YES | - | แหล่งที่มาที่เลือก: `primary`, `compared` |
+| `created_at` | Timestamp | YES | `now()` | วันที่สร้าง |
+| `updated_at` | Timestamp | YES | - | วันที่อัปเดตล่าสุด |
+| `verified_at` | Timestamp | YES | - | วันที่ตรวจสอบเสร็จ |
+
+### ความสัมพันธ์
+- **Belongs To** `lottery_results` (primary) -- ผ่าน `lottery_result_id` -> `lottery_results.id` (ON DELETE: Cascade)
+- **Belongs To** `lottery_results` (compared) -- ผ่าน `compared_result_id` -> `lottery_results.id` (ON DELETE: Cascade)
+- **Belongs To** `admins` -- ผ่าน `verified_by` -> `admins.id` (ON DELETE: NoAction)
+
+### Indexes
+- `verification_lottery_result_idx` -- Index บน `lottery_result_id`
+- `verification_status_idx` -- Index บน `status`
+
+### สถิติข้อมูลปัจจุบัน
+
+| รายการ | จำนวน |
+|---|---|
+| **จำนวนทั้งหมด** | 759 รายการ |
+| **status = verified** | 759 (100%) |
+| **chosen_source = primary** | 759 (100%) |
+| **มี compared_result_id** | 0 (ทุกรายการไม่มีผลเปรียบเทียบ) |
+| **มี verified_by (admin)** | 0 (ทุกรายการตรวจสอบโดยระบบอัตโนมัติ) |
+
+> **หมายเหตุ:** ข้อมูลปัจจุบันแสดงว่าทุกรายการผ่านการ verify อัตโนมัติ (ไม่มี admin ตรวจสอบ) และเลือกผลจาก source primary ทั้งหมด
+
+---
+
+## Flow การทำงานของข้อมูล
+
+```mermaid
+flowchart TD
+    A["Scraping Job ดึงข้อมูล"] --> B["บันทึก lottery_results"]
+    B --> C["สร้าง result_verifications"]
+    C --> D{"เปรียบเทียบกับ\nผลรางวัลอื่น?"}
+    D -- "ใช่" --> E["บันทึก compared_result_id\nคำนวณ match_percentage"]
+    D -- "ไม่" --> F["ใช้ผลรางวัลหลักโดยตรง"]
+    E --> G["Admin / ระบบ ตรวจสอบ"]
+    F --> G
+    G --> H["เลือก chosen_source\nอัปเดต status = verified"]
+    H --> I["ผลรางวัลพร้อมแสดงผล"]
+```
+
+---
+
+## ความสัมพันธ์ระหว่างตารางโดยสรุป
+
+| จาก | ไปยัง | ประเภท | FK Column | คำอธิบาย |
+|---|---|---|---|---|
+| `lotteries` | `countries` | Many-to-One | `country_id` | หวยสังกัดประเทศ |
+| `lottery_results` | `countries` | Many-to-One | `country_id` | ผลรางวัลสังกัดประเทศ |
+| `lottery_results` | `lotteries` | Many-to-One | `lottery_id` | ผลรางวัลสังกัดหวย |
+| `result_verifications` | `lottery_results` | Many-to-One | `lottery_result_id` | การตรวจสอบอ้างอิงผลรางวัลหลัก |
+| `result_verifications` | `lottery_results` | Many-to-One | `compared_result_id` | การตรวจสอบอ้างอิงผลรางวัลเปรียบเทียบ |
+| `result_verifications` | `admins` | Many-to-One | `verified_by` | ผู้ดูแลที่ตรวจสอบ |
