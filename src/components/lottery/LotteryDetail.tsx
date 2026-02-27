@@ -130,6 +130,7 @@ export default function LotteryDetail({
     d: any,
     names: string[],
     categories: string[] = [],
+    fallbackOrder?: number,
   ) => {
     if (d?.prizes && Array.isArray(d.prizes)) {
       const p = d.prizes.find(
@@ -141,6 +142,15 @@ export default function LotteryDetail({
         const nums = p.winningNumbers || p.number;
         return Array.isArray(nums) ? nums : [nums];
       }
+      // Fallback: match by order field
+      if (fallbackOrder !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        if (byOrder) {
+          const nums = byOrder.winningNumbers || byOrder.number;
+          return Array.isArray(nums) ? nums : [nums];
+        }
+      }
     }
     return undefined;
   };
@@ -150,6 +160,7 @@ export default function LotteryDetail({
     d: any,
     names: string[],
     categories: string[] = [],
+    fallbackOrder?: number,
   ) => {
     if (d?.prizes && Array.isArray(d.prizes)) {
       const p = d.prizes.find(
@@ -158,6 +169,15 @@ export default function LotteryDetail({
           names.includes(p.prizeName) || categories.includes(p.category),
       );
       if (p) return String(p.amount || p.prizeAmount || p.reward || "");
+      // Fallback: match by order field
+      if (fallbackOrder !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        if (byOrder)
+          return String(
+            byOrder.amount || byOrder.prizeAmount || byOrder.reward || "",
+          );
+      }
     }
     return undefined;
   };
@@ -165,15 +185,21 @@ export default function LotteryDetail({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rawData = latestData as any;
 
-  const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
-  const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial"];
-  const p1Num = getPrizeNumber(rawData, p1Names, p1Cats) || [
+  const p1Names = [
+    "Prize 1",
+    "รางวัลที่ 1",
+    "Special Prize",
+    "First Prize",
+    "First Prize (4 Digits)",
+  ];
+  const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial", "prize_4_digits"];
+  const p1Num = getPrizeNumber(rawData, p1Names, p1Cats, 1) || [
     rawData?.first || rawData?.firstPrize,
   ];
   const firstPrize =
     p1Num && p1Num.length > 0 && p1Num[0] !== undefined ? p1Num[0] : "-";
   const firstPrizeAmount =
-    getPrizeAmount(rawData, p1Names, p1Cats) ||
+    getPrizeAmount(rawData, p1Names, p1Cats, 1) ||
     rawData?.firstPrizeAmount ||
     "6,000,000";
 
@@ -190,22 +216,33 @@ export default function LotteryDetail({
     rawData?.front3 ||
     [];
 
-  const pBack3Names = ["3 Back", "เลขท้าย 3 ตัว", "รางวัลเลขท้าย 3 ตัว"];
+  const pBack3Names = [
+    "3 Back",
+    "เลขท้าย 3 ตัว",
+    "รางวัลเลขท้าย 3 ตัว",
+    "3 Last Digits",
+  ];
   const pBack3Cats = [
     "running_number_back_3",
     "prizeLast3Back",
     "prize_3_back",
+    "prize_3_digits",
   ];
   const back3 =
-    getPrizeNumber(rawData, pBack3Names, pBack3Cats) ||
+    getPrizeNumber(rawData, pBack3Names, pBack3Cats, 2) ||
     rawData?.last3?.number ||
     rawData?.last3b ||
     rawData?.back3 ||
     [];
 
-  const p2Names = ["2 Bottom", "เลขท้าย 2 ตัว", "รางวัลเลขท้าย 2 ตัว"];
+  const p2Names = [
+    "2 Bottom",
+    "เลขท้าย 2 ตัว",
+    "รางวัลเลขท้าย 2 ตัว",
+    "2 Last Digits",
+  ];
   const p2Cats = ["running_number_back_2", "prizeLast2", "prize_2_digits"];
-  const l2Num = getPrizeNumber(rawData, p2Names, p2Cats) ||
+  const l2Num = getPrizeNumber(rawData, p2Names, p2Cats, 3) ||
     rawData?.last2?.number || [rawData?.last2];
   const last2 = Array.isArray(l2Num) ? l2Num[0] : l2Num;
 
@@ -306,7 +343,7 @@ export default function LotteryDetail({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const d = item.data as any;
 
-    const rp1Num = getPrizeNumber(d, p1Names, p1Cats) || [
+    const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || [
       d?.first || d?.firstPrize,
     ];
     const rFirstPrize =
@@ -319,13 +356,13 @@ export default function LotteryDetail({
       d?.front3 ||
       [];
     const rBack3 =
-      getPrizeNumber(d, pBack3Names, pBack3Cats) ||
+      getPrizeNumber(d, pBack3Names, pBack3Cats, 2) ||
       d?.last3?.number ||
       d?.last3b ||
       d?.back3 ||
       [];
 
-    const rl2Num = getPrizeNumber(d, p2Names, p2Cats) ||
+    const rl2Num = getPrizeNumber(d, p2Names, p2Cats, 3) ||
       d?.last2?.number || [d?.last2];
     const rLast2 = Array.isArray(rl2Num) ? rl2Num[0] : rl2Num;
 
