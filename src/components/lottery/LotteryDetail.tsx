@@ -251,6 +251,11 @@ export default function LotteryDetail({
     }
   }
 
+  // Extract dynamic prizes for non-Thai lotteries
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawPrizes = (rawData?.prizes || []) as any[];
+  const isNonThai = countryCode !== "th";
+
   const drawResultProps = {
     country: country,
     lotteryName: lotteryName,
@@ -258,6 +263,8 @@ export default function LotteryDetail({
     drawId: latest?.drawNo || "-",
     firstPrize: String(firstPrize || "-"),
     firstPrizeAmount: String(firstPrizeAmount),
+    // Pass dynamicPrizes for non-Thai lotteries
+    dynamicPrizes: isNonThai && rawPrizes.length > 0 ? rawPrizes : [],
     front3: (Array.isArray(front3) ? front3 : [front3])
       .map(String)
       .filter((s) => s !== "undefined"),
