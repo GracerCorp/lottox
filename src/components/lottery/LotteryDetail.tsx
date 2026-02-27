@@ -215,11 +215,46 @@ export default function LotteryDetail({
     "รางวัลข้างเคียง",
   ];
   const pAdjCats = ["nearby_prize_1"];
+  // Helper to format any date string into human-readable locale format
+  const formatDateDisplay = (dateStr: string) => {
+    if (!dateStr || dateStr === "-") return dateStr;
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString(language === "th" ? "th-TH" : "en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  // Format date for display - make it human readable and clear
+  const rawDateStr = latest?.dateDisplay || latest?.date || "-";
+  let formattedDate = rawDateStr;
+  if (rawDateStr && rawDateStr !== "-") {
+    try {
+      const dateObj = new Date(rawDateStr);
+      formattedDate = dateObj.toLocaleDateString(
+        language === "th" ? "th-TH" : "en-US",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        },
+      );
+    } catch {
+      formattedDate = rawDateStr;
+    }
+  }
 
   const drawResultProps = {
     country: country,
     lotteryName: lotteryName,
-    date: latest?.dateDisplay || latest?.date || "-",
+    date: formattedDate,
     drawId: latest?.drawNo || "-",
     firstPrize: String(firstPrize || "-"),
     firstPrizeAmount: String(firstPrizeAmount),
@@ -288,7 +323,7 @@ export default function LotteryDetail({
     const rLast2 = Array.isArray(rl2Num) ? rl2Num[0] : rl2Num;
 
     return {
-      date: item.dateDisplay || item.date,
+      date: formatDateDisplay(item.dateDisplay || item.date),
       firstPrize: String(rFirstPrize || "-"),
       last3f: String((Array.isArray(rFront3) ? rFront3 : [rFront3])[0] || "-"),
       last3b: String((Array.isArray(rBack3) ? rBack3 : [rBack3])[0] || "-"),
@@ -509,7 +544,7 @@ export default function LotteryDetail({
                       </option>
                       {historyItems.slice(0, 5).map((item, idx) => (
                         <option key={idx} value={item.date}>
-                          {item.dateDisplay || item.date}
+                          {formatDateDisplay(item.dateDisplay || item.date)}
                         </option>
                       ))}
                     </select>
@@ -729,7 +764,7 @@ export default function LotteryDetail({
                   className="block rounded bg-gray-100 dark:bg-white/5 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 transition-colors hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gold-600 dark:hover:text-gold-400"
                 >
                   {language === "th" ? "งวด " : "Draw "}
-                  {item.dateDisplay || item.date}
+                  {formatDateDisplay(item.dateDisplay || item.date)}
                 </Link>
               ))}
             </div>

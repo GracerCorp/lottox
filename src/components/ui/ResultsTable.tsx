@@ -50,31 +50,37 @@ export function mapApiResultToRow(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const prizes = (d?.prizes || []) as any[];
 
-  let countryId = "th";
+  // Slugify lottery name to produce URL-safe path
+  const slugify = (name: string) =>
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+  // Derive country metadata from countryCode (from API) or fallback from type
+  const cc =
+    result.countryCode ||
+    (type.includes("LAO") ? "la" : type.includes("VIETNAM") ? "vn" : "th");
+  const lotterySlug = result.lotteryName ? slugify(result.lotteryName) : "";
+
+  let countryId = cc;
   let countryName = t.lottery?.thai?.country || "Thailand";
-  let lottoName = t.lottery?.thai?.subName || "Thai Lottery";
-  let lottoHref = "/th/thai-lotto";
-  let flagCode = "th";
+  let lottoName =
+    result.lotteryName || t.lottery?.thai?.subName || "Thai Lottery";
+  let lottoHref = `/${cc}/${lotterySlug}`;
+  let flagCode = cc;
   let currency = "B";
   let defaultP1 = "6,000,000";
-  let defaultP2 = "2,000";
-  let defaultP3 = "4,000";
 
-  if (type === "LAO" || type.includes("LAO")) {
-    countryId = "la";
+  if (cc === "la") {
     countryName = t.lottery?.lao?.country || "Laos";
-    lottoName = t.lottery?.lao?.subName || "Lao Lottery";
-    lottoHref = "/la/lao-lotto";
-    flagCode = "la";
+    lottoName = result.lotteryName || t.lottery?.lao?.subName || "Lao Lottery";
     currency = "Kip";
     defaultP1 = "1,200,000";
-    defaultP2 = "4,000"; // fallback example
-  } else if (type === "VIETNAM" || type.includes("VIETNAM")) {
-    countryId = "vn";
+  } else if (cc === "vn") {
     countryName = t.lottery?.vietnam?.country || "Vietnam";
-    lottoName = t.lottery?.vietnam?.subName || "Vietnam Lottery";
-    lottoHref = "/vn/vietnam-lotto";
-    flagCode = "vn";
+    lottoName =
+      result.lotteryName || t.lottery?.vietnam?.subName || "Vietnam Lottery";
     currency = "VND";
     defaultP1 = "500,000";
   }
@@ -112,12 +118,20 @@ export function mapApiResultToRow(
         finalVals = ["-"];
       }
 
+      let formattedPrize = p.prizeAmount
+        ? `${Number(p.prizeAmount).toLocaleString()} ${currency}`
+        : `- ${currency}`;
+
+      if (type.includes("LAO")) {
+        formattedPrize = p.prizeAmount
+          ? `1 Kip x ${Number(p.prizeAmount).toLocaleString()}`
+          : formattedPrize;
+      }
+
       return {
         label: p.prizeName || t.results?.prize1 || `Prize ${idx + 1}`,
         value: finalVals.map(String),
-        prize: p.prizeAmount
-          ? `${Number(p.prizeAmount).toLocaleString()} ${currency}`
-          : `- ${currency}`,
+        prize: formattedPrize,
         isMain: idx === 0,
       };
     });
@@ -125,15 +139,24 @@ export function mapApiResultToRow(
 
   // Fallback if numbers is empty
   if (numbers.length === 0) {
+    let formattedDefaultP1 = `${defaultP1} ${currency}`;
+    if (type.includes("LAO")) {
+      formattedDefaultP1 = `1 Kip x ${defaultP1}`;
+    }
     numbers = [
       {
         label: t.results?.prize1 || "Prize 1",
         value: ["-"],
-        prize: `${defaultP1} ${currency}`,
+        prize: formattedDefaultP1,
         isMain: true,
       },
     ];
   }
+
+  // Use the draw date directly for the href path
+  const parsedDrawDate = new Date(result.drawDate || result.date);
+  const pathDate = parsedDrawDate.toISOString().split("T")[0];
+  const finalHref = `${lottoHref}/${pathDate}`;
 
   return {
     id: countryId,
@@ -141,7 +164,7 @@ export function mapApiResultToRow(
     flag: getFlagUrl(flagCode),
     country: countryName,
     name: lottoName,
-    href: lottoHref,
+    href: finalHref,
     numbers,
   };
 }

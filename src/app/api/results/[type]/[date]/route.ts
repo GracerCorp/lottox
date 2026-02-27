@@ -40,6 +40,17 @@ export async function GET(
       date: date,
     });
 
+    // Fetch history for the same type to populate the previous draws list
+    let historyResults: any[] = [];
+    try {
+      const historyData = await apiClient.getResultsByType(type, 10, 0);
+      if (historyData && historyData.history) {
+        historyResults = historyData.history;
+      }
+    } catch (e) {
+      console.error("Failed to fetch history for date route:", e);
+    }
+
     // Find the specific result that matches our type and date
     // Note: getGlobalResults is generic, so we'll filter it down here safely
     const exactMatch = data.draws.find((d: any) => {
@@ -72,7 +83,7 @@ export async function GET(
           drawNo: dateMatch.draw_period,
           data: dateMatch.full_data,
         },
-        history: [],
+        history: historyResults,
       });
     }
 
@@ -84,7 +95,7 @@ export async function GET(
         drawNo: exactMatch.draw_period,
         data: exactMatch.full_data,
       },
-      history: [],
+      history: historyResults,
     });
   } catch (error: any) {
     console.error("API Error (Specific Result By Date):", error);

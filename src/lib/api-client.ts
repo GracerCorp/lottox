@@ -88,6 +88,8 @@ class ApiClient {
         drawDate: res.draw_date,
         drawNo: res.draw_period || "",
         data: dataToUse,
+        lotteryName: res.lottery?.name || "",
+        countryCode: countryCode,
       };
     };
 

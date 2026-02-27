@@ -59,16 +59,27 @@ export function DrawResult({
             {country}
           </div>
         )}
-        {(country || lotteryName) && (
-          <div className="mb-4 flex flex-col items-center justify-center gap-2">
+
+        <div className="mb-4 flex flex-col items-center justify-center gap-2">
+          {lotteryName && (
             <h2 className="bg-gradient-to-r from-gold-300 to-gold-600 bg-clip-text text-4xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-5xl text-center leading-tight">
               {lotteryName}
             </h2>
-          </div>
-        )}
+          )}
 
-        <div className="mb-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          {t.common.date} {date} | {drawId}
+          <div className="mt-2 inline-flex flex-col items-center justify-center rounded-2xl border border-gold-500/20 bg-white/50 px-6 py-3 shadow-[0_8px_30px_rgb(245,158,11,0.06)] backdrop-blur-sm sm:flex-row sm:gap-4 dark:bg-navy-900/50">
+            <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-xl font-bold text-transparent sm:text-2xl dark:from-white dark:to-gray-300">
+              {date}
+            </span>
+            {drawId && drawId !== "-" && (
+              <>
+                <span className="hidden h-6 w-px bg-gold-500/30 sm:block" />
+                <span className="text-sm font-semibold tracking-wider text-gold-500 sm:text-base">
+                  {t.common.draw || "DRAW"} #{drawId}
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
         {/* 1st Prize */}
