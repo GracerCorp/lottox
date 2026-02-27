@@ -74,165 +74,109 @@ export function mapApiResultToRow(
     return p?.amount || p?.prizeAmount || p?.reward || "";
   };
 
-  if (type === "THAI" || type.includes("THAI")) {
-    const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
-    const p1 = getPrizeNum("prize_1", p1Names) ||
-      getPrizeNum("prizeFirst", p1Names) || [d?.first || d?.firstPrize || "-"];
-
-    // Sometimes prize_1 winningNumbers includes all prizes in a single array format from some scrapers.
-    // If p1 has more than 1 item, we just take the first one since it's the 1st prize.
-    const actualP1 = Array.isArray(p1) && p1.length > 0 ? [p1[0]] : ["-"];
-
-    const p3fNames = [
-      "Prize 3 Front",
-      "3 Front",
-      "เลขหน้า 3 ตัว",
-      "รางวัลเลขหน้า 3 ตัว",
-    ];
-    const p3f = getPrizeNum("running_number_front_3", p3fNames) ||
-      getPrizeNum("prizeLast3Front", p3fNames) ||
-      d?.first3?.number ||
-      d?.last3f ||
-      d?.front3 || ["-"];
-
-    const p3bNames = [
-      "Prize 3 Back",
-      "3 Back",
-      "เลขท้าย 3 ตัว",
-      "รางวัลเลขท้าย 3 ตัว",
-    ];
-    const p3b = getPrizeNum("running_number_back_3", p3bNames) ||
-      getPrizeNum("prizeLast3Back", p3bNames) ||
-      d?.last3?.number ||
-      d?.last3b ||
-      d?.back3 || ["-"];
-
-    const p2Names = [
-      "Prize 2 Down",
-      "Prize 2",
-      "2 Bottom",
-      "เลขท้าย 2 ตัว",
-      "รางวัลเลขท้าย 2 ตัว",
-    ];
-    const p2 = getPrizeNum("running_number_back_2", p2Names) ||
-      getPrizeNum("prizeLast2", p2Names) ||
-      d?.last2?.number || [d?.last2 || "-"];
-
-    return {
-      id: "th",
-      date: dateStr,
-      flag: getFlagUrl("th"),
-      country: t.lottery?.thai?.country || "Thailand",
-      name: t.lottery?.thai?.subName || "Thai Lottery",
-      href: "/th/thai-lotto",
-      numbers: [
-        {
-          label: t.results?.prize1 || "Prize 1",
-          value: actualP1.map(String),
-          prize: `${getPrizeReward("prize_1", p1Names) || getPrizeReward("prizeFirst", p1Names) || "6,000,000"} B`,
-          isMain: true,
-        },
-        {
-          label: t.results?.prize3Front || "3 Front",
-          value: (Array.isArray(p3f) ? p3f : [p3f]).map(String),
-          prize: `${getPrizeReward("running_number_front_3", p3fNames) || getPrizeReward("prizeLast3Front", p3fNames) || "4,000"} B`,
-        },
-        {
-          label: t.results?.prize3Back || "3 Back",
-          value: (Array.isArray(p3b) ? p3b : [p3b]).map(String),
-          prize: `${getPrizeReward("running_number_back_3", p3bNames) || getPrizeReward("prizeLast3Back", p3bNames) || "4,000"} B`,
-        },
-        {
-          label: t.results?.prize2 || "2 Bottom",
-          value: (Array.isArray(p2) ? p2 : [p2]).map(String),
-          prize: `${getPrizeReward("running_number_back_2", p2Names) || getPrizeReward("prizeLast2", p2Names) || "2,000"} B`,
-        },
-      ],
-    };
-  }
+  let countryId = "th";
+  let countryName = t.lottery?.thai?.country || "Thailand";
+  let lottoName = t.lottery?.thai?.subName || "Thai Lottery";
+  let lottoHref = "/th/thai-lotto";
+  let flagCode = "th";
+  let currency = "B";
+  let defaultP1 = "6,000,000";
+  let defaultP2 = "2,000";
+  let defaultP3 = "4,000";
 
   if (type === "LAO" || type.includes("LAO")) {
-    const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
-    const p1 = getPrizeNum("prize_1", p1Names) ||
-      getPrizeNum("prizeFirst", p1Names) || [d?.first || d?.firstPrize || "-"];
-
-    const actualP1 = Array.isArray(p1) && p1.length > 0 ? [p1[0]] : ["-"];
-
-    const p3Names = ["Prize 3", "3 Numbers"];
-    const p3 = getPrizeNum("prize_3", p3Names) ||
-      getPrizeNum("prize3", p3Names) ||
-      getPrizeNum("running_number_back_3", p3Names) ||
-      d?.last3?.number ||
-      d?.last3b || ["-"];
-
-    const p2Names = ["Prize 2", "2 Numbers"];
-    const p2 = getPrizeNum("prize_2", p2Names) ||
-      getPrizeNum("prize2", p2Names) ||
-      getPrizeNum("running_number_back_2", p2Names) ||
-      d?.last2?.number || [d?.last2 || "-"];
-
-    return {
-      id: "la",
-      date: dateStr,
-      flag: getFlagUrl("la"),
-      country: t.lottery?.lao?.country || "Laos",
-      name: t.lottery?.lao?.subName || "Lao Lottery",
-      href: "/th/lao-lotto",
-      numbers: [
-        {
-          label: t.results?.prize1 || "Prize 1",
-          value: actualP1.map(String),
-          prize: `${getPrizeReward("prize_1", p1Names) || getPrizeReward("prizeFirst", p1Names) || "1,200,000"} Kip`,
-          isMain: true,
-        },
-        {
-          label: t.results?.prize3 || "3 Numbers",
-          value: (Array.isArray(p3) ? p3 : [p3]).map(String),
-          prize: `${getPrizeReward("prize_3", p3Names) || getPrizeReward("prize3", p3Names) || getPrizeReward("running_number_back_3", p3Names) || "-"} Kip`,
-        },
-        {
-          label: t.results?.prize2 || "2 Numbers",
-          value: (Array.isArray(p2) ? p2 : [p2]).map(String),
-          prize: `${getPrizeReward("prize_2", p2Names) || getPrizeReward("prize2", p2Names) || getPrizeReward("running_number_back_2", p2Names) || "-"} Kip`,
-        },
-      ],
-    };
+    countryId = "la";
+    countryName = t.lottery?.lao?.country || "Laos";
+    lottoName = t.lottery?.lao?.subName || "Lao Lottery";
+    lottoHref = "/la/lao-lotto";
+    flagCode = "la";
+    currency = "Kip";
+    defaultP1 = "1,200,000";
+    defaultP2 = "4,000"; // fallback example
+  } else if (type === "VIETNAM" || type.includes("VIETNAM")) {
+    countryId = "vn";
+    countryName = t.lottery?.vietnam?.country || "Vietnam";
+    lottoName = t.lottery?.vietnam?.subName || "Vietnam Lottery";
+    lottoHref = "/vn/vietnam-lotto";
+    flagCode = "vn";
+    currency = "VND";
+    defaultP1 = "500,000";
   }
 
-  if (type === "VIETNAM" || type.includes("VIETNAM")) {
-    const pSpecNames = ["Special Prize", "Special", "รางวัลพิเศษ"];
-    const pSpec = getPrizeNum("prize_special", pSpecNames) ||
-      getPrizeNum("prizeSpecial", pSpecNames) || [d?.special || "-"];
+  const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
+  const p1 = getPrizeNum("prize_1", p1Names) ||
+    getPrizeNum("prizeFirst", p1Names) || [d?.first || d?.firstPrize || "-"];
 
-    const p1Names = ["Prize 1", "รางวัลที่ 1"];
-    const p1 = getPrizeNum("prize_1", p1Names) ||
-      getPrizeNum("prize1", p1Names) || [d?.first || d?.firstPrize || "-"];
+  // Sometimes prize_1 winningNumbers includes all prizes in a single array format from some scrapers.
+  // If p1 has more than 1 item, we just take the first one since it's the 1st prize.
+  const actualP1 = Array.isArray(p1) && p1.length > 0 ? [p1[0]] : ["-"];
 
-    return {
-      id: "vn",
-      date: dateStr,
-      flag: getFlagUrl("vn"),
-      country: t.lottery?.vietnam?.country || "Vietnam",
-      name: t.lottery?.vietnam?.subName || "Vietnam Lottery",
-      href: "/th/vietnam-lotto",
-      numbers: [
-        {
-          label: t.results?.specialPrize || "Special",
-          value: (Array.isArray(pSpec) ? pSpec : [pSpec]).map(String),
-          prize: `${getPrizeReward("prize_special", pSpecNames) || getPrizeReward("prizeSpecial", pSpecNames) || "-"} VND`,
-          isMain: true,
-        },
-        {
-          label: t.results?.prize1 || "Prize 1",
-          value: (Array.isArray(p1) ? p1 : [p1]).map(String),
-          prize: `${getPrizeReward("prize_1", p1Names) || getPrizeReward("prize1", p1Names) || "-"} VND`,
-        },
-      ],
-    };
-  }
+  const p3fNames = [
+    "Prize 3 Front",
+    "3 Front",
+    "เลขหน้า 3 ตัว",
+    "รางวัลเลขหน้า 3 ตัว",
+  ];
+  const p3f = getPrizeNum("running_number_front_3", p3fNames) ||
+    getPrizeNum("prizeLast3Front", p3fNames) ||
+    d?.first3?.number ||
+    d?.last3f ||
+    d?.front3 || ["-"];
 
-  // Unknown type - skip
-  return null;
+  const p3bNames = [
+    "Prize 3 Back",
+    "3 Back",
+    "เลขท้าย 3 ตัว",
+    "รางวัลเลขท้าย 3 ตัว",
+  ];
+  const p3b = getPrizeNum("running_number_back_3", p3bNames) ||
+    getPrizeNum("prizeLast3Back", p3bNames) ||
+    d?.last3?.number ||
+    d?.last3b ||
+    d?.back3 || ["-"];
+
+  const p2Names = [
+    "Prize 2 Down",
+    "Prize 2",
+    "2 Bottom",
+    "เลขท้าย 2 ตัว",
+    "รางวัลเลขท้าย 2 ตัว",
+  ];
+  const p2 = getPrizeNum("running_number_back_2", p2Names) ||
+    getPrizeNum("prizeLast2", p2Names) ||
+    d?.last2?.number || [d?.last2 || "-"];
+
+  return {
+    id: countryId,
+    date: dateStr,
+    flag: getFlagUrl(flagCode),
+    country: countryName,
+    name: lottoName,
+    href: lottoHref,
+    numbers: [
+      {
+        label: t.results?.prize1 || "Prize 1",
+        value: actualP1.map(String),
+        prize: `${getPrizeReward("prize_1", p1Names) || getPrizeReward("prizeFirst", p1Names) || defaultP1} ${currency}`,
+        isMain: true,
+      },
+      {
+        label: t.results?.prize3Front || "3 Front",
+        value: (Array.isArray(p3f) ? p3f : [p3f]).map(String),
+        prize: `${getPrizeReward("running_number_front_3", p3fNames) || getPrizeReward("prizeLast3Front", p3fNames) || defaultP3} ${currency}`,
+      },
+      {
+        label: t.results?.prize3Back || "3 Back",
+        value: (Array.isArray(p3b) ? p3b : [p3b]).map(String),
+        prize: `${getPrizeReward("running_number_back_3", p3bNames) || getPrizeReward("prizeLast3Back", p3bNames) || defaultP3} ${currency}`,
+      },
+      {
+        label: t.results?.prize2 || "2 Bottom",
+        value: (Array.isArray(p2) ? p2 : [p2]).map(String),
+        prize: `${getPrizeReward("running_number_back_2", p2Names) || getPrizeReward("prizeLast2", p2Names) || defaultP2} ${currency}`,
+      },
+    ],
+  };
 }
 
 export function ResultsTable({ filter = "all" }: ResultsTableProps) {
