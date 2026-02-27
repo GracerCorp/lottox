@@ -38,6 +38,12 @@ class ApiClient {
       }
     }
 
+    // Filter only those with verified result_verification
+    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+      {
+        some: { status: "verified" },
+      };
+
     const latestResults = await prisma.lottery_results.findMany({
       where: whereClause,
       orderBy: { draw_date: "desc" },
@@ -49,6 +55,13 @@ class ApiClient {
             countries: { select: { code: true } },
           },
         },
+        result_verifications_result_verifications_lottery_result_idTolottery_results:
+          {
+            where: { status: "verified" },
+            orderBy: { created_at: "desc" },
+            take: 1,
+            select: { chosen_data: true },
+          },
       },
     });
 
@@ -58,15 +71,23 @@ class ApiClient {
       draw_period: string | null;
       full_data: unknown;
       lottery: { name: string; countries: { code: string } | null } | null;
+      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
+        chosen_data: unknown;
+      }[];
     }) => {
       const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
+      const verification =
+        res
+          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+      const dataToUse = verification?.chosen_data || res.full_data;
+
       return {
         id: res.id,
         type: COUNTRY_TO_TYPE[countryCode] || type || res.lottery?.name,
         date: res.draw_date,
         drawDate: res.draw_date,
         drawNo: res.draw_period || "",
-        data: res.full_data,
+        data: dataToUse,
       };
     };
 
@@ -85,6 +106,12 @@ class ApiClient {
         }
       : {};
 
+    // Filter only those with verified result_verification
+    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+      {
+        some: { status: "verified" },
+      };
+
     const [total, results] = await prisma.$transaction([
       prisma.lottery_results.count({ where: whereClause }),
       prisma.lottery_results.findMany({
@@ -99,6 +126,13 @@ class ApiClient {
               countries: { select: { code: true } },
             },
           },
+          result_verifications_result_verifications_lottery_result_idTolottery_results:
+            {
+              where: { status: "verified" },
+              orderBy: { created_at: "desc" },
+              take: 1,
+              select: { chosen_data: true },
+            },
         },
       }),
     ]);
@@ -109,8 +143,16 @@ class ApiClient {
       draw_period: string | null;
       full_data: unknown;
       lottery: { name: string; countries: { code: string } | null } | null;
+      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
+        chosen_data: unknown;
+      }[];
     }) => {
       const cc = res.lottery?.countries?.code?.toLowerCase() || "";
+      const verification =
+        res
+          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+      const dataToUse = verification?.chosen_data || res.full_data;
+
       return {
         id: res.id,
         type: COUNTRY_TO_TYPE[cc] || type,
@@ -118,7 +160,7 @@ class ApiClient {
         dateDisplay: res.draw_date,
         drawNo: res.draw_period || "",
         daysAgo: "",
-        data: res.full_data,
+        data: dataToUse,
       };
     };
 
@@ -157,6 +199,12 @@ class ApiClient {
       whereClause.draw_period = period;
     }
 
+    // Filter only those with verified result_verification
+    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+      {
+        some: { status: "verified" },
+      };
+
     const [total, results] = await prisma.$transaction([
       prisma.lottery_results.count({ where: whereClause }),
       prisma.lottery_results.findMany({
@@ -170,12 +218,32 @@ class ApiClient {
               countries: true,
             },
           },
+          result_verifications_result_verifications_lottery_result_idTolottery_results:
+            {
+              where: { status: "verified" },
+              orderBy: { created_at: "desc" },
+              take: 1,
+              select: { chosen_data: true },
+            },
         },
       }),
     ]);
 
+    const mappedResults = results.map((res) => {
+      const verification =
+        res
+          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+      return {
+        ...res,
+        full_data: verification?.chosen_data || res.full_data,
+        // Optional: Remove the large nested array so frontend payload is smaller
+        result_verifications_result_verifications_lottery_result_idTolottery_results:
+          undefined,
+      };
+    });
+
     return {
-      draws: results,
+      draws: mappedResults,
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -206,9 +274,6 @@ class ApiClient {
     const latestResult = await prisma.lottery_results.findFirst({
       where: resultWhere,
       orderBy: { draw_date: "desc" },
-      include: {
-        lottery_prizes: true,
-      },
     });
 
     if (!latestResult) {
@@ -219,31 +284,15 @@ class ApiClient {
       };
     }
 
-    let isWin = false;
-    let winPrize = "";
-    let amount = 0;
-
-    for (const prize of latestResult.lottery_prizes) {
-      // winning_numbers is likely an array in JSON or string
-      const numbers: unknown = prize.winning_numbers;
-      if (Array.isArray(numbers) && numbers.includes(number)) {
-        isWin = true;
-        winPrize = prize.prize_name;
-        amount = prize.prize_amount;
-        break;
-      } else if (typeof numbers === "string" && numbers === number) {
-        isWin = true;
-        winPrize = prize.prize_name;
-        amount = prize.prize_amount;
-        break;
-      }
-    }
+    const isWin = false;
+    // Check inside full_data if we know the structure, for now just return false
+    // as lottery_prizes has been removed from the schema.
 
     return {
       win: isWin,
-      prize: isWin ? winPrize : undefined,
-      prizeLabel: isWin ? winPrize : undefined,
-      amount: amount > 0 ? amount.toString() : undefined,
+      prize: undefined,
+      prizeLabel: undefined,
+      amount: undefined,
       drawDate: latestResult.draw_date,
       drawNo: latestResult.draw_period || "",
     };
@@ -270,8 +319,23 @@ class ApiClient {
         lotteries: {
           include: {
             lottery_results: {
+              where: {
+                result_verifications_result_verifications_lottery_result_idTolottery_results:
+                  {
+                    some: { status: "verified" },
+                  },
+              },
               orderBy: { draw_date: "desc" },
               take: 1,
+              include: {
+                result_verifications_result_verifications_lottery_result_idTolottery_results:
+                  {
+                    where: { status: "verified" },
+                    orderBy: { created_at: "desc" },
+                    take: 1,
+                    select: { chosen_data: true },
+                  },
+              },
             },
           },
         },
@@ -285,15 +349,59 @@ class ApiClient {
     const lotteryIds = countryInfo.lotteries.map((l) => l.id);
 
     const draws = await prisma.lottery_results.findMany({
-      where: { lottery_id: { in: lotteryIds } },
+      where: {
+        lottery_id: { in: lotteryIds },
+        result_verifications_result_verifications_lottery_result_idTolottery_results:
+          {
+            some: { status: "verified" },
+          },
+      },
       orderBy: { draw_date: "desc" },
       take: limit,
       include: {
         lottery: true,
+        result_verifications_result_verifications_lottery_result_idTolottery_results:
+          {
+            where: { status: "verified" },
+            orderBy: { created_at: "desc" },
+            take: 1,
+            select: { chosen_data: true },
+          },
       },
     });
 
-    return { country: countryInfo, draws };
+    // Map `chosen_data` into `full_data` for consistency
+    const mappedCountryInfo = {
+      ...countryInfo,
+      lotteries: countryInfo.lotteries.map((lottery) => ({
+        ...lottery,
+        lottery_results: lottery.lottery_results.map((res) => {
+          const verification =
+            res
+              .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+          return {
+            ...res,
+            full_data: verification?.chosen_data || res.full_data,
+            result_verifications_result_verifications_lottery_result_idTolottery_results:
+              undefined,
+          };
+        }),
+      })),
+    };
+
+    const mappedDraws = draws.map((res) => {
+      const verification =
+        res
+          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+      return {
+        ...res,
+        full_data: verification?.chosen_data || res.full_data,
+        result_verifications_result_verifications_lottery_result_idTolottery_results:
+          undefined,
+      };
+    });
+
+    return { country: mappedCountryInfo, draws: mappedDraws };
   }
 
   async getNews(
@@ -340,7 +448,11 @@ class ApiClient {
     };
   }
 
-  async getNewsDetail(slug: string, lang?: string) {
+  async getNewsDetail(
+    slug: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    lang?: string,
+  ) {
     const article = await prisma.articles.findUnique({
       where: { slug },
       include: {

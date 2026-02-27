@@ -190,6 +190,12 @@ erDiagram
 | **มี compared_result_id** | 0 (ทุกรายการไม่มีผลเปรียบเทียบ) |
 | **มี verified_by (admin)** | 0 (ทุกรายการตรวจสอบโดยระบบอัตโนมัติ) |
 
+### ตัวอย่างข้อมูลที่นำไปใช้ จาก chosen_data
+
+```json
+{"prizes": [{"order": 1, "category": "prize_4_digits", "prizeName": "First Prize (4 Digits)", "prizeCount": 1, "prizeAmount": 6000, "winningNumbers": ["1732"]}, {"order": 2, "category": "prize_3_digits", "prizeName": "3 Last Digits", "prizeCount": 1, "prizeAmount": 500, "winningNumbers": ["732"]}, {"order": 3, "category": "prize_2_digits", "prizeName": "2 Last Digits", "prizeCount": 1, "prizeAmount": 60, "winningNumbers": ["32"]}, {"order": 4, "category": "prize_modern_5", "prizeName": "Modern 5/45", "prizeCount": 5, "prizeAmount": 0, "winningNumbers": ["36", "43", "45", "37", "24"]}]}
+```
+
 > **หมายเหตุ:** ข้อมูลปัจจุบันแสดงว่าทุกรายการผ่านการ verify อัตโนมัติ (ไม่มี admin ตรวจสอบ) และเลือกผลจาก source primary ทั้งหมด
 
 ---

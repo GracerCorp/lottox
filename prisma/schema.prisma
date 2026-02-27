@@ -25,11 +25,12 @@ model account {
 }
 
 model admins {
-  id         Int       @id @default(autoincrement())
-  email      String    @unique(map: "admins_email_unique")
-  password   String
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  role       String    @default("editor")
+  id                   Int                    @id @default(autoincrement())
+  email                String                 @unique(map: "admins_email_unique")
+  password             String
+  created_at           DateTime?              @default(now()) @db.Timestamp(6)
+  role                 String                 @default("editor")
+  result_verifications result_verifications[]
 }
 
 model ai_usage_logs {
@@ -105,15 +106,16 @@ model banners {
 }
 
 model countries {
-  id            Int         @id @default(autoincrement())
-  code          String      @unique(map: "countries_code_unique")
-  name          String
-  flag          String?
-  draw_schedule String?
-  odds          String?
-  is_active     Boolean?    @default(true)
-  created_at    DateTime?   @default(now()) @db.Timestamp(6)
-  lotteries     lotteries[]
+  id              Int               @id @default(autoincrement())
+  code            String            @unique(map: "countries_code_unique")
+  name            String
+  flag            String?
+  draw_schedule   String?
+  odds            String?
+  is_active       Boolean?          @default(true)
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  lotteries       lotteries[]
+  lottery_results lottery_results[]
 }
 
 model lotteries {
@@ -175,42 +177,37 @@ model lottery_jobs {
   lotteries     lotteries @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_jobs_lottery_id_lotteries_id_fk")
 }
 
-model lottery_prizes {
-  id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  lottery_result_id Int
-  category          String
-  prize_name        String
-  prize_amount      Int             @default(0)
-  prize_count       Int             @default(0)
-  winning_numbers   Json
-  order             Int?            @default(0)
-  created_at        DateTime?       @default(now()) @db.Timestamp(6)
-  lottery_results   lottery_results @relation(fields: [lottery_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_prizes_lottery_result_id_lottery_results_id_fk")
-}
-
 model lottery_results {
-  id             Int              @id @default(autoincrement())
-  draw_date      String
-  draw_period    String?
-  full_data      Json
-  created_at     DateTime?        @default(now()) @db.Timestamp(6)
-  lottery_id     Int?
-  notified_at    DateTime?        @db.Timestamp(6)
-  banners        banners[]
-  lottery_prizes lottery_prizes[]
-  lottery        lotteries?       @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
+  id                                                                            Int                    @id @default(autoincrement())
+  draw_date                                                                     String
+  draw_period                                                                   String?
+  full_data                                                                     Json
+  created_at                                                                    DateTime?              @default(now()) @db.Timestamp(6)
+  lottery_id                                                                    Int?
+  notified_at                                                                   DateTime?              @db.Timestamp(6)
+  country_id                                                                    Int?
+  data                                                                          Json                   @default("{}")
+  updated_at                                                                    DateTime?              @db.Timestamp(6)
+  validation_status                                                             String                 @default("pending")
+  validation_errors                                                             Json?                  @default("[]")
+  validated_at                                                                  DateTime?              @db.Timestamp(6)
+  banners                                                                       banners[]
+  countries                                                                     countries?             @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_country_id_countries_id_fk")
+  lottery                                                                       lotteries?             @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
+  result_verifications_result_verifications_compared_result_idTolottery_results result_verifications[] @relation("result_verifications_compared_result_idTolottery_results")
+  result_verifications_result_verifications_lottery_result_idTolottery_results  result_verifications[] @relation("result_verifications_lottery_result_idTolottery_results")
 
   @@index([draw_date], map: "draw_date_idx")
   @@index([lottery_id, draw_date], map: "lottery_draw_date_idx")
 }
 
 model lottery_subscriptions {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id      String
-  lottery_id   Int
-  created_at   DateTime? @default(now()) @db.Timestamp(6)
-  lottery      lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
-  user         user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String
+  lottery_id Int
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  lottery    lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
+  user       user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
 
   @@index([user_id, lottery_id], map: "user_lottery_idx")
 }
@@ -307,4 +304,26 @@ model verificationToken {
   expires    DateTime @db.Timestamp(6)
 
   @@id([identifier, token], map: "verificationToken_identifier_token_pk")
+}
+
+model result_verifications {
+  id                                                                       Int              @id @default(autoincrement())
+  lottery_result_id                                                        Int
+  compared_result_id                                                       Int?
+  status                                                                   String           @default("pending")
+  match_percentage                                                         Int?
+  diff_details                                                             Json?            @default("{}")
+  verified_by                                                              Int?
+  notes                                                                    String?
+  created_at                                                               DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at                                                               DateTime?        @db.Timestamp(6)
+  verified_at                                                              DateTime?        @db.Timestamp(6)
+  chosen_data                                                              Json?
+  chosen_source                                                            String?
+  lottery_results_result_verifications_compared_result_idTolottery_results lottery_results? @relation("result_verifications_compared_result_idTolottery_results", fields: [compared_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "result_verifications_compared_result_id_lottery_results_id_fk")
+  lottery_results_result_verifications_lottery_result_idTolottery_results  lottery_results  @relation("result_verifications_lottery_result_idTolottery_results", fields: [lottery_result_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "result_verifications_lottery_result_id_lottery_results_id_fk")
+  admins                                                                   admins?          @relation(fields: [verified_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "result_verifications_verified_by_admins_id_fk")
+
+  @@index([lottery_result_id], map: "verification_lottery_result_idx")
+  @@index([status], map: "verification_status_idx")
 }
