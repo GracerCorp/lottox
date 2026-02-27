@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/api-client";
 import { z } from "zod";
 
+/** Map API type slugs to DB country codes */
+const TYPE_TO_COUNTRY_CODE: Record<string, string> = {
+  thai: "th",
+  "government-lottery-office-glo": "th",
+  lao: "la",
+  laos: "la",
+  "lao-development": "la",
+  vietnam: "vn",
+};
+
 const paramsSchema = z.object({
   type: z.enum([
     "thai",
@@ -31,16 +41,17 @@ export async function GET(
     }
 
     const { type, date } = typeValidation.data;
+    const countryCode = TYPE_TO_COUNTRY_CODE[type];
 
-    // Use global results endpoint with date filtering
+    // Fetch result filtered by both country and date
     const data = await apiClient.getGlobalResults({
-      period: undefined,
       limit: 1,
-      country: undefined,
+      country: countryCode,
       date: date,
     });
 
     // Fetch history for the same type to populate the previous draws list
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let historyResults: any[] = [];
     try {
       const historyData = await apiClient.getResultsByType(type, 10, 0);
@@ -51,40 +62,13 @@ export async function GET(
       console.error("Failed to fetch history for date route:", e);
     }
 
-    // Find the specific result that matches our type and date
-    // Note: getGlobalResults is generic, so we'll filter it down here safely
-    const exactMatch = data.draws.find((d: any) => {
-      const mappedType = d.lottery?.countries?.code?.toLowerCase();
-      // "thai" or "government-lottery-office-glo" match to 'th'
-      const isThaiMatch =
-        (type === "thai" || type === "government-lottery-office-glo") &&
-        mappedType === "th";
-      const isLaoMatch =
-        (type === "lao" || type === "laos" || type === "lao-development") &&
-        mappedType === "la";
-      const isVnMatch = type === "vietnam" && mappedType === "vn";
-      return isThaiMatch || isLaoMatch || isVnMatch;
-    });
+    const exactMatch = data.draws[0];
 
     if (!exactMatch) {
-      // Also try matching by exact date without type matching just in case
-      const dateMatch = data.draws.find((d) => d.draw_date === date);
-      if (!dateMatch) {
-        return NextResponse.json(
-          { error: "Result not found for the given date" },
-          { status: 404 },
-        );
-      }
-
-      return NextResponse.json({
-        latest: {
-          dateDisplay: dateMatch.draw_date,
-          date: dateMatch.draw_date,
-          drawNo: dateMatch.draw_period,
-          data: dateMatch.full_data,
-        },
-        history: historyResults,
-      });
+      return NextResponse.json(
+        { error: "Result not found for the given date" },
+        { status: 404 },
+      );
     }
 
     // Return the found result
@@ -97,6 +81,7 @@ export async function GET(
       },
       history: historyResults,
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (Specific Result By Date):", error);
     return NextResponse.json(
