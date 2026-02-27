@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Code, Terminal } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export default function APIDocsPage() {
   const { t } = useLanguage();

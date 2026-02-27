@@ -39,6 +39,7 @@ export async function GET(
 
     const data = await apiClient.getNewsDetail(slug, lang);
     return NextResponse.json(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (News Detail):", error);
     return NextResponse.json(

@@ -96,6 +96,7 @@ export function ResultsTable() {
                 )}
                 {!loading &&
                   !error &&
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   results.map((row: any, idx: number) => (
                     <tr
                       key={idx}

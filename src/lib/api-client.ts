@@ -430,7 +430,7 @@ class ApiClient {
       where.title = { contains: search, mode: "insensitive" };
     }
 
-    const [total, articles] = await prisma.$transaction([
+    const [total, rawArticles] = await prisma.$transaction([
       prisma.articles.count({ where }),
       prisma.articles.findMany({
         where,
@@ -440,8 +440,23 @@ class ApiClient {
       }),
     ]);
 
+    const mappedArticles = rawArticles.map((article) => ({
+      slug: article.slug,
+      title: article.title,
+      excerpt: article.excerpt || "",
+      image:
+        article.cover_image ||
+        (article.images && article.images.length > 0 ? article.images[0] : ""),
+      date:
+        article.published_at?.toISOString() ||
+        article.created_at?.toISOString() ||
+        "",
+      category: article.tags && article.tags.length > 0 ? article.tags[0] : "",
+      author: "Admin", // Need to join with User table if we want dynamic author, but Admin is fine as default
+    }));
+
     return {
-      articles,
+      articles: mappedArticles,
       total,
       page,
       totalPages: Math.ceil(total / limit),

@@ -1,7 +1,3 @@
-import { DrawResult } from "@/components/lottery/DrawResult";
-import { notFound } from "next/navigation";
-import { useApi } from "@/lib/hooks/useApi"; // Note: simple import, but this is server component
-
 // Note: For Server Components we cannot use the custom hook directly if it uses client-side logic (useState/useEffect)
 // We should fetch data directly or use a client component wrapper.
 // Since `DrawResult` is a client component (marked "use client"), we can just fetch data here or make this a client page.

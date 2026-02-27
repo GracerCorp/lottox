@@ -51,6 +51,7 @@ export async function GET(
       offset,
     );
     return NextResponse.json(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (Results By Type):", error);
     return NextResponse.json(

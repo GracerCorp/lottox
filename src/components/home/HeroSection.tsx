@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { LotteryCard } from "@/components/home/LotteryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getFlagUrl } from "@/lib/flags";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 

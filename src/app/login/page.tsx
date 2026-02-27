@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
@@ -18,9 +19,11 @@ export default function LoginPage() {
 
         <div className="space-y-4">
           <button className="w-full py-3 px-4 bg-white text-navy-900 font-bold rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center gap-3">
-            <img
+            <Image
               src="https://www.google.com/favicon.ico"
               alt="Google"
+              width={20}
+              height={20}
               className="w-5 h-5"
             />
             Sign in with Google

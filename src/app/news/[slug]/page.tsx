@@ -134,7 +134,9 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   return (
     <>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <ArticleJsonLd article={articleData as any} />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <NewsArticleContent article={articleData as any} />
     </>
   );

@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     const { type } = parseResult.data;
     const data = await apiClient.getLatestResults(type);
     return NextResponse.json(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (Latest):", error); // Log internal error
     // Return generic error to client

@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
 
     const data = await apiClient.checkNumber(number, type, drawDate);
     return NextResponse.json(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (Check):", error);
     return NextResponse.json(

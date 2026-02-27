@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { DrawResult } from "./DrawResult";
 import { TicketVerifier } from "@/components/country/TicketVerifier";
 import { NewsSidebar } from "@/components/ui/NewsSidebar";
@@ -125,40 +124,175 @@ export default function LotteryDetail({
   const historyItems = data?.history ?? [];
   const latestData = latest?.data as ThaiResultData | undefined;
 
-  // Map data to DrawResult props - handle both DB field names (first/last3f/last3b) and legacy (firstPrize/front3/back3)
-  const rawData = latestData as Record<string, unknown> | undefined;
+  // Helper to extract data from the new `chosen_data` prizes array
+  const getPrizeNumber = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d: any,
+    names: string[],
+    categories: string[] = [],
+  ) => {
+    if (d?.prizes && Array.isArray(d.prizes)) {
+      const p = d.prizes.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (p: any) =>
+          names.includes(p.prizeName) || categories.includes(p.category),
+      );
+      if (p) {
+        const nums = p.winningNumbers || p.number;
+        return Array.isArray(nums) ? nums : [nums];
+      }
+    }
+    return undefined;
+  };
+
+  const getPrizeAmount = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d: any,
+    names: string[],
+    categories: string[] = [],
+  ) => {
+    if (d?.prizes && Array.isArray(d.prizes)) {
+      const p = d.prizes.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (p: any) =>
+          names.includes(p.prizeName) || categories.includes(p.category),
+      );
+      if (p) return String(p.amount || p.prizeAmount || p.reward || "");
+    }
+    return undefined;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawData = latestData as any;
+
+  const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
+  const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial"];
+  const p1Num = getPrizeNumber(rawData, p1Names, p1Cats) || [
+    rawData?.first || rawData?.firstPrize,
+  ];
+  const firstPrize =
+    p1Num && p1Num.length > 0 && p1Num[0] !== undefined ? p1Num[0] : "-";
+  const firstPrizeAmount =
+    getPrizeAmount(rawData, p1Names, p1Cats) ||
+    rawData?.firstPrizeAmount ||
+    "6,000,000";
+
+  const pFront3Names = ["3 Front", "เลขหน้า 3 ตัว", "รางวัลเลขหน้า 3 ตัว"];
+  const pFront3Cats = [
+    "running_number_front_3",
+    "prizeLast3Front",
+    "prize_3_front",
+  ];
+  const front3 =
+    getPrizeNumber(rawData, pFront3Names, pFront3Cats) ||
+    rawData?.first3?.number ||
+    rawData?.last3f ||
+    rawData?.front3 ||
+    [];
+
+  const pBack3Names = ["3 Back", "เลขท้าย 3 ตัว", "รางวัลเลขท้าย 3 ตัว"];
+  const pBack3Cats = [
+    "running_number_back_3",
+    "prizeLast3Back",
+    "prize_3_back",
+  ];
+  const back3 =
+    getPrizeNumber(rawData, pBack3Names, pBack3Cats) ||
+    rawData?.last3?.number ||
+    rawData?.last3b ||
+    rawData?.back3 ||
+    [];
+
+  const p2Names = ["2 Bottom", "เลขท้าย 2 ตัว", "รางวัลเลขท้าย 2 ตัว"];
+  const p2Cats = ["running_number_back_2", "prizeLast2", "prize_2_digits"];
+  const l2Num = getPrizeNumber(rawData, p2Names, p2Cats) ||
+    rawData?.last2?.number || [rawData?.last2];
+  const last2 = Array.isArray(l2Num) ? l2Num[0] : l2Num;
+
+  const pAdjNames = [
+    "Adjacent Prizes",
+    "รางวัลข้างเคียงรางวัลที่ 1",
+    "รางวัลข้างเคียง",
+  ];
+  const pAdjCats = ["nearby_prize_1"];
+
   const drawResultProps = {
     country: country,
     lotteryName: lotteryName,
     date: latest?.dateDisplay || latest?.date || "-",
     drawId: latest?.drawNo || "-",
-    firstPrize:
-      (rawData?.first as string) || (rawData?.firstPrize as string) || "-",
-    firstPrizeAmount: (rawData?.firstPrizeAmount as string) || "Prize",
-    front3: (
-      (rawData?.last3f as (string | number)[]) ||
-      (rawData?.front3 as (string | number)[])
+    firstPrize: String(firstPrize || "-"),
+    firstPrizeAmount: String(firstPrizeAmount),
+    front3: (Array.isArray(front3) ? front3 : [front3])
+      .map(String)
+      .filter((s) => s !== "undefined"),
+    front3Amount: String(
+      getPrizeAmount(rawData, pFront3Names, pFront3Cats) ||
+        rawData?.first3?.amount ||
+        rawData?.front3Amount ||
+        "4,000",
+    ),
+    back3: (Array.isArray(back3) ? back3 : [back3])
+      .map(String)
+      .filter((s) => s !== "undefined"),
+    back3Amount: String(
+      getPrizeAmount(rawData, pBack3Names, pBack3Cats) ||
+        rawData?.last3?.amount ||
+        rawData?.back3Amount ||
+        "4,000",
+    ),
+    last2: String(last2 || "-"),
+    last2Amount: String(
+      getPrizeAmount(rawData, p2Names, p2Cats) ||
+        rawData?.last2?.amount ||
+        rawData?.last2Amount ||
+        "2,000",
+    ),
+    adjacent: (
+      getPrizeNumber(rawData, pAdjNames, pAdjCats) ||
+      rawData?.adjacent ||
+      []
     )?.map(String),
-    front3Amount: rawData?.front3Amount as string | undefined,
-    back3: (
-      (rawData?.last3b as (string | number)[]) ||
-      (rawData?.back3 as (string | number)[])
-    )?.map(String),
-    back3Amount: rawData?.back3Amount as string | undefined,
-    last2: rawData?.last2 as string | undefined,
-    last2Amount: rawData?.last2Amount as string | undefined,
-    adjacent: rawData?.adjacent as string[] | undefined,
-    adjacentAmount: rawData?.adjacentAmount as string | undefined,
+    adjacentAmount: String(
+      getPrizeAmount(rawData, pAdjNames, pAdjCats) ||
+        rawData?.adjacentAmount ||
+        "100,000",
+    ),
   };
 
   const recentResults = historyItems.map((item) => {
-    const d = item.data as unknown as Record<string, unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const d = item.data as any;
+
+    const rp1Num = getPrizeNumber(d, p1Names, p1Cats) || [
+      d?.first || d?.firstPrize,
+    ];
+    const rFirstPrize =
+      rp1Num && rp1Num.length > 0 && rp1Num[0] !== undefined ? rp1Num[0] : "-";
+
+    const rFront3 =
+      getPrizeNumber(d, pFront3Names, pFront3Cats) ||
+      d?.first3?.number ||
+      d?.last3f ||
+      d?.front3 ||
+      [];
+    const rBack3 =
+      getPrizeNumber(d, pBack3Names, pBack3Cats) ||
+      d?.last3?.number ||
+      d?.last3b ||
+      d?.back3 ||
+      [];
+
+    const rl2Num = getPrizeNumber(d, p2Names, p2Cats) ||
+      d?.last2?.number || [d?.last2];
+    const rLast2 = Array.isArray(rl2Num) ? rl2Num[0] : rl2Num;
+
     return {
       date: item.dateDisplay || item.date,
-      firstPrize: (d?.first as string) || (d?.firstPrize as string) || "-",
-      last3f: ((d?.last3f as string[]) || (d?.front3 as string[]))?.[0] || "-",
-      last3b: ((d?.last3b as string[]) || (d?.back3 as string[]))?.[0] || "-",
-      last2: (d?.last2 as string) || "-",
+      firstPrize: String(rFirstPrize || "-"),
+      last3f: String((Array.isArray(rFront3) ? rFront3 : [rFront3])[0] || "-"),
+      last3b: String((Array.isArray(rBack3) ? rBack3 : [rBack3])[0] || "-"),
+      last2: String(rLast2 || "-"),
     };
   });
 
@@ -215,27 +349,111 @@ export default function LotteryDetail({
           {[
             {
               title: t.results.prize2rank,
-              count: latestData?.prize2?.length || 0,
-              amount: latestData?.prize2Amount || "200,000",
-              numbers: latestData?.prize2 || [],
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 2", "รางวัลที่ 2"],
+                    ["prize_2"],
+                  ) || rawData?.prize2
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 2", "รางวัลที่ 2"],
+                  ["prize_2"],
+                ) ||
+                rawData?.prize2Amount ||
+                "200,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 2", "รางวัลที่ 2"],
+                  ["prize_2"],
+                ) ||
+                rawData?.prize2 ||
+                [],
             },
             {
               title: t.results.prize3rank,
-              count: latestData?.prize3?.length || 0,
-              amount: latestData?.prize3Amount || "80,000",
-              numbers: latestData?.prize3 || [],
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 3", "รางวัลที่ 3"],
+                    ["prize_3"],
+                  ) || rawData?.prize3
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 3", "รางวัลที่ 3"],
+                  ["prize_3"],
+                ) ||
+                rawData?.prize3Amount ||
+                "80,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 3", "รางวัลที่ 3"],
+                  ["prize_3"],
+                ) ||
+                rawData?.prize3 ||
+                [],
             },
             {
               title: t.results.prize4rank,
-              count: latestData?.prize4?.length || 0,
-              amount: latestData?.prize4Amount || "40,000",
-              numbers: latestData?.prize4 || [],
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 4", "รางวัลที่ 4"],
+                    ["prize_4"],
+                  ) || rawData?.prize4
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 4", "รางวัลที่ 4"],
+                  ["prize_4"],
+                ) ||
+                rawData?.prize4Amount ||
+                "40,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 4", "รางวัลที่ 4"],
+                  ["prize_4"],
+                ) ||
+                rawData?.prize4 ||
+                [],
             },
             {
               title: t.results.prize5rank,
-              count: latestData?.prize5?.length || 0,
-              amount: latestData?.prize5Amount || "20,000",
-              numbers: latestData?.prize5 || [],
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 5", "รางวัลที่ 5"],
+                    ["prize_5"],
+                  ) || rawData?.prize5
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 5", "รางวัลที่ 5"],
+                  ["prize_5"],
+                ) ||
+                rawData?.prize5Amount ||
+                "20,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 5", "รางวัลที่ 5"],
+                  ["prize_5"],
+                ) ||
+                rawData?.prize5 ||
+                [],
             },
           ]
             .filter((prize) => prize.numbers.length > 0)
@@ -495,6 +713,7 @@ export default function LotteryDetail({
             icon={
               <NewspaperIcon className="h-4 w-4 text-gold-600 dark:text-gold-400" />
             }
+            category={countryCode} // Use countryCode or country word as category. For example 'th', 'la', 'vn' or their full names. Let's use `countryCode` assuming articles might be tagged with country codes or we can adjust later, or `country` which is "Thai", "Lao", "Vietnam". I will use `country` since it maps to categories like "Thai", "Lao", etc.
           />
 
           {/* Sidebar: Past draw links */}

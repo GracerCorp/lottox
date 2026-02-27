@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { page, limit, category, lang, search } = validation.data;
+    const { page, limit, category, search } = validation.data;
 
     const data = await apiClient.getNews({
       page,
@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
       search,
     });
     return NextResponse.json(data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("API Error (News):", error);
     return NextResponse.json(

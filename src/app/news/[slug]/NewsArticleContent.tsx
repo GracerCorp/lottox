@@ -140,6 +140,7 @@ export default function NewsArticleContent({
         {/* Content */}
         <div className="prose-custom mb-12">
           {(() => {
+            let parsedNode = null;
             try {
               if (
                 content.trim().startsWith("{") ||
@@ -147,11 +148,15 @@ export default function NewsArticleContent({
               ) {
                 const parsed = JSON.parse(content);
                 if (parsed.type === "doc") {
-                  return <TipTapRenderer node={parsed} />;
+                  parsedNode = parsed;
                 }
               }
-            } catch (e) {
+            } catch {
               // Not JSON, fallback
+            }
+
+            if (parsedNode) {
+              return <TipTapRenderer node={parsedNode} />;
             }
 
             return content.split("\n").map((paragraph, i) => {
@@ -245,12 +250,14 @@ export default function NewsArticleContent({
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TipTapRenderer({ node }: { node: any }) {
   if (!node) return null;
 
   if (node.type === "text") {
     let el = <>{node.text}</>;
     if (node.marks) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       node.marks.forEach((mark: any) => {
         if (mark.type === "bold") el = <strong key="bold">{el}</strong>;
         if (mark.type === "italic") el = <em key="italic">{el}</em>;
@@ -274,6 +281,7 @@ function TipTapRenderer({ node }: { node: any }) {
   }
 
   const renderChildren = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (node.content || []).map((child: any, idx: number) => (
       <TipTapRenderer key={idx} node={child} />
     ));
@@ -290,6 +298,7 @@ function TipTapRenderer({ node }: { node: any }) {
       );
     case "heading":
       const level = node.attrs?.level || 2;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const Tag = `h${level}` as any;
       const sizeClasses: Record<number, string> = {
         1: "text-3xl sm:text-4xl",

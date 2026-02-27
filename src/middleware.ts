@@ -12,9 +12,9 @@ export function middleware(request: NextRequest) {
   // Only apply to /api routes
   if (request.nextUrl.pathname.startsWith("/api")) {
     // 1. Origin Check (Simple)
-    const origin = request.headers.get("origin");
-    const referer = request.headers.get("referer");
-    const host = request.headers.get("host"); // e.g., localhost:3000 or my-site.com
+    // const origin = request.headers.get("origin");
+    // const referer = request.headers.get("referer");
+    // const host = request.headers.get("host"); // e.g., localhost:3000 or my-site.com
 
     // Allow requests from same origin (browser) or no origin (server-side fetch/curl tools if needed)
     // If strict origin check is needed:

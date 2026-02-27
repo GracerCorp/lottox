@@ -15,17 +15,23 @@ interface NewsSidebarProps {
   icon?: React.ReactNode;
   /** Max number of articles to show */
   limit?: number;
+  /** Category to filter news by */
+  category?: string;
 }
 
 export function NewsSidebar({
   accentColor = "gold",
   icon,
   limit = 5,
+  category,
 }: NewsSidebarProps) {
   const { t, language } = useLanguage();
-  const { data, loading } = useApi<NewsListResponse>(
-    `/api/news?lang=${language}&limit=${limit}`,
-  );
+
+  const apiUrl = category
+    ? `/api/news?lang=${language}&limit=${limit}&category=${encodeURIComponent(category)}`
+    : `/api/news?lang=${language}&limit=${limit}`;
+
+  const { data, loading } = useApi<NewsListResponse>(apiUrl);
 
   const accentBg = `bg-${accentColor}-500/10`;
   const accentText = `text-${accentColor}-400`;
