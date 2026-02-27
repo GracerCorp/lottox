@@ -66,17 +66,25 @@ export async function GET(
       }
 
       return NextResponse.json({
-        date: dateMatch.draw_date,
-        drawNo: dateMatch.draw_period,
-        data: dateMatch.full_data,
+        latest: {
+          dateDisplay: dateMatch.draw_date,
+          date: dateMatch.draw_date,
+          drawNo: dateMatch.draw_period,
+          data: dateMatch.full_data,
+        },
+        history: [],
       });
     }
 
     // Return the found result
     return NextResponse.json({
-      date: exactMatch.draw_date,
-      drawNo: exactMatch.draw_period,
-      data: exactMatch.full_data,
+      latest: {
+        dateDisplay: exactMatch.draw_date,
+        date: exactMatch.draw_date,
+        drawNo: exactMatch.draw_period,
+        data: exactMatch.full_data,
+      },
+      history: [],
     });
   } catch (error: any) {
     console.error("API Error (Specific Result By Date):", error);

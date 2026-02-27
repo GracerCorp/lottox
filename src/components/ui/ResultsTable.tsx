@@ -161,12 +161,14 @@ export function mapApiResultToRow(
     const p3Names = ["Prize 3", "3 Numbers"];
     const p3 = getPrizeNum("prize_3", p3Names) ||
       getPrizeNum("prize3", p3Names) ||
+      getPrizeNum("running_number_back_3", p3Names) ||
       d?.last3?.number ||
       d?.last3b || ["-"];
 
     const p2Names = ["Prize 2", "2 Numbers"];
     const p2 = getPrizeNum("prize_2", p2Names) ||
       getPrizeNum("prize2", p2Names) ||
+      getPrizeNum("running_number_back_2", p2Names) ||
       d?.last2?.number || [d?.last2 || "-"];
 
     return {
@@ -186,12 +188,12 @@ export function mapApiResultToRow(
         {
           label: t.results?.prize3 || "3 Numbers",
           value: (Array.isArray(p3) ? p3 : [p3]).map(String),
-          prize: `${getPrizeReward("prize_3", p3Names) || getPrizeReward("prize3", p3Names) || "-"} Kip`,
+          prize: `${getPrizeReward("prize_3", p3Names) || getPrizeReward("prize3", p3Names) || getPrizeReward("running_number_back_3", p3Names) || "-"} Kip`,
         },
         {
           label: t.results?.prize2 || "2 Numbers",
           value: (Array.isArray(p2) ? p2 : [p2]).map(String),
-          prize: `${getPrizeReward("prize_2", p2Names) || getPrizeReward("prize2", p2Names) || "-"} Kip`,
+          prize: `${getPrizeReward("prize_2", p2Names) || getPrizeReward("prize2", p2Names) || getPrizeReward("running_number_back_2", p2Names) || "-"} Kip`,
         },
       ],
     };
