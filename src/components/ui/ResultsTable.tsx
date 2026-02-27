@@ -50,30 +50,6 @@ export function mapApiResultToRow(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const prizes = (d?.prizes || []) as any[];
 
-  const getPrizeNum = (categoryOrId: string, names: string[]) => {
-    const p = prizes.find(
-      (x) =>
-        x.category === categoryOrId ||
-        x.id === categoryOrId ||
-        names.includes(x.prizeName),
-    );
-    if (p) {
-      const v = p.winningNumbers || p.number;
-      return Array.isArray(v) ? v : [v];
-    }
-    return null;
-  };
-
-  const getPrizeReward = (categoryOrId: string, names: string[]) => {
-    const p = prizes.find(
-      (x) =>
-        x.category === categoryOrId ||
-        x.id === categoryOrId ||
-        names.includes(x.prizeName),
-    );
-    return p?.amount || p?.prizeAmount || p?.reward || "";
-  };
-
   let countryId = "th";
   let countryName = t.lottery?.thai?.country || "Thailand";
   let lottoName = t.lottery?.thai?.subName || "Thai Lottery";
@@ -103,48 +79,61 @@ export function mapApiResultToRow(
     defaultP1 = "500,000";
   }
 
-  const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize"];
-  const p1 = getPrizeNum("prize_1", p1Names) ||
-    getPrizeNum("prizeFirst", p1Names) || [d?.first || d?.firstPrize || "-"];
+  let numbers: PrizeItem[] = [];
 
-  // Sometimes prize_1 winningNumbers includes all prizes in a single array format from some scrapers.
-  // If p1 has more than 1 item, we just take the first one since it's the 1st prize.
-  const actualP1 = Array.isArray(p1) && p1.length > 0 ? [p1[0]] : ["-"];
+  if (prizes && prizes.length > 0) {
+    // Sort by order to ensure we get the main prizes first
+    const sortedPrizes = [...prizes].sort((a, b) => {
+      // Prioritize First Prize / Special Prize implicitly if order is missing but we know standard order
+      const orderA =
+        a.order !== undefined && a.order !== null ? Number(a.order) : 99;
+      const orderB =
+        b.order !== undefined && b.order !== null ? Number(b.order) : 99;
+      return orderA - orderB;
+    });
 
-  const p3fNames = [
-    "Prize 3 Front",
-    "3 Front",
-    "เลขหน้า 3 ตัว",
-    "รางวัลเลขหน้า 3 ตัว",
-  ];
-  const p3f = getPrizeNum("running_number_front_3", p3fNames) ||
-    getPrizeNum("prizeLast3Front", p3fNames) ||
-    d?.first3?.number ||
-    d?.last3f ||
-    d?.front3 || ["-"];
+    // In ResultsTable (preview card), we typically show up to 4 significant prizes.
+    const displayPrizes = sortedPrizes
+      .filter((p) => p.winningNumbers && p.winningNumbers.length > 0)
+      .slice(0, 4);
 
-  const p3bNames = [
-    "Prize 3 Back",
-    "3 Back",
-    "เลขท้าย 3 ตัว",
-    "รางวัลเลขท้าย 3 ตัว",
-  ];
-  const p3b = getPrizeNum("running_number_back_3", p3bNames) ||
-    getPrizeNum("prizeLast3Back", p3bNames) ||
-    d?.last3?.number ||
-    d?.last3b ||
-    d?.back3 || ["-"];
+    // If somehow empty after filtering, just take the first 4
+    const finalDisplayPrizes =
+      displayPrizes.length > 0 ? displayPrizes : sortedPrizes.slice(0, 4);
 
-  const p2Names = [
-    "Prize 2 Down",
-    "Prize 2",
-    "2 Bottom",
-    "เลขท้าย 2 ตัว",
-    "รางวัลเลขท้าย 2 ตัว",
-  ];
-  const p2 = getPrizeNum("running_number_back_2", p2Names) ||
-    getPrizeNum("prizeLast2", p2Names) ||
-    d?.last2?.number || [d?.last2 || "-"];
+    numbers = finalDisplayPrizes.map((p, idx) => {
+      const vals = p.winningNumbers || p.number || [];
+      let finalVals = Array.isArray(vals) ? vals : [vals];
+
+      if (idx === 0 && finalVals.length > 0) {
+        // Just take the first array item for the main highlighted prize to prevent overflow
+        finalVals = [finalVals[0]];
+      } else if (finalVals.length === 0) {
+        finalVals = ["-"];
+      }
+
+      return {
+        label: p.prizeName || t.results?.prize1 || `Prize ${idx + 1}`,
+        value: finalVals.map(String),
+        prize: p.prizeAmount
+          ? `${Number(p.prizeAmount).toLocaleString()} ${currency}`
+          : `- ${currency}`,
+        isMain: idx === 0,
+      };
+    });
+  }
+
+  // Fallback if numbers is empty
+  if (numbers.length === 0) {
+    numbers = [
+      {
+        label: t.results?.prize1 || "Prize 1",
+        value: ["-"],
+        prize: `${defaultP1} ${currency}`,
+        isMain: true,
+      },
+    ];
+  }
 
   return {
     id: countryId,
@@ -153,29 +142,7 @@ export function mapApiResultToRow(
     country: countryName,
     name: lottoName,
     href: lottoHref,
-    numbers: [
-      {
-        label: t.results?.prize1 || "Prize 1",
-        value: actualP1.map(String),
-        prize: `${getPrizeReward("prize_1", p1Names) || getPrizeReward("prizeFirst", p1Names) || defaultP1} ${currency}`,
-        isMain: true,
-      },
-      {
-        label: t.results?.prize3Front || "3 Front",
-        value: (Array.isArray(p3f) ? p3f : [p3f]).map(String),
-        prize: `${getPrizeReward("running_number_front_3", p3fNames) || getPrizeReward("prizeLast3Front", p3fNames) || defaultP3} ${currency}`,
-      },
-      {
-        label: t.results?.prize3Back || "3 Back",
-        value: (Array.isArray(p3b) ? p3b : [p3b]).map(String),
-        prize: `${getPrizeReward("running_number_back_3", p3bNames) || getPrizeReward("prizeLast3Back", p3bNames) || defaultP3} ${currency}`,
-      },
-      {
-        label: t.results?.prize2 || "2 Bottom",
-        value: (Array.isArray(p2) ? p2 : [p2]).map(String),
-        prize: `${getPrizeReward("running_number_back_2", p2Names) || getPrizeReward("prizeLast2", p2Names) || defaultP2} ${currency}`,
-      },
-    ],
+    numbers,
   };
 }
 
