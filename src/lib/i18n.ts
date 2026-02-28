@@ -286,38 +286,40 @@ export const dictionary = {
           "LOTTOX เป็นแพลตฟอร์มข้อมูลเท่านั้น เราไม่ให้บริการจำหน่ายสลากหรือเกี่ยวข้องกับการพนัน หากคุณต้องการซื้อสลาก กรุณาติดต่อหน่วยงานที่เกี่ยวข้องโดยตรง",
       },
       disclaimer: {
-        title: "ข้อจำกัดความรับผิดชอบ",
-        subtitle: "โปรดอ่านข้อจำกัดความรับผิดชอบนี้อย่างละเอียดก่อนใช้งาน",
+        title: "คำเตือนและข้อสงวนสิทธิ์",
+        subtitle: "โปรดอ่านข้อสงวนสิทธิ์นี้อย่างละเอียดก่อนใช้งาน",
         lastUpdated: "อัพเดทล่าสุด: กุมภาพันธ์ 2026",
         sections: [
           {
-            title: "วัตถุประสงค์ของเว็บไซต์",
+            title: "แพลตฟอร์มเพื่อการให้ข้อมูลเท่านั้น",
             content:
-              "LOTTOX เป็นแพลตฟอร์มรวบรวมและนำเสนอผลหวยจากทั่วโลก โดยทำหน้าที่เป็นศูนย์กลางข้อมูล (Information Hub) เท่านั้น ข้อมูลทั้งหมดที่แสดงบนเว็บไซต์นี้มีวัตถุประสงค์เพื่อให้ข้อมูลทั่วไปเท่านั้น ไม่ได้มีเจตนาเป็นคำแนะนำทางการเงินหรือการลงทุนแต่อย่างใด",
+              "LOTTOX เป็นแพลตฟอร์มเพื่อการให้ข้อมูลเท่านั้น LOTTOX ไม่มีส่วนเกี่ยวข้องกับการจำหน่ายลอตเตอรี่ การพนัน การรับแทง หรือการชักชวนให้เล่นการพนันในทุกรูปแบบ",
           },
           {
-            title: "ไม่เกี่ยวข้องกับการพนัน",
+            title: "แหล่งที่มาของข้อมูล",
             content:
-              "LOTTOX ไม่มีการจำหน่ายสลาก ไม่มีการรับแทง ไม่มีการให้บริการพนัน และไม่มีส่วนเกี่ยวข้องกับกิจกรรมการพนันใดๆ ทั้งสิ้น เราเป็นเพียงผู้รวบรวมและนำเสนอข้อมูลผลรางวัลจากแหล่งที่เปิดเผยต่อสาธารณะเท่านั้น",
+              "ข้อมูลผลการออกรางวัล สถิติ และเนื้อหาทั้งหมดบน LOTTOX จัดทำขึ้นจากแหล่งข้อมูลสาธารณะและแหล่งข้อมูลอย่างเป็นทางการของแต่ละประเทศ โดยมีวัตถุประสงค์เพื่อการอ้างอิง การศึกษา และการติดตามข้อมูลเท่านั้น",
           },
           {
             title: "ความถูกต้องของข้อมูล",
             content:
-              "แม้ว่าเราจะพยายามอย่างเต็มที่ในการให้ข้อมูลที่ถูกต้องและเป็นปัจจุบัน โดยรวบรวมจากแหล่งข้อมูลทางการ แต่เราไม่สามารถรับประกันความถูกต้อง 100% ของข้อมูลทั้งหมดได้ ผู้ใช้ควรตรวจสอบผลรางวัลกับแหล่งทางการอีกครั้งเสมอก่อนดำเนินการใดๆ",
+              "LOTTOX ไม่รับประกันความถูกต้อง ความครบถ้วน หรือความเป็นปัจจุบันของข้อมูล 100% ผู้ใช้งานควรตรวจสอบข้อมูลกับแหล่งทางการของลอตเตอรี่แต่ละประเทศอีกครั้งก่อนนำไปใช้งาน",
           },
           {
-            title: "ลิงก์ภายนอก",
+            title: "ไม่ให้คำแนะนำด้านการเงิน",
             content:
-              "เว็บไซต์ของเราอาจมีลิงก์ไปยังเว็บไซต์ภายนอกที่เราไม่ได้ควบคุม เราไม่รับผิดชอบต่อเนื้อหา นโยบายความเป็นส่วนตัว หรือการดำเนินงานของเว็บไซต์เหล่านั้น การเข้าถึงลิงก์ภายนอกเป็นความรับผิดชอบของผู้ใช้เอง",
+              "LOTTOX ไม่ให้คำแนะนำด้านการลงทุน การเงิน หรือการพนัน การตัดสินใจใดๆ ที่เกิดจากการใช้ข้อมูลบนแพลตฟอร์มนี้ ถือเป็นความรับผิดชอบของผู้ใช้งานแต่เพียงผู้เดียว",
           },
           {
-            title: "การจำกัดความรับผิดชอบ",
+            title: "การยอมรับเงื่อนไข",
             content:
-              "LOTTOX และทีมงานจะไม่รับผิดชอบต่อความเสียหาย ความสูญเสีย หรือผลกระทบใดๆ ที่เกิดจากการใช้ข้อมูลบนเว็บไซต์นี้ ไม่ว่าจะเป็นทางตรงหรือทางอ้อม ผู้ใช้ยอมรับความเสี่ยงจากการใช้ข้อมูลด้วยตนเอง",
+              "การเข้าถึงและใช้งาน LOTTOX ถือว่าผู้ใช้งานยอมรับและตกลงตามข้อกำหนดการใช้งาน (Terms of Service) และนโยบายความเป็นส่วนตัว (Privacy Policy) ของแพลตฟอร์ม",
           },
         ],
         importantNotice:
-          "ผลรางวัลที่แสดงบนเว็บไซต์นี้เป็นข้อมูลอ้างอิงเท่านั้น กรุณาตรวจสอบกับแหล่งทางการเสมอ",
+          "LOTTOX เป็นแพลตฟอร์มเพื่อการให้ข้อมูลเท่านั้น ไม่มีส่วนเกี่ยวข้องกับการจำหน่ายลอตเตอรี่ การพนัน หรือการรับแทงในทุกรูปแบบ",
+        shortDisclaimer:
+          "LOTTOX ให้บริการข้อมูลผลลอตเตอรี่เพื่อการอ้างอิงเท่านั้น ไม่มีส่วนเกี่ยวข้องกับการพนันหรือการจำหน่ายลอตเตอรี่ ผู้ใช้งานควรตรวจสอบข้อมูลกับแหล่งทางการอีกครั้ง",
       },
       terms: {
         title: "ข้อกำหนดและเงื่อนไขการใช้งาน",
@@ -735,33 +737,35 @@ export const dictionary = {
         lastUpdated: "Last Updated: February 2026",
         sections: [
           {
-            title: "Purpose of the Website",
+            title: "Information-Only Platform",
             content:
-              "LOTTOX is a platform that aggregates and presents lottery results from around the world, serving as an Information Hub only. All information displayed on this website is for general informational purposes only and is not intended as financial or investment advice.",
+              "LOTTOX is an information-only platform. LOTTOX does not operate, promote, sell, or facilitate any form of lottery sales, gambling, betting, or wagering.",
           },
           {
-            title: "No Gambling Involvement",
+            title: "Data Sources",
             content:
-              "LOTTOX does not sell lottery tickets, does not accept bets, does not provide gambling services, and is not involved in any gambling activities whatsoever. We are solely an aggregator and presenter of lottery result information from publicly available sources.",
+              "All lottery results, statistics, and related content displayed on LOTTOX are collected from publicly available sources and official lottery authorities, and are provided solely for informational and educational purposes.",
           },
           {
             title: "Accuracy of Information",
             content:
-              "While we make every effort to provide accurate and up-to-date information sourced from official channels, we cannot guarantee 100% accuracy of all data. Users should always verify results with official sources before taking any action.",
+              "LOTTOX does not guarantee the absolute accuracy, completeness, or real-time status of the information presented. Users are strongly advised to verify all results directly with the official lottery operators or authorized sources before relying on the information.",
           },
           {
-            title: "External Links",
+            title: "No Financial Advice",
             content:
-              "Our website may contain links to external websites that we do not control. We are not responsible for the content, privacy policies, or operations of those websites. Accessing external links is at the user's own responsibility.",
+              "LOTTOX does not provide financial, investment, or gambling advice. Any decisions made based on the information provided by LOTTOX are solely at the user's own risk and responsibility.",
           },
           {
-            title: "Limitation of Liability",
+            title: "Acceptance of Terms",
             content:
-              "LOTTOX and its team shall not be liable for any damages, losses, or impacts arising from the use of information on this website, whether direct or indirect. Users accept the risk of using the information at their own discretion.",
+              "By accessing or using LOTTOX, users acknowledge and agree to comply with the platform's Terms of Service and Privacy Policy.",
           },
         ],
         importantNotice:
-          "Lottery results displayed on this website are for reference only. Please always verify with official sources.",
+          "LOTTOX is an information-only platform. No gambling, betting, or lottery sales are offered or facilitated.",
+        shortDisclaimer:
+          "LOTTOX provides lottery information for reference only. No gambling, betting, or lottery sales are offered. Please verify results with official sources.",
       },
       terms: {
         title: "Terms of Service",

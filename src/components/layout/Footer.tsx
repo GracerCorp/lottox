@@ -37,10 +37,17 @@ export function Footer() {
           </div>
 
           <div className="text-sm dark:text-gray-400 text-gray-600 md:text-right">
-            <span className="font-bold dark:text-gold-400 text-gold-600">{t.footer.whyDesc1}</span>{" "}
+            <span className="font-bold dark:text-gold-400 text-gold-600">
+              {t.footer.whyDesc1}
+            </span>{" "}
             {t.footer.whyDesc2}
           </div>
         </div>
+
+        {/* Short Disclaimer */}
+        <p className="my-6 text-center text-xs leading-relaxed text-gray-500 dark:text-gray-500 max-w-2xl mx-auto">
+          {t.staticParams.disclaimer.shortDisclaimer}
+        </p>
 
         {/* Divider */}
         <div className="mb-8 h-px w-full bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent" />
