@@ -268,14 +268,14 @@ export const dictionary = {
         generalTitle: "ข้อมูลทั่วไป",
         generalDesc:
           "สำหรับคำถามทั่วไปเกี่ยวกับการใช้งาน LOTTOX หรือข้อเสนอแนะ",
-        generalEmail: "info@lotto-x.com",
+        generalEmail: "info@lottox.today",
         supportTitle: "ฝ่ายสนับสนุน",
         supportDesc:
           "สำหรับปัญหาทางเทคนิค รายงานข้อผิดพลาด หรือข้อมูลที่ไม่ถูกต้อง",
-        supportEmail: "support@lotto-x.com",
+        supportEmail: "support@lottox.today",
         partnerTitle: "พันธมิตรธุรกิจ",
         partnerDesc: "สำหรับสื่อมวลชน การร่วมมือทางธุรกิจ หรือการเข้าถึง API",
-        partnerEmail: "partner@lotto-x.com",
+        partnerEmail: "partner@lottox.today",
         responseTitle: "เวลาตอบกลับ",
         responseDesc:
           "เราจะพยายามตอบกลับทุกข้อความภายใน 24-48 ชั่วโมงในวันทำการ",

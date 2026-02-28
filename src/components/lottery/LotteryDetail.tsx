@@ -14,7 +14,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
 import { useApi } from "@/lib/hooks/useApi";
-import { ResultsByTypeResponse } from "@/lib/api-types";
+import { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
 import { getFlagUrl } from "@/lib/flags";
 import Image from "next/image";
 
@@ -122,12 +122,136 @@ export default function LotteryDetail({
 
   const latest = data?.latest;
   const historyItems = data?.history ?? [];
+  const latestData = latest?.data as ThaiResultData | undefined;
+
+  // Helper to extract data from the new `chosen_data` prizes array
+  const getPrizeNumber = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d: any,
+    names: string[],
+    categories: string[] = [],
+    fallbackOrder?: number,
+  ) => {
+    if (d?.prizes && Array.isArray(d.prizes)) {
+      const p = d.prizes.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (p: any) =>
+          names.includes(p.prizeName) || categories.includes(p.category),
+      );
+      if (p) {
+        const nums = p.winningNumbers || p.number;
+        return Array.isArray(nums) ? nums : [nums];
+      }
+      // Fallback: match by order field
+      if (fallbackOrder !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        if (byOrder) {
+          const nums = byOrder.winningNumbers || byOrder.number;
+          return Array.isArray(nums) ? nums : [nums];
+        }
+      }
+    }
+    return undefined;
+  };
+
+  const getPrizeAmount = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    d: any,
+    names: string[],
+    categories: string[] = [],
+    fallbackOrder?: number,
+  ) => {
+    if (d?.prizes && Array.isArray(d.prizes)) {
+      const p = d.prizes.find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (p: any) =>
+          names.includes(p.prizeName) || categories.includes(p.category),
+      );
+      if (p) return String(p.amount || p.prizeAmount || p.reward || "");
+      // Fallback: match by order field
+      if (fallbackOrder !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        if (byOrder)
+          return String(
+            byOrder.amount || byOrder.prizeAmount || byOrder.reward || "",
+          );
+      }
+    }
+    return undefined;
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawData = latest?.data as any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const latestPrizes = (rawData?.prizes || []) as any[];
+  const rawData = latestData as any;
 
+  const p1Names = [
+    "Prize 1",
+    "รางวัลที่ 1",
+    "Special Prize",
+    "First Prize",
+    "First Prize (4 Digits)",
+  ];
+  const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial", "prize_4_digits"];
+  const p1Num = getPrizeNumber(rawData, p1Names, p1Cats, 1) || [
+    rawData?.first || rawData?.firstPrize,
+  ];
+  const firstPrize =
+    p1Num && p1Num.length > 0 && p1Num[0] !== undefined ? p1Num[0] : "-";
+  const firstPrizeAmount =
+    getPrizeAmount(rawData, p1Names, p1Cats, 1) ||
+    rawData?.firstPrizeAmount ||
+    "6,000,000";
+
+  const pFront3Names = ["3 Front", "เลขหน้า 3 ตัว", "รางวัลเลขหน้า 3 ตัว"];
+  const pFront3Cats = [
+    "running_number_front_3",
+    "prizeLast3Front",
+    "prize_3_front",
+  ];
+  const front3 =
+    getPrizeNumber(rawData, pFront3Names, pFront3Cats) ||
+    rawData?.first3?.number ||
+    rawData?.last3f ||
+    rawData?.front3 ||
+    [];
+
+  const pBack3Names = [
+    "3 Back",
+    "เลขท้าย 3 ตัว",
+    "รางวัลเลขท้าย 3 ตัว",
+    "3 Last Digits",
+  ];
+  const pBack3Cats = [
+    "running_number_back_3",
+    "prizeLast3Back",
+    "prize_3_back",
+    "prize_3_digits",
+  ];
+  const back3 =
+    getPrizeNumber(rawData, pBack3Names, pBack3Cats, 2) ||
+    rawData?.last3?.number ||
+    rawData?.last3b ||
+    rawData?.back3 ||
+    [];
+
+  const p2Names = [
+    "2 Bottom",
+    "เลขท้าย 2 ตัว",
+    "รางวัลเลขท้าย 2 ตัว",
+    "2 Last Digits",
+  ];
+  const p2Cats = ["running_number_back_2", "prizeLast2", "prize_2_digits"];
+  const l2Num = getPrizeNumber(rawData, p2Names, p2Cats, 3) ||
+    rawData?.last2?.number || [rawData?.last2];
+  const last2 = Array.isArray(l2Num) ? l2Num[0] : l2Num;
+
+  const pAdjNames = [
+    "Adjacent Prizes",
+    "รางวัลข้างเคียงรางวัลที่ 1",
+    "รางวัลข้างเคียง",
+  ];
+  const pAdjCats = ["nearby_prize_1"];
   // Helper to format any date string into human-readable locale format
   const formatDateDisplay = (dateStr: string) => {
     if (!dateStr || dateStr === "-") return dateStr;
@@ -144,7 +268,7 @@ export default function LotteryDetail({
     }
   };
 
-  // Format date for display
+  // Format date for display - make it human readable and clear
   const rawDateStr = latest?.dateDisplay || latest?.date || "-";
   let formattedDate = rawDateStr;
   if (rawDateStr && rawDateStr !== "-") {
@@ -164,56 +288,90 @@ export default function LotteryDetail({
     }
   }
 
+  // Extract dynamic prizes for non-Thai lotteries
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawPrizes = (rawData?.prizes || []) as any[];
+  const isNonThai = countryCode !== "th";
+
   const drawResultProps = {
     country: country,
     lotteryName: lotteryName,
     date: formattedDate,
     drawId: latest?.drawNo || "-",
-    prizes: latestPrizes,
-  };
-
-  // Helper: extract prize data for history table rows
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extractHistoryRow = (d: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const prizes = (d?.prizes || []) as any[];
-    const sorted = [...prizes].sort(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (a: any, b: any) => (a.order ?? 99) - (b.order ?? 99),
-    );
-    const p1 = sorted[0];
-    const p2 = sorted[1];
-    const p3 = sorted[2];
-    const p4 = sorted[3];
-    return {
-      firstPrize: p1?.winningNumbers?.[0] || "-",
-      prize2: p2?.winningNumbers?.[0] || "-",
-      prize3: p3?.winningNumbers?.[0] || "-",
-      prize4: p4?.winningNumbers?.join(", ") || "-",
-    };
+    firstPrize: String(firstPrize || "-"),
+    firstPrizeAmount: String(firstPrizeAmount),
+    // Pass dynamicPrizes for non-Thai lotteries
+    dynamicPrizes: isNonThai && rawPrizes.length > 0 ? rawPrizes : [],
+    front3: (Array.isArray(front3) ? front3 : [front3])
+      .map(String)
+      .filter((s) => s !== "undefined"),
+    front3Amount: String(
+      getPrizeAmount(rawData, pFront3Names, pFront3Cats) ||
+        rawData?.first3?.amount ||
+        rawData?.front3Amount ||
+        "4,000",
+    ),
+    back3: (Array.isArray(back3) ? back3 : [back3])
+      .map(String)
+      .filter((s) => s !== "undefined"),
+    back3Amount: String(
+      getPrizeAmount(rawData, pBack3Names, pBack3Cats) ||
+        rawData?.last3?.amount ||
+        rawData?.back3Amount ||
+        "4,000",
+    ),
+    last2: String(last2 || "-"),
+    last2Amount: String(
+      getPrizeAmount(rawData, p2Names, p2Cats) ||
+        rawData?.last2?.amount ||
+        rawData?.last2Amount ||
+        "2,000",
+    ),
+    adjacent: (
+      getPrizeNumber(rawData, pAdjNames, pAdjCats) ||
+      rawData?.adjacent ||
+      []
+    )?.map(String),
+    adjacentAmount: String(
+      getPrizeAmount(rawData, pAdjNames, pAdjCats) ||
+        rawData?.adjacentAmount ||
+        "100,000",
+    ),
   };
 
   const recentResults = historyItems.map((item) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const d = item.data as any;
-    const row = extractHistoryRow(d);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const prizes = (d?.prizes || []) as any[];
-    const sorted = [...prizes].sort(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (a: any, b: any) => (a.order ?? 99) - (b.order ?? 99),
-    );
+
+    const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || [
+      d?.first || d?.firstPrize,
+    ];
+    const rFirstPrize =
+      rp1Num && rp1Num.length > 0 && rp1Num[0] !== undefined ? rp1Num[0] : "-";
+
+    const rFront3 =
+      getPrizeNumber(d, pFront3Names, pFront3Cats) ||
+      d?.first3?.number ||
+      d?.last3f ||
+      d?.front3 ||
+      [];
+    const rBack3 =
+      getPrizeNumber(d, pBack3Names, pBack3Cats, 2) ||
+      d?.last3?.number ||
+      d?.last3b ||
+      d?.back3 ||
+      [];
+
+    const rl2Num = getPrizeNumber(d, p2Names, p2Cats, 3) ||
+      d?.last2?.number || [d?.last2];
+    const rLast2 = Array.isArray(rl2Num) ? rl2Num[0] : rl2Num;
 
     return {
       date: formatDateDisplay(item.dateDisplay || item.date),
-      firstPrize: row.firstPrize,
-      // Show 2nd, 3rd, 4th prizes as supplementary columns
-      col2Label: sorted[1]?.prizeName || "-",
-      col2Value: sorted[1]?.winningNumbers?.join(", ") || "-",
-      col3Label: sorted[2]?.prizeName || "-",
-      col3Value: sorted[2]?.winningNumbers?.join(", ") || "-",
-      col4Label: sorted[3]?.prizeName || "-",
-      col4Value: sorted[3]?.winningNumbers?.join(", ") || "-",
+      firstPrize: String(rFirstPrize || "-"),
+      last3f: String((Array.isArray(rFront3) ? rFront3 : [rFront3])[0] || "-"),
+      last3b: String((Array.isArray(rBack3) ? rBack3 : [rBack3])[0] || "-"),
+      last2: String(rLast2 || "-"),
     };
   });
 
@@ -266,57 +424,131 @@ export default function LotteryDetail({
           {/* Hero Section */}
           <DrawResult {...drawResultProps} />
 
-          {/* Prize Grids - dynamically from the sorted prizes (Prize 2-5 for Thai, or additional prizes for others) */}
-          {(() => {
-            const sorted = [...latestPrizes].sort(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (a: any, b: any) => (a.order ?? 99) - (b.order ?? 99),
-            );
-            // Skip the first ~5 entries that DrawResult already shows (first prize + front3/back3/last2/adjacent)
-            // For Thai: order 1-5 is shown in DrawResult hero. Prize grids show order 6+ (prize_2, prize_3, prize_4, prize_5)
-            // For non-Thai: DrawResult already shows all prizes. Skip if fewer than 6.
-            const bigPrizeCategories = [
-              "prize_2",
-              "prize_3",
-              "prize_4",
-              "prize_5",
-            ];
-            const prizeGrids = sorted.filter(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (p: any) =>
-                bigPrizeCategories.includes(p.category) &&
-                p.winningNumbers?.length > 0,
-            );
-            const prizeLabels: Record<string, string> = {
-              prize_2: t.results.prize2rank,
-              prize_3: t.results.prize3rank,
-              prize_4: t.results.prize4rank,
-              prize_5: t.results.prize5rank,
-            };
-
-            if (prizeGrids.length === 0) return null;
-
-            return prizeGrids.map(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (prize: any, i: number) => (
-                <section
-                  key={i}
-                  className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm"
-                >
-                  <PrizeSectionHeader
-                    title={prizeLabels[prize.category] || prize.prizeName}
-                    count={prize.winningNumbers?.length || 0}
-                    amount={
-                      prize.prizeAmount
-                        ? Number(prize.prizeAmount).toLocaleString()
-                        : "-"
-                    }
-                  />
-                  <PrizeGrid numbers={prize.winningNumbers || []} columns={5} />
-                </section>
-              ),
-            );
-          })()}
+          {/* Prize Grids - specific to Thai struct but generic enough if data present */}
+          {[
+            {
+              title: t.results.prize2rank,
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 2", "รางวัลที่ 2"],
+                    ["prize_2"],
+                  ) || rawData?.prize2
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 2", "รางวัลที่ 2"],
+                  ["prize_2"],
+                ) ||
+                rawData?.prize2Amount ||
+                "200,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 2", "รางวัลที่ 2"],
+                  ["prize_2"],
+                ) ||
+                rawData?.prize2 ||
+                [],
+            },
+            {
+              title: t.results.prize3rank,
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 3", "รางวัลที่ 3"],
+                    ["prize_3"],
+                  ) || rawData?.prize3
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 3", "รางวัลที่ 3"],
+                  ["prize_3"],
+                ) ||
+                rawData?.prize3Amount ||
+                "80,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 3", "รางวัลที่ 3"],
+                  ["prize_3"],
+                ) ||
+                rawData?.prize3 ||
+                [],
+            },
+            {
+              title: t.results.prize4rank,
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 4", "รางวัลที่ 4"],
+                    ["prize_4"],
+                  ) || rawData?.prize4
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 4", "รางวัลที่ 4"],
+                  ["prize_4"],
+                ) ||
+                rawData?.prize4Amount ||
+                "40,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 4", "รางวัลที่ 4"],
+                  ["prize_4"],
+                ) ||
+                rawData?.prize4 ||
+                [],
+            },
+            {
+              title: t.results.prize5rank,
+              count:
+                (
+                  getPrizeNumber(
+                    rawData,
+                    ["Prize 5", "รางวัลที่ 5"],
+                    ["prize_5"],
+                  ) || rawData?.prize5
+                )?.length || 0,
+              amount:
+                getPrizeAmount(
+                  rawData,
+                  ["Prize 5", "รางวัลที่ 5"],
+                  ["prize_5"],
+                ) ||
+                rawData?.prize5Amount ||
+                "20,000",
+              numbers:
+                getPrizeNumber(
+                  rawData,
+                  ["Prize 5", "รางวัลที่ 5"],
+                  ["prize_5"],
+                ) ||
+                rawData?.prize5 ||
+                [],
+            },
+          ]
+            .filter((prize) => prize.numbers.length > 0)
+            .map((prize, i) => (
+              <section
+                key={i}
+                className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm"
+              >
+                <PrizeSectionHeader
+                  title={prize.title}
+                  count={prize.count}
+                  amount={prize.amount}
+                />
+                <PrizeGrid numbers={prize.numbers} columns={5} />
+              </section>
+            ))}
 
           {/* Inline Lottery Checker */}
           <section className="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/80 p-6 backdrop-blur-md shadow-lg">
@@ -426,13 +658,13 @@ export default function LotteryDetail({
                       {t.results.prize1}
                     </th>
                     <th className="px-4 py-3 font-medium">
-                      {recentResults[0]?.col2Label || t.results.prize3Front}
+                      {t.results.prize3Front}
                     </th>
                     <th className="px-4 py-3 font-medium">
-                      {recentResults[0]?.col3Label || t.results.prize3Back}
+                      {t.results.prize3Back}
                     </th>
                     <th className="px-4 py-3 font-medium">
-                      {recentResults[0]?.col4Label || t.results.prize2}
+                      {t.results.prize2}
                     </th>
                   </tr>
                 </thead>
@@ -452,17 +684,17 @@ export default function LotteryDetail({
                       </td>
                       <td className="px-4 py-4">
                         <span className="rounded border border-blue-500/20 bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-300">
-                          {row.col2Value}
+                          {row.last3f}
                         </span>
                       </td>
                       <td className="px-4 py-4">
                         <span className="rounded border border-blue-500/20 bg-blue-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-blue-300">
-                          {row.col3Value}
+                          {row.last3b}
                         </span>
                       </td>
                       <td className="px-4 py-4">
                         <span className="rounded border border-gold-500/20 bg-gold-500/20 px-2 py-0.5 font-mono text-lg font-bold tracking-widest text-gold-400">
-                          {row.col4Value}
+                          {row.last2}
                         </span>
                       </td>
                     </tr>
@@ -506,26 +738,26 @@ export default function LotteryDetail({
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="flex-1 min-w-[30%]">
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
-                        {row.col2Label}
+                        {t.results.prize3Front}
                       </div>
                       <span className="block w-full rounded border border-blue-500/20 bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-300 text-center">
-                        {row.col2Value}
+                        {row.last3f}
                       </span>
                     </div>
                     <div className="flex-1 min-w-[30%]">
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
-                        {row.col3Label}
+                        {t.results.prize3Back}
                       </div>
                       <span className="block w-full rounded border border-blue-500/20 bg-blue-500/20 px-2 py-1 font-mono text-lg font-bold text-blue-300 text-center">
-                        {row.col3Value}
+                        {row.last3b}
                       </span>
                     </div>
                     <div className="flex-1 min-w-[30%]">
                       <div className="mb-1 text-[10px] uppercase tracking-wider text-gray-500">
-                        {row.col4Label}
+                        {t.results.prize2}
                       </div>
                       <span className="block w-full rounded border border-gold-500/20 bg-gold-500/20 px-2 py-1 font-mono text-lg font-bold text-gold-400 text-center">
-                        {row.col4Value}
+                        {row.last2}
                       </span>
                     </div>
                   </div>

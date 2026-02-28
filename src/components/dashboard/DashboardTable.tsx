@@ -1,11 +1,24 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { Clock } from "lucide-react";
-import { useApi } from "@/lib/hooks/useApi";
-import type { GlobalResultsResponse, GlobalDraw } from "@/lib/api-types";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useApi } from "@/lib/hooks/useApi";
+import { mapApiResultToRow } from "@/components/ui/ResultsTable";
+import type { ResultRow } from "@/components/ui/ResultsTable";
+import type { LatestResult } from "@/lib/api-types";
+
+interface GlobalResultsResponse {
+  draws: LatestResult[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
 
 export function DashboardTable() {
+  const { t, language } = useLanguage();
   const [page, setPage] = useState(1);
   const [period, setPeriod] = useState<string>("all");
   const { data, loading, error } = useApi<GlobalResultsResponse>(
@@ -18,18 +31,23 @@ export function DashboardTable() {
     { label: "30 Days", value: "30d" },
   ];
 
-  const draws = data?.draws ?? [];
+  // Map API draws to ResultRow using the same mapper as ResultsTable
+  const rows: ResultRow[] = [];
+  if (data?.draws) {
+    for (const draw of data.draws) {
+      const row = mapApiResultToRow(draw, t, language);
+      if (row) {
+        rows.push(row);
+      }
+    }
+  }
 
-  // Group draws by date
-  const groupedDraws: Record<string, GlobalDraw[]> = {};
-  for (const draw of draws) {
-    const dateKey = new Date(draw.drawDate).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-    if (!groupedDraws[dateKey]) groupedDraws[dateKey] = [];
-    groupedDraws[dateKey].push(draw);
+  // Group rows by date
+  const groupedRows: Record<string, ResultRow[]> = {};
+  for (const row of rows) {
+    const dateKey = row.date;
+    if (!groupedRows[dateKey]) groupedRows[dateKey] = [];
+    groupedRows[dateKey].push(row);
   }
 
   return (
@@ -60,26 +78,17 @@ export function DashboardTable() {
         </div>
       </div>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-100/80 dark:bg-navy-950/80 text-gray-500 text-xs uppercase font-medium tracking-wider">
-        <div className="col-span-2">Time</div>
-        <div className="col-span-4">Lottery</div>
-        <div className="col-span-4">Winning Numbers</div>
-        <div className="col-span-2 text-right">Jackpot</div>
-      </div>
-
       {/* Loading State */}
       {loading && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="grid grid-cols-12 gap-4 px-6 py-4 animate-pulse"
+              className="flex items-center gap-4 px-5 py-3 animate-pulse"
             >
-              <div className="col-span-2 h-4 bg-gray-200 dark:bg-navy-700 rounded" />
-              <div className="col-span-4 h-4 bg-gray-200 dark:bg-navy-700 rounded" />
-              <div className="col-span-4 h-4 bg-gray-200 dark:bg-navy-700 rounded" />
-              <div className="col-span-2 h-4 bg-gray-200 dark:bg-navy-700 rounded" />
+              <div className="h-5 w-7 bg-gray-200 dark:bg-navy-700 rounded" />
+              <div className="h-4 w-32 bg-gray-200 dark:bg-navy-700 rounded" />
+              <div className="h-6 w-24 bg-gray-200 dark:bg-navy-700 rounded ml-auto" />
             </div>
           ))}
         </div>
@@ -92,50 +101,24 @@ export function DashboardTable() {
         </div>
       )}
 
-      {/* Table Body */}
+      {/* Table Body - using same row style as ResultsTable */}
       {!loading && !error && (
         <div className="divide-y divide-gray-100 dark:divide-white/5">
-          {Object.entries(groupedDraws).map(([dateKey, dateDraws]) => (
+          {Object.entries(groupedRows).map(([dateKey, dateRows]) => (
             <div key={dateKey}>
               {/* Date Separator */}
               <div className="px-6 py-2 bg-gray-50 dark:bg-navy-950/30 text-gray-500 text-xs font-bold uppercase">
                 {dateKey}
               </div>
-              {dateDraws.map((draw, idx) => (
-                <div
-                  key={`${draw.id}-${idx}`}
-                  className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group"
-                >
-                  <div className="col-span-2 text-gold-600 dark:text-gold-400 font-mono text-sm">
-                    {draw.time || "--:--"}
-                  </div>
-                  <div className="col-span-4 flex items-center gap-3">
-                    <span className="text-xs bg-gray-200 dark:bg-navy-700 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded uppercase">
-                      {draw.countryCode || draw.country?.slice(0, 3)}
-                    </span>
-                    <span className="text-gray-900 dark:text-white font-medium group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
-                      {draw.name}
-                    </span>
-                  </div>
-                  <div className="col-span-4 flex items-center gap-2">
-                    <span className="text-gray-900 dark:text-white font-mono tracking-wide">
-                      {draw.numbers?.join(" ") || "-"}
-                    </span>
-                    {draw.special && (
-                      <span className="bg-gold-500 text-white dark:text-navy-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                        {draw.special}
-                      </span>
-                    )}
-                  </div>
-                  <div className="col-span-2 text-right text-gray-900 dark:text-white font-bold">
-                    {draw.jackpot || "-"}
-                  </div>
-                </div>
-              ))}
+              <div className="flex flex-col gap-0 divide-y divide-gray-100 dark:divide-white/5">
+                {dateRows.map((item, idx) => (
+                  <GlobalDrawRow key={`${item.id}-${idx}`} item={item} />
+                ))}
+              </div>
             </div>
           ))}
 
-          {draws.length === 0 && !loading && (
+          {rows.length === 0 && !loading && (
             <div className="p-8 text-center text-gray-500">
               No results found for this period.
             </div>
@@ -166,5 +149,105 @@ export function DashboardTable() {
         </div>
       )}
     </div>
+  );
+}
+
+/* -- Row component matching ResultsTable SingleLineRow style -- */
+function GlobalDrawRow({ item }: { item: ResultRow }) {
+  const mainPrize = item.numbers.find((n) => n.isMain);
+  const subPrizes = item.numbers.filter((n) => !n.isMain);
+
+  return (
+    <Link
+      href={item.href}
+      className="group relative block overflow-hidden transition-all duration-200 hover:bg-gray-50 dark:hover:bg-white/5"
+    >
+      {/* Row content */}
+      <div className="relative flex items-center gap-4 px-4 py-3 sm:gap-6 sm:px-5">
+        {/* Flag + name */}
+        <div className="flex items-center gap-2.5 sm:min-w-[180px]">
+          <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">
+            <Image
+              src={item.flag}
+              alt={`${item.country} flag`}
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="min-w-0">
+            <span className="text-md font-semibold leading-tight text-gray-900 dark:text-white">
+              {item.name}
+            </span>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
+
+        {/* Main prize */}
+        {mainPrize && (
+          <div className="flex items-center gap-2">
+            <span className="hidden text-[14px] font-medium uppercase tracking-wide text-gray-500 sm:inline">
+              {mainPrize.label}
+            </span>
+            {mainPrize.value.map((v, i) => (
+              <span
+                key={i}
+                className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
+              >
+                {v}
+              </span>
+            ))}
+            <span className="text-[14px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
+              {mainPrize.prize}
+            </span>
+          </div>
+        )}
+
+        {/* Divider */}
+        {subPrizes.length > 0 && (
+          <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
+        )}
+
+        {/* Sub prizes inline */}
+        {subPrizes.length > 0 && (
+          <div className="hidden items-center gap-4 md:flex">
+            {subPrizes.map((prize, idx) => (
+              <div key={idx} className="flex items-center gap-1.5">
+                <span className="text-[14px] text-gray-500">{prize.label}</span>
+                {prize.value.map((val, vi) => (
+                  <span
+                    key={vi}
+                    className="text-md font-bold tracking-wide text-gray-700 dark:text-white/80"
+                  >
+                    {val}
+                  </span>
+                ))}
+                <span className="text-[14px] text-emerald-600 dark:text-emerald-400/70">
+                  {prize.prize}
+                </span>
+                {idx < subPrizes.length - 1 && (
+                  <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Arrow indicator */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="ml-auto h-4 w-4 shrink-0 text-gray-600 transition-colors group-hover:text-blue-400"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </div>
+    </Link>
   );
 }

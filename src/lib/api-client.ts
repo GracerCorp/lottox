@@ -195,7 +195,7 @@ class ApiClient {
       };
     }
     if (date) {
-      whereClause.draw_date = date; // Or however dates are tracked exactly
+      whereClause.draw_date = date;
     }
     if (period) {
       whereClause.draw_period = period;
@@ -216,8 +216,9 @@ class ApiClient {
         skip: offset,
         include: {
           lottery: {
-            include: {
-              countries: true,
+            select: {
+              name: true,
+              countries: { select: { code: true } },
             },
           },
           result_verifications_result_verifications_lottery_result_idTolottery_results:
@@ -231,21 +232,37 @@ class ApiClient {
       }),
     ]);
 
-    const mappedResults = results.map((res) => {
+    // Format each result as LatestResult-compatible object (same as getLatestResults)
+    const formatResult = (res: {
+      id: number;
+      draw_date: string;
+      draw_period: string | null;
+      full_data: unknown;
+      lottery: { name: string; countries: { code: string } | null } | null;
+      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
+        chosen_data: unknown;
+      }[];
+    }) => {
+      const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
       const verification =
         res
           .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+      const dataToUse = verification?.chosen_data || res.full_data;
+
       return {
-        ...res,
-        full_data: verification?.chosen_data || res.full_data,
-        // Optional: Remove the large nested array so frontend payload is smaller
-        result_verifications_result_verifications_lottery_result_idTolottery_results:
-          undefined,
+        id: res.id,
+        type: COUNTRY_TO_TYPE[countryCode] || res.lottery?.name || "",
+        date: res.draw_date,
+        drawDate: res.draw_date,
+        drawNo: res.draw_period || "",
+        data: dataToUse,
+        lotteryName: res.lottery?.name || "",
+        countryCode: countryCode,
       };
-    });
+    };
 
     return {
-      draws: mappedResults,
+      draws: results.map(formatResult),
       total,
       page,
       totalPages: Math.ceil(total / limit),
