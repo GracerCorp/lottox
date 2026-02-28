@@ -21,6 +21,7 @@ export interface ResultRow {
   name: string;
   numbers: PrizeItem[];
   id: string;
+  rowId: string;
   href: string;
 }
 
@@ -63,12 +64,12 @@ export function mapApiResultToRow(
     (type.includes("LAO") ? "la" : type.includes("VIETNAM") ? "vn" : "th");
   const lotterySlug = result.lotteryName ? slugify(result.lotteryName) : "";
 
-  let countryId = cc;
+  const countryId = cc;
   let countryName = t.lottery?.thai?.country || "Thailand";
   let lottoName =
     result.lotteryName || t.lottery?.thai?.subName || "Thai Lottery";
-  let lottoHref = `/${cc}/${lotterySlug}`;
-  let flagCode = cc;
+  const lottoHref = `/${cc}/${lotterySlug}`;
+  const flagCode = cc;
   let currency = "B";
   let defaultP1 = "6,000,000";
 
@@ -160,6 +161,7 @@ export function mapApiResultToRow(
 
   return {
     id: countryId,
+    rowId: `${countryId}-${result.id || pathDate}`,
     date: dateStr,
     flag: getFlagUrl(flagCode),
     country: countryName,
@@ -213,7 +215,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
   return (
     <div className="flex flex-col gap-2">
       {results.map((item) => (
-        <SingleLineRow key={item.id} item={item} />
+        <SingleLineRow key={item.rowId} item={item} />
       ))}
 
       {results.length === 0 && (
