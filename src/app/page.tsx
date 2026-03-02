@@ -137,8 +137,6 @@ export default async function Home() {
       {/* Hero Section */}
       <HeroSection items={heroItems} />
 
-      {/* Check Lottery Widget */}
-      <CheckLotteryWidget />
 
       {/* Results Section with Country Tabs */}
       <HomeResultsSection tabs={tabs} />
