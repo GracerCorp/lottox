@@ -10,12 +10,6 @@ export default function GlobalDrawsPage() {
       </div>
 
       <DashboardTable />
-
-      <div className="mt-12 text-center">
-        <button className="text-gray-600 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
-          Load more results...
-        </button>
-      </div>
     </div>
   );
 }

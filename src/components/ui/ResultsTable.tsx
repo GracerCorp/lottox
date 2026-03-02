@@ -252,7 +252,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
 }
 
 /* -- Single-line row -- */
-function SingleLineRow({ item }: { item: ResultRow }) {
+export function SingleLineRow({ item }: { item: ResultRow }) {
   const mainPrize = item.numbers.find((n) => n.isMain);
   const subPrizes = item.numbers.filter((n) => !n.isMain);
 
@@ -328,9 +328,6 @@ function SingleLineRow({ item }: { item: ResultRow }) {
                     {val}
                   </span>
                 ))}
-                <span className="text-[14px] text-emerald-600 dark:text-emerald-400/70">
-                  {prize.prize}
-                </span>
                 <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
               </div>
             ))}

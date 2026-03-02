@@ -76,12 +76,12 @@ export const dictionary = {
     lottery: {
       thai: {
         name: "สลากกินแบ่งรัฐบาล",
-        subName: "Thai Government Lotto",
+        subName: "Thai Government",
         country: "Thailand",
       },
       lao: {
-        name: "หวยลาวพัฒนา",
-        subName: "Lao Pattana Lotto",
+        name: "หวยลาว",
+        subName: "Lao Lotto",
         country: "Laos",
       },
       vietnam: {
@@ -488,8 +488,8 @@ export const dictionary = {
       inputPlaceholder4: "Enter 4 digits",
       visitGLO: "Visit GLO Website",
       otherLottery: "Other Lotteries",
-      thaiTitle: "Thai Government Lottery",
-      laoTitle: "Lao Development Lottery",
+      thaiTitle: "Thai Government",
+      laoTitle: "Lao Lotto",
       drawSchedule: "Draw Schedule",
       type: "Type",
       currency: "Currency",
@@ -522,13 +522,13 @@ export const dictionary = {
     },
     lottery: {
       thai: {
-        name: "Thai Government Lottery",
+        name: "Thai Government",
         subName: "Thai Government Lotto",
         country: "Thailand",
       },
       lao: {
-        name: "Lao Pattana Lottery",
-        subName: "Lao Pattana Lotto",
+        name: "Lao Lotto",
+        subName: "Lao Lotto",
         country: "Laos",
       },
       vietnam: {
