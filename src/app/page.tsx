@@ -2,6 +2,7 @@ import { HeroSection, HeroItem } from "@/components/home/HeroSection";
 import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
 import { CountryListSection } from "@/components/home/CountryListSection";
 import { HomeResultsSection } from "@/components/home/HomeResultsSection";
+import { CheckLotteryWidget } from "@/components/home/CheckLotteryWidget";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
@@ -129,12 +130,15 @@ export default async function Home() {
   return (
     <div className="flex flex-col gap-16 pb-20">
       {/* Background with Flare */}
-      <div className="absolute inset-x-0 -top-40 z-0 h-[800px] w-full bg-nebula opacity-80 blur-3xl pointer-events-none mix-blend-screen" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-blue-900/20 via-purple-900/10 to-transparent blur-[100px] z-0 pointer-events-none" />
+      <div className="absolute inset-x-0 -top-40 z-0 h-[800px] w-full bg-nebula opacity-30 dark:opacity-80 blur-3xl pointer-events-none dark:mix-blend-screen mix-blend-multiply" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-gradient-to-b from-blue-500/10 via-purple-500/5 dark:from-blue-900/20 dark:via-purple-900/10 to-transparent blur-[100px] z-0 pointer-events-none" />
       <BackgroundFlare />
 
       {/* Hero Section */}
       <HeroSection items={heroItems} />
+
+      {/* Check Lottery Widget */}
+      <CheckLotteryWidget />
 
       {/* Results Section with Country Tabs */}
       <HomeResultsSection tabs={tabs} />

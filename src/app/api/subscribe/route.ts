@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { z } from "zod";
 
-const EXTERNAL_API = "https://apidev.lottox.today";
+const EXTERNAL_API = "https://lotto-x-cms.vercel.app";
 
 const bodySchema = z.object({
   email: z.string().email("Invalid email address"),

@@ -10,8 +10,11 @@ interface SubscribeButtonProps {
 // Map lottery type string -> lotteryId number (matches DB lottery_jobs)
 const LOTTERY_ID_MAP: Record<string, number> = {
   THAI: 1,
+  TH: 1,
   LAO: 2,
+  LA: 2,
   VIETNAM: 3,
+  VN: 3,
 };
 
 export function SubscribeButton({ type }: SubscribeButtonProps) {

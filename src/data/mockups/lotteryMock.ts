@@ -62,6 +62,7 @@ export const mockBanners = [
       "https://images.unsplash.com/photo-1668107710159-10fbbab2a9dd?q=80&w=1287&auto=format&fit=crop",
     is_active: true,
     lottery_results: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       lottery: mockCountries[0].lotteries[0] as any,
     },
   },

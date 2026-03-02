@@ -59,25 +59,33 @@ model api_keys {
 }
 
 model articles {
-  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title        String
-  slug         String     @unique(map: "articles_slug_unique")
-  excerpt      String?
-  content      Json
-  cover_image  String?
-  author_id    String?
-  lottery_id   Int?
-  summary      String?
-  published    Boolean?   @default(false)
-  published_at DateTime?  @db.Timestamp(6)
-  tags         String[]
-  view_count   Int?       @default(0)
-  created_at   DateTime?  @default(now()) @db.Timestamp(6)
-  updated_at   DateTime?  @default(now()) @db.Timestamp(6)
-  full_content String?
-  images       String[]
-  user         user?      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
-  lottery      lotteries? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String
+  slug             String     @unique(map: "articles_slug_unique")
+  excerpt          String?
+  content          Json
+  cover_image      String?
+  author_id        String?
+  lottery_id       Int?
+  summary          String?
+  published        Boolean?   @default(false)
+  published_at     DateTime?  @db.Timestamp(6)
+  tags             String[]
+  view_count       Int?       @default(0)
+  created_at       DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?  @default(now()) @db.Timestamp(6)
+  full_content     String?
+  images           String[]
+  meta_title       String?
+  meta_description String?
+  canonical_url    String?
+  reading_time     Int?
+  og_image         String?
+  og_title         String?
+  related_articles String[]
+  is_featured      Boolean?   @default(false)
+  user             user?      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
+  lottery          lotteries? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
 
   @@index([author_id])
   @@index([published_at])
@@ -128,6 +136,8 @@ model lotteries {
   created_at            DateTime?               @default(now()) @db.Timestamp(6)
   updated_at            DateTime?               @db.Timestamp(6)
   showing_prizes        String[]
+  prize_amount_mode     String                  @default("fixed")
+  default_prize_amounts Json?                   @default("{}")
   articles              articles[]
   countries             countries?              @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")
   lottery_jobs          lottery_jobs[]
@@ -192,6 +202,9 @@ model lottery_results {
   validation_status                                                             String                 @default("pending")
   validation_errors                                                             Json?                  @default("[]")
   validated_at                                                                  DateTime?              @db.Timestamp(6)
+  prize_amount_mode                                                             String?
+  is_published                                                                  Boolean?               @default(false)
+  published_at                                                                  DateTime?              @db.Timestamp(6)
   banners                                                                       banners[]
   countries                                                                     countries?             @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_country_id_countries_id_fk")
   lottery                                                                       lotteries?             @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_results_lottery_id_lottery_jobs_id_fk")
@@ -272,6 +285,9 @@ model user {
   last_sign_in_method   String?
   push_subscriptions    Json?                   @default("[]")
   created_at            DateTime?               @default(now()) @db.Timestamp(6)
+  bio                   String?
+  expertise_tags        String[]
+  social_links          Json?
   account               account[]
   articles              articles[]
   email_logs            email_logs[]

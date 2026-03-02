@@ -2,6 +2,7 @@
 
 import { DrawResult } from "./DrawResult";
 import { TicketVerifier } from "@/components/country/TicketVerifier";
+import { SubscribeButton } from "@/components/ui/SubscribeButton";
 import { NewsSidebar } from "@/components/ui/NewsSidebar";
 import {
   NewspaperIcon,
@@ -412,10 +413,10 @@ export default function LotteryDetail({
           </div>
         </div>
 
-        {/* Subscribe Button - could be parameterized */}
-        <button className="bg-gray-200/50 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-          Subscribe needed
-        </button>
+        {/* Subscribe Button */}
+        <div className="relative z-20">
+          <SubscribeButton type={countryCode} />
+        </div>
       </header>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">

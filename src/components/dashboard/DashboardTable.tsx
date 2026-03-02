@@ -152,102 +152,85 @@ export function DashboardTable() {
   );
 }
 
-/* -- Row component matching ResultsTable SingleLineRow style -- */
+/* -- Sanook Style Row Component -- */
 function GlobalDrawRow({ item }: { item: ResultRow }) {
   const mainPrize = item.numbers.find((n) => n.isMain);
   const subPrizes = item.numbers.filter((n) => !n.isMain);
 
   return (
-    <Link
-      href={item.href}
-      className="group relative block overflow-hidden transition-all duration-200 hover:bg-gray-50 dark:hover:bg-white/5"
-    >
-      {/* Row content */}
-      <div className="relative flex items-center gap-4 px-4 py-3 sm:gap-6 sm:px-5">
-        {/* Flag + name */}
-        <div className="flex items-center gap-2.5 sm:min-w-[180px]">
-          <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">
-            <Image
-              src={item.flag}
-              alt={`${item.country} flag`}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="min-w-0">
-            <span className="text-md font-semibold leading-tight text-gray-900 dark:text-white">
+    <div className="p-4 sm:p-6 transition-colors hover:bg-gray-50/50 dark:hover:bg-white/[0.02]">
+      <Link
+        href={item.href}
+        className="block bg-white dark:bg-navy-800/80 rounded-2xl border border-gray-200/60 dark:border-white/10 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+      >
+        {/* Header Ribbon */}
+        <div className="flex items-center justify-between px-5 py-3 bg-gray-50 dark:bg-navy-900 border-b border-gray-100 dark:border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="relative h-6 w-8 shrink-0 overflow-hidden rounded shadow-sm">
+              <Image
+                src={item.flag}
+                alt={`${item.country} flag`}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               {item.name}
-            </span>
+            </h3>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-navy-800 px-3 py-1 rounded-full border border-gray-200/60 dark:border-white/10">
+            <Clock className="w-3.5 h-3.5" />
+            <span>{item.date}</span>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
-
-        {/* Main prize */}
-        {mainPrize && (
-          <div className="flex items-center gap-2">
-            <span className="hidden text-[14px] font-medium uppercase tracking-wide text-gray-500 sm:inline">
-              {mainPrize.label}
-            </span>
-            {mainPrize.value.map((v, i) => (
-              <span
-                key={i}
-                className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
-              >
-                {v}
-              </span>
-            ))}
-            <span className="text-[14px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
-              {mainPrize.prize}
-            </span>
-          </div>
-        )}
-
-        {/* Divider */}
-        {subPrizes.length > 0 && (
-          <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
-        )}
-
-        {/* Sub prizes inline */}
-        {subPrizes.length > 0 && (
-          <div className="hidden items-center gap-4 md:flex">
-            {subPrizes.map((prize, idx) => (
-              <div key={idx} className="flex items-center gap-1.5">
-                <span className="text-[14px] text-gray-500">{prize.label}</span>
-                {prize.value.map((val, vi) => (
+        {/* Content */}
+        <div className="p-5 sm:p-8">
+          {/* Main Prize (Sanook Style Big Number) */}
+          {mainPrize && (
+            <div className="text-center mb-8">
+              <div className="text-sm sm:text-base font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
+                {mainPrize.label}
+              </div>
+              <div className="flex justify-center flex-wrap gap-4">
+                {mainPrize.value.map((v, i) => (
                   <span
-                    key={vi}
-                    className="text-md font-bold tracking-wide text-gray-700 dark:text-white/80"
+                    key={i}
+                    className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-5xl sm:text-6xl md:text-7xl font-black tracking-[0.15em] text-transparent drop-shadow-sm"
                   >
-                    {val}
+                    {v}
                   </span>
                 ))}
-                <span className="text-[14px] text-emerald-600 dark:text-emerald-400/70">
-                  {prize.prize}
-                </span>
-                {idx < subPrizes.length - 1 && (
-                  <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
-                )}
               </div>
-            ))}
-          </div>
-        )}
+              <div className="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400 mt-3 bg-emerald-50 dark:bg-emerald-500/10 inline-block px-4 py-1.5 rounded-full">
+                {mainPrize.prize}
+              </div>
+            </div>
+          )}
 
-        {/* Arrow indicator */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="ml-auto h-4 w-4 shrink-0 text-gray-600 transition-colors group-hover:text-blue-400"
-        >
-          <path d="m9 18 6-6-6-6" />
-        </svg>
-      </div>
-    </Link>
+          {/* Sub Prizes Grid */}
+          {subPrizes.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+              {subPrizes.map((prize, idx) => (
+                <div
+                  key={idx}
+                  className="bg-gray-50 dark:bg-navy-900/50 rounded-xl p-3 sm:p-4 text-center border border-gray-100 dark:border-white/5 hover:border-blue-200 dark:hover:border-blue-500/30 transition-colors"
+                >
+                  <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5 font-medium">
+                    {prize.label}
+                  </div>
+                  <div className="text-lg sm:text-xl font-bold tracking-widest text-gray-800 dark:text-gray-200 mb-1 pb-1 border-b border-gray-200/50 dark:border-white/10">
+                    {prize.value.join(" ")}
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400/80">
+                    {prize.prize}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </Link>
+    </div>
   );
 }

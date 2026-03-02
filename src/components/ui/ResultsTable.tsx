@@ -259,13 +259,13 @@ function SingleLineRow({ item }: { item: ResultRow }) {
   return (
     <Link
       href={item.href}
-      className="group relative block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.003]"
+      className="group relative block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.003] hover:shadow-md dark:hover:shadow-none"
     >
       {/* Subtle border */}
-      <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-blue-500/20 opacity-40 transition-opacity duration-200 group-hover:opacity-70" />
+      <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-blue-500/20 opacity-20 dark:opacity-40 transition-opacity duration-200 group-hover:opacity-50 dark:group-hover:opacity-70" />
 
       {/* Row content */}
-      <div className="relative flex items-center gap-4 rounded-lg border border-gray-100 dark:border-transparent bg-white dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm">
+      <div className="relative flex items-center gap-4 rounded-lg border border-gray-200/50 dark:border-transparent bg-white/90 dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm dark:shadow-none">
         {/* Flag + name */}
         <div className="flex items-center gap-2.5 sm:min-w-[180px]">
           <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">

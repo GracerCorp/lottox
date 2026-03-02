@@ -36,7 +36,7 @@ export function HomeResultsSection({ tabs }: HomeResultsSectionProps) {
     <section className="container mx-auto px-4">
       {/* Country Tabs */}
       <div className="flex justify-center mb-8">
-        <div className="flex p-1 bg-white/50 dark:bg-navy-900/50 backdrop-blur-md rounded-full border border-gray-200 dark:border-white/10">
+        <div className="flex p-1 bg-white/60 dark:bg-navy-900/50 backdrop-blur-md rounded-full border border-gray-200/60 dark:border-white/10 shadow-sm dark:shadow-none">
           {localizedTabs.map((tab) => (
             <button
               key={tab.id}
@@ -44,8 +44,8 @@ export function HomeResultsSection({ tabs }: HomeResultsSectionProps) {
               className={cn(
                 "flex items-center gap-2 px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
                 activeTab === tab.id
-                  ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg"
-                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5",
+                  ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md dark:shadow-lg"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/5",
               )}
             >
               {tab.flag && (
