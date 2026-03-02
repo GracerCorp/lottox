@@ -32,7 +32,6 @@ export default async function LotteryPage({ params }: PageProps) {
   if (!data) {
     notFound();
   }
-
   const { country: countryInfo, lottery: lotteryInfo, apiType } = data;
 
   return (
@@ -42,6 +41,8 @@ export default async function LotteryPage({ params }: PageProps) {
       lotteryName={lotteryInfo.name}
       lotterySlug={lottery}
       apiEndpoint={`/api/results/${apiType}`}
+      logo={lotteryInfo.logo}
+      currency={lotteryInfo.currency}
     />
   );
 }

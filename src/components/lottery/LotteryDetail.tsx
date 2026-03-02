@@ -1,17 +1,10 @@
 "use client";
 
 import { DrawResult } from "./DrawResult";
-import { TicketVerifier } from "@/components/country/TicketVerifier";
 import { SubscribeButton } from "@/components/ui/SubscribeButton";
 import { NewsSidebar } from "@/components/ui/NewsSidebar";
-import {
-  NewspaperIcon,
-  SearchIcon,
-  ShieldCheck,
-  AlertTriangle,
-  Ticket,
-  CalendarDays,
-} from "lucide-react";
+import { InteractiveTicketVerifier } from "./InteractiveTicketVerifier";
+import { NewspaperIcon, ShieldCheck, AlertTriangle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
 import { useApi } from "@/lib/hooks/useApi";
@@ -25,6 +18,8 @@ interface LotteryDetailProps {
   lotteryName: string;
   lotterySlug: string;
   apiEndpoint: string;
+  logo?: string | null;
+  currency?: string | null;
 }
 
 /* -- Components -- */
@@ -61,19 +56,23 @@ function PrizeSectionHeader({
   title,
   count,
   amount,
+  currency,
 }: {
   title: string;
   count: number;
   amount: string;
+  currency?: string;
 }) {
   const { t } = useLanguage();
+  const displayCurrency = currency || t.common.currency;
+
   return (
     <div className="flex flex-col gap-2 border-b border-gold-500/20 bg-gradient-to-r from-gold-500/10 to-transparent px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
       <h3 className="text-xl font-bold text-gold-400">{title}</h3>
       <div className="text-sm text-gray-400">
         {count} {t.common.perPrize}{" "}
         <span className="font-bold text-gold-300">
-          {amount} {t.common.baht}
+          {amount} {displayCurrency}
         </span>
       </div>
     </div>
@@ -86,6 +85,8 @@ export default function LotteryDetail({
   lotteryName,
   lotterySlug,
   apiEndpoint,
+  logo,
+  currency,
 }: LotteryDetailProps) {
   const { t, language } = useLanguage();
   const { data, loading, error } = useApi<ResultsByTypeResponse>(
@@ -181,6 +182,50 @@ export default function LotteryDetail({
       }
     }
     return undefined;
+  };
+
+  const getPrizeName = (pName: string, pCat?: string): string => {
+    const name = pName || "";
+    const cat = pCat || "";
+
+    // Lao mappings
+    if (cat === "prize_2_digits" || name === "prize_2_digits")
+      return t.results.prize_2_digits;
+    if (cat === "prize_3_digits" || name === "prize_3_digits")
+      return t.results.prize_3_digits;
+    if (cat === "prize_4_digits" || name === "prize_4_digits")
+      return t.results.prize_4_digits;
+    if (cat === "prize_modern_5" || name === "prize_modern_5")
+      return t.results.prize_modern_5;
+
+    // Thai mappings
+    if (cat === "prize_1" || name === "prize_1") return t.results.prize_1_thai;
+    if (cat === "prize_2" || name === "prize_2") return t.results.prize2rank;
+    if (cat === "prize_3" || name === "prize_3") return t.results.prize3rank;
+    if (cat === "prize_4" || name === "prize_4") return t.results.prize4rank;
+    if (cat === "prize_5" || name === "prize_5") return t.results.prize5rank;
+    if (
+      cat === "running_number_front_3" ||
+      name === "running_number_front_3" ||
+      name === "3 Front"
+    )
+      return t.results.running_number_front_3;
+    if (
+      cat === "running_number_back_3" ||
+      name === "running_number_back_3" ||
+      name === "3 Back"
+    )
+      return t.results.running_number_back_3;
+    if (
+      cat === "running_number_back_2" ||
+      name === "running_number_back_2" ||
+      name === "2 Back"
+    )
+      return t.results.running_number_back_2;
+    if (cat === "nearby_prize_1" || name === "nearby_prize_1")
+      return t.results.nearby_prize_1;
+
+    return name;
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -299,6 +344,7 @@ export default function LotteryDetail({
     lotteryName: lotteryName,
     date: formattedDate,
     drawId: latest?.drawNo || "-",
+    currency: currency || undefined,
     firstPrize: String(firstPrize || "-"),
     firstPrizeAmount: String(firstPrizeAmount),
     // Pass dynamicPrizes for non-Thai lotteries
@@ -339,6 +385,142 @@ export default function LotteryDetail({
         "100,000",
     ),
   };
+
+  // Thai secondary prizes
+  const thaiSecondaryPrizes = [
+    {
+      title: t.results.prize2rank,
+      count:
+        (
+          getPrizeNumber(rawData, ["Prize 2", "รางวัลที่ 2"], ["prize_2"]) ||
+          rawData?.prize2
+        )?.length || 0,
+      amount:
+        getPrizeAmount(rawData, ["Prize 2", "รางวัลที่ 2"], ["prize_2"]) ||
+        rawData?.prize2Amount ||
+        "200,000",
+      numbers:
+        getPrizeNumber(rawData, ["Prize 2", "รางวัลที่ 2"], ["prize_2"]) ||
+        rawData?.prize2 ||
+        [],
+    },
+    {
+      title: t.results.prize3rank,
+      count:
+        (
+          getPrizeNumber(rawData, ["Prize 3", "รางวัลที่ 3"], ["prize_3"]) ||
+          rawData?.prize3
+        )?.length || 0,
+      amount:
+        getPrizeAmount(rawData, ["Prize 3", "รางวัลที่ 3"], ["prize_3"]) ||
+        rawData?.prize3Amount ||
+        "80,000",
+      numbers:
+        getPrizeNumber(rawData, ["Prize 3", "รางวัลที่ 3"], ["prize_3"]) ||
+        rawData?.prize3 ||
+        [],
+    },
+    {
+      title: t.results.prize4rank,
+      count:
+        (
+          getPrizeNumber(rawData, ["Prize 4", "รางวัลที่ 4"], ["prize_4"]) ||
+          rawData?.prize4
+        )?.length || 0,
+      amount:
+        getPrizeAmount(rawData, ["Prize 4", "รางวัลที่ 4"], ["prize_4"]) ||
+        rawData?.prize4Amount ||
+        "40,000",
+      numbers:
+        getPrizeNumber(rawData, ["Prize 4", "รางวัลที่ 4"], ["prize_4"]) ||
+        rawData?.prize4 ||
+        [],
+    },
+    {
+      title: t.results.prize5rank,
+      count:
+        (
+          getPrizeNumber(rawData, ["Prize 5", "รางวัลที่ 5"], ["prize_5"]) ||
+          rawData?.prize5
+        )?.length || 0,
+      amount:
+        getPrizeAmount(rawData, ["Prize 5", "รางวัลที่ 5"], ["prize_5"]) ||
+        rawData?.prize5Amount ||
+        "20,000",
+      numbers:
+        getPrizeNumber(rawData, ["Prize 5", "รางวัลที่ 5"], ["prize_5"]) ||
+        rawData?.prize5 ||
+        [],
+    },
+  ];
+
+  // Compile all prizes for the ticket verifier
+  const allPrizes = [];
+  if (isNonThai && rawPrizes.length > 0) {
+    rawPrizes.forEach(
+      (p: {
+        prizeName?: string;
+        category?: string;
+        winningNumbers?: string[];
+        number?: string | string[];
+        amount?: number | string;
+        prizeAmount?: number | string;
+        reward?: number | string;
+      }) => {
+        const pNumbers = p.winningNumbers || p.number || [];
+        const nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers])
+          .map(String)
+          .filter((s: string) => s !== "undefined" && s !== "null");
+        allPrizes.push({
+          name: getPrizeName(p.prizeName || p.category || "Prize", p.category),
+          amount: String(p.amount || p.prizeAmount || p.reward || "0"),
+          numbers: nums,
+        });
+      },
+    );
+  } else {
+    if (firstPrize && firstPrize !== "-")
+      allPrizes.push({
+        name: t.results.prize1,
+        amount: drawResultProps.firstPrizeAmount,
+        numbers: [String(firstPrize)],
+      });
+    if (front3.length > 0)
+      allPrizes.push({
+        name: t.results.prize3Front,
+        amount: drawResultProps.front3Amount,
+        numbers: front3.map(String),
+      });
+    if (back3.length > 0)
+      allPrizes.push({
+        name: t.results.prize3Back,
+        amount: drawResultProps.back3Amount,
+        numbers: back3.map(String),
+      });
+    if (last2 && last2 !== "-")
+      allPrizes.push({
+        name: t.results.prize2,
+        amount: drawResultProps.last2Amount,
+        numbers: [String(last2)],
+      });
+    if (drawResultProps.adjacent?.length > 0)
+      allPrizes.push({
+        name: "รางวัลข้างเคียงรางวัลที่ 1",
+        amount: drawResultProps.adjacentAmount,
+        numbers: drawResultProps.adjacent,
+      });
+
+    // Add secondary prizes
+    thaiSecondaryPrizes.forEach((p) => {
+      if (p.numbers && p.numbers.length > 0) {
+        allPrizes.push({
+          name: p.title,
+          amount: p.amount,
+          numbers: p.numbers.map(String),
+        });
+      }
+    });
+  }
 
   const recentResults = historyItems.map((item) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -398,10 +580,20 @@ export default function LotteryDetail({
             </span>
           </div>
           <div className="mt-3 flex items-center gap-3">
-            {/* Logo placeholder - replace with dynamic logic if needed */}
-            <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gold-500/20 text-gold-400 font-bold border border-gold-500/30">
-              {lotteryName.charAt(0)}
-            </div>
+            {logo ? (
+              <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-gray-200 dark:border-white/10 shadow-sm bg-white dark:bg-navy-900">
+                <Image
+                  src={logo}
+                  alt={`${lotteryName} logo`}
+                  fill
+                  className="object-contain p-1.5"
+                />
+              </div>
+            ) : (
+              <div className="h-12 w-12 flex-shrink-0 flex items-center justify-center rounded-full bg-gold-500/20 text-gold-500 font-bold border border-gold-500/30 text-lg shadow-sm">
+                {lotteryName.charAt(0)}
+              </div>
+            )}
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
                 {lotteryName}
@@ -546,100 +738,22 @@ export default function LotteryDetail({
                   title={prize.title}
                   count={prize.count}
                   amount={prize.amount}
+                  currency={currency || t.common.currency}
                 />
                 <PrizeGrid numbers={prize.numbers} columns={5} />
               </section>
             ))}
 
-          {/* Inline Lottery Checker */}
-          <section className="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/80 p-6 backdrop-blur-md shadow-lg">
-            {/* Background design elements */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold-400/5 blur-[80px]"></div>
-            <div className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-blue-500/5 blur-[80px]"></div>
-
-            <div className="relative z-10 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-500/20 text-gold-500">
-                    <SearchIcon className="h-4 w-4" />
-                  </div>
-                  {t.common.checkResult}
-                </h3>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  {t.common.checkResultDesc}
-                </p>
-              </div>
-            </div>
-
-            <div className="relative z-10 space-y-5">
-              <div className="flex flex-col gap-4 md:flex-row">
-                {/* Draw Date Selection */}
-                <div className="flex-1">
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t.common.drawDate}
-                  </label>
-                  <div className="relative">
-                    <select className="w-full appearance-none rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-10 text-gray-900 dark:text-white outline-none transition-all focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20">
-                      <option value="">
-                        {t.common.latestDraw} (
-                        {latest?.dateDisplay ||
-                          latest?.date ||
-                          t.common.current}
-                        )
-                      </option>
-                      {historyItems.slice(0, 5).map((item, idx) => (
-                        <option key={idx} value={item.date}>
-                          {formatDateDisplay(item.dateDisplay || item.date)}
-                        </option>
-                      ))}
-                    </select>
-                    <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                      <svg
-                        className="h-4 w-4 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Ticket Input */}
-                <div className="flex-[2]">
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t.common.yourTicketNumber}
-                  </label>
-                  <div className="relative flex items-center">
-                    <input
-                      type="text"
-                      placeholder={`${t.common.inputPlaceholder} ${t.common.ticketExample}`}
-                      className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20"
-                    />
-                    <Ticket className="absolute left-4 h-5 w-5 text-gray-400" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Area */}
-              <div className="flex flex-col-reverse items-center justify-between gap-4 border-t border-gray-100 dark:border-white/5 pt-5 sm:flex-row">
-                <button className="text-sm font-medium text-gray-500 transition-colors hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400">
-                  {t.common.addMoreTickets}
-                </button>
-                <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 px-8 py-3.5 font-bold text-white shadow-lg shadow-gold-500/25 transition-all hover:scale-[1.02] hover:shadow-gold-500/40 active:scale-95 sm:w-auto">
-                  <SearchIcon className="h-5 w-5" />
-                  {t.common.checkBtn}
-                </button>
-              </div>
-            </div>
-          </section>
+          {/* Interactive Ticket Verifier */}
+          <InteractiveTicketVerifier
+            countryCode={countryCode}
+            lotterySlug={lotterySlug}
+            latestDateDisplay={
+              latest?.dateDisplay || latest?.date || t.common.current
+            }
+            historyItems={historyItems}
+            prizes={allPrizes}
+          />
 
           {/* History Table */}
           <section className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm">
@@ -781,12 +895,16 @@ export default function LotteryDetail({
 
         {/* Sidebar */}
         <aside className="space-y-6">
-          <div className="rounded-xl border border-gold-500/20 bg-white dark:bg-navy-800/30 p-6 shadow-sm">
-            <h3 className="mb-4 text-center text-lg font-bold text-gold-400">
-              {t.common.checkTicket}
-            </h3>
-            <TicketVerifier country={country} />
-          </div>
+          <InteractiveTicketVerifier
+            variant="sidebar"
+            countryCode={countryCode}
+            lotterySlug={lotterySlug}
+            latestDateDisplay={
+              latest?.dateDisplay || latest?.date || t.common.current
+            }
+            historyItems={historyItems}
+            prizes={allPrizes}
+          />
 
           <NewsSidebar
             accentColor="gold"

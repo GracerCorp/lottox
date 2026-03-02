@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+const API_KEY = process.env.API_KEY || "";
 
 import { z } from "zod";
 
@@ -28,7 +29,10 @@ export async function POST(request: Request) {
     // Proxy to external API
     const res = await fetch(`${EXTERNAL_API}/api/subscribe`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API_KEY}`,
+      },
       body: JSON.stringify({ email, lotteryId }),
     });
 
