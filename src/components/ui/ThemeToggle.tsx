@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-9 p-2 text-gray-300">
+      <div className="h-9 w-9 p-2 text-gray-500 dark:text-gray-300">
         <span className="sr-only">Toggle theme</span>
       </div>
     );
@@ -24,7 +24,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="flex items-center justify-center rounded-lg p-2 text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+      className="flex items-center justify-center rounded-lg p-2 text-gray-500 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white transition-colors"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (

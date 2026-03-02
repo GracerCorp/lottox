@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "./prisma";
+import { prisma } from "../prisma";
 import type { Prisma } from "@prisma/client";
 
 /** Map API type strings to DB country codes */
@@ -52,6 +52,7 @@ class ApiClient {
         lottery: {
           select: {
             name: true,
+            showing_prizes: true,
             countries: { select: { code: true } },
           },
         },
@@ -70,7 +71,11 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery: { name: string; countries: { code: string } | null } | null;
+      lottery: {
+        name: string;
+        showing_prizes?: string[];
+        countries: { code: string } | null;
+      } | null;
       result_verifications_result_verifications_lottery_result_idTolottery_results?: {
         chosen_data: unknown;
       }[];
@@ -90,6 +95,7 @@ class ApiClient {
         data: dataToUse,
         lotteryName: res.lottery?.name || "",
         countryCode: countryCode,
+        showingPrizes: res.lottery?.showing_prizes || [],
       };
     };
 
@@ -125,6 +131,7 @@ class ApiClient {
           lottery: {
             select: {
               name: true,
+              showing_prizes: true,
               countries: { select: { code: true } },
             },
           },
@@ -144,7 +151,11 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery: { name: string; countries: { code: string } | null } | null;
+      lottery: {
+        name: string;
+        showing_prizes?: string[];
+        countries: { code: string } | null;
+      } | null;
       result_verifications_result_verifications_lottery_result_idTolottery_results?: {
         chosen_data: unknown;
       }[];
@@ -163,6 +174,7 @@ class ApiClient {
         drawNo: res.draw_period || "",
         daysAgo: "",
         data: dataToUse,
+        showingPrizes: res.lottery?.showing_prizes || [],
       };
     };
 
@@ -218,6 +230,7 @@ class ApiClient {
           lottery: {
             select: {
               name: true,
+              showing_prizes: true,
               countries: { select: { code: true } },
             },
           },
@@ -238,7 +251,11 @@ class ApiClient {
       draw_date: string;
       draw_period: string | null;
       full_data: unknown;
-      lottery: { name: string; countries: { code: string } | null } | null;
+      lottery: {
+        name: string;
+        showing_prizes?: string[];
+        countries: { code: string } | null;
+      } | null;
       result_verifications_result_verifications_lottery_result_idTolottery_results?: {
         chosen_data: unknown;
       }[];
@@ -258,6 +275,7 @@ class ApiClient {
         data: dataToUse,
         lotteryName: res.lottery?.name || "",
         countryCode: countryCode,
+        showingPrizes: res.lottery?.showing_prizes || [],
       };
     };
 
@@ -503,10 +521,7 @@ class ApiClient {
     return {
       slug: article.slug,
       title: article.title,
-      content:
-        typeof article.content === "string"
-          ? article.content
-          : JSON.stringify(article.content),
+      content: article.full_content,
       image:
         article.cover_image ||
         (article.images.length > 0 ? article.images[0] : ""),

@@ -8,7 +8,7 @@ const rateLimit = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 60; // 60 requests per minute
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   // Only apply to /api routes
   if (request.nextUrl.pathname.startsWith("/api")) {
     // 1. Origin Check (Simple)

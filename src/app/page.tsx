@@ -3,6 +3,7 @@ import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
 import { CountryListSection } from "@/components/home/CountryListSection";
 import { HomeResultsSection } from "@/components/home/HomeResultsSection";
 import { getActiveCountries } from "@/lib/services/lotteryService";
+import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 
 function slugify(name: string): string {
@@ -38,6 +39,7 @@ const GRADIENTS: Record<string, { from: string; to: string; bg: string }> = {
 
 export default async function Home() {
   const countries = await getActiveCountries();
+  const dbBanners = await getActiveBanners();
 
   // Deduplicate by country code to prevent React duplicate key errors
   const seen = new Set<string>();
@@ -65,32 +67,62 @@ export default async function Home() {
   }));
 
   const heroItems: HeroItem[] = [];
-  for (const country of countries) {
+
+  // 1. Create banners from DB
+  for (const banner of dbBanners) {
+    const lotto = banner.lottery_results?.lottery;
+    const country = lotto?.countries;
+
+    if (!lotto || !country) continue;
+
     const code = country.code.toLowerCase();
-    for (const lotto of country.lotteries) {
-      if (!lotto.is_active) continue;
+    const theme = GRADIENTS[code] || GRADIENTS.th;
+    const jackpot = JACKPOT_DATA[code] || "Play Now";
+    const lottoSlug = slugify(lotto.name);
+    const nextDraw = country.draw_schedule || "Next Draw Soon";
 
-      const theme = GRADIENTS[code] || GRADIENTS.th;
-      const jackpot = JACKPOT_DATA[code] || "Play Now";
-      const lottoSlug = slugify(lotto.name);
-      // Construct an approximate Next Draw string or leave it empty if unavailable
-      const nextDraw = country.draw_schedule || "Next Draw Soon";
+    heroItems.push({
+      id: `banner-${banner.id}`,
+      name: lotto.name,
+      country: country.name,
+      flag: getFlagUrl(code),
+      jackpot,
+      nextDraw,
+      gradientFrom: theme.from,
+      gradientTo: theme.to,
+      href: `/${code}/${lottoSlug}`,
+      bgImage: banner.image_url || theme.bg,
+    });
+  }
 
-      heroItems.push({
-        id: `${code}-${lotto.id}`,
-        name: lotto.name,
-        country: country.name,
-        flag: getFlagUrl(code),
-        jackpot,
-        nextDraw,
-        gradientFrom: theme.from,
-        gradientTo: theme.to,
-        href: `/${code}/${lottoSlug}`,
-        bgImage: theme.bg,
-      });
+  // 2. Fallback to default country banners if no banners found in DB
+  if (heroItems.length === 0) {
+    for (const country of countries) {
+      const code = country.code.toLowerCase();
+      for (const lotto of country.lotteries) {
+        if (!lotto.is_active) continue;
 
-      // We likely only need the primary lottery per country for the hero banners, or we can show up to 1-2 per country
-      break;
+        const theme = GRADIENTS[code] || GRADIENTS.th;
+        const jackpot = JACKPOT_DATA[code] || "Play Now";
+        const lottoSlug = slugify(lotto.name);
+        const nextDraw = country.draw_schedule || "Next Draw Soon";
+
+        heroItems.push({
+          id: `${code}-${lotto.id}`,
+          name: lotto.name,
+          country: country.name,
+          flag: getFlagUrl(code),
+          jackpot,
+          nextDraw,
+          gradientFrom: theme.from,
+          gradientTo: theme.to,
+          href: `/${code}/${lottoSlug}`,
+          bgImage: theme.bg,
+        });
+
+        // We likely only need the primary lottery per country for the hero banners
+        break;
+      }
     }
   }
 

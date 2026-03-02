@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 export async function GET() {
   try {

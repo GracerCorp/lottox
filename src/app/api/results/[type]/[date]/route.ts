@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/services/lotteryResultService";
 import { z } from "zod";
 
 /** Map API type slugs to DB country codes */
@@ -74,10 +74,10 @@ export async function GET(
     // Return the found result
     return NextResponse.json({
       latest: {
-        dateDisplay: exactMatch.draw_date,
-        date: exactMatch.draw_date,
-        drawNo: exactMatch.draw_period,
-        data: exactMatch.full_data,
+        dateDisplay: exactMatch.drawDate,
+        date: exactMatch.drawDate,
+        drawNo: exactMatch.drawNo,
+        data: exactMatch.data,
       },
       history: historyResults,
     });

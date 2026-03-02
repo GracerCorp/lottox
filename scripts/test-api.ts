@@ -1,5 +1,5 @@
 import "dotenv/config"; // Try to load .env
-import { apiClient } from "../src/lib/api-client";
+import { apiClient } from "../src/lib/services/lotteryResultService";
 
 async function test() {
   console.log("Testing API Client...");

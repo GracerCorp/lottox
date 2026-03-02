@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

@@ -127,6 +127,7 @@ model lotteries {
   country_id            Int?
   created_at            DateTime?               @default(now()) @db.Timestamp(6)
   updated_at            DateTime?               @db.Timestamp(6)
+  showing_prizes        String[]
   articles              articles[]
   countries             countries?              @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")
   lottery_jobs          lottery_jobs[]

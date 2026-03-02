@@ -14,6 +14,7 @@ export interface LatestResult {
   data: ThaiResultData | LaoResultData | VietnamResultData;
   lotteryName?: string;
   countryCode?: string;
+  showingPrizes?: string[];
 }
 
 // Thai Data shape

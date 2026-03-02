@@ -7,9 +7,6 @@ import { newsArticles as fallbackNewsArticles } from "@/lib/newsData";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, ChevronLeft } from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import type { Components } from "react-markdown";
 
 interface ArticleProps {
   slug: string;
@@ -24,210 +21,6 @@ interface ArticleProps {
   author: string;
   source?: string;
   isLocal?: boolean;
-}
-
-/** Detect whether content string contains markdown syntax */
-function hasMarkdownSyntax(text: string): boolean {
-  const markdownPatterns = [
-    /^#{1,6}\s/m, // headings
-    /\*\*.+?\*\*/, // bold
-    /\*.+?\*/, // italic
-    /\[.+?\]\(.+?\)/, // links
-    /^>\s/m, // blockquotes
-    /^[-*+]\s/m, // unordered list
-    /^\d+\.\s/m, // ordered list
-    /```/, // code blocks
-    /`[^`]+`/, // inline code
-    /^---$/m, // horizontal rule
-    /!\[.*?\]\(.+?\)/, // images
-    /\|.+\|.+\|/, // tables
-    /~~.+?~~/, // strikethrough
-  ];
-  return markdownPatterns.some((pattern) => pattern.test(text));
-}
-
-/** Custom components for react-markdown with styled classes */
-const markdownComponents: Components = {
-  h1: ({ children }) => (
-    <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-      {children}
-    </h2>
-  ),
-  h2: ({ children }) => (
-    <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-      {children}
-    </h2>
-  ),
-  h3: ({ children }) => (
-    <h3 className="mb-3 mt-6 text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
-      {children}
-    </h3>
-  ),
-  h4: ({ children }) => (
-    <h4 className="mb-3 mt-6 text-lg font-bold text-gray-900 dark:text-white sm:text-xl">
-      {children}
-    </h4>
-  ),
-  h5: ({ children }) => (
-    <h5 className="mb-2 mt-4 text-base font-bold text-gray-900 dark:text-white sm:text-lg">
-      {children}
-    </h5>
-  ),
-  h6: ({ children }) => (
-    <h6 className="mb-2 mt-4 text-base font-semibold text-gray-900 dark:text-white">
-      {children}
-    </h6>
-  ),
-  p: ({ children }) => (
-    <p className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
-      {children}
-    </p>
-  ),
-  ul: ({ children }) => (
-    <ul className="mb-6 ml-6 list-disc text-gray-700 dark:text-gray-300 space-y-2">
-      {children}
-    </ul>
-  ),
-  ol: ({ children }) => (
-    <ol className="mb-6 ml-6 list-decimal text-gray-700 dark:text-gray-300 space-y-2">
-      {children}
-    </ol>
-  ),
-  li: ({ children }) => (
-    <li className="text-base leading-relaxed">{children}</li>
-  ),
-  a: ({ href, children }) => (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-gold-500 hover:text-gold-400 underline transition-colors"
-    >
-      {children}
-    </a>
-  ),
-  blockquote: ({ children }) => (
-    <blockquote className="border-l-4 border-gold-500 bg-gray-50 dark:bg-navy-800/50 p-4 my-6 italic text-gray-700 dark:text-gray-300 rounded-r-lg">
-      {children}
-    </blockquote>
-  ),
-  code: ({ children, className }) => {
-    const isInline = !className;
-    if (isInline) {
-      return (
-        <code className="rounded bg-gray-100 dark:bg-navy-700 px-1.5 py-0.5 text-sm font-mono text-gold-600 dark:text-gold-400">
-          {children}
-        </code>
-      );
-    }
-    return (
-      <code
-        className={`block overflow-x-auto rounded-lg bg-gray-100 dark:bg-navy-800 p-4 text-sm font-mono text-gray-800 dark:text-gray-200 ${className || ""}`}
-      >
-        {children}
-      </code>
-    );
-  },
-  pre: ({ children }) => (
-    <pre className="mb-6 overflow-x-auto rounded-lg bg-gray-100 dark:bg-navy-800 p-4">
-      {children}
-    </pre>
-  ),
-  hr: () => <hr className="my-8 border-gray-200 dark:border-white/10" />,
-  strong: ({ children }) => (
-    <strong className="font-bold text-gray-900 dark:text-white">
-      {children}
-    </strong>
-  ),
-  em: ({ children }) => <em className="italic">{children}</em>,
-  del: ({ children }) => <del className="line-through">{children}</del>,
-  table: ({ children }) => (
-    <div className="my-6 overflow-x-auto rounded-lg border border-gray-200 dark:border-white/10">
-      <table className="w-full text-sm text-gray-700 dark:text-gray-300">
-        {children}
-      </table>
-    </div>
-  ),
-  thead: ({ children }) => (
-    <thead className="bg-gray-50 dark:bg-navy-800 text-left font-semibold text-gray-900 dark:text-white">
-      {children}
-    </thead>
-  ),
-  th: ({ children }) => (
-    <th className="px-4 py-3 border-b border-gray-200 dark:border-white/10">
-      {children}
-    </th>
-  ),
-  td: ({ children }) => (
-    <td className="px-4 py-3 border-b border-gray-100 dark:border-white/5">
-      {children}
-    </td>
-  ),
-  img: ({ src, alt }) => (
-    <span className="my-6 block relative w-full h-auto overflow-hidden rounded-xl">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt || ""}
-        className="w-full h-auto object-cover rounded-xl"
-      />
-    </span>
-  ),
-};
-
-/** Render markdown content with styled components */
-function MarkdownRenderer({ content }: { content: string }) {
-  return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-      {content}
-    </ReactMarkdown>
-  );
-}
-
-/** Render plain text with basic line-based formatting */
-function PlainTextRenderer({ content }: { content: string }) {
-  return (
-    <>
-      {content.split("\n").map((paragraph, i) => {
-        if (paragraph.trim() === "") return null;
-        // Lines starting with - as list items
-        if (paragraph.trim().startsWith("- ")) {
-          return (
-            <div
-              key={i}
-              className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
-            >
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-600 dark:bg-gold-400" />
-              <span>{paragraph.trim().slice(2)}</span>
-            </div>
-          );
-        }
-        // Lines with number prefix as list items
-        if (/^\d+\.\s/.test(paragraph.trim())) {
-          return (
-            <div
-              key={i}
-              className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
-            >
-              <span className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400 font-bold text-sm">
-                {paragraph.trim().split(".")[0]}.
-              </span>
-              <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
-            </div>
-          );
-        }
-        // Regular paragraphs
-        return (
-          <p
-            key={i}
-            className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg"
-          >
-            {paragraph.trim()}
-          </p>
-        );
-      })}
-    </>
-  );
 }
 
 export default function NewsArticleContent({
@@ -283,29 +76,6 @@ export default function NewsArticleContent({
         date: a.date,
       }));
   }
-
-  /** Determine content type and render accordingly */
-  const renderContent = () => {
-    // 1) Try TipTap JSON
-    try {
-      if (content.trim().startsWith("{") || content.trim().startsWith("[")) {
-        const parsed = JSON.parse(content);
-        if (parsed.type === "doc") {
-          return <TipTapRenderer node={parsed} />;
-        }
-      }
-    } catch {
-      // Not JSON, continue
-    }
-
-    // 2) Markdown content
-    if (hasMarkdownSyntax(content)) {
-      return <MarkdownRenderer content={content} />;
-    }
-
-    // 3) Plain text fallback
-    return <PlainTextRenderer content={content} />;
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -368,7 +138,67 @@ export default function NewsArticleContent({
         </div>
 
         {/* Content */}
-        <div className="prose-custom mb-12">{renderContent()}</div>
+        <div className="prose-custom mb-12">
+          {(() => {
+            let parsedNode = null;
+            try {
+              if (
+                content.trim().startsWith("{") ||
+                content.trim().startsWith("[")
+              ) {
+                const parsed = JSON.parse(content);
+                if (parsed.type === "doc") {
+                  parsedNode = parsed;
+                }
+              }
+            } catch {
+              // Not JSON, fallback
+            }
+
+            if (parsedNode) {
+              return <TipTapRenderer node={parsedNode} />;
+            }
+
+            return content.split("\n").map((paragraph, i) => {
+              if (paragraph.trim() === "") return null;
+              // Lines starting with - as list items
+              if (paragraph.trim().startsWith("- ")) {
+                return (
+                  <div
+                    key={i}
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
+                  >
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-600 dark:bg-gold-400" />
+                    <span>{paragraph.trim().slice(2)}</span>
+                  </div>
+                );
+              }
+              // Lines with number prefix as list items
+              if (/^\d+\.\s/.test(paragraph.trim())) {
+                return (
+                  <div
+                    key={i}
+                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
+                  >
+                    <span className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400 font-bold text-sm">
+                      {paragraph.trim().split(".")[0]}.
+                    </span>
+                    <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
+                  </div>
+                );
+              }
+              // Regular paragraphs
+              return (
+                <p
+                  key={i}
+                  className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg"
+                >
+                  {paragraph.trim()}
+                </p>
+              );
+            });
+          })()}
+        </div>
 
         {/* Disclaimer */}
         <div className="mb-12 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/5 p-5 shadow-sm">
@@ -466,7 +296,7 @@ function TipTapRenderer({ node }: { node: any }) {
           {renderChildren()}
         </p>
       );
-    case "heading": {
+    case "heading":
       const level = node.attrs?.level || 2;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const Tag = `h${level}` as any;
@@ -485,7 +315,6 @@ function TipTapRenderer({ node }: { node: any }) {
           {renderChildren()}
         </Tag>
       );
-    }
     case "bulletList":
       return (
         <ul className="mb-6 ml-6 list-disc text-gray-700 dark:text-gray-300 space-y-2">

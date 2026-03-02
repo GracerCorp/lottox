@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/services/lotteryResultService";
 import { getArticleBySlug } from "@/lib/newsData";
 import { notFound } from "next/navigation";
 import NewsArticleContent from "./NewsArticleContent";

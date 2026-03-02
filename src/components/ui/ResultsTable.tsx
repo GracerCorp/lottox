@@ -63,12 +63,12 @@ export function mapApiResultToRow(
     (type.includes("LAO") ? "la" : type.includes("VIETNAM") ? "vn" : "th");
   const lotterySlug = result.lotteryName ? slugify(result.lotteryName) : "";
 
-  let countryId = cc;
+  const countryId = cc;
   let countryName = t.lottery?.thai?.country || "Thailand";
   let lottoName =
     result.lotteryName || t.lottery?.thai?.subName || "Thai Lottery";
-  let lottoHref = `/${cc}/${lotterySlug}`;
-  let flagCode = cc;
+  const lottoHref = `/${cc}/${lotterySlug}`;
+  const flagCode = cc;
   let currency = "B";
   let defaultP1 = "6,000,000";
 
@@ -98,10 +98,21 @@ export function mapApiResultToRow(
       return orderA - orderB;
     });
 
-    // In ResultsTable (preview card), we typically show up to 4 significant prizes.
-    const displayPrizes = sortedPrizes
-      .filter((p) => p.winningNumbers && p.winningNumbers.length > 0)
-      .slice(0, 4);
+    // Filter by showingPrizes if available
+    let displayPrizes = sortedPrizes.filter(
+      (p) => p.winningNumbers && p.winningNumbers.length > 0,
+    );
+
+    if (result.showingPrizes && result.showingPrizes.length > 0) {
+      displayPrizes = displayPrizes.filter(
+        (p) =>
+          result.showingPrizes!.includes(p.prizeName) ||
+          result.showingPrizes!.includes(p.category),
+      );
+    } else {
+      // Fallback: show up to 4 significant prizes
+      displayPrizes = displayPrizes.slice(0, 4);
+    }
 
     // If somehow empty after filtering, just take the first 4
     const finalDisplayPrizes =
@@ -128,8 +139,23 @@ export function mapApiResultToRow(
           : formattedPrize;
       }
 
+      const getCategoryLabel = (
+        cat: string | undefined,
+        defaultName: string | undefined,
+      ): string => {
+        if (!cat) return defaultName || t.results?.prize1 || `Prize ${idx + 1}`;
+        // Map category properly if translation exists
+        const key = cat as keyof typeof t.results;
+        return (
+          t.results?.[key] ||
+          defaultName ||
+          t.results?.prize1 ||
+          `Prize ${idx + 1}`
+        );
+      };
+
       return {
-        label: p.prizeName || t.results?.prize1 || `Prize ${idx + 1}`,
+        label: getCategoryLabel(p.category, p.prizeName),
         value: finalVals.map(String),
         prize: formattedPrize,
         isMain: idx === 0,

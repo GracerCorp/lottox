@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 import { z } from "zod";
 
