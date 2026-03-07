@@ -6,6 +6,7 @@ import type { NewsListResponse } from "@/lib/api-types";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, ChevronLeft } from "lucide-react";
+import { useMemo } from "react";
 
 interface ArticleProps {
   slug: string;
@@ -42,6 +43,20 @@ export default function NewsArticleContent({
     language === "th"
       ? article.category
       : article.categoryEn || article.category;
+
+  const parsedContent = useMemo(() => {
+    try {
+      if (typeof content === "string") {
+        const parsed = JSON.parse(content);
+        if (parsed && parsed.type === "doc") {
+          return parsed;
+        }
+      }
+    } catch {
+      // Not valid JSON
+    }
+    return null;
+  }, [content]);
 
   // Related articles: from API
   let relatedArticles: {
@@ -120,65 +135,14 @@ export default function NewsArticleContent({
 
         {/* Content */}
         <div className="prose-custom mb-12">
-          {(() => {
-            let parsedNode = null;
-            try {
-              if (
-                content.trim().startsWith("{") ||
-                content.trim().startsWith("[")
-              ) {
-                const parsed = JSON.parse(content);
-                if (parsed.type === "doc") {
-                  parsedNode = parsed;
-                }
-              }
-            } catch {
-              // Not JSON, fallback
-            }
-
-            if (parsedNode) {
-              return <TipTapRenderer node={parsedNode} />;
-            }
-
-            return content.split("\n").map((paragraph, i) => {
-              if (paragraph.trim() === "") return null;
-              // Lines starting with - as list items
-              if (paragraph.trim().startsWith("- ")) {
-                return (
-                  <div
-                    key={i}
-                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
-                  >
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold-600 dark:bg-gold-400" />
-                    <span>{paragraph.trim().slice(2)}</span>
-                  </div>
-                );
-              }
-              // Lines with number prefix as list items
-              if (/^\d+\.\s/.test(paragraph.trim())) {
-                return (
-                  <div
-                    key={i}
-                    className="ml-4 flex items-start gap-2 py-1 text-base leading-relaxed text-gray-700 dark:text-gray-300"
-                  >
-                    <span className="mt-0.5 shrink-0 text-gold-600 dark:text-gold-400 font-bold text-sm">
-                      {paragraph.trim().split(".")[0]}.
-                    </span>
-                    <span>{paragraph.trim().replace(/^\d+\.\s/, "")}</span>
-                  </div>
-                );
-              }
-              // Regular paragraphs
-              return (
-                <p
-                  key={i}
-                  className="mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg"
-                >
-                  {paragraph.trim()}
-                </p>
-              );
-            });
-          })()}
+          {parsedContent ? (
+            <TipTapRenderer node={parsedContent} />
+          ) : (
+            <div
+              className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap break-words"
+              
+            >{ content.replace(/<p><\/p>/g, '') }</div>
+          )}
         </div>
 
         {/* Disclaimer */}
@@ -331,6 +295,12 @@ function TipTapRenderer({ node }: { node: any }) {
         <blockquote className="border-l-4 border-gold-500 bg-gray-50 dark:bg-navy-800/50 p-4 my-6 italic text-gray-700 dark:text-gray-300 rounded-r-lg">
           {renderChildren()}
         </blockquote>
+      );
+    case "codeBlock":
+      return (
+        <pre className="my-6 rounded-lg bg-navy-900 p-4 text-sm text-gray-100 overflow-x-auto whitespace-pre-wrap font-mono">
+          <code>{renderChildren()}</code>
+        </pre>
       );
     case "horizontalRule":
       return <hr className="my-8 border-gray-200 dark:border-white/10" />;

@@ -1,16 +1,12 @@
-# Plan: News Data Migration
+# Plan: News Article Content Rendering
 
-1. Write `src/scripts/seed-news.ts` to migrate data from `src/lib/newsData.ts` into the Prisma `articles` table.
-2. Store `titleEn`, `excerptEn`, `contentEn`, `categoryEn`, and `source` in the `articles.content` JSON field (since there are no dedicated En columns to prevent doing unnecessary database schema migrations, though we can migrate schema if requested).
-3. Update `lotteryResultService.ts`:
-   - `getNews()`: extract English text from the `content` JSON to return exactly what UI expects.
-   - `getNewsDetail()`: extract English text from the `content` JSON to return exactly what UI expects.
-4. Refactor Frontend:
-   - `NewsSidebar.tsx`
-   - `NewsPage.tsx`
-   - `NewsArticleContent.tsx`
-   - Remove fallbacks to `fallbackNewsArticles`.
-5. Remove `src/lib/newsData.ts`.
-6. Run the seed script to verify data is in DB.
-7. Run the Next.js dev server and check if the pages load successfully.
-8. Resolve lint issues.
+1. **Update `TipTapRenderer`**:
+   - Add `codeBlock` rendering support inside `TipTapRenderer`. Ensure we preserve whitespace and line breaks (using `whitespace-pre-wrap`) to make the text readable.
+2. **Create a `renderContent` helper function in `NewsArticleContent.tsx`**:
+   - Try `JSON.parse` on the `content` string.
+   - If successful and `type === 'doc'`, return `<TipTapRenderer node={parsed} />`.
+   - If `JSON.parse` fails, fallback to rendering the string as legacy HTML by using `dangerouslySetInnerHTML={{ __html: content }}`.
+3. **Apply the helper to the UI**:
+   - Replace `{content}` inside the `<div className="prose-custom mb-12">...</div>` with `{renderContent(content)}`.
+4. **Test & Lint**:
+   - Ensure there are no TypeScript or lint warnings resulting from the `any` types or JSON parsing.

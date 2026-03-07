@@ -1,8 +1,4 @@
-- [x] Create `src/scripts/seed-news.ts` to insert mock news into the PostgreSQL database. (Skipped)
-- [x] Update `lotteryResultService.ts` (`getNews` and `getNewsDetail`) to extract bilingual content from the `content` JSON.
-- [x] Refactor `NewsSidebar.tsx` to remove `newsData.ts` and rely strictly on the API.
-- [x] Refactor `NewsPage.tsx` to remove `newsData.ts` and rely strictly on the API.
-- [x] Refactor `NewsArticleContent.tsx` to remove `newsData.ts` and rely strictly on the API.
-- [x] Run the seed script. (Skipped)
-- [ ] Run frontend dev server to verify news loading from DB correctly.
-- [x] Resolve any TypeScript or linting errors.
+- [x] Research and check the current state of `NewsArticleContent.tsx`.
+- [x] Update `TipTapRenderer` in `NewsArticleContent.tsx` to handle `codeBlock`.
+- [x] Add `renderContent` logic in `NewsArticleContent.tsx` to safely parse and render TipTap JSON or fallback to standard HTML/Text.
+- [x] Fix any linting errors.

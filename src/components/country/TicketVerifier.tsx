@@ -45,7 +45,7 @@ export function TicketVerifier({ country }: { country: string }) {
                 type="text"
                 value={numbers}
                 onChange={(e) => setNumbers(e.target.value)}
-                placeholder={`${t.common.inputPlaceholder} ${t.common.ticketExample}`}
+                placeholder={`${t.common.inputPlaceholder}`}
                 className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-4 pl-12 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20"
               />
               <Ticket className="absolute left-4 h-5 w-5 text-gray-400" />

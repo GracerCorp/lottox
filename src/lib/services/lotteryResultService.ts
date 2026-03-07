@@ -544,8 +544,9 @@ class ApiClient {
       slug: article.slug,
       title: article.title,
       titleEn: contentData.titleEn || article.title,
-      content: article.full_content || "",
-      contentEn: contentData.contentEn || article.full_content || "",
+      content: article.raw_html || article.full_content || "",
+      contentEn:
+        contentData.contentEn || article.raw_html || article.full_content || "",
       excerpt: article.excerpt || "",
       excerptEn: contentData.excerptEn || article.excerpt || "",
       image:

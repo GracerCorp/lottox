@@ -200,7 +200,7 @@ export function InteractiveTicketVerifier({
                 onChange={(e) =>
                   setTicketInput(e.target.value.replace(/\D/g, ""))
                 }
-                placeholder={`${t.common.inputPlaceholder} ${t.common.ticketExample}`}
+                placeholder={`${t.common.inputPlaceholder}`}
                 disabled={isChecking}
                 className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20 disabled:opacity-50"
               />
@@ -211,13 +211,6 @@ export function InteractiveTicketVerifier({
 
         {/* Action Area */}
         <div className="flex flex-col-reverse items-center justify-between gap-4 border-t border-gray-100 dark:border-white/5 pt-5 sm:flex-row">
-          <button
-            type="button"
-            onClick={() => setTicketInput("")}
-            className="text-sm font-medium text-gray-500 transition-colors hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400"
-          >
-            {t.common.addMoreTickets || "Clear input"}
-          </button>
           <button
             type="submit"
             disabled={!ticketInput || isChecking}

@@ -29,7 +29,8 @@ model admins {
   email                String                 @unique(map: "admins_email_unique")
   password             String
   created_at           DateTime?              @default(now()) @db.Timestamp(6)
-  role                 String                 @default("editor")
+  role                 String                 @default("content_editor")
+  prediction_feedback  prediction_feedback[]
   result_verifications result_verifications[]
 }
 
@@ -59,33 +60,40 @@ model api_keys {
 }
 
 model articles {
-  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title            String
-  slug             String     @unique(map: "articles_slug_unique")
-  excerpt          String?
-  content          Json
-  cover_image      String?
-  author_id        String?
-  lottery_id       Int?
-  summary          String?
-  published        Boolean?   @default(false)
-  published_at     DateTime?  @db.Timestamp(6)
-  tags             String[]
-  view_count       Int?       @default(0)
-  created_at       DateTime?  @default(now()) @db.Timestamp(6)
-  updated_at       DateTime?  @default(now()) @db.Timestamp(6)
-  full_content     String?
-  images           String[]
-  meta_title       String?
-  meta_description String?
-  canonical_url    String?
-  reading_time     Int?
-  og_image         String?
-  og_title         String?
-  related_articles String[]
-  is_featured      Boolean?   @default(false)
-  user             user?      @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
-  lottery          lotteries? @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                   String
+  slug                    String                    @unique(map: "articles_slug_unique")
+  excerpt                 String?
+  content                 Json
+  cover_image             String?
+  author_id               String?
+  lottery_id              Int?
+  summary                 String?
+  published               Boolean?                  @default(false)
+  published_at            DateTime?                 @db.Timestamp(6)
+  tags                    String[]
+  view_count              Int?                      @default(0)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  full_content            String?
+  images                  String[]
+  meta_title              String?
+  meta_description        String?
+  canonical_url           String?
+  reading_time            Int?
+  og_image                String?
+  og_title                String?
+  related_articles        String[]
+  is_featured             Boolean?                  @default(false)
+  likes_count             Int?                      @default(0)
+  shares_count            Int?                      @default(0)
+  comments_count          Int?                      @default(0)
+  raw_html                String?
+  article_analytics_daily article_analytics_daily[]
+  article_comments        article_comments[]
+  article_reactions       article_reactions[]
+  user                    user?                     @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_author_id_user_id_fk")
+  lottery                 lotteries?                @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "articles_lottery_id_lottery_jobs_id_fk")
 
   @@index([author_id])
   @@index([published_at])
@@ -127,22 +135,25 @@ model countries {
 }
 
 model lotteries {
-  id                    Int                     @id @default(autoincrement())
-  name                  String
-  logo                  String?
-  currency              String?                 @default("THB")
-  is_active             Boolean?                @default(true)
-  country_id            Int?
-  created_at            DateTime?               @default(now()) @db.Timestamp(6)
-  updated_at            DateTime?               @db.Timestamp(6)
-  showing_prizes        String[]
-  prize_amount_mode     String                  @default("fixed")
-  default_prize_amounts Json?                   @default("{}")
-  articles              articles[]
-  countries             countries?              @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")
-  lottery_jobs          lottery_jobs[]
-  lottery_results       lottery_results[]
-  lottery_subscriptions lottery_subscriptions[]
+  id                      Int                       @id @default(autoincrement())
+  name                    String
+  logo                    String?
+  currency                String?                   @default("THB")
+  is_active               Boolean?                  @default(true)
+  country_id              Int?
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @db.Timestamp(6)
+  showing_prizes          String[]
+  prize_amount_mode       String                    @default("fixed")
+  default_prize_amounts   Json?                     @default("{}")
+  articles                articles[]
+  countries               countries?                @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")
+  lottery_analytics_cache lottery_analytics_cache[]
+  lottery_jobs            lottery_jobs[]
+  lottery_results         lottery_results[]
+  lottery_subscriptions   lottery_subscriptions[]
+  prediction_feedback     prediction_feedback[]
+  scraper_logs            scraper_logs[]
 }
 
 model email_logs {
@@ -176,16 +187,17 @@ model gamification_logs {
 }
 
 model lottery_jobs {
-  id            Int       @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String
   url           String
   cron_schedule String
-  status        String    @default("active")
-  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  status        String         @default("active")
+  created_at    DateTime?      @default(now()) @db.Timestamp(6)
   lottery_id    Int
-  scraper_type  String    @default("ai")
+  scraper_type  String         @default("ai")
   scraper_key   String?
-  lotteries     lotteries @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_jobs_lottery_id_lotteries_id_fk")
+  lotteries     lotteries      @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lottery_jobs_lottery_id_lotteries_id_fk")
+  scraper_logs  scraper_logs[]
 }
 
 model lottery_results {
@@ -289,6 +301,8 @@ model user {
   expertise_tags        String[]
   social_links          Json?
   account               account[]
+  article_comments      article_comments[]
+  article_reactions     article_reactions[]
   articles              articles[]
   email_logs            email_logs[]
   gamification_logs     gamification_logs[]
@@ -343,4 +357,98 @@ model result_verifications {
 
   @@index([lottery_result_id], map: "verification_lottery_result_idx")
   @@index([status], map: "verification_status_idx")
+}
+
+model article_analytics_daily {
+  id                 Int       @id @default(autoincrement())
+  article_id         String    @db.Uuid
+  date               String
+  views              Int?      @default(0)
+  avg_active_seconds Int?      @default(0)
+  scroll_completes   Int?      @default(0)
+  bounce_count       Int?      @default(0)
+  created_at         DateTime? @default(now()) @db.Timestamp(6)
+  updated_at         DateTime? @db.Timestamp(6)
+  articles           articles  @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article_analytics_daily_article_id_articles_id_fk")
+
+  @@unique([article_id, date], map: "article_analytics_daily_article_date_idx")
+}
+
+model article_comments {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  article_id String    @db.Uuid
+  user_id    String?
+  content    String
+  status     String    @default("approved")
+  parent_id  String?   @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  articles   articles  @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article_comments_article_id_articles_id_fk")
+  user       user?     @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "article_comments_user_id_user_id_fk")
+
+  @@index([article_id])
+  @@index([parent_id])
+  @@index([user_id])
+}
+
+model article_reactions {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  article_id    String    @db.Uuid
+  user_id       String?
+  session_id    String?
+  reaction_type String    @default("like")
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  articles      articles  @relation(fields: [article_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "article_reactions_article_id_articles_id_fk")
+  user          user?     @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "article_reactions_user_id_user_id_fk")
+
+  @@unique([article_id, session_id], map: "article_reactions_article_session_idx")
+  @@index([article_id, user_id], map: "article_reactions_article_user_idx")
+}
+
+model lottery_analytics_cache {
+  id          Int        @id @default(autoincrement())
+  lottery_id  Int?
+  category    String
+  period      Int
+  type        String
+  payload     Json
+  computed_at DateTime?  @default(now()) @db.Timestamp(6)
+  created_at  DateTime?  @default(now()) @db.Timestamp(6)
+  lotteries   lotteries? @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_analytics_cache_lottery_id_lotteries_id_fk")
+
+  @@index([lottery_id, category, type, period], map: "analytics_cache_lookup_idx")
+}
+
+model prediction_feedback {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lottery_id      Int?
+  draw_date       String
+  prediction_type String
+  predicted_data  Json
+  actual_data     Json
+  rating          String
+  match_count     Int?
+  total_predicted Int?
+  notes           String?
+  admin_id        Int?
+  created_at      DateTime?  @default(now()) @db.Timestamp(6)
+  admins          admins?    @relation(fields: [admin_id], references: [id], onUpdate: NoAction, map: "prediction_feedback_admin_id_admins_id_fk")
+  lotteries       lotteries? @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "prediction_feedback_lottery_id_lotteries_id_fk")
+
+  @@index([lottery_id, draw_date], map: "prediction_feedback_lottery_draw_idx")
+}
+
+model scraper_logs {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  job_id        Int?
+  lottery_id    Int?
+  status        String
+  attempts      Int           @default(1)
+  error_details String?
+  duration_ms   Int?
+  started_at    DateTime?     @default(now()) @db.Timestamp(6)
+  completed_at  DateTime?     @db.Timestamp(6)
+  created_at    DateTime?     @default(now()) @db.Timestamp(6)
+  lottery_jobs  lottery_jobs? @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "scraper_logs_job_id_lottery_jobs_id_fk")
+  lotteries     lotteries?    @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "scraper_logs_lottery_id_lotteries_id_fk")
 }

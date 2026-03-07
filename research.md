@@ -1,16 +1,18 @@
-# Research: News Data Migration
+# Research: News Article Content Rendering
 
 ## Current State
-- `src/lib/newsData.ts` contains 6 mock news articles with bilingual content (`title`, `titleEn`, `content`, `contentEn`, etc.).
-- UI components `NewsSidebar`, `NewsPage`, `NewsArticleContent` fetch from `/api/news` but fallback to `newsData.ts` if the API data is empty.
-- `/api/news` connects to `lotteryResultService.getNews`, querying `prisma.articles`.
-- The database `articles` table currently lacks explicit columns for English content (`titleEn`, `excerptEn`, `contentEn`), but has a generic `content` field of type `Json` which can be utilized.
+- The UI in `NewsArticleContent.tsx` currently renders the `content` string directly inside a `div`.
+- For new articles (like the recent post about Willy), the content is saved as a JSON string from a rich text editor (e.g., TipTap), structured like: `{"type":"doc","content":[{"type":"codeBlock", ...}]}`.
+- Because it's rendered as a plain string, React just displays the raw JSON text literally.
+- There is a `TipTapRenderer` component already existing in `NewsArticleContent.tsx`, but it's not being utilized for the main `content` field.
+- Furthermore, `TipTapRenderer` is missing support for the `codeBlock` node type, which is used in the provided JSON string. This means even if we pass it to `TipTapRenderer`, it wouldn't format newlines correctly.
 
 ## Objective
-Migrate the mock data to the database, remove the fallback logic from the frontend, and ensure bilingual data is supported effectively.
+Make the article content display correctly and readably by parsing the JSON and rendering it using the `TipTapRenderer`, while also adding support for `codeBlock` formatting and line breaks.
 
 ## Proposed Strategy
-1. **Seed Script**: Create `src/scripts/seed-news.ts` to insert the 6 mock articles into the database. We will store English fields and `source` inside the `content` JSON column of `articles`.
-2. **Service Update**: Update `getNews` and `getNewsDetail` in `lotteryResultService.ts` to unpack the `content` JSON and send `titleEn`, `excerptEn`, `contentEn`, `categoryEn` back to the UI.
-3. **UI Refactor**: Remove imports of `newsData.ts` in `NewsSidebar.tsx`, `NewsPage.tsx`, and `NewsArticleContent.tsx`. 
-4. **Clean up**: Delete `src/lib/newsData.ts`.
+1. **Parse Content**: Update `NewsArticleContent.tsx` to safely parse the `content` string.
+2. **Conditional Rendering**: 
+   - If it's valid TipTap JSON (i.e., has `type: "doc"`), render it using `<TipTapRenderer node={parsedContent} />`.
+   - If parsing fails or it's plain text/HTML, render it safely as HTML to support legacy articles.
+3. **Enhance TipTapRenderer**: Add a `case "codeBlock":` inside `TipTapRenderer` to render it using `<pre className="whitespace-pre-wrap">...</pre>` or similar so that line breaks (`\n`) are preserved and the text is easy to read.
