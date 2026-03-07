@@ -1,90 +1,16 @@
-# แผนการแก้ไขและปรับปรุงโค้ด (Implementation Plan)
+# Plan: News Data Migration
 
-อ้างอิงจากปัญหาที่พบหลังจากรันคำสั่ง `bun run lint` และ `bun run build` รวมถึงข้อมูลโครงสร้างระบบที่อัปเดตใหม่ใน `research.md` นี่คือแผนการแก้ไขระบบโดยยังไม่แก้ไขโค้ดจริงในตอนนี้
-
-## 1. แก้ไขข้อผิดพลาดจากการ Build และการดึงข้อมูลผลรางวัล (Database/API Integration)
-
-**ไฟล์ที่ต้องปรับปรุง:** `src/app/api/results/[type]/[date]/route.ts` แและ API ที่เกี่ยวข้องกับผลหวย (เช่น `api-client.ts` และโฟลเดอร์ใน `src/app/api/results/`)
-
-- **ปัญหาเดิม:** มีการเรียกใช้ Property `draw_date`, `draw_period`, และ `full_data` ผิดประเภทจากการ Build Error
-- **ปัญหาเชิงโครงสร้าง (Critical):** โค้ดเดิมดึงข้อมูลผลรางวัลจาก `lottery_results.full_data` ซึ่งไม่ถูกต้องตาม Business Logic ใหม่
-- **วิธีแก้ไข:**
-  - เปลี่ยนแปลง Logic การดึงผลหวยทั้งหมด **ต้องดึงข้อมูลผ่าน `result_verifications.chosen_data`** เท่านั้น (ซึ่งเป็นผลที่ผ่านการตรวจสอบความถูกต้องแล้ว)
-  - ปรับการ Mapping Type ในคลาส ApiClient ให้ดึงจาก `chosen_data` และแก้ไข Error การเรียกใช้ `drawDate`, `drawNo`, และ `data` ให้ตรงตาม Interface
-
-## 2. การจัดการรางวัลที่แสดงผลผ่าน `showing_prize`
-
-**ไฟล์ที่ต้องปรับปรุง:** `src/components/ui/ResultsTable.tsx`, หน้า Global Draws (`src/app/global-draws/page.tsx`) และหน้าอื่นๆ ที่มีการโชว์ตารางผลหวย
-
-- **ปัญหา:** รางวัลที่นำมาแสดงผลควรจำกัดเฉพาะรางวัลที่ถูกกำหนดไว้ในฟิลด์ `showing_prize` ของตาราง `lotteries`
-- **วิธีแก้ไข:**
-  - ในฟังก์ชันที่ดึงตัวหวย (Lotteries) ต้องดึงข้อมูล `showing_prize` นำมาเป็นฟิลเตอร์ (Filter)
-  - ใน UI Components ต้องนำฟิลเตอร์นี้มากรองผลรางวัลที่จะ Render ออกมาให้ตรงกัน เพื่อไม่ให้แสดงผลรางวัลขยะหรือไม่เกี่ยวข้อง
-
-## 3. แก้ไขข้อผิดพลาดจาก Linter (ESLint)
-
-**ไฟล์ที่พบปัญหา:** `src/components/ui/ResultsTable.tsx`
-
-- **ปัญหา:** ตัวแปร `countryId`, `lottoHref`, และ `flagCode` ประกาศด้วย `let` แต่ไม่มีการเปลี่ยนแปลงค่า
-- **วิธีแก้ไข:** เปลี่ยนจาก `let` เป็น `const` เพื่อแก้ไข Error `prefer-const`
-
-## 4. จัดการ Hero Banners ในหน้าแรก
-
-**ไฟล์ที่เกี่ยวข้อง:** `src/app/page.tsx` หรือ `src/components/home/HeroSection.tsx`
-
-- **ปัญหา:** ข้อมูล Hero banner ปัจจุบันอาจถูก Hardcode หรือไม่ได้ดึงมาจากฐานข้อมูล
-- **วิธีแก้ไข:** เขียน Query ไปดึงข้อมูลแบนเนอร์จากตาราง `banners` แทน เพื่อให้ผู้ดูแลระบบสามารถปรับเปลี่ยนแบนเนอร์ในหน้าแรกได้อย่างอิสระและเป็น Dynamic
-
-## 5. การปรับปรุง UI ให้รองรับ Light Mode ขนานกับ Dark Mode (UI Design)
-
-- **ปัญหา:** ระบบรองรับ `next-themes` แต่อาจมีดีไซน์ที่เน้น Dark Mode เป็นหลัก ทำให้ Light Mode ดูดรอปหรือยังไม่สวยงาม
-- **วิธีแก้ไข:**
-  - ตรวจสอบคลาส CSS (Tailwind classes) บน Components หลักๆ (เช่นตารางผลหวย, การ์ดแสดงผล, Nav Bar)
-  - ปรับปรุงและออกแบบ Light Mode ให้สวยงาม อ่านง่าย และมีมิติ (Depth/Shadow) ขนานคู่ไปกับความสวยงามของ Dark Mode อย่างพิถีพิถันและไม่ด้อยกว่าอย่างที่ตั้งเป้าหมายไว้
-  - ออกแบบให้มีสีสันต์เข้ากับโทนเว็บ แม้เป็นโหมด Light ก็ตาม
-
-## 6. แก้ไขการแสดงผลหวยให้ดูง่าย
-
-- **ปัญหา:** UX การใช้งานและการดูยังดูยากอยู่ จากการถามผู้ใช้จริง
-- **วิธีแก้ไข:** ศึกษาวิธีแสดงผลรางวัลแบบตาราง ResultTable และหน้า Lotto Detail ให้อ่านเข้าใจง่าย เห็นปุ๊บรู้ปั๊บเลย
-
-## 7. ปรับปรุงระบบตรวจผลหวย
-
-- **ย้าย Business Logic:** ตรวจผลหวยในงวดนั้นๆจาก client side จากข้อมูลที่นำมาแสดง โดยผู้ใช้กรอกเลขและคลิกตรวจหวย ก็จะแสดงว่าผู้ใช้ถูกรางวัลหรือไม่ โดยให้มี effect และ ui feedback เพื่อให้เกิดควาทน่าตื่นเต้นเมื่อถูกหรือไม่ถูก
-
-## 8. แก้ไขการแสดงชื่อรางวัลแบบแยกภาษา
-
-* ปัญหา: ใน chosen_data จะมีขื่อรางวัลใน prizeName มาให้แต่จะใช้จริงไม่ได้ เพราะแต่ละภาษาจะเรียกไม่เหมือนกัน
-* วิธีแก้ไข: ให้ใช้ category แทน prizeName เพื่อเป็นการกำหนด key ใน i18n ในการกำหนดคำแปลของรางวัลในแต่ละภาษา ขั้นตอนนี้ให้สร้าง keys สำหรับตั้งค่าชื่อเรียกแต่ละรางวัลที่อ้างอิงจาก category ทั้งไทยและอังกฤษ ดังนี้
-  * กรณีหวยลาว
-    * prize_2_digits = เลข 2 ตัว
-    * prize_3_digits = เลข 3 ตัว
-    * prize_4_digits = เลข 4 ตัว
-    * prize_modern_5 = หวยลาวพัฒนา
-  * กรณีหวยไทย
-    * prize_1 = รางวัลที่ 1
-    * running_number_front_3 = เลขหน้า 3 ตัว
-    * running_number_back_3 = เลขท้าย 3 ตัว
-    * running_number_back_2 = เลขท้าย 2 ตัว
-    * nearby_prize_1 = รางวัลข้างเคียงรางวัลที่ 1
-    * prize_2 = รางวัลที่ 2
-    * prize_3 = รางวัลที่ 3
-    * prize_4 = รางวัลที่ 4
-    * prize_5 = รางวัลที่ 5
-
-## 9.  ออกแบบตารางแสดงผลหวยให้ดูง่ายขึ้น
-
-* ปัญหา: ตาราง ResultTable และ Global Lottery Results ยังแสดงผลที่ทำให้อ่านแล้วสับสน
-* วิธีแก้ ออกแบบใหม่โดยดูจากตัวอย่างในเว็บที่ให้นี้เพื่อปรับปรุงการแสดงผลให้ดูง่าย
-  https://news.sanook.com/lotto/
-  https://www.sanook.com/news/laolotto/
-
-## 10. เชื่อมต่อ API เพื่อทำให้ปุ่ม Subscribe ทำงานได้
-
-POST to https://lotto-x-cms.vercel.app/api/subscribe
-JSON raw: {  \"email\": \"user@example.com\",  \"lotteryId\": `<current_lottery_id>`}
-
-> **หมายเหตุ:**
->
-> 1. ไม่ใช้ Emoji icon ใน UI โครงการ
-> 2. พัฒนาโค้ดเรียบร้อย ต้องมีการรัน Linter/Build ให้ผ่าน และ Commit ทันทีเมื่อแล้วเสร็จ
+1. Write `src/scripts/seed-news.ts` to migrate data from `src/lib/newsData.ts` into the Prisma `articles` table.
+2. Store `titleEn`, `excerptEn`, `contentEn`, `categoryEn`, and `source` in the `articles.content` JSON field (since there are no dedicated En columns to prevent doing unnecessary database schema migrations, though we can migrate schema if requested).
+3. Update `lotteryResultService.ts`:
+   - `getNews()`: extract English text from the `content` JSON to return exactly what UI expects.
+   - `getNewsDetail()`: extract English text from the `content` JSON to return exactly what UI expects.
+4. Refactor Frontend:
+   - `NewsSidebar.tsx`
+   - `NewsPage.tsx`
+   - `NewsArticleContent.tsx`
+   - Remove fallbacks to `fallbackNewsArticles`.
+5. Remove `src/lib/newsData.ts`.
+6. Run the seed script to verify data is in DB.
+7. Run the Next.js dev server and check if the pages load successfully.
+8. Resolve lint issues.

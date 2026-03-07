@@ -3,7 +3,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import type { NewsListResponse } from "@/lib/api-types";
-import { newsArticles as fallbackNewsArticles } from "@/lib/newsData";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock } from "lucide-react";
@@ -36,7 +35,6 @@ export function NewsSidebar({
   const accentBg = `bg-${accentColor}-500/10`;
   const accentText = `text-${accentColor}-400`;
 
-  // Use API data if available, otherwise fallback to local
   const hasApiData = data?.articles && data.articles.length > 0;
 
   // Render news item shared by both API and fallback
@@ -108,32 +106,32 @@ export function NewsSidebar({
 
       {!loading && (
         <div className="divide-y divide-gray-200 dark:divide-white/5">
-          {hasApiData
-            ? data!.articles.map((article, i) =>
-                renderNewsItem(
-                  {
-                    slug: article.slug,
-                    title: article.title,
-                    image: article.image,
-                    category: article.category,
-                    date: article.date,
-                  },
-                  i,
-                ),
-              )
-            : fallbackNewsArticles.slice(0, limit).map((news, i) =>
-                renderNewsItem(
-                  {
-                    slug: news.slug,
-                    title: language === "th" ? news.title : news.titleEn,
-                    image: news.image,
-                    category:
-                      language === "th" ? news.category : news.categoryEn,
-                    date: news.date,
-                  },
-                  i,
-                ),
-              )}
+          {hasApiData ? (
+            data!.articles.map((article, i) =>
+              renderNewsItem(
+                {
+                  slug: article.slug,
+                  title:
+                    language === "th"
+                      ? article.title
+                      : article.titleEn || article.title,
+                  image: article.image,
+                  category:
+                    language === "th"
+                      ? article.category
+                      : article.categoryEn || article.category,
+                  date: article.date,
+                },
+                i,
+              ),
+            )
+          ) : (
+            <div className="p-8 text-center text-sm text-gray-500">
+              {language === "th"
+                ? "ยังไม่มีข่าวสารในขณะนี้"
+                : "No news available at the moment"}
+            </div>
+          )}
         </div>
       )}
     </div>

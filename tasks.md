@@ -1,0 +1,8 @@
+- [x] Create `src/scripts/seed-news.ts` to insert mock news into the PostgreSQL database. (Skipped)
+- [x] Update `lotteryResultService.ts` (`getNews` and `getNewsDetail`) to extract bilingual content from the `content` JSON.
+- [x] Refactor `NewsSidebar.tsx` to remove `newsData.ts` and rely strictly on the API.
+- [x] Refactor `NewsPage.tsx` to remove `newsData.ts` and rely strictly on the API.
+- [x] Refactor `NewsArticleContent.tsx` to remove `newsData.ts` and rely strictly on the API.
+- [x] Run the seed script. (Skipped)
+- [ ] Run frontend dev server to verify news loading from DB correctly.
+- [x] Resolve any TypeScript or linting errors.

@@ -2,7 +2,6 @@ import { HeroSection, HeroItem } from "@/components/home/HeroSection";
 import { BackgroundFlare } from "@/components/ui/BackgroundFlare";
 import { CountryListSection } from "@/components/home/CountryListSection";
 import { HomeResultsSection } from "@/components/home/HomeResultsSection";
-import { CheckLotteryWidget } from "@/components/home/CheckLotteryWidget";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
@@ -136,7 +135,6 @@ export default async function Home() {
 
       {/* Hero Section */}
       <HeroSection items={heroItems} />
-
 
       {/* Results Section with Country Tabs */}
       <HomeResultsSection tabs={tabs} />

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { apiClient } from "@/lib/services/lotteryResultService";
-import { getArticleBySlug } from "@/lib/newsData";
 import { notFound } from "next/navigation";
 import NewsArticleContent from "./NewsArticleContent";
 
@@ -14,22 +13,17 @@ export async function generateMetadata({
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  // Try API first, fallback to local
+  // Try API
   let title = "";
   let excerpt = "";
   let image = "";
   try {
     const article = await apiClient.getNewsDetail(slug, "th");
     title = article.title;
-    excerpt = article.content?.slice(0, 160) || "";
-    image = article.image || getArticleBySlug(slug)?.image || "";
+    excerpt = article.excerpt || article.content?.slice(0, 160) || "";
+    image = article.image || "";
   } catch {
-    const local = getArticleBySlug(slug);
-    if (local) {
-      title = local.title;
-      excerpt = local.excerpt;
-      image = local.image;
-    }
+    return {};
   }
 
   if (!title) return {};
@@ -101,31 +95,13 @@ export default async function NewsDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  // Try API first
+  // Try API
   let articleData: unknown = null;
   try {
     articleData = await apiClient.getNewsDetail(slug, "th");
   } catch {
-    // Fallback to local
-    const local = getArticleBySlug(slug);
-    if (local) {
-      articleData = {
-        slug: local.slug,
-        title: local.title,
-        titleEn: local.titleEn,
-        content: local.content,
-        contentEn: local.contentEn,
-        image: local.image,
-        date: local.date,
-        category: local.category,
-        categoryEn: local.categoryEn,
-        author: local.author,
-        source: local.source,
-        excerpt: local.excerpt,
-        excerptEn: local.excerptEn,
-        isLocal: true,
-      };
-    }
+    // Return 404 if API fails
+    notFound();
   }
 
   if (!articleData) {

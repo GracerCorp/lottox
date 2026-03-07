@@ -343,7 +343,6 @@ export default function LotteryDetail({
     country: country,
     lotteryName: lotteryName,
     date: formattedDate,
-    drawId: latest?.drawNo || "-",
     currency: currency || undefined,
     firstPrize: String(firstPrize || "-"),
     firstPrizeAmount: String(firstPrizeAmount),

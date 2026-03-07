@@ -477,20 +477,36 @@ class ApiClient {
       }),
     ]);
 
-    const mappedArticles = rawArticles.map((article) => ({
-      slug: article.slug,
-      title: article.title,
-      excerpt: article.excerpt || "",
-      image:
-        article.cover_image ||
-        (article.images && article.images.length > 0 ? article.images[0] : ""),
-      date:
-        article.published_at?.toISOString() ||
-        article.created_at?.toISOString() ||
-        "",
-      category: article.tags && article.tags.length > 0 ? article.tags[0] : "",
-      author: "Admin", // Need to join with User table if we want dynamic author, but Admin is fine as default
-    }));
+    const mappedArticles = rawArticles.map((article) => {
+      // Parse JSON content if it's a string, or use as is if already an object
+      const contentData =
+        typeof article.content === "string"
+          ? JSON.parse(article.content)
+          : (article.content as Record<string, unknown>) || {};
+
+      return {
+        slug: article.slug,
+        title: article.title,
+        titleEn: contentData.titleEn || article.title,
+        excerpt: article.excerpt || "",
+        excerptEn: contentData.excerptEn || article.excerpt || "",
+        image:
+          article.cover_image ||
+          (article.images && article.images.length > 0
+            ? article.images[0]
+            : ""),
+        date:
+          article.published_at?.toISOString() ||
+          article.created_at?.toISOString() ||
+          "",
+        category:
+          article.tags && article.tags.length > 0 ? article.tags[0] : "",
+        categoryEn:
+          contentData.categoryEn ||
+          (article.tags && article.tags.length > 0 ? article.tags[0] : ""),
+        author: "Admin", // Need to join with User table if we want dynamic author, but Admin is fine as default
+      };
+    });
 
     return {
       articles: mappedArticles,
@@ -518,10 +534,20 @@ class ApiClient {
       throw new Error("Article not found");
     }
 
+    // Parse JSON content if it's a string, or use as is if already an object
+    const contentData =
+      typeof article.content === "string"
+        ? JSON.parse(article.content)
+        : (article.content as Record<string, unknown>) || {};
+
     return {
       slug: article.slug,
       title: article.title,
-      content: article.full_content,
+      titleEn: contentData.titleEn || article.title,
+      content: article.full_content || "",
+      contentEn: contentData.contentEn || article.full_content || "",
+      excerpt: article.excerpt || "",
+      excerptEn: contentData.excerptEn || article.excerpt || "",
       image:
         article.cover_image ||
         (article.images.length > 0 ? article.images[0] : ""),
@@ -530,8 +556,11 @@ class ApiClient {
         article.created_at?.toISOString() ||
         "",
       category: article.tags.length > 0 ? article.tags[0] : "",
+      categoryEn:
+        contentData.categoryEn ||
+        (article.tags.length > 0 ? article.tags[0] : ""),
       author: article.user?.name || "Admin",
-      source: "LottoX",
+      source: contentData.source || "LottoX",
       related: [],
     };
   }

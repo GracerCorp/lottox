@@ -3,7 +3,6 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import type { NewsListResponse } from "@/lib/api-types";
-import { newsArticles as fallbackNewsArticles } from "@/lib/newsData";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, ChevronLeft } from "lucide-react";
@@ -44,7 +43,7 @@ export default function NewsArticleContent({
       ? article.category
       : article.categoryEn || article.category;
 
-  // Related articles: from API or fallback
+  // Related articles: from API
   let relatedArticles: {
     slug: string;
     title: string;
@@ -57,24 +56,13 @@ export default function NewsArticleContent({
       .filter((a) => a.slug !== article.slug)
       .slice(0, 3)
       .map((a) => {
-        const fallback = fallbackNewsArticles.find((fa) => fa.slug === a.slug);
         return {
           slug: a.slug,
-          title: a.title,
-          image: a.image || fallback?.image || "",
+          title: language === "th" ? a.title : a.titleEn || a.title,
+          image: a.image || "",
           date: a.date,
         };
       });
-  } else {
-    relatedArticles = fallbackNewsArticles
-      .filter((a) => a.slug !== article.slug)
-      .slice(0, 3)
-      .map((a) => ({
-        slug: a.slug,
-        title: language === "th" ? a.title : a.titleEn,
-        image: a.image,
-        date: a.date,
-      }));
   }
 
   return (
@@ -89,17 +77,10 @@ export default function NewsArticleContent({
       </Link>
 
       <article className="mx-auto max-w-3xl">
-        {/* Hero Image */}
-        {(article.image ||
-          fallbackNewsArticles.find((a) => a.slug === article.slug)?.image) && (
+        {article.image && (
           <div className="relative mb-8 h-64 w-full overflow-hidden rounded-2xl sm:h-80 md:h-96">
             <Image
-              src={
-                article.image ||
-                fallbackNewsArticles.find((a) => a.slug === article.slug)
-                  ?.image ||
-                ""
-              }
+              src={article.image}
               alt={title}
               fill
               className="object-cover"

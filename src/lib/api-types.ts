@@ -137,10 +137,13 @@ export interface NewsListResponse {
 export interface NewsArticle {
   slug: string;
   title: string;
+  titleEn?: string;
   excerpt: string;
+  excerptEn?: string;
   image: string;
   date: string;
   category: string;
+  categoryEn?: string;
   author: string;
 }
 
@@ -148,10 +151,15 @@ export interface NewsArticle {
 export interface NewsDetailResponse {
   slug: string;
   title: string;
+  titleEn?: string;
   content: string;
+  contentEn?: string;
+  excerpt?: string;
+  excerptEn?: string;
   image: string;
   date: string;
   category: string;
+  categoryEn?: string;
   author: string;
   source: string;
   related: string[];

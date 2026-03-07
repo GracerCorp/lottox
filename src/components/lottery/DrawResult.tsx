@@ -23,7 +23,6 @@ interface DrawResultProps {
   country?: string;
   lotteryName?: string;
   date: string;
-  drawId: string;
   firstPrize: string;
   firstPrizeAmount: string;
   prizes?: Prize[];
@@ -44,7 +43,6 @@ export function DrawResult({
   country,
   lotteryName,
   date,
-  drawId,
   firstPrize,
   firstPrizeAmount,
   dynamicPrizes = [],

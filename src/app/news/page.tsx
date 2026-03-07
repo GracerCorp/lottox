@@ -8,7 +8,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { Clock, Search } from "lucide-react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
-import { newsArticles as fallbackNewsArticles } from "@/lib/newsData";
 
 export default function NewsPage() {
   const { t, language } = useLanguage();
@@ -19,10 +18,10 @@ export default function NewsPage() {
     `/api/news?lang=${language}&limit=20${debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : ""}`,
   );
 
-  // If API returns articles, use them; otherwise fall back to local data
+  // If API returns articles, use them
   const hasApiArticles = data?.articles && data.articles.length > 0;
 
-  const showFallback =
+  const showEmptyState =
     !loading && (error || (!hasApiArticles && !debouncedSearch));
   const showEmptySearch =
     !loading && !error && !hasApiArticles && !!debouncedSearch;
@@ -68,40 +67,14 @@ export default function NewsPage() {
         </div>
       )}
 
-      {/* Error - fallback to local data */}
-      {showFallback && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {fallbackNewsArticles.map((news) => (
-            <Link
-              key={news.slug}
-              href={`/news/${news.slug}`}
-              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 transition-all hover:-translate-y-1 hover:border-gold-500/50 dark:hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/10 shadow-sm"
-            >
-              <div className="relative aspect-video w-full overflow-hidden">
-                <Image
-                  src={news.image}
-                  alt={language === "th" ? news.title : news.titleEn}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute top-2 right-2 rounded bg-gold-500 px-2 py-0.5 text-xs font-bold text-black">
-                  {language === "th" ? news.category : news.categoryEn}
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="mb-2 flex items-center gap-2 text-xs text-gray-400">
-                  <Clock className="h-3.5 w-3.5" />
-                  {news.date}
-                </div>
-                <h2 className="mb-2 text-lg font-bold text-gray-900 dark:text-white line-clamp-2 transition-colors group-hover:text-gold-600 dark:group-hover:text-gold-400 leading-normal">
-                  {language === "th" ? news.title : news.titleEn}
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
-                  {language === "th" ? news.excerpt : news.excerptEn}
-                </p>
-              </div>
-            </Link>
-          ))}
+      {/* Empty State */}
+      {showEmptyState && (
+        <div className="col-span-full py-16 text-center text-gray-500 dark:text-gray-400">
+          <p className="text-xl font-medium text-gray-900 dark:text-white mb-2">
+            {language === "th"
+              ? "ยังไม่มีข่าวสารในขณะนี้"
+              : "No news available at the moment"}
+          </p>
         </div>
       )}
 
@@ -132,27 +105,28 @@ export default function NewsPage() {
       {!loading && !error && hasApiArticles && (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {data!.articles.map((article) => {
-            const fallbackImage = fallbackNewsArticles.find(
-              (a) => a.slug === article.slug,
-            )?.image;
-            const articleImage = article.image || fallbackImage;
-
             return (
               <Link
                 key={article.slug}
                 href={`/news/${article.slug}`}
                 className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 transition-all hover:-translate-y-1 hover:border-gold-500/50 dark:hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/10 shadow-sm"
               >
-                {articleImage && (
+                {article.image && (
                   <div className="relative aspect-video w-full overflow-hidden">
                     <Image
-                      src={articleImage}
-                      alt={article.title}
+                      src={article.image}
+                      alt={
+                        language === "th"
+                          ? article.title
+                          : article.titleEn || article.title
+                      }
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute top-2 right-2 rounded bg-gold-500 px-2 py-0.5 text-xs font-bold text-black">
-                      {article.category}
+                      {language === "th"
+                        ? article.category
+                        : article.categoryEn || article.category}
                     </div>
                   </div>
                 )}
@@ -162,10 +136,14 @@ export default function NewsPage() {
                     {article.date}
                   </div>
                   <h2 className="mb-2 text-lg font-bold text-gray-900 dark:text-white line-clamp-2 transition-colors group-hover:text-gold-600 dark:group-hover:text-gold-400 leading-normal">
-                    {article.title}
+                    {language === "th"
+                      ? article.title
+                      : article.titleEn || article.title}
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
-                    {article.excerpt}
+                    {language === "th"
+                      ? article.excerpt
+                      : article.excerptEn || article.excerpt}
                   </p>
                 </div>
               </Link>
