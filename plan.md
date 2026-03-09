@@ -1,12 +1,24 @@
-# Plan: News Article Content Rendering
+# Plan: News Article Enhancements
 
-1. **Update `TipTapRenderer`**:
-   - Add `codeBlock` rendering support inside `TipTapRenderer`. Ensure we preserve whitespace and line breaks (using `whitespace-pre-wrap`) to make the text readable.
-2. **Create a `renderContent` helper function in `NewsArticleContent.tsx`**:
-   - Try `JSON.parse` on the `content` string.
-   - If successful and `type === 'doc'`, return `<TipTapRenderer node={parsed} />`.
-   - If `JSON.parse` fails, fallback to rendering the string as legacy HTML by using `dangerouslySetInnerHTML={{ __html: content }}`.
-3. **Apply the helper to the UI**:
-   - Replace `{content}` inside the `<div className="prose-custom mb-12">...</div>` with `{renderContent(content)}`.
-4. **Test & Lint**:
-   - Ensure there are no TypeScript or lint warnings resulting from the `any` types or JSON parsing.
+## 1. Modify API & Types
+- Update `/src/lib/api-types.ts`: Add `relatedLottery?: { type: string; name: string }` to the article type (or handle it dynamically).
+- Update `/src/lib/services/lotteryResultService.ts`:
+  - Enhance `getNewsDetail` to fetch `lottery { name, countries { code } }`.
+  - Translate the country code to the uppercase `type` format (like `THAI`, `LAO`, `VIETNAM`).
+  - Return `relatedLottery: { type, name }` if a lottery is associated.
+
+## 2. Update UI (NewsArticleContent.tsx)
+- Add state and functions for "Share":
+  - Copy to clipboard button.
+  - Facebook, Twitter, and LINE share links.
+  - Render these elegantly below the content and above "Related News".
+- Add "Related Lottery" fetch logic:
+  - If `article.relatedLottery` is present, use `useApi` to fetch `/api/results/latest?type=\${article.relatedLottery.type}`.
+  - Display the `DrawResult.tsx` component to show the latest result for that specific lottery.
+  - Hide the section if no related lottery data is found or if it fails to load.
+
+## 3. Verify Changes
+- Ensure TypeScript compiles successfully.
+- Ensure ESLint reports no errors.
+- Test the share buttons by hovering/clicking.
+- Verify the related lottery appears for articles linked to a lottery (and disappears gracefully when not linked).

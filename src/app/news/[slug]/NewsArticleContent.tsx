@@ -14,8 +14,10 @@ import {
   Link as LinkIcon,
   Check,
 } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { DrawResult } from "@/components/lottery/DrawResult";
+import { transformLotteryResult } from "@/lib/utils/lotteryResultTransform";
 
 interface ArticleProps {
   slug: string;
@@ -57,14 +59,19 @@ export default function NewsArticleContent({
       : null,
   );
 
+  const pathname = usePathname();
   const [copied, setCopied] = useState(false);
-  const [shareUrl, setShareUrl] = useState("");
-  const [shareTitle, setShareTitle] = useState("");
 
-  useEffect(() => {
-    setShareUrl(window.location.href);
-    setShareTitle(encodeURIComponent(article.title));
-  }, [article.title]);
+  // Derive URL from pathname. Use a placeholder origin during SSR,
+  // then client can use correct origin if needed, or we just rely on window.location in interaction
+  const origin =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : "https://lotto-x.com";
+  const shareUrl = `${origin}${pathname}`;
+
+  const shareTitle =
+    typeof article.title === "string" ? encodeURIComponent(article.title) : "";
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -255,7 +262,9 @@ export default function NewsArticleContent({
               : `Latest ${article.relatedLottery.name} Results`}
           </h2>
           <div className="[&>div]:mx-0 [&>div]:max-w-none">
-            <DrawResult {...latestResultData} />
+            {latestResultData && transformLotteryResult(latestResultData, t) ? (
+              <DrawResult {...transformLotteryResult(latestResultData, t)!} />
+            ) : null}
           </div>
         </section>
       )}

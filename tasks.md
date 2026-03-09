@@ -409,6 +409,6 @@ After all phases:
 | **Total** | **~45 test files** | |
 
 ## News Article Content
-- [x] Content display in NewsArticleContent.tsx add
-  - [x] Share button to social network
-  - [x] Show related lottery section if available
+- [x] Integrate sharing functionality with `NewsArticleContent.tsx` component.
+- [x] Fetch corresponding latest lottery result if appropriate metadata is parsed.
+- [x] Resolve JSON stringification errors for `DrawResult` when used.if available

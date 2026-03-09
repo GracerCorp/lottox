@@ -1,18 +1,19 @@
-# Research: News Article Content Rendering
+# Research: News Article Enhancements
 
-## Current State
-- The UI in `NewsArticleContent.tsx` currently renders the `content` string directly inside a `div`.
-- For new articles (like the recent post about Willy), the content is saved as a JSON string from a rich text editor (e.g., TipTap), structured like: `{"type":"doc","content":[{"type":"codeBlock", ...}]}`.
-- Because it's rendered as a plain string, React just displays the raw JSON text literally.
-- There is a `TipTapRenderer` component already existing in `NewsArticleContent.tsx`, but it's not being utilized for the main `content` field.
-- Furthermore, `TipTapRenderer` is missing support for the `codeBlock` node type, which is used in the provided JSON string. This means even if we pass it to `TipTapRenderer`, it wouldn't format newlines correctly.
+## Share Buttons
+- Need a way to share the article to social networks (Facebook, Twitter, LINE) and copy link.
+- Will use standard share URLs:
+  - LINE: `https://social-plugins.line.me/lineit/share?url={url}`
+  - Facebook: `https://www.facebook.com/sharer/sharer.php?u={url}`
+  - Twitter/X: `https://twitter.com/intent/tweet?url={url}&text={title}`
+- Needs to look clean and modern using `lucide-react` icons.
 
-## Objective
-Make the article content display correctly and readably by parsing the JSON and rendering it using the `TipTapRenderer`, while also adding support for `codeBlock` formatting and line breaks.
-
-## Proposed Strategy
-1. **Parse Content**: Update `NewsArticleContent.tsx` to safely parse the `content` string.
-2. **Conditional Rendering**: 
-   - If it's valid TipTap JSON (i.e., has `type: "doc"`), render it using `<TipTapRenderer node={parsedContent} />`.
-   - If parsing fails or it's plain text/HTML, render it safely as HTML to support legacy articles.
-3. **Enhance TipTapRenderer**: Add a `case "codeBlock":` inside `TipTapRenderer` to render it using `<pre className="whitespace-pre-wrap">...</pre>` or similar so that line breaks (`\n`) are preserved and the text is easy to read.
+## Related Lottery Section
+- `articles` table in database has a `lottery_id` relation to `lotteries` table.
+- Currently, `getNewsDetail` in `lotteryResultService.ts` does not fetch or return this lottery info.
+- We need to:
+  1. Update `getNewsDetail` to `include` the `lottery` and its `countries.code`.
+  2. Map the `countries.code` to an API type (e.g. `th` -> `THAI`).
+  3. Return `relatedLottery: { type, name }` to the frontend.
+  4. In `NewsArticleContent.tsx`, if `relatedLottery` exists, fetch the latest draw result using `/api/results/latest?type={type}`.
+  5. Display it using the `DrawResult` component, similar to how `LotteryDetail.tsx` does.
