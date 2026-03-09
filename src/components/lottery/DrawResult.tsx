@@ -158,9 +158,10 @@ export function DrawResult({
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            {(useDynamic
-              ? dynamicFirst?.winningNumbers?.[0] || firstPrize
-              : firstPrize
+            {(
+              (useDynamic
+                ? dynamicFirst?.winningNumbers?.[0] || firstPrize
+                : firstPrize) || ""
             )
               .split("")
               .map((n, i) => (
