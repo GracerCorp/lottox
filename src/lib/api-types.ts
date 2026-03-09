@@ -163,6 +163,11 @@ export interface NewsDetailResponse {
   author: string;
   source: string;
   related: string[];
+  relatedLottery?: {
+    type: string;
+    name: string;
+    countryCode: string;
+  };
 }
 
 // GET /api/statistics/overview

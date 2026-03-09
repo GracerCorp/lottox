@@ -407,3 +407,8 @@ After all phases:
 | **3** | `caching.test.ts`, `HeroSection.test.tsx`, `useApi.test.ts`, `subscribe.test.ts`, `LotteryDetail.test.tsx`, `loading.test.tsx`, `cache-headers.test.ts`, `lottery-page-ssr.test.ts`, `lottery-detail.spec.ts`, `loading-states.spec.ts` | Unit, Integration, E2E |
 | **4** | `prizes.test.ts`, `prizeParser.test.ts`, `SecondaryPrizesSection.test.tsx`, `HistoryTable.test.tsx`, `InteractiveTicketVerifier.test.tsx`, `i18n.test.ts`, `bannerService.test.ts`, `error.test.tsx`, `cors.test.ts`, `i18n-ticket-verifier.spec.ts`, `error-boundary.spec.ts`, `cors.test.ts` | Unit, Integration, E2E |
 | **Total** | **~45 test files** | |
+
+## News Article Content
+- [x] Content display in NewsArticleContent.tsx add
+  - [x] Share button to social network
+  - [x] Show related lottery section if available

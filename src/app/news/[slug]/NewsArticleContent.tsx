@@ -5,8 +5,17 @@ import { useApi } from "@/lib/hooks/useApi";
 import type { NewsListResponse } from "@/lib/api-types";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, ChevronLeft } from "lucide-react";
-import { useMemo } from "react";
+import {
+  Clock,
+  ChevronLeft,
+  Share2,
+  Facebook,
+  Twitter,
+  Link as LinkIcon,
+  Check,
+} from "lucide-react";
+import { useMemo, useState } from "react";
+import { DrawResult } from "@/components/lottery/DrawResult";
 
 interface ArticleProps {
   slug: string;
@@ -21,6 +30,11 @@ interface ArticleProps {
   author: string;
   source?: string;
   isLocal?: boolean;
+  relatedLottery?: {
+    type: string;
+    name: string;
+    countryCode: string;
+  };
 }
 
 export default function NewsArticleContent({
@@ -34,6 +48,28 @@ export default function NewsArticleContent({
   const { data: newsData } = useApi<NewsListResponse>(
     `/api/news?lang=${language}&limit=4`,
   );
+
+  // Fetch latest result for the related lottery
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: latestResultData } = useApi<any>(
+    article.relatedLottery
+      ? `/api/results/latest?type=${article.relatedLottery.type}`
+      : null,
+  );
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareTitle =
+    typeof window !== "undefined" ? encodeURIComponent(article.title) : "";
 
   const title =
     language === "th" ? article.title : article.titleEn || article.title;
@@ -145,6 +181,58 @@ export default function NewsArticleContent({
           )}
         </div>
 
+        {/* Share Buttons */}
+        <div className="mb-12 flex items-center justify-between border-y border-gray-200 dark:border-white/10 py-4">
+          <div className="flex items-center gap-2">
+            <Share2 className="h-5 w-5 text-gray-400" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              {language === "th" ? "แชร์บทความนี้" : "Share this article"}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/40"
+              aria-label="Share on Facebook"
+            >
+              <Facebook className="h-5 w-5" />
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-50 text-sky-500 transition-colors hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/40"
+              aria-label="Share on Twitter"
+            >
+              <Twitter className="h-5 w-5" />
+            </a>
+            <a
+              href={`https://social-plugins.line.me/lineit/share?url=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50 text-green-600 transition-colors hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40"
+              aria-label="Share on LINE"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+                <path d="M22.5 10.334c0-4.634-4.885-8.4-10.902-8.4-6.015 0-10.9 3.766-10.9 8.4 0 4.148 3.86 7.643 9.07 8.283.355.076.843.235.966.541.11.272.036.688.016.966-.023.298-.152.923-.186 1.139-.053.303-.25.803.708.402.955-.404 5.15-3.033 7.502-5.548 1.83-1.954 2.676-3.832 2.676-5.783zm-14.774 2.15h-2.12v-3.793h2.12v3.793zm5.405-3.793v3.793h-1.077v-3.793h1.077zm3.172 0v2.705h1.928v1.088h-3.004v-3.793h1.076zm-5.632 0v3.793h-1.076v-2.384l-1.554 2.384h-1.04v-3.793h1.077v2.385l1.553-2.385h1.04z" />
+              </svg>
+            </a>
+            <button
+              onClick={handleCopyLink}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+              aria-label="Copy link"
+            >
+              {copied ? (
+                <Check className="h-5 w-5 text-green-500" />
+              ) : (
+                <LinkIcon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+
         {/* Disclaimer */}
         <div className="mb-12 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/5 p-5 shadow-sm">
           <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
@@ -154,6 +242,20 @@ export default function NewsArticleContent({
           </p>
         </div>
       </article>
+
+      {/* Related Lottery Section */}
+      {article.relatedLottery && latestResultData && (
+        <section className="mx-auto max-w-3xl mb-12">
+          <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
+            {language === "th"
+              ? `ผลสลาก ${article.relatedLottery.name} ล่าสุด`
+              : `Latest ${article.relatedLottery.name} Results`}
+          </h2>
+          <div className="[&>div]:mx-0 [&>div]:max-w-none">
+            <DrawResult {...latestResultData} />
+          </div>
+        </section>
+      )}
 
       {/* Related News */}
       <section className="mx-auto max-w-3xl">
