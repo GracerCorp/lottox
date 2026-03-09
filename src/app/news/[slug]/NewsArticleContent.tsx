@@ -140,8 +140,8 @@ export default function NewsArticleContent({
           ) : (
             <div
               className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap break-words"
-              
-            >{ content.replace(/<p><\/p>/g, '') }</div>
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
           )}
         </div>
 
