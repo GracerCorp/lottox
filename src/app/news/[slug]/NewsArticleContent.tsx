@@ -14,7 +14,7 @@ import {
   Link as LinkIcon,
   Check,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { DrawResult } from "@/components/lottery/DrawResult";
 
 interface ArticleProps {
@@ -58,6 +58,13 @@ export default function NewsArticleContent({
   );
 
   const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+  const [shareTitle, setShareTitle] = useState("");
+
+  useEffect(() => {
+    setShareUrl(window.location.href);
+    setShareTitle(encodeURIComponent(article.title));
+  }, [article.title]);
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -66,10 +73,6 @@ export default function NewsArticleContent({
       setTimeout(() => setCopied(false), 2000);
     }
   };
-
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
-  const shareTitle =
-    typeof window !== "undefined" ? encodeURIComponent(article.title) : "";
 
   const title =
     language === "th" ? article.title : article.titleEn || article.title;
