@@ -2,24 +2,48 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { getFlagUrl } from "@/lib/flags";
+import { getActiveCountries } from "@/lib/services/lotteryService";
 
-export function CountryGrid() {
-  const countries = [
-    {
-      name: "Thailand",
-      nameLocal: "ไทย",
-      flag: getFlagUrl("th"),
-      count: "สลากกินแบ่งรัฐบาล",
-      href: "/th/thai-lotto",
-    },
-    {
-      name: "Laos",
-      nameLocal: "ลาว",
-      flag: getFlagUrl("la"),
-      count: "หวยลาวพัฒนา",
-      href: "/la/lao-lotto",
-    },
-  ];
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function getLocalName(code: string, fallback: string) {
+  switch (code.toLowerCase()) {
+    case "th":
+      return "ไทย";
+    case "la":
+      return "ลาว";
+    case "vn":
+      return "เวียดนาม";
+    default:
+      return fallback;
+  }
+}
+
+export async function CountryGrid() {
+  const dbCountries = await getActiveCountries();
+
+  const countries = dbCountries.map((country) => {
+    const code = country.code.toLowerCase();
+    const primaryLottery =
+      country.lotteries.find((l) => l.is_active) || country.lotteries[0];
+
+    return {
+      name: country.name,
+      nameLocal: getLocalName(code, country.name),
+      flag: getFlagUrl(code) || country.flag || "",
+      count: primaryLottery
+        ? primaryLottery.name
+        : `${country.lotteries.length} ลอตเตอรี่`,
+      href: primaryLottery
+        ? `/${code}/${slugify(primaryLottery.name)}`
+        : `/${code}`,
+    };
+  });
 
   return (
     <div className="flex flex-col gap-12">
