@@ -7,10 +7,18 @@ import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 import { slugify } from "@/lib/utils/lotteryUtils";
 
+const DEFAULT_JACKPOT = "Play Now";
+
 const JACKPOT_DATA: Record<string, string> = {
   th: "6,000,000 ฿",
   la: "x6,000",
   vn: "x850",
+};
+
+const DEFAULT_GRADIENT = {
+  from: "from-slate-800",
+  to: "to-slate-950",
+  bg: "https://images.unsplash.com/photo-1546768292-fb12f6c92568?q=80&w=1287&auto=format&fit=crop", // Generic dark conceptual abstract
 };
 
 const GRADIENTS: Record<string, { from: string; to: string; bg: string }> = {
@@ -78,8 +86,8 @@ export default async function Home() {
     if (!lotto || !country) continue;
 
     const code = country.code.toLowerCase();
-    const theme = GRADIENTS[code] || GRADIENTS.th;
-    const jackpot = JACKPOT_DATA[code] || "Play Now";
+    const theme = GRADIENTS[code] || DEFAULT_GRADIENT;
+    const jackpot = JACKPOT_DATA[code] || DEFAULT_JACKPOT;
     const lottoSlug = slugify(lotto.name);
     const nextDraw = country.draw_schedule || "Next Draw Soon";
 
@@ -104,8 +112,8 @@ export default async function Home() {
       for (const lotto of country.lotteries) {
         if (!lotto.is_active) continue;
 
-        const theme = GRADIENTS[code] || GRADIENTS.th;
-        const jackpot = JACKPOT_DATA[code] || "Play Now";
+        const theme = GRADIENTS[code] || DEFAULT_GRADIENT;
+        const jackpot = JACKPOT_DATA[code] || DEFAULT_JACKPOT;
         const lottoSlug = slugify(lotto.name);
         const nextDraw = country.draw_schedule || "Next Draw Soon";
 

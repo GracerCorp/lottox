@@ -1,4 +1,5 @@
 import { prisma } from "../prisma";
+import { resolveCountryCode } from "@/lib/utils/countryResolver";
 
 export const statisticsService = {
   async getStatsOverview() {
@@ -24,14 +25,7 @@ export const statisticsService = {
     };
 
     if (type && type !== "frequency") {
-      const countryCode =
-        type.toLowerCase() === "thai"
-          ? "th"
-          : type.toLowerCase() === "lao"
-            ? "la"
-            : type.toLowerCase() === "vietnam"
-              ? "vn"
-              : undefined;
+      const countryCode = await resolveCountryCode(type);
       if (countryCode) {
         where.lottery = { countries: { code: countryCode } };
       }

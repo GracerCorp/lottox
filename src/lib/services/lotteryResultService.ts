@@ -1,25 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../prisma";
 import type { Prisma } from "@prisma/client";
-
-/** Map API type strings to DB country codes */
-const TYPE_TO_COUNTRY: Record<string, string> = {
-  thai: "th",
-  lao: "la",
-  laos: "la",
-  vietnam: "vn",
-  vietnam_specific: "vn",
-  vietnam_special: "vn",
-  vietnam_normal: "vn",
-  vietnam_vip: "vn",
-};
-
-/** Map country code to display type used by frontend */
-const COUNTRY_TO_TYPE: Record<string, string> = {
-  th: "THAI",
-  la: "LAO",
-  vn: "VIETNAM",
-};
+import { resolveCountryCode, getDisplayType } from "../utils/countryResolver";
 
 type LotteryResultWithIncludes = {
   id: number;
@@ -36,18 +18,20 @@ type LotteryResultWithIncludes = {
   }[];
 };
 
-function formatLotteryResult(res: LotteryResultWithIncludes, explicitType?: string) {
+function formatLotteryResult(
+  res: LotteryResultWithIncludes,
+  explicitType?: string,
+) {
   const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
   const verification =
-    res.result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+    res
+      .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
   const dataToUse = verification?.chosen_data || res.full_data;
 
-  // The type logic sometimes returns the country display, explicit type, or lottery name.
-  // Note: getResultsByType uses `COUNTRY_TO_TYPE[cc] || type`
-  // getLatestResults uses `COUNTRY_TO_TYPE[countryCode] || type || res.lottery?.name`
-  // getGlobalResults uses `COUNTRY_TO_TYPE[countryCode] || res.lottery?.name || ""`
-  // We can unify as `COUNTRY_TO_TYPE[countryCode] || explicitType || res.lottery?.name || ""`
-  const displayType = COUNTRY_TO_TYPE[countryCode] || explicitType || res.lottery?.name || "";
+  // The type logic dynamically assigns uppercase countryCode, explicit type, or lottery name
+  const displayType = countryCode
+    ? getDisplayType(countryCode)
+    : explicitType || res.lottery?.name || "";
 
   return {
     id: res.id,
@@ -71,7 +55,7 @@ class ApiClient {
   async getLatestResults(type?: string) {
     const whereClause: Prisma.lottery_resultsWhereInput = {};
     if (type) {
-      const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+      const countryCode = await resolveCountryCode(type);
       if (countryCode) {
         whereClause.lottery = {
           countries: {
@@ -109,11 +93,15 @@ class ApiClient {
       },
     });
 
-    return { results: latestResults.map((r) => formatLotteryResult(r as LotteryResultWithIncludes, type)) };
+    return {
+      results: latestResults.map((r) =>
+        formatLotteryResult(r as LotteryResultWithIncludes, type),
+      ),
+    };
   }
 
   async getResultsByType(type: string, limit: number = 10, offset: number = 0) {
-    const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+    const countryCode = await resolveCountryCode(type);
     const whereClause: Prisma.lottery_resultsWhereInput = countryCode
       ? {
           lottery: {
@@ -157,8 +145,13 @@ class ApiClient {
     ]);
 
     return {
-      latest: results.length > 0 ? formatLotteryResult(results[0] as LotteryResultWithIncludes, type) : null,
-      history: results.map((r) => formatLotteryResult(r as LotteryResultWithIncludes, type)),
+      latest:
+        results.length > 0
+          ? formatLotteryResult(results[0] as LotteryResultWithIncludes, type)
+          : null,
+      history: results.map((r) =>
+        formatLotteryResult(r as LotteryResultWithIncludes, type),
+      ),
       total,
     };
   }
@@ -224,7 +217,9 @@ class ApiClient {
     ]);
 
     return {
-      draws: results.map((r) => formatLotteryResult(r as LotteryResultWithIncludes)),
+      draws: results.map((r) =>
+        formatLotteryResult(r as LotteryResultWithIncludes),
+      ),
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -238,7 +233,7 @@ class ApiClient {
     // For now we will try checking lottery_prizes.
 
     // Find the relevant result first
-    const countryCode = TYPE_TO_COUNTRY[type.toLowerCase()];
+    const countryCode = await resolveCountryCode(type);
     const resultWhere: Prisma.lottery_resultsWhereInput = countryCode
       ? {
           lottery: {
@@ -273,37 +268,43 @@ class ApiClient {
       if (Array.isArray(obj)) {
         obj.forEach((item) => {
           if (typeof item === "string" || typeof item === "number") {
-             if (String(item) === number) {
-               isWin = true;
-               wonPrizes.push({ label: parentKey || "Prize" });
-             }
+            if (String(item) === number) {
+              isWin = true;
+              wonPrizes.push({ label: parentKey || "Prize" });
+            }
           } else {
-             traverse(item, parentKey);
+            traverse(item, parentKey);
           }
         });
       } else if (obj !== null && typeof obj === "object") {
         const record = obj as Record<string, unknown>;
-        
+
         // Direct match in a structured prize object
-        if (String(record.number) === number || 
-           (Array.isArray(record.numbers) && record.numbers.some((n: unknown) => String(n) === number))) {
+        if (
+          String(record.number) === number ||
+          (Array.isArray(record.numbers) &&
+            record.numbers.some((n: unknown) => String(n) === number))
+        ) {
           isWin = true;
           wonPrizes.push({
             label: String(record.name || parentKey || "Prize"),
-            amount: record.amount || record.reward ? String(record.amount || record.reward) : undefined
+            amount:
+              record.amount || record.reward
+                ? String(record.amount || record.reward)
+                : undefined,
           });
         }
-        
+
         for (const [key, value] of Object.entries(record)) {
           if (key !== "number" && key !== "numbers") {
-             traverse(value, key);
+            traverse(value, key);
           }
         }
       } else if (typeof obj === "string" || typeof obj === "number") {
-         if (String(obj) === number) {
-             isWin = true;
-             wonPrizes.push({ label: parentKey || "Prize" });
-         }
+        if (String(obj) === number) {
+          isWin = true;
+          wonPrizes.push({ label: parentKey || "Prize" });
+        }
       }
     };
 
