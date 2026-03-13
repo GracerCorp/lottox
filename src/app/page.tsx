@@ -5,13 +5,7 @@ import { HomeResultsSection } from "@/components/home/HomeResultsSection";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+import { slugify } from "@/lib/utils/lotteryUtils";
 
 const JACKPOT_DATA: Record<string, string> = {
   th: "6,000,000 ฿",
@@ -59,12 +53,20 @@ export default async function Home() {
       })),
   ];
 
-  const countryListItems = countries.map((c) => ({
-    id: c.code.toLowerCase(),
-    name: c.name,
-    count: c.lotteries.length,
-    flag: c.code.toLowerCase(),
-  }));
+  const seenCountry = new Set<string>();
+  const countryListItems = countries
+    .filter((c) => {
+      const key = c.code.toLowerCase();
+      if (seenCountry.has(key)) return false;
+      seenCountry.add(key);
+      return true;
+    })
+    .map((c) => ({
+      id: c.code.toLowerCase(),
+      name: c.name,
+      count: c.lotteries.length,
+      flag: c.code.toLowerCase(),
+    }));
 
   const heroItems: HeroItem[] = [];
 

@@ -49,12 +49,7 @@ export async function getLotteriesByCountry(countryCode: string) {
 }
 
 /** Slugify a lottery name to produce URL-safe slug */
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+import { slugify } from "@/lib/utils/lotteryUtils";
 
 /** Map from country code to API type key used in /api/results/[type] */
 const COUNTRY_TO_API_TYPE: Record<string, string> = {

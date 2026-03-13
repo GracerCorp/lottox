@@ -21,6 +21,49 @@ const COUNTRY_TO_TYPE: Record<string, string> = {
   vn: "VIETNAM",
 };
 
+type LotteryResultWithIncludes = {
+  id: number;
+  draw_date: string;
+  draw_period: string | null;
+  full_data: unknown;
+  lottery: {
+    name: string;
+    showing_prizes?: string[];
+    countries: { code: string } | null;
+  } | null;
+  result_verifications_result_verifications_lottery_result_idTolottery_results?: {
+    chosen_data: unknown;
+  }[];
+};
+
+function formatLotteryResult(res: LotteryResultWithIncludes, explicitType?: string) {
+  const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
+  const verification =
+    res.result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
+  const dataToUse = verification?.chosen_data || res.full_data;
+
+  // The type logic sometimes returns the country display, explicit type, or lottery name.
+  // Note: getResultsByType uses `COUNTRY_TO_TYPE[cc] || type`
+  // getLatestResults uses `COUNTRY_TO_TYPE[countryCode] || type || res.lottery?.name`
+  // getGlobalResults uses `COUNTRY_TO_TYPE[countryCode] || res.lottery?.name || ""`
+  // We can unify as `COUNTRY_TO_TYPE[countryCode] || explicitType || res.lottery?.name || ""`
+  const displayType = COUNTRY_TO_TYPE[countryCode] || explicitType || res.lottery?.name || "";
+
+  return {
+    id: res.id,
+    type: displayType,
+    date: res.draw_date,
+    dateDisplay: res.draw_date, // Added from getResultsByType
+    drawDate: res.draw_date, // Added from getGlobalResults / getLatestResults
+    drawNo: res.draw_period || "",
+    daysAgo: "", // Added from getResultsByType
+    data: dataToUse,
+    lotteryName: res.lottery?.name || "",
+    countryCode: countryCode,
+    showingPrizes: res.lottery?.showing_prizes || [],
+  };
+}
+
 class ApiClient {
   // --- Public Spec API Methods ---
 
@@ -66,40 +109,7 @@ class ApiClient {
       },
     });
 
-    const formatResult = (res: {
-      id: number;
-      draw_date: string;
-      draw_period: string | null;
-      full_data: unknown;
-      lottery: {
-        name: string;
-        showing_prizes?: string[];
-        countries: { code: string } | null;
-      } | null;
-      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
-        chosen_data: unknown;
-      }[];
-    }) => {
-      const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
-      const verification =
-        res
-          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-      const dataToUse = verification?.chosen_data || res.full_data;
-
-      return {
-        id: res.id,
-        type: COUNTRY_TO_TYPE[countryCode] || type || res.lottery?.name,
-        date: res.draw_date,
-        drawDate: res.draw_date,
-        drawNo: res.draw_period || "",
-        data: dataToUse,
-        lotteryName: res.lottery?.name || "",
-        countryCode: countryCode,
-        showingPrizes: res.lottery?.showing_prizes || [],
-      };
-    };
-
-    return { results: latestResults.map(formatResult) };
+    return { results: latestResults.map((r) => formatLotteryResult(r as LotteryResultWithIncludes, type)) };
   }
 
   async getResultsByType(type: string, limit: number = 10, offset: number = 0) {
@@ -146,41 +156,9 @@ class ApiClient {
       }),
     ]);
 
-    const formatResult = (res: {
-      id: number;
-      draw_date: string;
-      draw_period: string | null;
-      full_data: unknown;
-      lottery: {
-        name: string;
-        showing_prizes?: string[];
-        countries: { code: string } | null;
-      } | null;
-      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
-        chosen_data: unknown;
-      }[];
-    }) => {
-      const cc = res.lottery?.countries?.code?.toLowerCase() || "";
-      const verification =
-        res
-          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-      const dataToUse = verification?.chosen_data || res.full_data;
-
-      return {
-        id: res.id,
-        type: COUNTRY_TO_TYPE[cc] || type,
-        date: res.draw_date,
-        dateDisplay: res.draw_date,
-        drawNo: res.draw_period || "",
-        daysAgo: "",
-        data: dataToUse,
-        showingPrizes: res.lottery?.showing_prizes || [],
-      };
-    };
-
     return {
-      latest: results.length > 0 ? formatResult(results[0]) : null,
-      history: results.map(formatResult),
+      latest: results.length > 0 ? formatLotteryResult(results[0] as LotteryResultWithIncludes, type) : null,
+      history: results.map((r) => formatLotteryResult(r as LotteryResultWithIncludes, type)),
       total,
     };
   }
@@ -245,42 +223,8 @@ class ApiClient {
       }),
     ]);
 
-    // Format each result as LatestResult-compatible object (same as getLatestResults)
-    const formatResult = (res: {
-      id: number;
-      draw_date: string;
-      draw_period: string | null;
-      full_data: unknown;
-      lottery: {
-        name: string;
-        showing_prizes?: string[];
-        countries: { code: string } | null;
-      } | null;
-      result_verifications_result_verifications_lottery_result_idTolottery_results?: {
-        chosen_data: unknown;
-      }[];
-    }) => {
-      const countryCode = res.lottery?.countries?.code?.toLowerCase() || "";
-      const verification =
-        res
-          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-      const dataToUse = verification?.chosen_data || res.full_data;
-
-      return {
-        id: res.id,
-        type: COUNTRY_TO_TYPE[countryCode] || res.lottery?.name || "",
-        date: res.draw_date,
-        drawDate: res.draw_date,
-        drawNo: res.draw_period || "",
-        data: dataToUse,
-        lotteryName: res.lottery?.name || "",
-        countryCode: countryCode,
-        showingPrizes: res.lottery?.showing_prizes || [],
-      };
-    };
-
     return {
-      draws: results.map(formatResult),
+      draws: results.map((r) => formatLotteryResult(r as LotteryResultWithIncludes)),
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -321,273 +265,57 @@ class ApiClient {
       };
     }
 
-    const isWin = false;
-    // Check inside full_data if we know the structure, for now just return false
-    // as lottery_prizes has been removed from the schema.
+    let isWin = false;
+    const wonPrizes: Array<{ label: string; amount?: string }> = [];
+
+    // Traverse the fully nested JSON object looking for exact number matches
+    const traverse = (obj: unknown, parentKey?: string) => {
+      if (Array.isArray(obj)) {
+        obj.forEach((item) => {
+          if (typeof item === "string" || typeof item === "number") {
+             if (String(item) === number) {
+               isWin = true;
+               wonPrizes.push({ label: parentKey || "Prize" });
+             }
+          } else {
+             traverse(item, parentKey);
+          }
+        });
+      } else if (obj !== null && typeof obj === "object") {
+        const record = obj as Record<string, unknown>;
+        
+        // Direct match in a structured prize object
+        if (String(record.number) === number || 
+           (Array.isArray(record.numbers) && record.numbers.some((n: unknown) => String(n) === number))) {
+          isWin = true;
+          wonPrizes.push({
+            label: String(record.name || parentKey || "Prize"),
+            amount: record.amount || record.reward ? String(record.amount || record.reward) : undefined
+          });
+        }
+        
+        for (const [key, value] of Object.entries(record)) {
+          if (key !== "number" && key !== "numbers") {
+             traverse(value, key);
+          }
+        }
+      } else if (typeof obj === "string" || typeof obj === "number") {
+         if (String(obj) === number) {
+             isWin = true;
+             wonPrizes.push({ label: parentKey || "Prize" });
+         }
+      }
+    };
+
+    if (latestResult.full_data) {
+      traverse(latestResult.full_data);
+    }
 
     return {
       win: isWin,
-      prize: undefined,
-      prizeLabel: undefined,
-      amount: undefined,
+      prizes: wonPrizes.length > 0 ? wonPrizes : undefined,
       drawDate: latestResult.draw_date,
       drawNo: latestResult.draw_period || "",
-    };
-  }
-
-  // Countries
-  async getCountries() {
-    const countriesList = await prisma.countries.findMany({
-      where: { is_active: true },
-      orderBy: { name: "asc" },
-      include: {
-        _count: {
-          select: { lotteries: true },
-        },
-      },
-    });
-    return { countries: countriesList };
-  }
-
-  async getCountryDraws(code: string, limit: number = 10) {
-    const countryInfo = await prisma.countries.findFirst({
-      where: { code: { equals: code, mode: "insensitive" } },
-      include: {
-        lotteries: {
-          include: {
-            lottery_results: {
-              where: {
-                result_verifications_result_verifications_lottery_result_idTolottery_results:
-                  {
-                    some: { status: "verified" },
-                  },
-              },
-              orderBy: { draw_date: "desc" },
-              take: 1,
-              include: {
-                result_verifications_result_verifications_lottery_result_idTolottery_results:
-                  {
-                    where: { status: "verified" },
-                    orderBy: { created_at: "desc" },
-                    take: 1,
-                    select: { chosen_data: true },
-                  },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!countryInfo) {
-      throw new Error("Country not found");
-    }
-
-    const lotteryIds = countryInfo.lotteries.map((l) => l.id);
-
-    const draws = await prisma.lottery_results.findMany({
-      where: {
-        lottery_id: { in: lotteryIds },
-        result_verifications_result_verifications_lottery_result_idTolottery_results:
-          {
-            some: { status: "verified" },
-          },
-      },
-      orderBy: { draw_date: "desc" },
-      take: limit,
-      include: {
-        lottery: true,
-        result_verifications_result_verifications_lottery_result_idTolottery_results:
-          {
-            where: { status: "verified" },
-            orderBy: { created_at: "desc" },
-            take: 1,
-            select: { chosen_data: true },
-          },
-      },
-    });
-
-    // Map `chosen_data` into `full_data` for consistency
-    const mappedCountryInfo = {
-      ...countryInfo,
-      lotteries: countryInfo.lotteries.map((lottery) => ({
-        ...lottery,
-        lottery_results: lottery.lottery_results.map((res) => {
-          const verification =
-            res
-              .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-          return {
-            ...res,
-            full_data: verification?.chosen_data || res.full_data,
-            result_verifications_result_verifications_lottery_result_idTolottery_results:
-              undefined,
-          };
-        }),
-      })),
-    };
-
-    const mappedDraws = draws.map((res) => {
-      const verification =
-        res
-          .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-      return {
-        ...res,
-        full_data: verification?.chosen_data || res.full_data,
-        result_verifications_result_verifications_lottery_result_idTolottery_results:
-          undefined,
-      };
-    });
-
-    return { country: mappedCountryInfo, draws: mappedDraws };
-  }
-
-  async getNews(
-    params: {
-      page?: number;
-      limit?: number;
-      category?: string;
-      search?: string;
-    } = {},
-  ) {
-    const { page = 1, limit = 10, category, search } = params;
-    const offset = (page - 1) * limit;
-
-    const where: Prisma.articlesWhereInput = {
-      published: true,
-    };
-
-    if (category) {
-      // Based on schema, tags are String[] arrays, we can look within them or use a dedicated column if exists (schema lacks simple category)
-      where.tags = {
-        has: category,
-      };
-    }
-
-    if (search) {
-      where.title = { contains: search, mode: "insensitive" };
-    }
-
-    const [total, rawArticles] = await prisma.$transaction([
-      prisma.articles.count({ where }),
-      prisma.articles.findMany({
-        where,
-        orderBy: { published_at: "desc" },
-        take: limit,
-        skip: offset,
-      }),
-    ]);
-
-    const mappedArticles = rawArticles.map((article) => {
-      // Parse JSON content if it's a string, or use as is if already an object
-      const contentData =
-        typeof article.content === "string"
-          ? JSON.parse(article.content)
-          : (article.content as Record<string, unknown>) || {};
-
-      return {
-        slug: article.slug,
-        title: article.title,
-        titleEn: contentData.titleEn || article.title,
-        excerpt: article.excerpt || "",
-        excerptEn: contentData.excerptEn || article.excerpt || "",
-        image:
-          article.cover_image ||
-          (article.images && article.images.length > 0
-            ? article.images[0]
-            : ""),
-        date:
-          article.published_at?.toISOString() ||
-          article.created_at?.toISOString() ||
-          "",
-        category:
-          article.tags && article.tags.length > 0 ? article.tags[0] : "",
-        categoryEn:
-          contentData.categoryEn ||
-          (article.tags && article.tags.length > 0 ? article.tags[0] : ""),
-        author: "Admin", // Need to join with User table if we want dynamic author, but Admin is fine as default
-      };
-    });
-
-    return {
-      articles: mappedArticles,
-      total,
-      page,
-      totalPages: Math.ceil(total / limit),
-    };
-  }
-
-  async getNewsDetail(
-    slug: string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    lang?: string,
-  ) {
-    const article = await prisma.articles.findUnique({
-      where: { slug },
-      include: {
-        user: {
-          select: { name: true },
-        },
-      },
-    });
-
-    if (!article) {
-      throw new Error("Article not found");
-    }
-
-    // Parse JSON content if it's a string, or use as is if already an object
-    const contentData =
-      typeof article.content === "string"
-        ? JSON.parse(article.content)
-        : (article.content as Record<string, unknown>) || {};
-
-    return {
-      slug: article.slug,
-      title: article.title,
-      titleEn: contentData.titleEn || article.title,
-      content: article.raw_html || article.full_content || "",
-      contentEn:
-        contentData.contentEn || article.raw_html || article.full_content || "",
-      excerpt: article.excerpt || "",
-      excerptEn: contentData.excerptEn || article.excerpt || "",
-      image:
-        article.cover_image ||
-        (article.images.length > 0 ? article.images[0] : ""),
-      date:
-        article.published_at?.toISOString() ||
-        article.created_at?.toISOString() ||
-        "",
-      category: article.tags.length > 0 ? article.tags[0] : "",
-      categoryEn:
-        contentData.categoryEn ||
-        (article.tags.length > 0 ? article.tags[0] : ""),
-      author: article.user?.name || "Admin",
-      source: contentData.source || "LottoX",
-      related: [],
-    };
-  }
-
-  // Statistics
-  async getStatsOverview() {
-    const [totalResults, activeLottos, countries] = await prisma.$transaction([
-      prisma.lottery_results.count(),
-      prisma.lotteries.count({ where: { is_active: true } }),
-      prisma.countries.count({ where: { is_active: true } }),
-    ]);
-
-    return {
-      totalJackpotsTracked: totalResults.toString(), // Approximation based on DB counts
-      activeLotteries: activeLottos,
-      upcomingDraws24h: 0, // Need schedule implementation logic to calc properly
-      totalCountries: countries,
-    };
-  }
-
-  async getStatsFrequency(type: string, draws: number = 30) {
-    return {
-      type,
-      draws,
-      frequency: {}, // Needs complex aggregation logic over JSON fields
-      trends: {},
     };
   }
 }

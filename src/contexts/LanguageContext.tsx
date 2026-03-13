@@ -7,7 +7,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { dictionary, Dictionary, Language } from "@/lib/i18n";
+import { getDictionary, defaultDict, Dictionary, Language } from "@/lib/i18n";
 
 interface LanguageContextType {
   language: Language;
@@ -23,12 +23,16 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 export function LanguageProvider({ children }: { children: ReactNode }) {
   // Always start with "th" for consistent SSR — sync from localStorage after mount
   const [language, setLanguageState] = useState<Language>("th");
+  const [dict, setDict] = useState<Dictionary>(defaultDict); // Default is sync
 
   useEffect(() => {
     const saved = localStorage.getItem("language") as Language;
     if (saved && (saved === "th" || saved === "en")) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguageState(saved);
+      if (saved !== "th") {
+        getDictionary(saved).then(setDict).catch(console.error);
+      }
     }
   }, []);
 
@@ -41,6 +45,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("language", lang);
     // Update HTML lang attribute
     document.documentElement.lang = lang;
+    
+    if (lang === "th") {
+      setDict(defaultDict);
+    } else {
+      getDictionary(lang).then(setDict).catch(console.error);
+    }
   };
 
   const toggleLanguage = () => {
@@ -51,7 +61,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     language,
     toggleLanguage,
     setLanguage,
-    t: dictionary[language],
+    t: dict,
   };
 
   return (

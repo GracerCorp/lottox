@@ -1,14 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/services/lotteryResultService";
-
+import { NextResponse } from "next/server";
+import { newsService } from "@/lib/services/newsService";
+import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 const paramsSchema = z.object({
   slug: z.string().min(1),
-});
-
-const querySchema = z.object({
-  lang: z.enum(["th", "en"]).optional(),
 });
 
 export async function GET(
@@ -18,8 +14,9 @@ export async function GET(
   try {
     const { slug } = await params;
     const searchParams = request.nextUrl.searchParams;
+    const lang = searchParams.get("lang") || "th";
 
-    // Validate params
+    // Validate params using zod
     const paramsValidation = paramsSchema.safeParse({ slug });
     if (!paramsValidation.success) {
       return NextResponse.json(
@@ -28,16 +25,7 @@ export async function GET(
       );
     }
 
-    // Validate query
-    const queryValidation = querySchema.safeParse({
-      lang: searchParams.get("lang") || undefined,
-    });
-    // lang is simple enum, but safeParse handles it gracefully
-    const lang = queryValidation.success
-      ? queryValidation.data.lang || "th"
-      : "th";
-
-    const data = await apiClient.getNewsDetail(slug, lang);
+    const data = await newsService.getNewsDetail(slug, lang);
     return NextResponse.json(data);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -48,3 +36,7 @@ export async function GET(
     );
   }
 }
+
+
+
+export const revalidate = 300;

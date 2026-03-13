@@ -3,12 +3,21 @@ import { prisma } from "@/lib/prisma";
 export async function getActiveBanners() {
   return await prisma.banners.findMany({
     where: { is_active: true },
-    include: {
+    select: {
+      id: true,
+      image_url: true,
       lottery_results: {
-        include: {
+        select: {
           lottery: {
-            include: {
-              countries: true,
+            select: {
+              name: true,
+              countries: {
+                select: {
+                  name: true,
+                  code: true,
+                  draw_schedule: true,
+                },
+              },
             },
           },
         },

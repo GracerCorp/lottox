@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { apiClient } from "@/lib/services/lotteryResultService";
+import { newsService } from "@/lib/services/newsService";
 import { notFound } from "next/navigation";
 import NewsArticleContent from "./NewsArticleContent";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({
   let excerpt = "";
   let image = "";
   try {
-    const article = await apiClient.getNewsDetail(slug, "th");
+    const article = await newsService.getNewsDetail(slug, "th");
     title = article.title;
     excerpt = article.excerpt || article.content?.slice(0, 160) || "";
     image = article.image || "";
@@ -98,7 +98,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
   // Try API
   let articleData: unknown = null;
   try {
-    articleData = await apiClient.getNewsDetail(slug, "th");
+    articleData = await newsService.getNewsDetail(slug, "th");
   } catch {
     // Return 404 if API fails
     notFound();

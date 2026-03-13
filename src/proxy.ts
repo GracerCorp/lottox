@@ -1,49 +1,48 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Simple in-memory rate limiter
-// For production serverless, use Redis (e.g. Upstash) instead
-const rateLimit = new Map<string, { count: number; lastReset: number }>();
-
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 60; // 60 requests per minute
+// Fallback rate limiter for when environment variables are missing for Redis
+// In memory map for basic rate limiting
+const inMemoryCache = new Map<string, { count: number; expires: number }>();
 
 export default function proxy(request: NextRequest) {
-  // Only apply to /api routes
-  if (request.nextUrl.pathname.startsWith("/api")) {
-    // 1. Origin Check (Simple)
-    // const origin = request.headers.get("origin");
-    // const referer = request.headers.get("referer");
-    // const host = request.headers.get("host"); // e.g., localhost:3000 or my-site.com
-
-    // Allow requests from same origin (browser) or no origin (server-side fetch/curl tools if needed)
-    // If strict origin check is needed:
-    // if (origin && !origin.includes(host!)) { ... }
-
-    // 2. Rate Limiting
-    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
-    const now = Date.now();
-
-    const limitData = rateLimit.get(ip) ?? { count: 0, lastReset: now };
-
-    // Reset if window passed
-    if (now - limitData.lastReset > RATE_LIMIT_WINDOW) {
-      limitData.count = 0;
-      limitData.lastReset = now;
-    }
-
-    limitData.count++;
-    rateLimit.set(ip, limitData);
-
-    if (limitData.count > MAX_REQUESTS) {
-      return new NextResponse(
-        JSON.stringify({ error: "Too many requests, please try again later." }),
-        { status: 429, headers: { "Content-Type": "application/json" } },
-      );
-    }
+  // Only apply to API routes
+  if (!request.nextUrl.pathname.startsWith("/api/")) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
+  
+  // Rate limiting configuration
+  const config = {
+    windowMs: 60 * 1000, // 1 minute
+    maxLimit: request.nextUrl.pathname.startsWith("/api/subscribe") ? 10 : 60, // 10 reqs for subscribe, 60 for others
+  };
+
+  const now = Date.now();
+  const cacheData = inMemoryCache.get(ip);
+  let count = 1;
+
+  if (cacheData) {
+    if (now > cacheData.expires) {
+      // Window expired, reset
+      inMemoryCache.set(ip, { count: 1, expires: now + config.windowMs });
+    } else {
+      // Still in window, increment
+      count = cacheData.count + 1;
+      inMemoryCache.set(ip, { ...cacheData, count });
+    }
+  } else {
+    // New IP entry
+    inMemoryCache.set(ip, { count: 1, expires: now + config.windowMs });
+  }
+
+  // Add CORS headers and rate limit status
+  const response = count > config.maxLimit
+    ? NextResponse.json({ error: "Too many requests, please try again later." }, { status: 429 })
+    : NextResponse.next();
+    
+  return response;
 }
 
 export const config = {

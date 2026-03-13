@@ -45,23 +45,15 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
     setActiveIndex((prev) => (prev === displayItems.length - 1 ? 0 : prev + 1));
   };
 
-  const startAutoScroll = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      if (!isPaused) {
-        handleNext();
-      }
-    }, 4000);
-  };
-
-  const stopAutoScroll = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-  };
-
   useEffect(() => {
-    startAutoScroll();
-    return () => stopAutoScroll();
-  });
+    if (isPaused || displayItems.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev === displayItems.length - 1 ? 0 : prev + 1));
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [isPaused, displayItems.length]);
 
   const onMouseEnter = () => setIsPaused(true);
   const onMouseLeave = () => setIsPaused(false);

@@ -11,7 +11,7 @@ interface UseApiState<T> {
 export function useApi<T>(url: string | null, options?: RequestInit) {
   const [state, setState] = useState<UseApiState<T>>({
     data: null,
-    loading: true,
+    loading: !!url,
     error: null,
   });
 
@@ -29,7 +29,6 @@ export function useApi<T>(url: string | null, options?: RequestInit) {
         throw new Error(`API Error: ${response.status}`);
       }
       const json = await response.json();
-      console.log("[useApi Debug]", url, json);
       setState({ data: json as T, loading: false, error: null });
     } catch (err: unknown) {
       if (err instanceof Error) {
