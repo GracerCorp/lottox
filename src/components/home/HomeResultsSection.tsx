@@ -26,6 +26,16 @@ export function HomeResultsSection({ tabs }: HomeResultsSectionProps) {
     else if (tab.id === "th") localizedLabel = t.selector.thai;
     else if (tab.id === "la") localizedLabel = t.selector.lao;
     else if (tab.id === "vn") localizedLabel = t.selector.vietnam;
+    else if (tab.id === "jp") localizedLabel = t.selector.jp;
+    else if (tab.id === "au") localizedLabel = t.selector.au;
+    else if (tab.id === "sg") localizedLabel = t.selector.sg;
+    else if (tab.id === "my") localizedLabel = t.selector.my;
+    else if (tab.id === "id") localizedLabel = t.selector.id;
+    else if (tab.id === "ph") localizedLabel = t.selector.ph;
+    else if (tab.id === "tw") localizedLabel = t.selector.tw;
+    else if (tab.id === "hk") localizedLabel = t.selector.hk;
+    else if (tab.id === "sg") localizedLabel = t.selector.sg;
+    else if (tab.id === "br") localizedLabel = t.selector.br;
     // For future countries, maybe they have translations inside t.selector or fallback to DB Name
     // Ideally, DB provides the proper translated name, or we store translations in keys.
 
