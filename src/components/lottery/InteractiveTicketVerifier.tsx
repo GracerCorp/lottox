@@ -246,14 +246,14 @@ export function InteractiveTicketVerifier({
                   </div>
                   <div>
                     <h4 className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">
-                      ยินดีด้วย! คุณถูกรางวัล
+                      {t.common.verifySuccess}
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300 mb-4">
-                      หมายเลข{" "}
+                      {t.common.verifySuccessDesc1}{" "}
                       <strong className="font-mono text-lg tracking-widest text-green-700 dark:text-green-300">
                         {checkResult.checkedToken}
                       </strong>{" "}
-                      ตรงกับรางวัลต่อไปนี้:
+                      {t.common.verifySuccessDesc2}
                     </p>
                     <div className="space-y-3">
                       {checkResult.wonPrizes.map((prize, idx) => (
@@ -265,7 +265,7 @@ export function InteractiveTicketVerifier({
                             {prize.name}
                           </span>
                           <span className="font-bold text-green-600 dark:text-green-400 text-lg">
-                            {prize.amount} บาท
+                            {prize.amount}
                           </span>
                         </div>
                       ))}
@@ -281,14 +281,14 @@ export function InteractiveTicketVerifier({
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-red-500 dark:text-red-400 mb-1">
-                      เสียใจด้วยนะ
+                      {t.common.verifyFail}
                     </h4>
                     <p className="text-gray-600 dark:text-gray-400">
-                      หมายเลข{" "}
+                      {t.common.verifyFailDesc1}{" "}
                       <strong className="font-mono tracking-widest">
                         {checkResult.checkedToken}
                       </strong>{" "}
-                      ไม่ตรงกับรางวัลใดๆ ในงวดนี้
+                      {t.common.verifyFailDesc2}
                     </p>
                   </div>
                 </div>

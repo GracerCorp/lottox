@@ -1,0 +1,140 @@
+import { prisma } from "../prisma";
+import type { Prisma } from "@prisma/client";
+
+export const newsService = {
+  async getNews(
+    params: {
+      page?: number;
+      limit?: number;
+      category?: string;
+      search?: string;
+    } = {},
+  ) {
+    const { page = 1, limit = 10, category, search } = params;
+    const offset = (page - 1) * limit;
+
+    const where: Prisma.articlesWhereInput = {
+      published: true,
+    };
+
+    if (category) {
+      where.tags = {
+        has: category,
+      };
+    }
+
+    if (search) {
+      where.title = { contains: search, mode: "insensitive" };
+    }
+
+    const [total, rawArticles] = await prisma.$transaction([
+      prisma.articles.count({ where }),
+      prisma.articles.findMany({
+        where,
+        orderBy: { published_at: "desc" },
+        take: limit,
+        skip: offset,
+      }),
+    ]);
+
+    const mappedArticles = rawArticles.map((article) => {
+      let contentData: Record<string, any> = {};
+      if (typeof article.content === "string") {
+        try {
+          contentData = JSON.parse(article.content);
+        } catch (e) {
+          console.warn(`[getNews] Failed to parse content for article ${article.slug}`);
+          contentData = {};
+        }
+      } else if (article.content) {
+        contentData = article.content as Record<string, any>;
+      }
+
+      return {
+        slug: article.slug,
+        title: article.title,
+        titleEn: contentData.titleEn || article.title,
+        excerpt: article.excerpt || "",
+        excerptEn: contentData.excerptEn || article.excerpt || "",
+        image:
+          article.cover_image ||
+          (article.images && article.images.length > 0
+            ? article.images[0]
+            : ""),
+        date:
+          article.published_at?.toISOString() ||
+          article.created_at?.toISOString() ||
+          "",
+        category:
+          article.tags && article.tags.length > 0 ? article.tags[0] : "",
+        categoryEn:
+          contentData.categoryEn ||
+          (article.tags && article.tags.length > 0 ? article.tags[0] : ""),
+        author: "Admin",
+      };
+    });
+
+    return {
+      articles: mappedArticles,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
+  },
+
+  async getNewsDetail(
+    slug: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    lang?: string,
+  ) {
+    const article = await prisma.articles.findUnique({
+      where: { slug },
+      include: {
+        user: {
+          select: { name: true },
+        },
+      },
+    });
+
+    if (!article) {
+      throw new Error("Article not found");
+    }
+
+    let contentData: Record<string, any> = {};
+    if (typeof article.content === "string") {
+      try {
+        contentData = JSON.parse(article.content);
+      } catch (e) {
+        console.warn(`[getNewsDetail] Failed to parse content for article ${article.slug}`);
+        contentData = {};
+      }
+    } else if (article.content) {
+      contentData = article.content as Record<string, any>;
+    }
+
+    return {
+      slug: article.slug,
+      title: article.title,
+      titleEn: contentData.titleEn || article.title,
+      content: article.raw_html || article.full_content || "",
+      contentEn:
+        contentData.contentEn || article.raw_html || article.full_content || "",
+      excerpt: article.excerpt || "",
+      excerptEn: contentData.excerptEn || article.excerpt || "",
+      image:
+        article.cover_image ||
+        (article.images.length > 0 ? article.images[0] : ""),
+      date:
+        article.published_at?.toISOString() ||
+        article.created_at?.toISOString() ||
+        "",
+      category: article.tags.length > 0 ? article.tags[0] : "",
+      categoryEn:
+        contentData.categoryEn ||
+        (article.tags.length > 0 ? article.tags[0] : ""),
+      author: article.user?.name || "Admin",
+      source: contentData.source || "LottoX",
+      related: [],
+    };
+  },
+};

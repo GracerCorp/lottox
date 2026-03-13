@@ -1,0 +1,460 @@
+export default {
+    header: {
+      home: "Home",
+      results: "Latest Results",
+      news: "News",
+      verified: "Verified",
+    },
+    hero: {
+      title: "Worldwide Lottery Results",
+      subtitle:
+        "Fast, accurate, and reliable worldwide lottery results platform.",
+      viewDetails: "View Details",
+      estimatedJackpot: "Estimated Jackpot",
+    },
+    common: {
+      date: "Date",
+      draw: "Draw",
+      baht: "Baht",
+      kip: "Kip",
+      searchPlaceholder: "Enter Ticket Number",
+      checkResult: "Check Result",
+      checkBtn: "Check",
+      checkLaoResult: "Check Result",
+      readMore: "Read More",
+      loading: "Loading...",
+      error: "Error occurred",
+      updated: "Updated",
+      perPrize: "per prize",
+      adjacent: "Adjacent to 1st Prize",
+      stats: "Stats",
+      nextDraw: "Next Draw",
+      odds: "Odds",
+      totalPrize: "Total Prize Pool",
+      historyTitle: "Check Past Draws",
+      checkTicket: "Check Government Lottery",
+      selectType: "Select Draw",
+      inputPlaceholder: "Enter number",
+      inputPlaceholder1: "1st Prize",
+      inputPlaceholder2: "3-Digit Front",
+      inputPlaceholder3: "3-Digit Back",
+      inputPlaceholder4: "Enter 4 digits",
+      visitGLO: "Visit GLO Website",
+      otherLottery: "Other Lotteries",
+      thaiTitle: "Thai Government",
+      laoTitle: "Lao Lotto",
+      drawSchedule: "Draw Schedule",
+      type: "Type",
+      currency: "Currency",
+      pay: "Pays",
+      payRate: "Pay Rate",
+      info: "Lao Lotto Info",
+      newsTitle: "Latest News",
+      viewDetails: "View Details",
+      checkResultDesc:
+        "Enter your ticket numbers to see if you've won in the selected draw. Supports multiple numbers.",
+      drawDate: "Draw Date",
+      latestDraw: "Latest Draw",
+      current: "Current",
+      yourTicketNumber: "Your Ticket Number",
+      ticketExample: "(e.g. 123456, 789012)",
+      addMoreTickets: "+ Add more tickets",
+      verifyTicketTitle: "Verify Your Ticket",
+      verifyTicketDesc:
+        "Check if your tickets are winners across the last 30 draws automatically.",
+      enterYourNumbers: "Enter your numbers",
+      separateTickets: "Separate multiple tickets by commas or spaces.",
+      verifySuccess: "Congratulations! You've won",
+      verifySuccessDesc1: "Number",
+      verifySuccessDesc2: "matched the following prizes:",
+      verifyFail: "Sorry",
+      verifyFailDesc1: "Number",
+      verifyFailDesc2: "did not match any prizes in this draw.",
+    },
+    subscribe: {
+      button: "Subscribe for Results",
+      title: "Get Lottery Alerts",
+      placeholder: "Enter your email",
+      success: "Subscribed! We will send results to your email.",
+      error: "Something went wrong. Please try again.",
+      sending: "Sending...",
+    },
+    lottery: {
+      thai: {
+        name: "Thai Government",
+        subName: "Thai Government Lotto",
+        country: "Thailand",
+      },
+      lao: {
+        name: "Lao Lotto",
+        subName: "Lao Lotto",
+        country: "Laos",
+      },
+      vietnam: {
+        name: "Vietnam Lottery",
+        subName: "Hanoi Lottery",
+        country: "Vietnam",
+        specific: {
+          name: "Hanoi Specific",
+          subName: "Hanoi Specific",
+          time: "16:30",
+        },
+        special: {
+          name: "Hanoi Special",
+          subName: "Hanoi Special",
+          time: "17:30",
+        },
+        normal: {
+          name: "Hanoi Normal",
+          subName: "Hanoi Normal",
+          time: "18:30",
+        },
+        vip: {
+          name: "Hanoi VIP",
+          subName: "Hanoi VIP",
+          time: "19:30",
+        },
+      },
+    },
+    news: {
+      title: "News",
+      backToNews: "Back to News",
+      publishedAt: "Published at",
+      source: "Source",
+      relatedNews: "Related News",
+    },
+    results: {
+      latest: "Latest Results",
+      history: "History",
+      prize1: "1st Prize",
+      prize3Front: "3-Digit Front",
+      prize3Back: "3-Digit Back",
+      prize2: "2-Digit Suffix",
+      prize4: "4 Digits",
+      prize3: "3 Digits",
+      prize1Digit: "1 Digit",
+      prize2rank: "2nd Prize",
+      prize3rank: "3rd Prize",
+      prize4rank: "4th Prize",
+      prize5rank: "5th Prize",
+      digit4: "4 Digits",
+      digit3: "3 Digits",
+      digit2: "2 Digits",
+      digit3Top: "3 Digits Upper",
+      digit2Top: "2 Digits Upper",
+      digit2Bottom: "2 Digits Lower",
+      prize_2_digits: "2-Digits",
+      prize_3_digits: "3-Digits",
+      prize_4_digits: "4-Digits",
+      prize_modern_5: "Lao Modern 5",
+      prize_1_thai: "1st Prize",
+      running_number_front_3: "3-Digit Front",
+      running_number_back_3: "3-Digit Back",
+      running_number_back_2: "2-Digit Back",
+      nearby_prize_1: "Adjacent to 1st Prize",
+    },
+    selector: {
+      all: "All",
+      thai: "Thai",
+      lao: "Lao",
+      vietnam: "Vietnam",
+    },
+    footer: {
+      worldDashboard: "World Dashboard",
+      statistics: "Statistics",
+      about: "About",
+      faq: "FAQ",
+      contact: "Contact",
+      disclaimer: "Disclaimer",
+      terms: "Terms",
+      privacy: "Privacy",
+      api: "API",
+      whyTitle: "Why LOTTOX?",
+      whyDesc1: "Global 100+ sources",
+      whyDesc2:
+        "providing platform with verified lottery results. Strict process care with premium reliability and encryption technology.",
+      apiAccess: "API Access",
+    },
+    countryList: {
+      title: "Choose Your Country",
+      seeAll: "See All Countries",
+      lotteries: "Lotteries",
+      countries: {
+        usa: "USA",
+        uk: "UK",
+        laos: "Laos",
+        vietnam: "Vietnam",
+        thailand: "Thailand",
+        italy: "Italy",
+        france: "France",
+        japan: "Japan",
+        australia: "Australia",
+        brazil: "Brazil",
+      },
+    },
+    staticParams: {
+      about: {
+        title: "About LOTTOX",
+        subtitle: "The worldwide lottery results platform you can trust",
+        intro:
+          "LOTTOX is a Global Lottery Results Platform focused on accuracy, precision, and premium user experience. We serve as an Information Hub only -- we are NOT involved in gambling, lottery sales, or any betting activities.",
+        missionTitle: "Our Mission",
+        mission:
+          "We aim to be the most trusted source for lottery results in the region, aggregating data from over 100 official sources worldwide with a rigorous automated verification system, ensuring you receive accurate and up-to-date information.",
+        visionTitle: "Our Vision",
+        vision:
+          "We believe everyone should have convenient, fast, and transparent access to lottery results, no matter where they are in the world. LOTTOX is committed to setting a new standard for modern, secure, and user-friendly online lottery result checking.",
+        featuresTitle: "Our Key Features",
+        features: [
+          {
+            title: "Real-Time Data",
+            desc: "Results updated instantly as official draws are announced, with automatic notification systems.",
+          },
+          {
+            title: "Global Coverage",
+            desc: "Supporting lotteries from over 50 countries including Thailand, Laos, USA, UK, Japan, and more.",
+          },
+          {
+            title: "Verified Results",
+            desc: "Every piece of data goes through a verification process and cross-referencing with official sources.",
+          },
+          {
+            title: "In-Depth Statistics",
+            desc: "Hot/cold number analysis, jackpot trends, and detailed historical statistics.",
+          },
+        ],
+        valuesTitle: "Core Values",
+        values: [
+          {
+            title: "Accuracy",
+            desc: "We prioritize data precision above all else.",
+          },
+          {
+            title: "Transparency",
+            desc: "All data can be verified and traced back to its source.",
+          },
+          {
+            title: "Reliability",
+            desc: "Enterprise-grade security with data encryption technology.",
+          },
+        ],
+      },
+      faq: {
+        title: "Frequently Asked Questions",
+        subtitle: "Popular questions about using LOTTOX",
+        items: [
+          {
+            q: "What is LOTTOX?",
+            a: "LOTTOX is a platform that aggregates and presents lottery results from around the world. It serves as an Information Hub only -- it does NOT sell lottery tickets or engage in any gambling activities.",
+          },
+          {
+            q: "How fast are the results updated?",
+            a: "Results are updated in real-time as official draws are announced. Our system collects data directly from official sources. Users can check results within minutes of the draw.",
+          },
+          {
+            q: "Is this verified information?",
+            a: "All data is sourced directly from official government agencies and related organizations, and goes through an automated verification process before being displayed. However, we always recommend verifying with official sources.",
+          },
+          {
+            q: "Can I check past lottery results?",
+            a: "Yes, LOTTOX has a historical results database that you can search and verify. You can filter by date or draw number, and use the ticket number checker for automatic result verification.",
+          },
+          {
+            q: "Which countries does LOTTOX support?",
+            a: "Currently, LOTTOX supports lotteries from multiple countries including Thailand (Government Lottery), Laos (Lao Development Lottery), and we are expanding to cover over 50 countries worldwide, including Powerball, Mega Millions, UK Lotto, and more.",
+          },
+          {
+            q: "Is LOTTOX free to use?",
+            a: "Using LOTTOX to check lottery results and view basic statistics is completely free. You can access all lottery result data at no cost through our website.",
+          },
+          {
+            q: "Is my personal data safe?",
+            a: "We do not collect sensitive personal information and use internationally recognized security standards to protect data. We will never sell or share your data with third parties. Read more on our Privacy Policy page.",
+          },
+          {
+            q: "How can I report incorrect information?",
+            a: "If you find incorrect information, please contact us at support@lotto-x.com with details about the error, the draw number, and the correct information. Our team will review and correct it as soon as possible.",
+          },
+        ],
+      },
+      contact: {
+        title: "Contact Us",
+        subtitle:
+          "Have questions or need assistance? We'd love to hear from you",
+        generalTitle: "General Inquiries",
+        generalDesc: "For general questions about using LOTTOX or suggestions",
+        generalEmail: "info@lotto-x.com",
+        supportTitle: "Technical Support",
+        supportDesc: "For technical issues, bug reports, or incorrect data",
+        supportEmail: "support@lotto-x.com",
+        partnerTitle: "Business Partners",
+        partnerDesc: "For media, business collaborations, or API access",
+        partnerEmail: "partner@lotto-x.com",
+        responseTitle: "Response Time",
+        responseDesc:
+          "We strive to respond to all messages within 24-48 hours on business days",
+        workingHours: "Monday - Friday, 09:00 - 18:00 (Bangkok Time, GMT+7)",
+        noteTitle: "Please Note",
+        noteDesc:
+          "LOTTOX is an information platform only. We do not sell lottery tickets or engage in gambling. To purchase tickets, please contact the relevant official agencies directly.",
+      },
+      disclaimer: {
+        title: "Disclaimer",
+        subtitle:
+          "Please read this disclaimer carefully before using our services",
+        lastUpdated: "Last Updated: February 2026",
+        sections: [
+          {
+            title: "Information-Only Platform",
+            content:
+              "LOTTOX is an information-only platform. LOTTOX does not operate, promote, sell, or facilitate any form of lottery sales, gambling, betting, or wagering.",
+          },
+          {
+            title: "Data Sources",
+            content:
+              "All lottery results, statistics, and related content displayed on LOTTOX are collected from publicly available sources and official lottery authorities, and are provided solely for informational and educational purposes.",
+          },
+          {
+            title: "Accuracy of Information",
+            content:
+              "LOTTOX does not guarantee the absolute accuracy, completeness, or real-time status of the information presented. Users are strongly advised to verify all results directly with the official lottery operators or authorized sources before relying on the information.",
+          },
+          {
+            title: "No Financial Advice",
+            content:
+              "LOTTOX does not provide financial, investment, or gambling advice. Any decisions made based on the information provided by LOTTOX are solely at the user's own risk and responsibility.",
+          },
+          {
+            title: "Acceptance of Terms",
+            content:
+              "By accessing or using LOTTOX, users acknowledge and agree to comply with the platform's Terms of Service and Privacy Policy.",
+          },
+        ],
+        importantNotice:
+          "LOTTOX is an information-only platform. No gambling, betting, or lottery sales are offered or facilitated.",
+        shortDisclaimer:
+          "LOTTOX provides lottery information for reference only. No gambling, betting, or lottery sales are offered. Please verify results with official sources.",
+      },
+      terms: {
+        title: "Terms of Service",
+        subtitle: "Please read these terms carefully before using our services",
+        lastUpdated: "Last Updated: February 2026",
+        sections: [
+          {
+            title: "1. Acceptance of Terms",
+            content:
+              "By accessing and using the LOTTOX website, you accept and agree to comply with these terms and conditions. If you do not agree with these terms, please stop using our website immediately.",
+          },
+          {
+            title: "2. User Eligibility",
+            content:
+              "You must be at least 18 years old to use this service. By using the website, you confirm that you meet the age requirement as required by law.",
+          },
+          {
+            title: "3. Nature of Service",
+            content:
+              "LOTTOX is a platform that provides lottery result information from around the world as an Information Hub only. We do not sell lottery tickets, do not accept bets, do not provide gambling services, and are not involved in any gambling activities. Users should not interpret information on this website as gambling advice.",
+          },
+          {
+            title: "4. Intellectual Property",
+            content:
+              "All content, design, logos, graphics, and components on this website are the property of LOTTOX and are protected by intellectual property laws. Reproduction, modification, or distribution without written permission is prohibited.",
+          },
+          {
+            title: "5. Data and Accuracy",
+            content:
+              "While we make every effort to provide accurate information, we do not guarantee the accuracy, completeness, or timeliness of all information. Users should always verify results with official sources.",
+          },
+          {
+            title: "6. Limitation of Liability",
+            content:
+              "LOTTOX shall not be liable for any damages arising from the use or inability to use the website, including but not limited to direct, indirect, special, or consequential damages.",
+          },
+          {
+            title: "7. Changes to Terms",
+            content:
+              "We reserve the right to modify, change, or update these terms at any time without prior notice. Continued use of the website after changes constitutes acceptance of the updated terms.",
+          },
+          {
+            title: "8. Governing Law",
+            content:
+              "These terms are governed by and construed in accordance with the laws of Thailand. Any disputes shall be subject to the jurisdiction of the courts of Thailand.",
+          },
+        ],
+      },
+      privacy: {
+        title: "Privacy Policy",
+        subtitle: "We are committed to protecting your personal information",
+        lastUpdated: "Last Updated: February 2026",
+        sections: [
+          {
+            title: "Information We Collect",
+            content:
+              "We collect only the information necessary for providing our services, including website usage data (pages visited, session duration), device information (browser type, operating system), IP address, and approximate geographic location. For registered users, we may collect email addresses and personal preferences.",
+          },
+          {
+            title: "How We Use Information",
+            content:
+              "We use collected information for the following purposes: improving and developing our services, analyzing usage behavior for better performance, compiling usage statistics, answering questions and providing user support, and sending news or notifications (only with user consent).",
+          },
+          {
+            title: "Cookies and Tracking Technologies",
+            content:
+              "We use cookies and similar technologies to remember your preferences, such as language selection, and to analyze website usage. You can set your browser to reject cookies, but doing so may affect the functionality of some features.",
+          },
+          {
+            title: "Information Sharing",
+            content:
+              "We will not sell, trade, or transfer your personal information to third parties for commercial purposes. Information may only be shared with service providers necessary for operations (e.g., hosting providers, analytics services) under confidentiality agreements.",
+          },
+          {
+            title: "Data Security",
+            content:
+              "We implement appropriate technical and organizational security measures to protect your data, including SSL/TLS encryption for data transmission and restricting data access to authorized personnel only.",
+          },
+          {
+            title: "User Rights",
+            content:
+              "You have the right to access, correct, or delete your personal data, the right to object to or restrict data processing, the right to withdraw consent, and the right to file a complaint with a data protection authority. To exercise these rights, please contact us at support@lotto-x.com.",
+          },
+          {
+            title: "Policy Changes",
+            content:
+              "We may update this privacy policy from time to time. Changes take effect when published on the website. We recommend checking this policy periodically to stay informed of the latest updates.",
+          },
+        ],
+      },
+      api: {
+        title: "API Documentation",
+        desc: "Integrate lottery results into your own application with our robust API.",
+        endpoint: "Endpoint",
+        method: "Method",
+        example: "Example Response",
+      },
+      laoDetails: {
+        title: "Lottery Details",
+        desc: "Each animal number represents a single digit. You purchase three animals at a time. After the 2-digit and 3-digit results are announced, the animal numbers are drawn.",
+        prizesTitle: "Prize Rates",
+        prizes: [
+          "4 Digits: Win 6,000x your bet. Example: Buy 1,000 LAK, get 6,000,000 LAK.",
+          "3 Digits: Win 500x your bet. Example: Buy 1,000 LAK, get 500,000 LAK.",
+          "2 Digits: Win 60x your bet. Example: Buy 1,000 LAK, get 60,000 LAK.",
+          "1 Animal Match: Get your bet amount back (Refund).",
+          "2 Animal Matches: Win 20x your bet. Example: Buy 1,000 LAK, get 20,000 LAK. Buy 5,000 LAK, get 100,000 LAK.",
+          "3 Animal Matches: Win 2,000x your bet. Example: Buy 1,000 LAK, get 2,000,000 LAK. Buy 5,000 LAK, get 10,000,000 LAK.",
+        ],
+      },
+      vietnamDetails: {
+        title: "Hanoi Lottery Details",
+        desc: "Hanoi Lottery or Vietnam Lottery is based on the lottery results from Vietnam. Draws take place daily.",
+        prizesTitle: "Estimated Prize Rates",
+        prizes: [
+          "3 Digits Upper: Pays 850 : 1",
+          "3 Digits Tood: Pays 120 : 1",
+          "2 Digits Upper: Pays 92 : 1",
+          "2 Digits Lower: Pays 92 : 1",
+          "Running Upper: Pays 3.2 : 1",
+          "Running Lower: Pays 4.2 : 1",
+        ],
+      },
+    }}

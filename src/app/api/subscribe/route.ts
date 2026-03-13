@@ -3,7 +3,7 @@ const API_KEY = process.env.API_KEY || "";
 
 import { z } from "zod";
 
-const EXTERNAL_API = "https://lotto-x-cms.vercel.app";
+const EXTERNAL_API = process.env.CMS_API_URL || "https://lotto-x-cms.vercel.app";
 
 const bodySchema = z.object({
   email: z.string().email("Invalid email address"),

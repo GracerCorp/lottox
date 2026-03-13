@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getFlagUrl } from "@/lib/flags";
 import { useApi } from "@/lib/hooks/useApi";
+import { slugify } from "@/lib/utils/lotteryUtils";
 import type { LatestResultsResponse, LatestResult } from "@/lib/api-types";
 
 interface PrizeItem {
@@ -18,6 +19,7 @@ export interface ResultRow {
   date: string;
   flag: string;
   country: string;
+  countryId: string;
   name: string;
   numbers: PrizeItem[];
   id: string;
@@ -49,13 +51,6 @@ export function mapApiResultToRow(
   const d = result.data as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const prizes = (d?.prizes || []) as any[];
-
-  // Slugify lottery name to produce URL-safe path
-  const slugify = (name: string) =>
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
 
   // Derive country metadata from countryCode (from API) or fallback from type
   const cc =
@@ -185,7 +180,8 @@ export function mapApiResultToRow(
   const finalHref = `${lottoHref}/${pathDate}`;
 
   return {
-    id: countryId,
+    id: `${countryId}-${result.id}`,
+    countryId: countryId,
     date: dateStr,
     flag: getFlagUrl(flagCode),
     country: countryName,
@@ -213,7 +209,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
   }
 
   const results =
-    filter === "all" ? rawResults : rawResults.filter((r) => r.id === filter);
+    filter === "all" ? rawResults : rawResults.filter((r) => r.countryId === filter);
 
   if (loading) {
     return (

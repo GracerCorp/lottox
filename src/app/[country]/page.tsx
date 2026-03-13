@@ -10,12 +10,7 @@ interface PageProps {
 }
 
 /** Generate URL-friendly slug from lottery name */
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+import { slugify } from "@/lib/utils/lotteryUtils";
 
 export default async function CountryPage({ params }: PageProps) {
   const resolvedParams = await params;

@@ -2,6 +2,7 @@ import LotteryDetail from "@/components/lottery/LotteryDetail";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getLotteryBySlug } from "@/lib/services/lotteryService";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 interface PageProps {
   params: Promise<{ country: string; lottery: string }>;
@@ -33,6 +34,14 @@ export default async function LotteryPage({ params }: PageProps) {
     notFound();
   }
   const { country: countryInfo, lottery: lotteryInfo, apiType } = data;
+  
+  // Optional chaining fallback array, fallback if fails
+  let initialData;
+  try {
+    initialData = await apiClient.getResultsByType(apiType, 10);
+  } catch (error) {
+    console.error("Failed to prefetch lottery detail:", error);
+  }
 
   return (
     <LotteryDetail
@@ -43,6 +52,7 @@ export default async function LotteryPage({ params }: PageProps) {
       apiEndpoint={`/api/results/${apiType}`}
       logo={lotteryInfo.logo}
       currency={lotteryInfo.currency}
+      initialData={initialData as import("@/lib/api-types").ResultsByTypeResponse | undefined}
     />
   );
 }

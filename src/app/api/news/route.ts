@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiClient } from "@/lib/services/lotteryResultService";
-
+import { NextResponse, NextRequest } from "next/server";
+import { newsService } from "@/lib/services/newsService";
 import { z } from "zod";
 
 const querySchema = z.object({
@@ -33,7 +32,7 @@ export async function GET(request: NextRequest) {
 
     const { page, limit, category, search } = validation.data;
 
-    const data = await apiClient.getNews({
+    const data = await newsService.getNews({
       page,
       limit,
       category,
@@ -49,3 +48,6 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+
+export const revalidate = 300;

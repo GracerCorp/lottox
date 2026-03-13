@@ -11,8 +11,15 @@ import { useApi } from "@/lib/hooks/useApi";
 import { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
 import { getFlagUrl } from "@/lib/flags";
 import Image from "next/image";
+import {
+  getPrizeNumber,
+  getPrizeAmount,
+  getPrizeName,
+  formatDateDisplay,
+  GenericPrizeData
+} from "@/lib/utils/lotteryUtils";
 
-interface LotteryDetailProps {
+export interface LotteryDetailProps {
   country: string;
   countryCode: string;
   lotteryName: string;
@@ -20,6 +27,7 @@ interface LotteryDetailProps {
   apiEndpoint: string;
   logo?: string | null;
   currency?: string | null;
+  initialData?: ResultsByTypeResponse;
 }
 
 /* -- Components -- */
@@ -87,13 +95,21 @@ export default function LotteryDetail({
   apiEndpoint,
   logo,
   currency,
+  initialData,
 }: LotteryDetailProps) {
   const { t, language } = useLanguage();
-  const { data, loading, error } = useApi<ResultsByTypeResponse>(
-    `${apiEndpoint}?limit=10`,
+  const {
+    data: apiData,
+    loading,
+    error,
+  } = useApi<ResultsByTypeResponse>(
+    initialData ? null : `${apiEndpoint}?limit=10`,
   );
 
-  if (loading) {
+  const activeData = initialData || apiData;
+  const isLoading = !initialData && loading;
+
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 animate-pulse">
         <div className="mb-8 h-20 rounded-lg bg-gray-200 dark:bg-navy-800/50" />
@@ -112,7 +128,7 @@ export default function LotteryDetail({
     );
   }
 
-  if (error) {
+  if (error && !initialData) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-8 text-center text-red-400">
@@ -122,114 +138,11 @@ export default function LotteryDetail({
     );
   }
 
-  const latest = data?.latest;
-  const historyItems = data?.history ?? [];
+  const latest = activeData?.latest;
+  const historyItems = activeData?.history ?? [];
   const latestData = latest?.data as ThaiResultData | undefined;
 
-  // Helper to extract data from the new `chosen_data` prizes array
-  const getPrizeNumber = (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    d: any,
-    names: string[],
-    categories: string[] = [],
-    fallbackOrder?: number,
-  ) => {
-    if (d?.prizes && Array.isArray(d.prizes)) {
-      const p = d.prizes.find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (p: any) =>
-          names.includes(p.prizeName) || categories.includes(p.category),
-      );
-      if (p) {
-        const nums = p.winningNumbers || p.number;
-        return Array.isArray(nums) ? nums : [nums];
-      }
-      // Fallback: match by order field
-      if (fallbackOrder !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
-        if (byOrder) {
-          const nums = byOrder.winningNumbers || byOrder.number;
-          return Array.isArray(nums) ? nums : [nums];
-        }
-      }
-    }
-    return undefined;
-  };
-
-  const getPrizeAmount = (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    d: any,
-    names: string[],
-    categories: string[] = [],
-    fallbackOrder?: number,
-  ) => {
-    if (d?.prizes && Array.isArray(d.prizes)) {
-      const p = d.prizes.find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (p: any) =>
-          names.includes(p.prizeName) || categories.includes(p.category),
-      );
-      if (p) return String(p.amount || p.prizeAmount || p.reward || "");
-      // Fallback: match by order field
-      if (fallbackOrder !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
-        if (byOrder)
-          return String(
-            byOrder.amount || byOrder.prizeAmount || byOrder.reward || "",
-          );
-      }
-    }
-    return undefined;
-  };
-
-  const getPrizeName = (pName: string, pCat?: string): string => {
-    const name = pName || "";
-    const cat = pCat || "";
-
-    // Lao mappings
-    if (cat === "prize_2_digits" || name === "prize_2_digits")
-      return t.results.prize_2_digits;
-    if (cat === "prize_3_digits" || name === "prize_3_digits")
-      return t.results.prize_3_digits;
-    if (cat === "prize_4_digits" || name === "prize_4_digits")
-      return t.results.prize_4_digits;
-    if (cat === "prize_modern_5" || name === "prize_modern_5")
-      return t.results.prize_modern_5;
-
-    // Thai mappings
-    if (cat === "prize_1" || name === "prize_1") return t.results.prize_1_thai;
-    if (cat === "prize_2" || name === "prize_2") return t.results.prize2rank;
-    if (cat === "prize_3" || name === "prize_3") return t.results.prize3rank;
-    if (cat === "prize_4" || name === "prize_4") return t.results.prize4rank;
-    if (cat === "prize_5" || name === "prize_5") return t.results.prize5rank;
-    if (
-      cat === "running_number_front_3" ||
-      name === "running_number_front_3" ||
-      name === "3 Front"
-    )
-      return t.results.running_number_front_3;
-    if (
-      cat === "running_number_back_3" ||
-      name === "running_number_back_3" ||
-      name === "3 Back"
-    )
-      return t.results.running_number_back_3;
-    if (
-      cat === "running_number_back_2" ||
-      name === "running_number_back_2" ||
-      name === "2 Back"
-    )
-      return t.results.running_number_back_2;
-    if (cat === "nearby_prize_1" || name === "nearby_prize_1")
-      return t.results.nearby_prize_1;
-
-    return name;
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawData = latestData as any;
+  const rawData = latestData as unknown as GenericPrizeData;
 
   const p1Names = [
     "Prize 1",
@@ -298,41 +211,10 @@ export default function LotteryDetail({
     "รางวัลข้างเคียง",
   ];
   const pAdjCats = ["nearby_prize_1"];
-  // Helper to format any date string into human-readable locale format
-  const formatDateDisplay = (dateStr: string) => {
-    if (!dateStr || dateStr === "-") return dateStr;
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString(language === "th" ? "th-TH" : "en-US", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-    } catch {
-      return dateStr;
-    }
-  };
 
   // Format date for display - make it human readable and clear
   const rawDateStr = latest?.dateDisplay || latest?.date || "-";
-  let formattedDate = rawDateStr;
-  if (rawDateStr && rawDateStr !== "-") {
-    try {
-      const dateObj = new Date(rawDateStr);
-      formattedDate = dateObj.toLocaleDateString(
-        language === "th" ? "th-TH" : "en-US",
-        {
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        },
-      );
-    } catch {
-      formattedDate = rawDateStr;
-    }
-  }
+  const formattedDate = formatDateDisplay(rawDateStr, language);
 
   // Extract dynamic prizes for non-Thai lotteries
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -471,7 +353,7 @@ export default function LotteryDetail({
           .map(String)
           .filter((s: string) => s !== "undefined" && s !== "null");
         allPrizes.push({
-          name: getPrizeName(p.prizeName || p.category || "Prize", p.category),
+          name: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
           amount: String(p.amount || p.prizeAmount || p.reward || "0"),
           numbers: nums,
         });
@@ -549,7 +431,7 @@ export default function LotteryDetail({
     const rLast2 = Array.isArray(rl2Num) ? rl2Num[0] : rl2Num;
 
     return {
-      date: formatDateDisplay(item.dateDisplay || item.date),
+      date: formatDateDisplay(item.dateDisplay || item.date, language),
       firstPrize: String(rFirstPrize || "-"),
       last3f: String((Array.isArray(rFront3) ? rFront3 : [rFront3])[0] || "-"),
       last3b: String((Array.isArray(rBack3) ? rBack3 : [rBack3])[0] || "-"),
@@ -926,7 +808,7 @@ export default function LotteryDetail({
                   className="block rounded bg-gray-100 dark:bg-white/5 px-3 py-2 text-sm text-gray-600 dark:text-gray-300 transition-colors hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gold-600 dark:hover:text-gold-400"
                 >
                   {language === "th" ? "งวด " : "Draw "}
-                  {formatDateDisplay(item.dateDisplay || item.date)}
+                  {formatDateDisplay(item.dateDisplay || item.date, language)}
                 </Link>
               ))}
             </div>

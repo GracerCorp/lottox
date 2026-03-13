@@ -1,0 +1,92 @@
+import { countries, lotteries, lottery_results, articles, banners } from "@prisma/client";
+
+export const createMockCountry = (overrides?: Partial<countries>): countries => ({
+  id: 1,
+  name: "Thailand",
+  code: "th",
+  flag: null,
+  draw_schedule: null,
+  odds: null,
+  is_active: true,
+  created_at: new Date(),
+  ...overrides,
+});
+
+export const createMockLottery = (overrides?: Partial<lotteries>): lotteries => ({
+  id: 1,
+  name: "Thai Government Lottery",
+  logo: null,
+  currency: "THB",
+  country_id: 1,
+  showing_prizes: ["prize_1", "running_number_front_3"],
+  prize_amount_mode: "default",
+  default_prize_amounts: {},
+  is_active: true,
+  created_at: new Date(),
+  updated_at: new Date(),
+  ...overrides,
+});
+
+export const createMockLotteryResult = (overrides?: Partial<lottery_results>): lottery_results => ({
+  id: 1,
+  draw_date: "2024-01-01",
+  draw_period: "1/2567",
+  lottery_id: 1,
+  full_data: {}, // Raw data
+  data: {},
+  created_at: new Date(),
+  updated_at: new Date(),
+  validation_errors: null,
+  validation_status: "verified",
+  validated_at: new Date(),
+  prize_amount_mode: null,
+  is_published: true,
+  published_at: new Date(),
+  notified_at: null,
+  country_id: 1,
+  ...overrides,
+});
+
+export const createMockArticle = (overrides?: Partial<articles>): articles => ({
+  id: "article-1",
+  title: "Test Article",
+  slug: "test-article",
+  content: JSON.stringify({ titleEn: "Test Article EN" }),
+  excerpt: "Short test",
+  summary: null,
+  full_content: null,
+  meta_title: null,
+  meta_description: null,
+  canonical_url: null,
+  reading_time: null,
+  og_image: null,
+  og_title: null,
+  is_featured: false,
+  author_id: "user-1",
+  cover_image: null,
+  images: [],
+  tags: ["test"],
+  published: true,
+  published_at: new Date(),
+  created_at: new Date(),
+  updated_at: new Date(),
+  lottery_id: null,
+  related_articles: [],
+  view_count: 0,
+  likes_count: 0,
+  shares_count: 0,
+  comments_count: 0,
+  raw_html: null,
+  ...overrides,
+});
+
+export const createMockBanner = (overrides?: Partial<banners>): banners => ({
+  id: 1,
+  lottery_result_id: 1,
+  image_url: "https://example.com/banner.png",
+  ai_prompt: null,
+  is_active: true,
+  created_at: new Date(),
+  updated_at: new Date(),
+  ...overrides,
+});
