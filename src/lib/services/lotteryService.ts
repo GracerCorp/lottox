@@ -1,13 +1,16 @@
 import { prisma } from "@/lib/prisma";
 
-/** Country codes that have a live results page */
-export const SUPPORTED_COUNTRY_CODES = ["th", "la", "vn"] as const;
+/** Slugify a lottery name to produce URL-safe slug */
+import { slugify } from "@/lib/utils/lotteryUtils";
 
+/**
+ * Get all active countries with their active lotteries and jobs.
+ * No whitelist — returns every country marked `is_active: true` in the DB.
+ */
 export async function getActiveCountries() {
   const countries = await prisma.countries.findMany({
     where: {
       is_active: true,
-      code: { in: [...SUPPORTED_COUNTRY_CODES] },
     },
     include: {
       lotteries: {
@@ -48,16 +51,6 @@ export async function getLotteriesByCountry(countryCode: string) {
   return country;
 }
 
-/** Slugify a lottery name to produce URL-safe slug */
-import { slugify } from "@/lib/utils/lotteryUtils";
-
-/** Map from country code to API type key used in /api/results/[type] */
-const COUNTRY_TO_API_TYPE: Record<string, string> = {
-  th: "thai",
-  la: "lao",
-  vn: "vietnam",
-};
-
 /**
  * Find a lottery by country code + URL slug.
  * Slug is matched by slugifying each lottery name and comparing.
@@ -85,7 +78,8 @@ export async function getLotteryBySlug(
 
   if (!lottery) return null;
 
-  const apiType = COUNTRY_TO_API_TYPE[countryCode.toLowerCase()] || countryCode;
+  // apiType always uses the country code directly — no hardcoded map needed
+  const apiType = countryCode.toLowerCase();
 
   return {
     country,

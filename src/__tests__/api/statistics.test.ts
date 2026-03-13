@@ -1,84 +1,102 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { GET } from "@/app/api/statistics/route";
-import { statisticsService } from "@/lib/services/statisticsService";
-import { NextRequest } from "next/server";
 
-vi.mock("@/lib/services/statisticsService", () => {
+// 1. Mock countryResolver first
+vi.mock("@/lib/utils/countryResolver", () => {
   return {
-    statisticsService: {
-      getStatsOverview: vi.fn(),
-      getStatsFrequency: vi.fn(),
-    },
+    resolveCountryCode: vi.fn(async (input: string) => {
+      const mockMap: Record<string, string | null> = {
+        thai: "th",
+        th: "th",
+        au: "au",
+        nonsense: null,
+      };
+      return mockMap[input.toLowerCase()] || null;
+    }),
+    getDisplayType: vi.fn((code: string) => code.toUpperCase()),
   };
 });
 
-describe("Statistics API Route", () => {
+// 2. Mock prisma
+const mockFindMany = vi.fn();
+const mockCount = vi.fn();
+const mockTransaction = vi.fn();
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    lottery_results: {
+      findMany: (...args: any) => mockFindMany(...args),
+      count: (...args: any) => mockCount(...args),
+    },
+    lotteries: { count: vi.fn() },
+    countries: { count: vi.fn() },
+    $transaction: (...args: any) => mockTransaction(...args),
+  },
+}));
+
+// 3. Import service
+import { statisticsService } from "@/lib/services/statisticsService";
+
+describe("statisticsService", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should return formatted statistics on success", async () => {
-    (statisticsService.getStatsOverview as any).mockResolvedValue({
-      totalJackpotsTracked: "1000",
-      activeLotteries: 5,
-      upcomingDraws24h: 2,
-      totalCountries: 3,
+  describe("getStatsOverview", () => {
+    it("returns correct overview stats", async () => {
+      mockTransaction.mockResolvedValue([100, 10, 3]);
+      const result = await statisticsService.getStatsOverview();
+      expect(result).toEqual({
+        totalJackpotsTracked: "100",
+        activeLotteries: 10,
+        upcomingDraws24h: 0,
+        totalCountries: 3,
+      });
+    });
+  });
+
+  describe("getStatsFrequency", () => {
+    it("resolves dynamic country code", async () => {
+      mockFindMany.mockResolvedValue([]);
+      await statisticsService.getStatsFrequency("thai");
+      expect(mockFindMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            lottery: { countries: { code: "th" } },
+          }),
+        }),
+      );
     });
 
-    const req = new NextRequest("http://localhost:3000/api/statistics?type=overview");
-    const response = await GET(req);
-    const data = await response.json();
+    it("handles new dynamic country code", async () => {
+      mockFindMany.mockResolvedValue([]);
+      await statisticsService.getStatsFrequency("au");
+      expect(mockFindMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            lottery: { countries: { code: "au" } },
+          }),
+        }),
+      );
+    });
 
-    expect(response.status).toBe(200);
-    expect(data.totalJackpotsTracked).toBe("1000");
-    expect(data.activeLotteries).toBe(5);
-    expect(statisticsService.getStatsOverview).toHaveBeenCalledTimes(1);
-  });
-
-  it("should validate query parameters and reject invalid types", async () => {
-    const req = new NextRequest("http://localhost:3000/api/statistics?type=invalid");
-    const response = await GET(req);
-    const data = await response.json();
-
-    expect(response.status).toBe(400);
-    expect(data.error).toBe("Invalid query parameters");
-    expect(statisticsService.getStatsOverview).not.toHaveBeenCalled();
-    expect(statisticsService.getStatsFrequency).not.toHaveBeenCalled();
-  });
-
-  it("should default to overview type when none provided", async () => {
-    (statisticsService.getStatsOverview as any).mockResolvedValue({ default: true });
-    
-    const req = new NextRequest("http://localhost:3000/api/statistics");
-    await GET(req);
-    
-    expect(statisticsService.getStatsOverview).toHaveBeenCalledTimes(1);
-  });
-
-  it("should route to getStatsFrequency when type is valid and not overview", async () => {
-    (statisticsService.getStatsFrequency as any).mockResolvedValue({ type: "thai", draws: 30 });
-    
-    const req = new NextRequest("http://localhost:3000/api/statistics?type=thai&draws=30");
-    await GET(req);
-    
-    expect(statisticsService.getStatsFrequency).toHaveBeenCalledWith("thai", 30);
-  });
-
-  it("should catch and sanitize internal errors", async () => {
-    const dbError = new Error("Database connection failed completely");
-    (statisticsService.getStatsOverview as any).mockRejectedValue(dbError);
-
-    // Suppress console.error in tests for this specific test
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
-    const req = new NextRequest("http://localhost:3000/api/statistics?type=overview");
-    const response = await GET(req);
-    const data = await response.json();
-
-    expect(consoleSpy).toHaveBeenCalledWith("[API/Statistics] Error:", dbError);
-    expect(response.status).toBe(500);
-    expect(data.error).toBe("Internal Server Error");
-
-    consoleSpy.mockRestore();
+    it("extracts data and builds frequencies correctly", async () => {
+      mockFindMany.mockResolvedValue([
+        {
+          full_data: null,
+          draw_date: "2024-01-01",
+          result_verifications_result_verifications_lottery_result_idTolottery_results: [
+            { chosen_data: { number: "12345" } },
+          ],
+        },
+        {
+          full_data: { numbers: ["67890", "11111"] },
+          draw_date: "2024-01-02",
+          result_verifications_result_verifications_lottery_result_idTolottery_results: [],
+        },
+      ]);
+      const result = await statisticsService.getStatsFrequency("thai", 10);
+      expect(result.frequency["45"]).toBe(1);
+      expect(result.frequency["90"]).toBe(1);
+      expect(result.frequency["11"]).toBe(1);
+    });
   });
 });

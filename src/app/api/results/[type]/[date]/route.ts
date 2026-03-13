@@ -1,26 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
+import { resolveCountryCode } from "@/lib/utils/countryResolver";
 import { z } from "zod";
 
-/** Map API type slugs to DB country codes */
-const TYPE_TO_COUNTRY_CODE: Record<string, string> = {
-  thai: "th",
-  "government-lottery-office-glo": "th",
-  lao: "la",
-  laos: "la",
-  "lao-development": "la",
-  vietnam: "vn",
-};
-
 const paramsSchema = z.object({
-  type: z.enum([
-    "thai",
-    "lao",
-    "laos",
-    "vietnam",
-    "government-lottery-office-glo",
-    "lao-development",
-  ]),
+  type: z.string().min(1).max(30),
   date: z.string(),
 });
 
@@ -31,7 +15,7 @@ export async function GET(
   try {
     const resolvedParams = await params;
 
-    // Validate URL params
+    // Validate URL params (format only)
     const typeValidation = paramsSchema.safeParse(resolvedParams);
     if (!typeValidation.success) {
       return NextResponse.json(
@@ -41,12 +25,20 @@ export async function GET(
     }
 
     const { type, date } = typeValidation.data;
-    const countryCode = TYPE_TO_COUNTRY_CODE[type];
+
+    // Resolve dynamic country code
+    const countryCode = await resolveCountryCode(type);
+    if (!countryCode) {
+      return NextResponse.json(
+        { error: "Unsupported lottery type or country code" },
+        { status: 400 },
+      );
+    }
 
     // Fetch result filtered by both country and date
     const data = await apiClient.getGlobalResults({
       limit: 1,
-      country: countryCode,
+      country: countryCode, // The lookup depends on country code as param
       date: date,
     });
 
@@ -54,6 +46,7 @@ export async function GET(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let historyResults: any[] = [];
     try {
+      // Pass the original `type` string as getResultsByType resolves it again internally
       const historyData = await apiClient.getResultsByType(type, 10, 0);
       if (historyData && historyData.history) {
         historyResults = historyData.history;
@@ -90,6 +83,5 @@ export async function GET(
     );
   }
 }
-
 
 export const revalidate = 300;

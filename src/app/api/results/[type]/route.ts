@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
-
+import { resolveCountryCode } from "@/lib/utils/countryResolver";
 import { z } from "zod";
 
 const paramsSchema = z.object({
-  type: z.enum(["thai", "lao", "laos", "vietnam"]),
+  type: z.string().min(1).max(30),
 });
 
 const querySchema = z.object({
@@ -24,7 +24,16 @@ export async function GET(
     const typeValidation = paramsSchema.safeParse({ type });
     if (!typeValidation.success) {
       return NextResponse.json(
-        { error: "Invalid lottery type" },
+        { error: "Invalid lottery type format" },
+        { status: 400 },
+      );
+    }
+
+    // Verify it maps to a real country code in DB
+    const resolvedCountry = await resolveCountryCode(typeValidation.data.type);
+    if (!resolvedCountry) {
+      return NextResponse.json(
+        { error: "Unsupported lottery type or country code" },
         { status: 400 },
       );
     }
@@ -60,6 +69,5 @@ export async function GET(
     );
   }
 }
-
 
 export const revalidate = 300;
