@@ -3,7 +3,7 @@ export default {
       home: "หน้าแรก",
       results: "ผลรางวัลล่าสุด",
       news: "ข่าวสาร",
-      verified: "Verified",
+      verified: "ตรวจสอบแล้ว",
     },
     hero: {
       title: "ผลหวยออนไลน์ทั่วโลก",
@@ -156,6 +156,10 @@ export default {
       all: "ทั้งหมด",
       thai: "ไทย",
       lao: "ลาว",
+      jp: "ญี่ปุ่น",
+      au: "ออสเตรเลีย",
+      uk: "สหราชอาณาจักร",
+      usa: "สหรัฐอเมริกา",
       vietnam: "เวียดนาม",
     },
     footer: {
