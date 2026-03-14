@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "LOTTOX - ตรวจหวยออนไลน์ ผลหวยไทย หวยลาว งวดล่าสุด",
   description:
     "LOTTOX แพลตฟอร์มตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาล ผลหวยลาวพัฒนา งวดล่าสุด อัพเดทรวดเร็ว ถูกต้อง แม่นยำ ครบทุกรางวัล",
-  metadataBase: new URL("https://lottox.com"),
+  metadataBase: new URL("https://lottox.today"),
   alternates: {
     canonical: "/",
   },
@@ -56,10 +56,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${notoSansThai.variable} font-sans min-h-screen flex flex-col relative overflow-x-hidden`}
-      >
+    <html
+      lang="th"
+      suppressHydrationWarning
+      className={`${inter.variable} ${notoSansThai.variable}`}
+    >
+      <body className="font-sans min-h-screen flex flex-col relative overflow-x-hidden">
         <ClientProviders>
           <Header />
           <main className="flex-grow">{children}</main>
