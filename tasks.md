@@ -412,3 +412,8 @@ After all phases:
 - [x] Integrate sharing functionality with `NewsArticleContent.tsx` component.
 - [x] Fetch corresponding latest lottery result if appropriate metadata is parsed.
 - [x] Resolve JSON stringification errors for `DrawResult` when used.if available
+
+## Refactoring CountryGrid
+- [x] Research current `CountryGrid` implementation and database schema.
+- [x] Refactor `CountryGrid` safely to fetch from the database.
+- [x] Verify functionality.

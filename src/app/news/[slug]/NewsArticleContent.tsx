@@ -67,7 +67,7 @@ export default function NewsArticleContent({
   const origin =
     typeof window !== "undefined"
       ? window.location.origin
-      : "https://lotto-x.com";
+      : "https://lottox.today";
   const shareUrl = `${origin}${pathname}`;
 
   const shareTitle =
