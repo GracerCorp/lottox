@@ -69,9 +69,9 @@ export function CheckLotteryWidget() {
 
           <form
             onSubmit={handleCheck}
-            className="flex flex-col md:flex-row gap-4 items-center justify-center bg-gray-50 dark:bg-navy-950/50 p-2 md:p-3 rounded-2xl border border-gray-100 dark:border-white/5 shadow-inner"
+            className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-center bg-gray-50 dark:bg-navy-950/50 p-3 md:p-3 rounded-2xl border border-gray-100 dark:border-white/5 shadow-inner"
           >
-            <div className="w-full md:w-auto min-w-[150px]">
+            <div className="w-full md:w-auto md:min-w-[150px]">
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
@@ -94,14 +94,14 @@ export function CheckLotteryWidget() {
                 onChange={(e) => setNumber(e.target.value.replace(/\D/g, ""))}
                 placeholder="Enter numbers (e.g. 123456)"
                 maxLength={6}
-                className="w-full bg-white dark:bg-navy-800 border-none outline-none text-gray-800 dark:text-white text-lg py-3 md:py-4 pl-6 pr-12 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-white/10 focus:ring-2 focus:ring-primary transition-all text-center tracking-widest font-bold placeholder:font-normal placeholder:tracking-normal placeholder:text-gray-400"
+                className="w-full bg-white dark:bg-navy-800 border-none outline-none text-gray-800 dark:text-white text-lg py-3 md:py-4 px-4 md:pl-6 md:pr-12 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-white/10 focus:ring-2 focus:ring-primary transition-all text-center tracking-widest font-bold placeholder:font-normal placeholder:tracking-normal placeholder:text-gray-400"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading || number.length < 2}
-              className="w-full md:w-auto min-w-[140px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 md:py-4 px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
+              className="w-full md:w-auto md:min-w-[140px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 md:py-4 px-4 md:px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

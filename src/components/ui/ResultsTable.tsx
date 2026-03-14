@@ -261,9 +261,9 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
       <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-blue-500/20 opacity-20 dark:opacity-40 transition-opacity duration-200 group-hover:opacity-50 dark:group-hover:opacity-70" />
 
       {/* Row content */}
-      <div className="relative flex items-center gap-4 rounded-lg border border-gray-200/50 dark:border-transparent bg-white/90 dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm dark:shadow-none">
+      <div className="relative flex flex-wrap md:flex-nowrap items-center gap-3 rounded-lg border border-gray-200/50 dark:border-transparent bg-white/90 dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm dark:shadow-none">
         {/* Flag + name */}
-        <div className="flex items-center gap-2.5 sm:min-w-[180px]">
+        <div className="flex items-center gap-2.5 sm:min-w-[180px] w-full md:w-auto overflow-hidden">
           <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">
             <Image
               src={item.flag}
@@ -272,34 +272,36 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
               className="object-cover"
             />
           </div>
-          <div className="min-w-0">
-            <span className="text-md font-semibold leading-tight text-gray-900 dark:text-white">
+          <div className="min-w-0 flex flex-row md:flex-col items-center md:items-start gap-2 md:gap-0 grow">
+            <span className="text-md md:text-sm font-semibold leading-tight text-gray-900 dark:text-white truncate">
               {item.name}
             </span>
-            <span className="ml-2 hidden text-[14px] text-gray-500 sm:inline">
+            <span className="text-[12px] text-gray-500 truncate md:inline ml-auto md:ml-0">
               {item.date}
             </span>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
+        <div className="hidden md:block h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
 
         {/* Main prize */}
         {mainPrize && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 grow md:grow-0 justify-between md:justify-start">
             <span className="hidden text-[14px] font-medium uppercase tracking-wide text-gray-500 sm:inline">
               {mainPrize.label}
             </span>
-            {mainPrize.value.map((v, i) => (
-              <span
-                key={i}
-                className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
-              >
-                {v}
-              </span>
-            ))}
-            <span className="text-[14px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
+            <div className="flex items-center gap-2">
+              {mainPrize.value.map((v, i) => (
+                <span
+                  key={i}
+                  className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
+                >
+                  {v}
+                </span>
+              ))}
+            </div>
+            <span className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
               {mainPrize.prize}
             </span>
           </div>

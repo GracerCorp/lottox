@@ -28,7 +28,10 @@ export interface LotteryDetailProps {
   logo?: string | null;
   currency?: string | null;
   initialData?: ResultsByTypeResponse;
+  genericPrizeData?: GenericPrizeData;
 }
+
+import { cn } from "@/lib/utils";
 
 /* -- Components -- */
 function PrizeGrid({
@@ -40,8 +43,11 @@ function PrizeGrid({
 }) {
   return (
     <div
-      className="grid gap-px"
-      style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+      className={cn(
+        "grid gap-px",
+        columns === 5 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" : `grid-cols-${columns}` // Fallback wrapper for explicit sizes if needed
+      )}
+      style={columns !== 5 ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}
     >
       {numbers.map((num, i) => {
         const rowIndex = Math.floor(i / columns);
@@ -49,7 +55,7 @@ function PrizeGrid({
         return (
           <div
             key={i}
-            className={`px-2 py-3 text-center font-mono text-xl tabular-nums tracking-widest text-gray-800 dark:text-gray-200 transition-colors hover:bg-gold-500/10 hover:text-gold-600 dark:hover:text-gold-300 ${isZebraRow ? "bg-gray-50 dark:bg-white/[0.03]" : ""}`}
+            className={`px-1 sm:px-2 py-2 sm:py-3 text-center font-mono text-base sm:text-xl tabular-nums tracking-wide sm:tracking-widest text-gray-800 dark:text-gray-200 transition-colors hover:bg-gold-500/10 hover:text-gold-600 dark:hover:text-gold-300 ${isZebraRow ? "bg-gray-50 dark:bg-white/[0.03]" : ""}`}
             style={{ fontWeight: 600 }}
           >
             {num}

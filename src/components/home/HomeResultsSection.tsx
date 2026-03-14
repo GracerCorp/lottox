@@ -45,8 +45,8 @@ export function HomeResultsSection({ tabs }: HomeResultsSectionProps) {
   return (
     <section className="container mx-auto px-4">
       {/* Country Tabs */}
-      <div className="flex justify-center mb-8">
-        <div className="flex p-1 bg-white/60 dark:bg-navy-900/50 backdrop-blur-md rounded-full border border-gray-200/60 dark:border-white/10 shadow-sm dark:shadow-none">
+      <div className="flex w-full overflow-x-auto hide-scrollbar mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center">
+        <div className="flex shrink-0 p-1 bg-white/60 dark:bg-navy-900/50 backdrop-blur-md rounded-full border border-gray-200/60 dark:border-white/10 shadow-sm dark:shadow-none w-max">
           {localizedTabs.map((tab) => (
             <button
               key={tab.id}

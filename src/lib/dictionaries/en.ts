@@ -181,6 +181,13 @@ export default {
       au: "Australia",
       uk: "UK",
       usa: "USA",
+      sg: "Singapore",
+      my: "Malaysia",
+      id: "Indonesia",
+      ph: "Philippines",
+      tw: "Taiwan",
+      hk: "Hong Kong",
+      br: "Brazil",
       vietnam: "Vietnam",
     },
     footer: {

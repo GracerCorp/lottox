@@ -1,5 +1,13 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import withSerwistInit from "@serwist/next";
 import type { NextConfig } from "next";
+
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  disable: process.env.NODE_ENV === "development",
+  reloadOnOnline: true,
+});
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -46,7 +54,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+// Apply Serwist only in production, as it breaks Turbopack in development
+const exportConfig = process.env.NODE_ENV === "development" ? nextConfig : withSerwist(nextConfig);
+
+export default withSentryConfig(exportConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
