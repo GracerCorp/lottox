@@ -5,7 +5,6 @@ import { LotteryCard } from "@/components/home/LotteryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { motion } from "framer-motion";
 
 export interface HeroItem {
   id: string;
@@ -61,25 +60,20 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
   return (
     <section className="relative py-12 md:py-10 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-radial from-blue-500/10 to-transparent opacity-50 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] w-full bg-gradient-radial from-blue-500/10 to-transparent opacity-50 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-10">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <h1
             className="text-4xl md:text-6xl font-normal text-gray-900 dark:text-gray-50/80 mb-4 tracking-tight"
           >
             {t.hero.title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+          </h1>
+          <p
             className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
           >
             {t.hero.subtitle}
-          </motion.p>
+          </p>
         </div>
 
         {/* Carousel */}
