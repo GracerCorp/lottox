@@ -417,3 +417,7 @@ After all phases:
 - [x] Research current `CountryGrid` implementation and database schema.
 - [x] Refactor `CountryGrid` safely to fetch from the database.
 - [x] Verify functionality.
+
+## Fix Noto Sans Thai Font
+- [x] Fix Noto Sans Thai Font not applying properly
+

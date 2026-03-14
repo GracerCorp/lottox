@@ -9,14 +9,11 @@ export function Footer() {
 
   const links = [
     { title: t.footer.worldDashboard, href: "/global-draws" },
-    { title: t.footer.statistics, href: "/statistics" },
-    { title: t.footer.about, href: "/about" },
     { title: t.footer.faq, href: "/faq" },
     { title: t.footer.contact, href: "/contact" },
     { title: t.footer.disclaimer, href: "/disclaimer" },
     { title: t.footer.terms, href: "/terms" },
-    { title: t.footer.privacy, href: "/privacy" },
-    { title: t.footer.api, href: "/api-docs" },
+    { title: t.footer.privacy, href: "/privacy" }
   ];
 
   return (
@@ -65,10 +62,6 @@ export function Footer() {
               </Link>
             ))}
           </nav>
-
-          <button className="rounded-full border border-gold-500/30 bg-gold-500/10 px-6 py-2 text-xs font-bold dark:text-gold-400 text-gold-600 hover:bg-gold-500/20 hover:text-gold-300 transition-colors shadow-lg shadow-gold-900/20">
-            {t.footer.apiAccess}
-          </button>
         </div>
       </div>
     </footer>
