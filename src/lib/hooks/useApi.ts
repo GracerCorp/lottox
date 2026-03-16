@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface UseApiState<T> {
   data: T | null;
@@ -15,6 +15,11 @@ export function useApi<T>(url: string | null, options?: RequestInit) {
     error: null,
   });
 
+  const optionsRef = useRef(options);
+  useEffect(() => {
+    optionsRef.current = options;
+  }, [options]);
+
   const fetchData = useCallback(async () => {
     if (!url) {
       setState({ data: null, loading: false, error: null });
@@ -24,7 +29,7 @@ export function useApi<T>(url: string | null, options?: RequestInit) {
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const response = await fetch(url, options);
+      const response = await fetch(url, optionsRef.current);
       if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
       }
@@ -41,7 +46,6 @@ export function useApi<T>(url: string | null, options?: RequestInit) {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 const API_KEY = process.env.API_KEY || "";
 
 import { z } from "zod";
@@ -49,11 +50,7 @@ export async function POST(request: Request) {
       success: true,
       message: "Subscribed successfully",
     });
-  } catch (error) {
-    console.error("Subscribe API Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "Subscribe");
   }
 }

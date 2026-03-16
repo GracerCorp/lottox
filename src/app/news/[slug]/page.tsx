@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { newsService } from "@/lib/services/newsService";
+import type { NewsDetailResponse } from "@/lib/api-types";
 import { notFound } from "next/navigation";
 import NewsArticleContent from "./NewsArticleContent";
 
@@ -112,8 +113,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
     <>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <ArticleJsonLd article={articleData as any} />
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <NewsArticleContent article={articleData as any} />
+      <NewsArticleContent article={articleData as NewsDetailResponse} />
     </>
   );
 }

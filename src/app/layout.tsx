@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ClientProviders } from "@/components/ClientProviders";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
+import { CookieConsent } from "@/components/ui/CookieConsent";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -67,6 +68,7 @@ export default function RootLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
           <ScrollToTop />
+          <CookieConsent />
         </ClientProviders>
       </body>
     </html>

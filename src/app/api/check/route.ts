@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 
 import { z } from "zod";
 
@@ -33,12 +34,7 @@ export async function GET(request: NextRequest) {
 
     const data = await apiClient.checkNumber(number, type, drawDate);
     return NextResponse.json(data);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("API Error (Check):", error);
-    return NextResponse.json(
-      { error: "Failed to check number" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "Check");
   }
 }

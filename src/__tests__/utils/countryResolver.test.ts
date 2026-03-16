@@ -59,7 +59,7 @@ describe("countryResolver", () => {
 
     it("resolves direct country code 'th' via legacy map", async () => {
       // 'th' is not in LEGACY_ALIASES, so it falls through to DB lookup
-      mockFindFirst.mockResolvedValue({ code: "th" } as any);
+      mockFindFirst.mockResolvedValue({ code: "th" } as never);
       const result = await resolveCountryCode("th");
       expect(result).toBe("th");
       expect(mockFindFirst).toHaveBeenCalledWith({
@@ -72,7 +72,7 @@ describe("countryResolver", () => {
     });
 
     it("resolves a new country code 'au' from DB", async () => {
-      mockFindFirst.mockResolvedValue({ code: "au" } as any);
+      mockFindFirst.mockResolvedValue({ code: "au" } as never);
       const result = await resolveCountryCode("au");
       expect(result).toBe("au");
       expect(mockFindFirst).toHaveBeenCalled();

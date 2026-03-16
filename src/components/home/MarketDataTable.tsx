@@ -6,7 +6,7 @@ import { mapApiResultToRow } from "@/components/ui/ResultsTable";
 import type { LatestResultsResponse } from "@/lib/api-types";
 import { ArrowUpRight, TrendingUp } from "lucide-react";
 
-export function ResultsTable() {
+export function MarketDataTable() {
   const { t, language } = useLanguage();
   const { data, loading, error } = useApi<LatestResultsResponse>(
     "/api/results/latest",
@@ -29,11 +29,9 @@ export function ResultsTable() {
           special: specialPrize?.value?.join(" ") || "-",
           jackpot: mainPrize?.prize || "-",
           currency: row.id === "th" ? "THB" : row.id === "la" ? "LAK" : "VND",
-          change: "+0.0%",
-          trend: "neutral",
         };
       })
-      .filter(Boolean) || [];
+      .filter((r): r is NonNullable<typeof r> => r !== null) || [];
 
   return (
     <section className="py-12 bg-[#0a0f1c]">
@@ -42,16 +40,15 @@ export function ResultsTable() {
           <div className="flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-green-500" />
             <h2 className="text-xl font-mono uppercase tracking-widest text-green-500">
-              Market Data <span className="text-gray-600">{`//`}</span> Global
-              Lottery Index
+              {t.market.marketData} <span className="text-gray-600">{`//`}</span> {t.market.globalIndex}
             </h2>
           </div>
           <div className="flex items-center gap-4 text-xs font-mono text-gray-500">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              MARKET OPEN
+              {t.market.marketOpen}
             </span>
-            <span>VOL: 24.5M</span>
+            <span>{t.market.vol} 24.5M</span>
           </div>
         </div>
 
@@ -63,48 +60,46 @@ export function ResultsTable() {
             <table className="w-full text-left border-collapse table-fixed min-w-[700px]">
               <thead>
                 <tr className="bg-gray-900/50 text-gray-500 text-xs border-b border-gray-800 uppercase tracking-wider">
-                  <th className="p-3 font-normal w-12 text-center">STS</th>
-                  <th className="p-3 font-normal text-cyan-500">Symbol</th>
-                  <th className="p-3 font-normal text-left">Numbers</th>
-                  <th className="p-3 font-normal text-right">Special</th>
-                  <th className="p-3 font-normal text-right">Jackpot</th>
-                  <th className="p-3 font-normal text-right">Chg%</th>
+                  <th className="p-3 font-normal w-12 text-center">{t.market.sts}</th>
+                  <th className="p-3 font-normal text-cyan-500">{t.market.symbol}</th>
+                  <th className="p-3 font-normal text-left">{t.market.numbers}</th>
+                  <th className="p-3 font-normal text-right">{t.market.special}</th>
+                  <th className="p-3 font-normal text-right">{t.market.jackpot}</th>
                   <th className="p-3 font-normal text-right w-10"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/50">
                 {loading && (
                   <tr>
-                    <td colSpan={7} className="p-4 text-center text-gray-500">
-                      Loading market data...
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      {t.market.loading}
                     </td>
                   </tr>
                 )}
                 {error && (
                   <tr>
-                    <td colSpan={7} className="p-4 text-center text-red-500">
-                      Error loading data: {error}
+                    <td colSpan={6} className="p-4 text-center text-red-500">
+                      {t.market.error} {error}
                     </td>
                   </tr>
                 )}
                 {!loading && !error && results.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="p-4 text-center text-gray-500">
-                      No market data available.
+                    <td colSpan={6} className="p-4 text-center text-gray-500">
+                      {t.market.noData}
                     </td>
                   </tr>
                 )}
                 {!loading &&
                   !error &&
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  results.map((row: any, idx: number) => (
+                  results.map((row, idx) => (
                     <tr
                       key={idx}
                       className="hover:bg-gray-800/30 transition-colors group cursor-pointer text-gray-300"
                     >
                       <td className="p-3 text-center">
                         <div
-                          className={`w-1.5 h-1.5 rounded-full mx-auto ${row.trend === "up" ? "bg-green-500" : row.trend === "down" ? "bg-red-500" : "bg-gray-500"}`}
+                          className="w-1.5 h-1.5 rounded-full mx-auto bg-green-500"
                         ></div>
                       </td>
                       <td className="p-3">
@@ -133,11 +128,6 @@ export function ResultsTable() {
                           </span>
                         </div>
                       </td>
-                      <td
-                        className={`p-3 text-right ${row.change.startsWith("+") ? "text-green-500" : row.change.startsWith("-") ? "text-red-500" : "text-gray-500"}`}
-                      >
-                        {row.change}
-                      </td>
                       <td className="p-3 text-right text-gray-600 group-hover:text-white">
                         <ArrowUpRight className="w-4 h-4 ml-auto" />
                       </td>
@@ -148,10 +138,10 @@ export function ResultsTable() {
           </div>
 
           <div className="p-2 border-t border-gray-800 bg-gray-900/30 flex justify-between items-center text-[10px] text-gray-600 uppercase tracking-widest">
-            <span>Data provided by LottoX Financial</span>
+            <span>{t.market.providedBy}</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-green-900 rounded-full animate-ping"></span>
-              Realtime
+              {t.market.realtime}
             </span>
           </div>
         </div>

@@ -1,3 +1,19 @@
+/* ── Shared API Response Types ── */
+
+/** Standard error response shape returned by handleApiError */
+export interface ApiErrorResponse {
+  error: string;
+  details?: unknown;
+}
+
+/** Wrapper for paginated API responses */
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
 /* ── Types for External API Responses ── */
 
 // GET /api/results/latest

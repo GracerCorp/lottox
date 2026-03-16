@@ -17,9 +17,10 @@ describe("Countries API Route", () => {
   });
 
   it("should return formatted country data on success", async () => {
-    (countryService.getCountries as any).mockResolvedValue({
+    const mockedGetCountries = vi.mocked(countryService.getCountries);
+    mockedGetCountries.mockResolvedValue({
       countries: [
-        { id: 1, code: "th", name: "Thailand", is_active: true, _count: { lotteries: 1 } },
+        { id: 1, code: "th", name: "Thailand", is_active: true, _count: { lotteries: 1 } } as never,
       ],
     });
 
@@ -34,7 +35,8 @@ describe("Countries API Route", () => {
 
   it("should catch and sanitize internal errors", async () => {
     const dbError = new Error("Database connection failed completely");
-    (countryService.getCountries as any).mockRejectedValue(dbError);
+    const mockedGetCountries = vi.mocked(countryService.getCountries);
+    mockedGetCountries.mockRejectedValue(dbError);
 
     // Suppress console.error in tests for this specific test
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -42,7 +44,10 @@ describe("Countries API Route", () => {
     const response = await GET();
     const data = await response.json();
 
-    expect(consoleSpy).toHaveBeenCalledWith("[API/Countries] Error:", dbError);
+    expect(consoleSpy).toHaveBeenCalledWith("[API/Countries]", expect.objectContaining({
+      error: dbError.message,
+      stack: dbError.stack,
+    }));
     expect(response.status).toBe(500);
     expect(data.error).toBe("Internal Server Error");
 

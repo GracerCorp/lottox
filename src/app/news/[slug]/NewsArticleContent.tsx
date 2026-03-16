@@ -14,10 +14,11 @@ import {
   Link as LinkIcon,
   Check,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { DrawResult } from "@/components/lottery/DrawResult";
 import { transformLotteryResult } from "@/lib/utils/lotteryResultTransform";
+import { sanitizeHtml } from "@/lib/utils/sanitizeHtml";
 
 interface ArticleProps {
   slug: string;
@@ -45,6 +46,10 @@ export default function NewsArticleContent({
   article: ArticleProps;
 }) {
   const { t, language } = useLanguage();
+  const startTimeRef = useRef<number>(Date.now());
+  const activeSecondsRef = useRef<number>(0);
+  const isTabActiveRef = useRef<boolean>(true);
+  const viewTrackedRef = useRef<boolean>(false);
 
   // Fetch related articles from API
   const { data: newsData } = useApi<NewsListResponse>(
@@ -62,12 +67,63 @@ export default function NewsArticleContent({
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
 
-  // Derive URL from pathname. Use a placeholder origin during SSR,
-  // then client can use correct origin if needed, or we just rely on window.location in interaction
-  const origin =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://lottox.today";
+  useEffect(() => {
+    // 1. Initial page load - record view using beacon when navigating away
+    const handleVisibilityChange = () => {
+      const isVisible = document.visibilityState === "visible";
+      isTabActiveRef.current = isVisible;
+
+      if (isVisible) {
+        // Tab became active again
+        startTimeRef.current = Date.now();
+      } else {
+        // Tab became hidden
+        const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        activeSecondsRef.current += timeSpent;
+
+        // Send payload using sendBeacon to ensure it goes out even if the tab is closing
+        const payload = {
+          views: viewTrackedRef.current ? 0 : 1, // Only count view once per page load
+          activeSeconds: activeSecondsRef.current
+        };
+        
+        viewTrackedRef.current = true;
+        
+        // Reset active seconds after tracking so we don't double count if they come back
+        activeSecondsRef.current = 0;
+        
+        const blob = new Blob([JSON.stringify(payload)], {
+          type: "application/json",
+        });
+        navigator.sendBeacon(`/api/articles/${article.slug}/track`, blob);
+      }
+    };
+
+    // Track active seconds when user scrolls
+    let scrollTimeout: NodeJS.Timeout;
+    const handleScroll = () => {
+      // Just some basic scroll tracking logic could go here
+      // For now we rely on visibilityChange
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        // User stopped scrolling
+      }, 1000);
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [article.slug]);
+
+  // Use SSR-safe fallback origin, then sync real origin after mount to prevent hydration mismatch
+  const [origin, setOrigin] = useState("https://lottox.today");
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
   const shareUrl = `${origin}${pathname}`;
 
   const shareTitle =
@@ -186,7 +242,7 @@ export default function NewsArticleContent({
           ) : (
             <div
               className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap break-words"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
             />
           )}
         </div>
@@ -196,7 +252,7 @@ export default function NewsArticleContent({
           <div className="flex items-center gap-2">
             <Share2 className="h-5 w-5 text-gray-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {language === "th" ? "แชร์บทความนี้" : "Share this article"}
+              {t.news.shareArticle}
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -246,9 +302,7 @@ export default function NewsArticleContent({
         {/* Disclaimer */}
         <div className="mb-12 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-500/5 p-5 shadow-sm">
           <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-            {language === "th"
-              ? "ข้อมูลในบทความนี้เป็นเพียงข้อมูลอ้างอิง ไม่ได้รับประกันผลรางวัล กรุณาตรวจสอบจากแหล่งข้อมูลทางการเสมอ"
-              : "The information in this article is for reference only and does not guarantee results. Please always verify from official sources."}
+            {t.news.disclaimer}
           </p>
         </div>
       </article>
@@ -257,9 +311,7 @@ export default function NewsArticleContent({
       {article.relatedLottery && latestResultData && (
         <section className="mx-auto max-w-3xl mb-12">
           <h2 className="mb-6 text-xl font-bold text-gray-900 dark:text-white">
-            {language === "th"
-              ? `ผลสลาก ${article.relatedLottery.name} ล่าสุด`
-              : `Latest ${article.relatedLottery.name} Results`}
+            {t.news.latestResults.replace("{name}", article.relatedLottery.name)}
           </h2>
           <div className="[&>div]:mx-0 [&>div]:max-w-none">
             {latestResultData && transformLotteryResult(latestResultData, t) ? (

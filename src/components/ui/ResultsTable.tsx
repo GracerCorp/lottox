@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getFlagUrl } from "@/lib/flags";
 import { useApi } from "@/lib/hooks/useApi";
-import { slugify } from "@/lib/utils/lotteryUtils";
+import { slugify, formatDateShort } from "@/lib/utils/lotteryUtils";
 import type { LatestResultsResponse, LatestResult } from "@/lib/api-types";
+import type { GenericPrizeData, GenericPrizeItem } from "@/lib/utils/lotteryUtils";
 
 interface PrizeItem {
   label: string;
@@ -37,20 +38,11 @@ export function mapApiResultToRow(
   language: string,
 ): ResultRow | null {
   const type = result.type?.toUpperCase() || "";
-  const drawDate = new Date(result.drawDate || result.date);
-  const dateStr = drawDate.toLocaleDateString(
-    language === "th" ? "th-TH" : "en-US",
-    {
-      day: "numeric",
-      month: "short",
-      year: language === "th" ? undefined : "numeric",
-    },
-  );
+  const drawDate = result.drawDate || result.date;
+  const dateStr = formatDateShort(drawDate, language);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const d = result.data as any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const prizes = (d?.prizes || []) as any[];
+  const d = result.data as unknown as GenericPrizeData;
+  const prizes = (d?.prizes || []) as GenericPrizeItem[];
 
   // Derive country metadata from countryCode (from API) or fallback from type
   const cc =
@@ -101,8 +93,8 @@ export function mapApiResultToRow(
     if (result.showingPrizes && result.showingPrizes.length > 0) {
       displayPrizes = displayPrizes.filter(
         (p) =>
-          result.showingPrizes!.includes(p.prizeName) ||
-          result.showingPrizes!.includes(p.category),
+          result.showingPrizes!.includes(p.prizeName || "") ||
+          result.showingPrizes!.includes(p.category || ""),
       );
     } else {
       // Fallback: show up to 4 significant prizes

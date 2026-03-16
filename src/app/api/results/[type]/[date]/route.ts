@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
 import { resolveCountryCode } from "@/lib/utils/countryResolver";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 import { z } from "zod";
 
 const paramsSchema = z.object({
@@ -46,13 +47,12 @@ export async function GET(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let historyResults: any[] = [];
     try {
-      // Pass the original `type` string as getResultsByType resolves it again internally
       const historyData = await apiClient.getResultsByType(type, 10, 0);
       if (historyData && historyData.history) {
         historyResults = historyData.history;
       }
-    } catch (e) {
-      console.error("Failed to fetch history for date route:", e);
+    } catch (_e) {
+      console.error("Failed to fetch history for date route");
     }
 
     const exactMatch = data.draws[0];
@@ -74,13 +74,8 @@ export async function GET(
       },
       history: historyResults,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("API Error (Specific Result By Date):", error);
-    return NextResponse.json(
-      { error: "Failed to fetch specific result" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "Results/ByDate");
   }
 }
 

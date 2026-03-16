@@ -21,9 +21,9 @@ describe("News Service", () => {
   it("should gracefully handle non-JSON string content in getNews", async () => {
     const rawContent = "This is simply text, not JSON at all";
     
-    (prisma.$transaction as any).mockResolvedValueOnce([
+    (prisma.$transaction as never).mockResolvedValueOnce([
       1,
-      [{ slug: "bad-json", title: "Fail", content: rawContent }] as any
+      [{ slug: "bad-json", title: "Fail", content: rawContent }] as never
     ]);
 
     const result = await newsService.getNews({});
@@ -33,7 +33,7 @@ describe("News Service", () => {
   it("should correctly handle non-JSON string content in getNewsDetail", async () => {
     const rawContent = "This is simply text, not JSON at all";
     
-    (prisma.articles.findUnique as any).mockResolvedValueOnce({
+    (prisma.articles.findUnique as never).mockResolvedValueOnce({
       slug: "bad-json-detail", 
       title: "Fail", 
       content: rawContent,
@@ -41,7 +41,7 @@ describe("News Service", () => {
       raw_html: "Some HTML",
       images: [],
       tags: []
-    } as any);
+    } as never);
 
     const result = await newsService.getNewsDetail("bad-json-detail");
     expect(result.titleEn).toBe("Fail");
@@ -54,7 +54,7 @@ describe("News Service", () => {
       contentEn: "Valid HTML"
     });
     
-    (prisma.articles.findUnique as any).mockResolvedValueOnce({
+    (prisma.articles.findUnique as never).mockResolvedValueOnce({
       slug: "good-json", 
       title: "Orig", 
       content: validJson,
@@ -62,7 +62,7 @@ describe("News Service", () => {
       raw_html: "Orig HTML",
       images: [],
       tags: []
-    } as any);
+    } as never);
 
     const result = await newsService.getNewsDetail("good-json");
     expect(result.titleEn).toBe("Valid JSON Title");
@@ -72,14 +72,14 @@ describe("News Service", () => {
   it("should avoid parsing explicitly object-typed content", async () => {
     const objContent = { titleEn: "Object Title" };
     
-    (prisma.articles.findUnique as any).mockResolvedValueOnce({
+    (prisma.articles.findUnique as never).mockResolvedValueOnce({
       slug: "object-json", 
       title: "Orig", 
       content: objContent, 
       user: null,
       images: [],
       tags: []
-    } as any);
+    } as never);
 
     const result = await newsService.getNewsDetail("object-json");
     expect(result.titleEn).toBe("Object Title");
@@ -89,14 +89,14 @@ describe("News Service", () => {
   it("should log a warning when JSON.parse fails", async () => {
     const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     
-    (prisma.articles.findUnique as any).mockResolvedValueOnce({
+    (prisma.articles.findUnique as never).mockResolvedValueOnce({
       slug: "spy-json", 
       title: "Orig", 
       content: "Not JSON {",
       user: null,
       images: [],
       tags: []
-    } as any);
+    } as never);
 
     await newsService.getNewsDetail("spy-json");
     

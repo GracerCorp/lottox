@@ -11,7 +11,7 @@ const enStart = content.indexOf('  en: {');
 const thContent = content.substring(thStart + 6, enStart - 3).trim();
 
 // The end of `en` is right before `} as const;` or `};` block ends
-const enEnd = content.lastIndexOf('    },');
+const _enEnd = content.lastIndexOf('    },');
 const enContentRaw = content.substring(enStart + 6);
 const justEnContent = enContentRaw.substring(0, enContentRaw.lastIndexOf('    }') + 6);
 

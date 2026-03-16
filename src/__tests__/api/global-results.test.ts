@@ -14,18 +14,19 @@ describe("GET /api/results/global", () => {
   it("should return global results on success", async () => {
     const { apiClient } = await import("@/lib/services/lotteryResultService");
     
-    (apiClient.getGlobalResults as any).mockResolvedValue({
-      total: 10,
-      totalPages: 1,
-      currentPage: 1,
-      results: []
-    });
-
-    const request = {
-      nextUrl: {
-        searchParams: new URLSearchParams("page=1&limit=10")
-      }
-    } as any;
+      const mockedGetGlobalResults = vi.mocked(apiClient.getGlobalResults);
+      mockedGetGlobalResults.mockResolvedValue({
+        total: 10,
+        totalPages: 1,
+        page: 1,
+        draws: [],
+      });
+  
+      const request = {
+        nextUrl: {
+          searchParams: new URLSearchParams("page=1&limit=10"),
+        },
+      } as never;
     const response = await GET(request);
     const data = await response.json();
 
@@ -38,13 +39,14 @@ describe("GET /api/results/global", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     
     const dbError = new Error("PrismaClientKnownRequestError: Table not found");
-    (apiClient.getGlobalResults as any).mockRejectedValue(dbError);
+    const mockedGetGlobalResults = vi.mocked(apiClient.getGlobalResults);
+    mockedGetGlobalResults.mockRejectedValue(dbError);
 
     const request = {
       nextUrl: {
         searchParams: new URLSearchParams()
       }
-    } as any;
+    } as never;
     const response = await GET(request);
     const data = await response.json();
 
@@ -52,7 +54,10 @@ describe("GET /api/results/global", () => {
     expect(data.error).toBe("Internal Server Error");
     expect(data.error).not.toContain("PrismaClientKnownRequestError");
     
-    expect(consoleSpy).toHaveBeenCalledWith("[API/Results/Global] Error:", dbError);
+    expect(consoleSpy).toHaveBeenCalledWith("[API/Results/Global]", expect.objectContaining({
+      error: dbError.message,
+      stack: dbError.stack,
+    }));
     
     consoleSpy.mockRestore();
   });

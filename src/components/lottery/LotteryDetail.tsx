@@ -410,8 +410,7 @@ export default function LotteryDetail({
   }
 
   const recentResults = historyItems.map((item) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const d = item.data as any;
+    const d = item.data as unknown as GenericPrizeData;
 
     const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || [
       d?.first || d?.firstPrize,

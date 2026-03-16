@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { statisticsService } from "@/lib/services/statisticsService";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 import { z } from "zod";
 
 const querySchema = z.object({
@@ -30,13 +31,8 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(data);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("[API/Statistics] Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "Statistics");
   }
 }
 

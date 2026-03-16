@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { newsService } from "@/lib/services/newsService";
 import type { NextRequest } from "next/server";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 import { z } from "zod";
 
 const paramsSchema = z.object({
@@ -27,13 +28,8 @@ export async function GET(
 
     const data = await newsService.getNewsDetail(slug, lang);
     return NextResponse.json(data);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("API Error (News Detail):", error);
-    return NextResponse.json(
-      { error: "Failed to fetch news detail" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "News/Detail");
   }
 }
 

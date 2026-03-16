@@ -1,26 +1,49 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
-export function transformLotteryResult(rawData: any, t: any) {
+import { GenericPrizeData, GenericPrizeItem } from "./lotteryUtils";
+
+interface RawResultData {
+  data?: GenericPrizeData;
+  type?: string;
+  drawDate?: string;
+  date?: string;
+  countryCode?: string;
+  lotteryName?: string;
+  first?: string;
+  firstPrize?: string;
+  firstPrizeAmount?: string;
+  front3?: string[];
+  front3Amount?: string;
+  back3?: string[];
+  back3Amount?: string;
+  last2?: string;
+  last2Amount?: string;
+  adjacent?: string[];
+  adjacentAmount?: string;
+  [key: string]: unknown;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function transformLotteryResult(rawData: RawResultData, t: Record<string, any>) {
   if (!rawData || !rawData.data || !rawData.data.prizes) {
     return null;
   }
 
   const getPrizeNumber = (
-    d: any,
+    d: GenericPrizeData,
     names: string[],
     categories: string[] = [],
     fallbackOrder?: number,
   ) => {
     if (d?.prizes && Array.isArray(d.prizes)) {
       const p = d.prizes.find(
-        (p: any) =>
-          names.includes(p.prizeName) || categories.includes(p.category),
+        (p: GenericPrizeItem) =>
+          names.includes(p.prizeName || "") || categories.includes(p.category || ""),
       );
       if (p) {
         const nums = p.winningNumbers || p.number;
         return Array.isArray(nums) ? nums : [nums];
       }
       if (fallbackOrder !== undefined) {
-        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        const byOrder = d.prizes.find((p: GenericPrizeItem) => p.order === fallbackOrder);
         if (byOrder) {
           const nums = byOrder.winningNumbers || byOrder.number;
           return Array.isArray(nums) ? nums : [nums];
@@ -31,19 +54,19 @@ export function transformLotteryResult(rawData: any, t: any) {
   };
 
   const getPrizeAmount = (
-    d: any,
+    d: GenericPrizeData,
     names: string[],
     categories: string[] = [],
     fallbackOrder?: number,
   ) => {
     if (d?.prizes && Array.isArray(d.prizes)) {
       const p = d.prizes.find(
-        (p: any) =>
-          names.includes(p.prizeName) || categories.includes(p.category),
+        (p: GenericPrizeItem) =>
+          names.includes(p.prizeName || "") || categories.includes(p.category || ""),
       );
       if (p) return String(p.amount || p.prizeAmount || p.reward || "");
       if (fallbackOrder !== undefined) {
-        const byOrder = d.prizes.find((p: any) => p.order === fallbackOrder);
+        const byOrder = d.prizes.find((p: GenericPrizeItem) => p.order === fallbackOrder);
         if (byOrder)
           return String(
             byOrder.amount || byOrder.prizeAmount || byOrder.reward || "",
@@ -160,38 +183,38 @@ export function transformLotteryResult(rawData: any, t: any) {
 
   const staticPrizes = isDynamic
     ? undefined
-    : (rawData.data?.prizes || []).map((p: any) => ({
-        name: p.prizeName || p.name,
+    : (rawData.data?.prizes || []).map((p: GenericPrizeItem) => ({
+        name: String(p.prizeName || (p as Record<string, unknown>).name || ""),
         amount: String(p.prizeAmount || p.amount || 0),
-        numbers: p.winningNumbers || p.numbers || [],
+        numbers: (p.winningNumbers || (p as Record<string, unknown>).numbers || []) as string[],
       }));
 
   const dynamicPrizes = isDynamic
-    ? (rawData.data?.prizes || []).map((p: any) => ({
-        prizeName: p.prizeName || p.name,
+    ? (rawData.data?.prizes || []).map((p: GenericPrizeItem) => ({
+        prizeName: String(p.prizeName || (p as Record<string, unknown>).name || ""),
         prizeAmount: Number(p.prizeAmount || p.amount || 0),
-        winningNumbers: p.winningNumbers || p.numbers || [],
+        winningNumbers: (p.winningNumbers || (p as Record<string, unknown>).numbers || []) as string[],
         order: p.order,
         category: p.category,
-        prizeCount: p.prizeCount,
+        prizeCount: (p as Record<string, unknown>).prizeCount as number | undefined,
       }))
     : undefined;
 
   return {
-    date: rawData.drawDate || rawData.date || "",
+    date: String(rawData.drawDate || rawData.date || ""),
     firstPrize,
     firstPrizeAmount,
     prizes: staticPrizes,
     dynamicPrizes,
-    front3: front3Num,
+    front3: (front3Num || []).map(String).filter((s: string) => s !== "undefined"),
     front3Amount,
-    back3: back3Num,
+    back3: (back3Num || []).map(String).filter((s: string) => s !== "undefined"),
     back3Amount,
-    last2: last2Str,
+    last2: String(last2Str || "-"),
     last2Amount,
-    adjacent: adjacentNum,
+    adjacent: (adjacentNum || []).map(String).filter((s: string) => s !== "undefined"),
     adjacentAmount,
-    country: rawData.countryCode || "",
-    lotteryName: rawData.lotteryName || "",
+    country: String(rawData.countryCode || ""),
+    lotteryName: String(rawData.lotteryName || ""),
   };
 }

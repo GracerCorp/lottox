@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
 import { resolveCountryCode } from "@/lib/utils/countryResolver";
+import { handleApiError } from "@/lib/utils/apiErrorHandler";
 import { z } from "zod";
 
 const paramsSchema = z.object({
@@ -60,13 +61,8 @@ export async function GET(
       offset,
     );
     return NextResponse.json(data);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("API Error (Results By Type):", error);
-    return NextResponse.json(
-      { error: "Failed to fetch results history" },
-      { status: 500 },
-    );
+  } catch (error: unknown) {
+    return handleApiError(error, "Results/ByType");
   }
 }
 

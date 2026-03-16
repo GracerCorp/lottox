@@ -12,6 +12,7 @@ export type GenericPrizeItem = {
 
 export type GenericPrizeData = {
   prizes?: GenericPrizeItem[];
+  // Dynamic lottery JSON — index must remain `any` because schemas vary by country
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };
@@ -69,6 +70,7 @@ export const getPrizeAmount = (
   return undefined;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getPrizeName = (pName: string, pCat: string | undefined, t: Record<string, any>): string => {
   const name = pName || "";
   const cat = pCat || "";
@@ -96,17 +98,49 @@ export const getPrizeName = (pName: string, pCat: string | undefined, t: Record<
   return name;
 };
 
-// Helper to format any date string into human-readable locale format
+// Deterministic date formatter — avoids toLocaleDateString hydration mismatches
+const MONTHS_EN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MONTHS_TH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+const DAYS_EN = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const DAYS_TH = ["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"];
+
 export const formatDateDisplay = (dateStr: string, language: string) => {
   if (!dateStr || dateStr === "-") return dateStr;
   try {
     const d = new Date(dateStr);
-    return d.toLocaleDateString(language === "th" ? "th-TH" : "en-US", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    if (isNaN(d.getTime())) return dateStr;
+
+    const day = d.getUTCDate();
+    const monthIdx = d.getUTCMonth();
+    const year = d.getUTCFullYear();
+    const dayOfWeek = d.getUTCDay();
+
+    if (language === "th") {
+      const buddhistYear = year + 543;
+      return `${DAYS_TH[dayOfWeek]} ${day} ${MONTHS_TH[monthIdx]} ${buddhistYear}`;
+    }
+    return `${DAYS_EN[dayOfWeek]}, ${MONTHS_EN[monthIdx]} ${day}, ${year}`;
+  } catch {
+    return dateStr;
+  }
+};
+
+/** Short date format for table rows — deterministic, no locale dependency */
+export const formatDateShort = (dateStr: string, language: string) => {
+  if (!dateStr || dateStr === "-") return dateStr;
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+
+    const day = d.getUTCDate();
+    const monthIdx = d.getUTCMonth();
+    const MONTHS_SHORT_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const MONTHS_SHORT_TH = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+
+    if (language === "th") {
+      return `${day} ${MONTHS_SHORT_TH[monthIdx]}`;
+    }
+    return `${MONTHS_SHORT_EN[monthIdx]} ${day}, ${d.getUTCFullYear()}`;
   } catch {
     return dateStr;
   }

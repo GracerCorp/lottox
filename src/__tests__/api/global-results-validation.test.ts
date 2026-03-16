@@ -15,11 +15,11 @@ vi.mock("@/lib/services/lotteryResultService", () => {
 describe("GET /api/results/global validation", () => {
   const createRequest = (query: string) => ({
     nextUrl: { searchParams: new URLSearchParams(query) }
-  } as any);
+  } as never);
 
   it("should parse page correctly from query", async () => {
-    (apiClient.getGlobalResults as any).mockResolvedValueOnce({
-      total: 10, totalPages: 1, currentPage: 1, results: []
+    (apiClient.getGlobalResults as never).mockResolvedValueOnce({
+      total: 10, totalPages: 1, page: 1, results: []
     });
 
     const response = await GET(createRequest("page=2&limit=5"));
@@ -45,8 +45,8 @@ describe("GET /api/results/global validation", () => {
   });
 
   it("should default to page 1 limit 20 when missing", async () => {
-    (apiClient.getGlobalResults as any).mockResolvedValueOnce({
-      total: 10, totalPages: 1, currentPage: 1, results: []
+    (apiClient.getGlobalResults as never).mockResolvedValueOnce({
+      total: 10, totalPages: 1, page: 1, results: []
     });
 
     const response = await GET(createRequest(""));

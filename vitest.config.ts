@@ -1,4 +1,4 @@
-/// <reference types="vitest/config" />
+
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -21,10 +21,10 @@ export default defineConfig({
         "src/app/**/globals.css",
       ],
       thresholds: {
-        lines: 0,
-        branches: 0,
-        functions: 0,
-        statements: 0,
+        lines: 40,
+        branches: 40,
+        functions: 40,
+        statements: 40,
       },
     },
     alias: {

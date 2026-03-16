@@ -1,6 +1,16 @@
 import { prisma } from "../prisma";
 import type { Prisma } from "@prisma/client";
 
+/** Shape of the JSON stored in articles.content */
+interface ArticleContentData {
+  titleEn?: string;
+  excerptEn?: string;
+  categoryEn?: string;
+  contentEn?: string;
+  source?: string;
+  [key: string]: unknown;
+}
+
 export const newsService = {
   async getNews(
     params: {
@@ -38,16 +48,16 @@ export const newsService = {
     ]);
 
     const mappedArticles = rawArticles.map((article) => {
-      let contentData: Record<string, any> = {};
+      let contentData: ArticleContentData = {};
       if (typeof article.content === "string") {
         try {
           contentData = JSON.parse(article.content);
-        } catch (e) {
+        } catch (_e) {
           console.warn(`[getNews] Failed to parse content for article ${article.slug}`);
           contentData = {};
         }
       } else if (article.content) {
-        contentData = article.content as Record<string, any>;
+        contentData = article.content as ArticleContentData;
       }
 
       return {
@@ -104,7 +114,7 @@ export const newsService = {
     if (typeof article.content === "string") {
       try {
         contentData = JSON.parse(article.content);
-      } catch (e) {
+      } catch (_e) {
         console.warn(`[getNewsDetail] Failed to parse content for article ${article.slug}`);
         contentData = {};
       }
@@ -136,5 +146,70 @@ export const newsService = {
       source: contentData.source || "LottoX",
       related: [],
     };
+  },
+
+  async trackAnalytics(
+    slug: string,
+    data: {
+      views?: number;
+      activeSeconds?: number;
+      scrollCompletes?: number;
+      bounceRate?: number;
+      shareClick?: boolean;
+    }
+  ) {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+    // Look up the article first because we need the ID
+    const article = await prisma.articles.findUnique({
+      where: { slug },
+      select: { id: true, view_count: true, shares_count: true },
+    });
+
+    if (!article) {
+      throw new Error("Article not found");
+    }
+
+    const updates: Prisma.articlesUpdateInput = {};
+
+    if (data.views) {
+      updates.view_count = { increment: data.views };
+    }
+
+    if (data.shareClick) {
+      updates.shares_count = { increment: 1 };
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await prisma.articles.update({
+        where: { id: article.id },
+        data: updates,
+      });
+    }
+
+    // Upsert into daily analytics
+    await prisma.article_analytics_daily.upsert({
+      where: {
+        article_id_date: {
+          article_id: article.id,
+          date: today,
+        },
+      },
+      create: {
+        article_id: article.id,
+        date: today,
+        views: data.views || 0,
+        avg_active_seconds: data.activeSeconds || 0,
+        scroll_completes: data.scrollCompletes || 0,
+        bounce_count: data.bounceRate ? 1 : 0,
+      },
+      update: {
+        views: { increment: data.views || 0 },
+        avg_active_seconds: { increment: data.activeSeconds || 0 },
+        scroll_completes: { increment: data.scrollCompletes || 0 },
+        bounce_count: { increment: data.bounceRate ? 1 : 0 },
+        updated_at: new Date(),
+      },
+    });
   },
 };
