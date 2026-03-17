@@ -7,6 +7,7 @@ import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 import { slugify } from "@/lib/utils/lotteryUtils";
+import { JsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 
 const DEFAULT_JACKPOT = "Play Now";
@@ -226,6 +227,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col relative">
+      <JsonLd />
       {/* Background for entire homepage */}
       <div className="absolute inset-0 bg-slate-50 dark:bg-navy-950 -z-10" />
 

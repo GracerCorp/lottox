@@ -71,10 +71,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Safe default for SSR — components render with English defaults when
+// context is unavailable (e.g. during server pre-render or tests).
+const SSR_DEFAULTS: LanguageContextType = {
+  language: "en",
+  toggleLanguage: () => {},
+  setLanguage: () => {},
+  t: defaultDict,
+};
+
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
+  return context ?? SSR_DEFAULTS;
 }

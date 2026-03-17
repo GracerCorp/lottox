@@ -6,6 +6,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Search, Loader2, CheckCircle2, XCircle, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFlagUrl } from "@/lib/flags";
+import { type Language } from "@/lib/i18n";
+import { JackpotResult, StandardWinResult, NoWinResult } from "./ResultStates";
 
 /* ---------- Types ---------- */
 export interface LotteryOption {
@@ -42,15 +44,17 @@ export function CheckLotteryWidget({
 }) {
   const { t } = useLanguage();
   const [number, setNumber] = useState("");
+  const [searchedNumber, setSearchedNumber] = useState(""); // frozen at search time
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Dropdown state
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<LotteryOption | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Default selection: first lottery in the list
   useEffect(() => {
@@ -79,7 +83,29 @@ export function CheckLotteryWidget({
   const handleSelect = (lottery: LotteryOption) => {
     setSelected(lottery);
     setIsOpen(false);
+    setSearchQuery("");
   };
+
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  // Filter groups by search query
+  const filteredGroups = searchQuery.trim()
+    ? lotteryGroups
+        .map((group) => ({
+          ...group,
+          lotteries: group.lotteries.filter(
+            (l) =>
+              l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              l.countryName.toLowerCase().includes(searchQuery.toLowerCase())
+          ),
+        }))
+        .filter((g) => g.lotteries.length > 0)
+    : lotteryGroups;
 
   const handleCheck = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,6 +114,7 @@ export function CheckLotteryWidget({
     setLoading(true);
     setError(null);
     setResult(null);
+    setSearchedNumber(number); // freeze the number at search time
 
     try {
       const apiType = selected.countryCode.toUpperCase();
@@ -113,7 +140,28 @@ export function CheckLotteryWidget({
       : selected.name
     : "Select...";
 
+  // Determine if it's a jackpot win
+  // 1. Result must be a win
+  // 2. We check if any prize label contains '1st', 'jackpot', 'grande', 'first', 'prize_1'
   const isWinner = result?.isWinner || result?.win;
+  const isJackpot = isWinner && result?.prizes?.some(p => {
+    const name = (p.prizeName || p.label || p.category || "").toLowerCase();
+    return (
+      name.includes("1st") ||
+      name.includes("first") ||
+      name.includes("jackpot") ||
+      name.includes("grande") ||
+      name.includes("รางวัลที่ 1") ||
+      name === "prize_1"
+    );
+  });
+
+  const handleReset = () => {
+    setResult(null);
+    setNumber("");
+    setSearchedNumber("");
+    setError(null);
+  };
 
   return (
     <section className="container mx-auto px-4 py-10">
@@ -191,8 +239,25 @@ export function CheckLotteryWidget({
 
         {/* Dropdown Panel — full width of form, anchored to outer container */}
         {isOpen && (
-          <div ref={panelRef} className="absolute left-0 right-0 mt-2 max-h-[360px] overflow-y-auto rounded-xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200">
-            {lotteryGroups.map((group, gIdx) => (
+          <div ref={panelRef} className="absolute left-0 right-0 mt-2 max-h-[360px] overflow-hidden rounded-xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col">
+            {/* Search Input */}
+            <div className="p-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t.common.searchLotteryPlaceholder}
+                  className="w-full bg-gray-50 dark:bg-navy-800 border border-gray-200 dark:border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-gold-400/50"
+                />
+              </div>
+            </div>
+
+            {/* Scrollable lottery list */}
+            <div className="overflow-y-auto max-h-[280px]">
+            {filteredGroups.map((group, gIdx) => (
               <div key={group.countryCode}>
                 {/* Country Group Header */}
                 {gIdx > 0 && (
@@ -241,75 +306,36 @@ export function CheckLotteryWidget({
               </div>
             ))}
 
-            {lotteryGroups.length === 0 && (
+            {filteredGroups.length === 0 && (
               <div className="p-4 text-center text-sm text-gray-500">
-                {t.common.loading}
+                {searchQuery ? t.common.noResults : t.common.loading}
               </div>
             )}
+            </div>
           </div>
         )}
       </div>
 
       {/* Results feedback */}
       {(result || error) && (
-        <div className="max-w-2xl mx-auto mt-6">
-          <div
-            className={cn(
-              "p-5 rounded-xl border text-center animate-in fade-in slide-in-from-bottom-4 duration-500",
-              error || !isWinner
-                ? "bg-red-500/10 border-red-500/20 text-red-400"
-                : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-            )}
-          >
-            {error ? (
-              <div className="flex flex-col items-center gap-2">
-                <XCircle className="w-8 h-8 opacity-80" />
-                <p className="font-bold">{t.common.somethingWrong}</p>
-                <p className="text-sm opacity-80">{error}</p>
+        <div className="w-full">
+          {error ? (
+            <div className="max-w-2xl mx-auto mt-6">
+              <div className="p-5 rounded-xl border text-center animate-in fade-in slide-in-from-bottom-4 duration-500 bg-red-500/10 border-red-500/20 text-red-400">
+                <div className="flex flex-col items-center gap-2">
+                  <XCircle className="w-8 h-8 opacity-80" />
+                  <p className="font-bold">{t.common.somethingWrong}</p>
+                  <p className="text-sm opacity-80">{error}</p>
+                </div>
               </div>
-            ) : isWinner ? (
-              <div className="flex flex-col items-center gap-3">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400" />
-                <p className="text-xl font-black text-emerald-400">
-                  {t.common.congratulations}
-                </p>
-                <p className="text-sm">
-                  {t.common.verifySuccessDesc1}{" "}
-                  <span className="font-bold tracking-widest">{number}</span>{" "}
-                  {t.common.verifySuccessDesc2}
-                </p>
-                {result?.prizes && (
-                  <div className="w-full max-w-md mt-3 space-y-2">
-                    {result.prizes.map((p, idx) => (
-                      <div
-                        key={idx}
-                        className="flex justify-between items-center bg-navy-800/60 p-3 rounded-lg border border-emerald-500/10"
-                      >
-                        <span className="text-sm text-gray-300">
-                          {p.prizeName || p.label || p.category || "Prize"}
-                        </span>
-                        <span className="font-bold text-emerald-400 text-sm">
-                          {p.amount
-                            ? `${Number(p.amount).toLocaleString()} ฿`
-                            : "Prize"}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-2">
-                <XCircle className="w-8 h-8 opacity-80" />
-                <p className="font-bold">{t.common.noPrize}</p>
-                <p className="text-sm opacity-80">
-                  {t.common.verifyFailDesc1}{" "}
-                  <span className="font-bold tracking-widest">{number}</span>{" "}
-                  {t.common.verifyFailDesc2}
-                </p>
-              </div>
-            )}
-          </div>
+            </div>
+          ) : isJackpot ? (
+            <JackpotResult result={result!} number={searchedNumber} onReset={handleReset} />
+          ) : isWinner ? (
+            <StandardWinResult result={result!} number={searchedNumber} onReset={handleReset} />
+          ) : (
+            <NoWinResult number={searchedNumber} onReset={handleReset} />
+          )}
         </div>
       )}
     </section>
