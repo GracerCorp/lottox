@@ -10,6 +10,8 @@ export default {
       subtitle: "แพลตฟอร์มตรวจผลหวย ทั่วโลก อัพเดทรวดเร็ว ถูกต้อง แม่นยำ",
       viewDetails: "ดูรายละเอียด",
       estimatedJackpot: "เงินรางวัลโดยประมาณ",
+      titleHighlight: "ผลหวยออนไลน์",
+      titleSuffix: "ทั่วโลก",
     },
     common: {
       date: "วันที่",
@@ -69,6 +71,15 @@ export default {
       verifyFail: "เสียใจด้วยนะ",
       verifyFailDesc1: "หมายเลข",
       verifyFailDesc2: "ไม่ตรงกับรางวัลใดๆ ในงวดนี้",
+      findByNumber: "ค้นหาด้วยหมายเลข",
+      findByNumberDesc: "ค้นหาด้วยหมายเลขสลากและเลือกประเภทหวยเพื่อดูผลรางวัลที่ตรงกัน",
+      fillNumberPlaceholder: "กรอกเลขของคุณ",
+      searchBtn: "ค้นหา",
+      somethingWrong: "เกิดข้อผิดพลาดบางอย่าง",
+      noPrize: "เสียใจด้วย ไม่ถูกรางวัลในครั้งนี้",
+      congratulations: "ยินดีด้วย! คุณถูกรางวัล!",
+      latestUpdate: "ผลรางวัลล่าสุด",
+      allGlobalResults: "ดูผลรางวัลทั้งหมด",
     },
     market: {
       marketData: "ข้อมูลตลาด",
@@ -226,7 +237,8 @@ export default {
       apiAccess: "เข้าถึง API",
     },
     countryList: {
-      title: "เลือกประเทศของคุณ",
+      title: "หวยตามประเทศ",
+      subtitle: "เลือกดูหวยจากประเทศต่างๆ และติดตามผลรางวัลล่าสุด",
       seeAll: "ดูประเทศทั้งหมด",
       lotteries: "รายการ",
       countries: {

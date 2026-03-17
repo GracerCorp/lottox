@@ -11,6 +11,8 @@ export default {
         "Fast, accurate, and reliable worldwide lottery results platform.",
       viewDetails: "View Details",
       estimatedJackpot: "Estimated Jackpot",
+      titleHighlight: "Worldwide Lottery",
+      titleSuffix: "Result",
     },
     common: {
       date: "Date",
@@ -70,6 +72,15 @@ export default {
       verifyFail: "Sorry",
       verifyFailDesc1: "Number",
       verifyFailDesc2: "did not match any prizes in this draw.",
+      findByNumber: "Find By Number",
+      findByNumberDesc: "Search by lottery number and select the lottery type to find matching results instantly.",
+      fillNumberPlaceholder: "Fill your number here",
+      searchBtn: "Search",
+      somethingWrong: "Something went wrong",
+      noPrize: "Sorry, no prize this time.",
+      congratulations: "Congratulations! You won!",
+      latestUpdate: "Latest Update",
+      allGlobalResults: "All Global Results",
     },
     market: {
       marketData: "Market Data",
@@ -227,7 +238,8 @@ export default {
       apiAccess: "API Access",
     },
     countryList: {
-      title: "Choose Your Country",
+      title: "Lottery By Country",
+      subtitle: "Browse available lotteries and explore their latest results.",
       seeAll: "See All Countries",
       lotteries: "Lotteries",
       countries: {

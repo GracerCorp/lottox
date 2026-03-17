@@ -1,49 +1,59 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const RECENT_RESULTS = [
-  { name: "USA Powerball", numbers: "12 34 45 55 58 (20)" },
-  { name: "EuroMillions", numbers: "02 10 26 32 45 (05)" },
-  { name: "Thai Lotto", numbers: "43558" },
-  { name: "Mega Millions", numbers: "05 13 24 31 58 (17)" },
-  { name: "Japan Lotto 6", numbers: "01 05 06 13 23 29" },
-];
+import { useApi } from "@/lib/hooks/useApi";
+import type { LatestResultsResponse } from "@/lib/api-types";
 
 export function LiveTicker() {
+  const { data } = useApi<LatestResultsResponse>("/api/results/latest");
+
+  const tickerItems =
+    data?.results?.map((r) => ({
+      name: r.lotteryName || r.type,
+      type: r.type,
+    })) || [];
+
+  // Create enough duplicates for smooth infinite scroll
+  const displayItems =
+    tickerItems.length > 0
+      ? [...tickerItems, ...tickerItems, ...tickerItems]
+      : [];
+
+  if (displayItems.length === 0) return null;
+
   return (
-    <div className="w-full bg-gray-50 dark:bg-navy-950/50 border-y border-gray-200 dark:border-white/5 py-3 overflow-hidden flex items-center">
-      <div className="bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mx-4 whitespace-nowrap animate-pulse">
-        ● Live Results
+    <div className="w-full bg-gray-50/80 dark:bg-navy-950/80 border-y border-gray-200 dark:border-white/5 py-3 overflow-hidden">
+      <div className="flex items-center">
+        <div className="relative flex overflow-hidden w-full">
+          <div
+            className="flex gap-3 whitespace-nowrap animate-ticker"
+            style={{
+              animation: "ticker 40s linear infinite",
+            }}
+          >
+            {displayItems.map((item, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/80 dark:bg-navy-800/80 border border-gray-200 dark:border-white/5 px-4 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-navy-700/80 hover:text-gray-900 dark:hover:text-white transition-colors cursor-default"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
+                {item.name}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="flex overflow-hidden relative w-full">
-        <motion.div
-          className="flex gap-12 whitespace-nowrap"
-          animate={{ x: [0, -1000] }}
-          transition={{
-            repeat: Infinity,
-            duration: 30,
-            ease: "linear",
-          }}
-        >
-          {[...RECENT_RESULTS, ...RECENT_RESULTS, ...RECENT_RESULTS].map(
-            (result, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300"
-              >
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {result.name}:
-                </span>
-                <span className="font-mono text-amber-600 dark:text-gold-400 tracking-wider">
-                  {result.numbers}
-                </span>
-              </div>
-            ),
-          )}
-        </motion.div>
-      </div>
+      {/* Inline keyframes for ticker animation */}
+      <style jsx>{`
+        @keyframes ticker {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-33.333%);
+          }
+        }
+      `}</style>
     </div>
   );
 }
