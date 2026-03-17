@@ -18,6 +18,7 @@ interface PrizeItem {
 
 export interface ResultRow {
   date: string;
+  time: string;
   flag: string;
   country: string;
   countryId: string;
@@ -40,6 +41,17 @@ export function mapApiResultToRow(
   const type = result.type?.toUpperCase() || "";
   const drawDate = result.drawDate || result.date;
   const dateStr = formatDateShort(drawDate, language);
+
+  // Extract time from drawDate if available
+  let timeStr = "";
+  try {
+    const dt = new Date(drawDate);
+    if (!isNaN(dt.getTime())) {
+      const hours = dt.getUTCHours().toString().padStart(2, "0");
+      const mins = dt.getUTCMinutes().toString().padStart(2, "0");
+      timeStr = `${hours}:${mins}`;
+    }
+  } catch { /* ignore */ }
 
   const d = result.data as unknown as GenericPrizeData;
   const prizes = (d?.prizes || []) as GenericPrizeItem[];
@@ -175,6 +187,7 @@ export function mapApiResultToRow(
     id: `${countryId}-${result.id}`,
     countryId: countryId,
     date: dateStr,
+    time: timeStr,
     flag: getFlagUrl(flagCode),
     country: countryName,
     name: lottoName,
@@ -206,10 +219,10 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
   if (loading) {
     return (
       <div className="flex flex-col gap-2">
-        {[1, 2, 3].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-lg bg-gray-200 dark:bg-navy-900/50 h-16"
+            className="animate-pulse rounded-xl bg-navy-900/60 border border-white/5 h-16"
           />
         ))}
       </div>
@@ -218,7 +231,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-500/30 bg-red-50 dark:bg-red-500/5 p-6 text-center text-sm text-red-600 dark:text-red-400">
+      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 text-center text-sm text-red-400">
         {t.common.error}: {error}
       </div>
     );
@@ -231,7 +244,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
       ))}
 
       {results.length === 0 && (
-        <div className="rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 p-6 text-center text-sm text-gray-500 dark:text-gray-400 shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900/50 p-6 text-center text-sm text-gray-500 dark:text-gray-400">
           {t.common.error}
         </div>
       )}
@@ -241,21 +254,19 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
 
 /* -- Single-line row -- */
 export function SingleLineRow({ item }: { item: ResultRow }) {
-  const mainPrize = item.numbers.find((n) => n.isMain);
-  const subPrizes = item.numbers.filter((n) => !n.isMain);
-
   return (
     <Link
       href={item.href}
-      className="group relative block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.003] hover:shadow-md dark:hover:shadow-none"
+      className="group block rounded-xl transition-all duration-200"
     >
-      {/* Subtle border */}
-      <div className="absolute -inset-[1px] rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/10 to-blue-500/20 opacity-20 dark:opacity-40 transition-opacity duration-200 group-hover:opacity-50 dark:group-hover:opacity-70" />
+      <div className="flex items-center gap-3 md:gap-4 rounded-xl border border-gray-100 dark:border-white/5 bg-white/60 dark:bg-navy-900/60 px-4 md:px-5 py-3 transition-all duration-200 hover:border-gold-400/60 hover:bg-gray-50 dark:hover:bg-navy-800/50">
+        {/* Colored dot indicator */}
+        <div className="shrink-0 hidden md:block">
+          <div className="w-2 h-2 rounded-full bg-gold-400" />
+        </div>
 
-      {/* Row content */}
-      <div className="relative flex flex-wrap md:flex-nowrap items-center gap-3 rounded-lg border border-gray-200/50 dark:border-transparent bg-white/90 dark:bg-navy-900/85 px-4 py-3 backdrop-blur-sm sm:gap-6 sm:px-5 shadow-sm dark:shadow-none">
-        {/* Flag + name */}
-        <div className="flex items-center gap-2.5 sm:min-w-[180px] w-full md:w-auto overflow-hidden">
+        {/* Left — Flag + Name + Time/Date */}
+        <div className="flex items-center gap-2.5 min-w-[120px] md:min-w-[180px] shrink-0">
           <div className="relative h-5 w-7 shrink-0 overflow-hidden rounded shadow">
             <Image
               src={item.flag}
@@ -264,79 +275,56 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
               className="object-cover"
             />
           </div>
-          <div className="min-w-0 flex flex-row md:flex-col items-center md:items-start gap-2 md:gap-0 grow">
-            <span className="text-md md:text-sm font-semibold leading-tight text-gray-900 dark:text-white truncate">
+          <div className="min-w-0">
+            <span className="block text-sm font-semibold text-gray-900 dark:text-white leading-tight truncate">
               {item.name}
             </span>
-            <span className="text-[12px] text-gray-500 truncate md:inline ml-auto md:ml-0">
-              {item.date}
+            <span className="block text-[11px] text-gray-500 leading-tight">
+              {item.time && <>{item.time} | </>}{item.date}
             </span>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="hidden md:block h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10" />
-
-        {/* Main prize */}
-        {mainPrize && (
-          <div className="flex items-center gap-2 grow md:grow-0 justify-between md:justify-start">
-            <span className="hidden text-[14px] font-medium uppercase tracking-wide text-gray-500 sm:inline">
-              {mainPrize.label}
-            </span>
-            <div className="flex items-center gap-2">
-              {mainPrize.value.map((v, i) => (
-                <span
-                  key={i}
-                  className="bg-gradient-to-b from-amber-500 to-amber-700 dark:from-amber-300 dark:via-yellow-400 dark:to-amber-500 bg-clip-text text-xl font-black tracking-[0.1em] text-transparent sm:text-2xl"
-                >
-                  {v}
-                </span>
-              ))}
-            </div>
-            <span className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400 sm:text-xs">
-              {mainPrize.prize}
-            </span>
-          </div>
-        )}
-
-        {/* Divider */}
-        {subPrizes.length > 0 && (
-          <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
-        )}
-
-        {/* Sub prizes inline */}
-        {subPrizes.length > 0 && (
-          <div className="hidden items-center gap-4 md:flex">
-            {subPrizes.map((prize, idx) => (
-              <div key={idx} className="flex items-center gap-1.5">
-                <span className="text-[14px] text-gray-500">{prize.label}</span>
-                {prize.value.map((val, vi) => (
+        {/* Middle — Prize categories (label above, value below, inline) */}
+        <div className="flex-1 flex items-center gap-4 md:gap-6 overflow-x-auto hide-scrollbar">
+          {item.numbers.map((prize, idx) => (
+            <div key={idx} className="shrink-0">
+              <span className="block text-[10px] font-medium text-gray-500 uppercase tracking-wide leading-tight whitespace-nowrap">
+                {prize.label}
+              </span>
+              <div className="flex items-center gap-1 mt-0.5">
+                {prize.value.map((v, vi) => (
                   <span
                     key={vi}
-                    className="text-md font-bold tracking-wide text-gray-700 dark:text-white/80"
+                    className={
+                      prize.isMain
+                        ? "text-sm md:text-base font-black tracking-wider text-gold-400"
+                        : "text-sm md:text-base font-bold tracking-wide text-red-400"
+                    }
                   >
-                    {val}
+                    {v}
                   </span>
                 ))}
-                <div className="hidden h-6 w-px shrink-0 bg-gray-200 dark:bg-white/10 md:block" />
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
 
-        {/* Arrow indicator */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="ml-auto h-4 w-4 shrink-0 text-gray-600 transition-colors group-hover:text-blue-400"
-        >
-          <path d="m9 18 6-6-6-6" />
-        </svg>
+        {/* Right — Chevron */}
+        <div className="shrink-0 ml-auto pl-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5 text-gray-600 transition-colors group-hover:text-gold-400"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </div>
       </div>
     </Link>
   );

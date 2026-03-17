@@ -1,7 +1,7 @@
-import type th from "./dictionaries/th";
+import type en from "./dictionaries/en";
 
 export type Language = "th" | "en";
-export type Dictionary = typeof th;
+export type Dictionary = typeof en;
 
 const dictionaries = {
   th: () => import('./dictionaries/th').then((module) => module.default),
@@ -10,13 +10,13 @@ const dictionaries = {
 
 export const getDictionary = async (locale: Language) => {
   if (!dictionaries[locale]) {
-    console.warn(`Dictionary not found for ${locale}, falling back to th`);
-    return dictionaries.th();
+    console.warn(`Dictionary not found for ${locale}, falling back to en`);
+    return dictionaries.en();
   }
   return dictionaries[locale]();
 };
 
 // For backward compatibility during migration, we can load a default dictionary synchronously
 // but this defeats lazy loading for initial renders if used globally.
-import defaultDictionary from "./dictionaries/th";
+import defaultDictionary from "./dictionaries/en";
 export const defaultDict = defaultDictionary;

@@ -15,30 +15,79 @@ const notoSansThai = Noto_Sans_Thai({
 });
 
 export const metadata: Metadata = {
-  title: "LOTTOX - ตรวจหวยออนไลน์ ผลหวยไทย หวยลาว งวดล่าสุด",
+  title: {
+    default: "LOTTOX - Worldwide Lottery Results | ตรวจหวยออนไลน์",
+    template: "%s | LOTTOX",
+  },
   description:
-    "LOTTOX แพลตฟอร์มตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาล ผลหวยลาวพัฒนา งวดล่าสุด อัพเดทรวดเร็ว ถูกต้อง แม่นยำ ครบทุกรางวัล",
+    "LOTTOX — Fast, accurate worldwide lottery results. Check Thai Government Lottery, Lao Lotto, Japan Loto, and 30+ international lotteries. ตรวจหวยออนไลน์ ผลสลากกินแบ่งรัฐบาล ผลหวยลาว อัพเดทรวดเร็ว",
   metadataBase: new URL("https://lottox.today"),
+  keywords: [
+    "lottery results",
+    "ตรวจหวย",
+    "ผลหวย",
+    "Thai lottery",
+    "สลากกินแบ่งรัฐบาล",
+    "Lao lottery",
+    "หวยลาว",
+    "Japan loto",
+    "worldwide lottery",
+    "lottery checker",
+    "ตรวจสลาก",
+    "ผลสลากกินแบ่ง",
+    "หวยออนไลน์",
+    "lottox",
+  ],
   alternates: {
     canonical: "/",
+    languages: {
+      en: "/",
+      th: "/",
+    },
   },
   openGraph: {
-    title: "LOTTOX - ตรวจหวยออนไลน์ ผลหวยไทย หวยลาว",
+    title: "LOTTOX - Worldwide Lottery Results | ตรวจหวยออนไลน์",
     description:
-      "แพลตฟอร์มตรวจหวยออนไลน์ ผลหวยไทย หวยลาว งวดล่าสุด ครบทุกรางวัล",
+      "Fast, accurate lottery results for Thai, Lao, Japan, and 30+ international lotteries. ผลหวยไทย หวยลาว ครบทุกรางวัล",
     type: "website",
-    locale: "th_TH",
+    locale: "en_US",
+    alternateLocale: "th_TH",
     siteName: "LOTTOX",
+    url: "https://lottox.today",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "LOTTOX - Worldwide Lottery Results",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LOTTOX - ตรวจหวยออนไลน์",
-    description: "ผลสลากกินแบ่งรัฐบาล ผลหวยลาวพัฒนา งวดล่าสุด",
+    title: "LOTTOX - Worldwide Lottery Results",
+    description:
+      "Check 30+ international lottery results instantly. Thai, Lao, Japan and more.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
+  verification: {
+    // Add your verification codes here
+    // google: "your-google-verification-code",
+    // yandex: "your-yandex-verification-code",
+  },
+  manifest: "/manifest.json",
+  category: "entertainment",
 };
 
 export const viewport: Viewport = {
@@ -58,7 +107,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="th"
+      lang="en"
       suppressHydrationWarning
       className={`${inter.variable} ${notoSansThai.variable}`}
     >

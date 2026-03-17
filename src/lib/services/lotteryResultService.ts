@@ -228,95 +228,146 @@ class ApiClient {
 
   // Check Number
   async checkNumber(number: string, type: string, drawDate?: string) {
-    // Basic implementation since we lack all specific parsing details.
-    // Assuming full_data JSON has properties we need, or check against lottery_prizes.
-    // For now we will try checking lottery_prizes.
-
-    // Find the relevant result first
+    // Resolve the lottery to check
     const countryCode = await resolveCountryCode(type);
-    const resultWhere: Prisma.lottery_resultsWhereInput = countryCode
-      ? {
-          lottery: {
-            countries: {
-              code: { equals: countryCode, mode: "insensitive" },
-            },
-          },
-        }
-      : {};
-    if (drawDate) {
-      resultWhere.draw_date = drawDate;
-    }
 
-    const latestResult = await prisma.lottery_results.findFirst({
-      where: resultWhere,
-      orderBy: { draw_date: "desc" },
+    // Build where clause — filter by country if resolved, otherwise check all
+    const lotteryWhere: Prisma.lotteriesWhereInput = countryCode
+      ? { countries: { code: { equals: countryCode, mode: "insensitive" } } }
+      : {};
+
+    // Get all matching lotteries
+    const lotteries = await prisma.lotteries.findMany({
+      where: { ...lotteryWhere, is_active: true },
+      select: { id: true },
     });
 
-    if (!latestResult) {
-      return {
-        win: false,
-        drawDate: drawDate || "Unknown",
-        drawNo: "Unknown",
-      };
+    if (lotteries.length === 0) {
+      return { win: false, drawDate: drawDate || "Unknown", drawNo: "Unknown" };
     }
 
-    let isWin = false;
-    const wonPrizes: Array<{ label: string; amount?: string }> = [];
+    const lotteryIds = lotteries.map((l) => l.id);
 
-    // Traverse the fully nested JSON object looking for exact number matches
-    const traverse = (obj: unknown, parentKey?: string) => {
-      if (Array.isArray(obj)) {
-        obj.forEach((item) => {
-          if (typeof item === "string" || typeof item === "number") {
-            if (String(item) === number) {
-              isWin = true;
-              wonPrizes.push({ label: parentKey || "Prize" });
-            }
-          } else {
-            traverse(item, parentKey);
+    // For each lottery, pick its LATEST result (or a specific drawDate if provided)
+    const latestResults = await prisma.lottery_results.findMany({
+      where: {
+        lottery_id: { in: lotteryIds },
+        ...(drawDate ? { draw_date: drawDate } : {}),
+      },
+      orderBy: { draw_date: "desc" },
+      // Get up to 1 result per lottery by picking the most recent overall,
+      // then deduplicate below
+      take: 50,
+      select: {
+        id: true,
+        draw_date: true,
+        draw_period: true,
+        lottery_id: true,
+        full_data: true,
+      },
+    });
+
+    // Keep only the newest per lottery_id
+    const seenLotteries = new Set<number>();
+    const dedupedResults = latestResults.filter((r) => {
+      if (seenLotteries.has(r.lottery_id!)) return false;
+      seenLotteries.add(r.lottery_id!);
+      return true;
+    });
+
+    // --- Prize matching across all results ---
+    const wonPrizes: Array<{ label: string; amount?: string; drawDate: string; drawNo: string }> = [];
+
+    for (const res of dedupedResults) {
+      if (!res.full_data) continue;
+      const data = res.full_data as Record<string, unknown>;
+
+      // ── Format 1: Standard prizes array (GLO Thai, most lotteries) ──────────
+      // Shape: { prizes: [{ prizeName, category, prizeAmount, winningNumbers: [] }] }
+      if (Array.isArray(data.prizes)) {
+        for (const prize of data.prizes as Record<string, unknown>[]) {
+          const nums: string[] = Array.isArray(prize.winningNumbers)
+            ? (prize.winningNumbers as unknown[]).map(String)
+            : [];
+          if (nums.includes(number)) {
+            wonPrizes.push({
+              label: String(prize.prizeName || prize.category || "Prize"),
+              amount: prize.prizeAmount != null ? String(prize.prizeAmount) : undefined,
+              drawDate: res.draw_date,
+              drawNo: res.draw_period || "",
+            });
           }
-        });
-      } else if (obj !== null && typeof obj === "object") {
-        const record = obj as Record<string, unknown>;
-
-        // Direct match in a structured prize object
-        if (
-          String(record.number) === number ||
-          (Array.isArray(record.numbers) &&
-            record.numbers.some((n: unknown) => String(n) === number))
-        ) {
-          isWin = true;
-          wonPrizes.push({
-            label: String(record.name || parentKey || "Prize"),
-            amount:
-              record.amount || record.reward
-                ? String(record.amount || record.reward)
-                : undefined,
-          });
         }
-
-        for (const [key, value] of Object.entries(record)) {
-          if (key !== "number" && key !== "numbers") {
-            traverse(value, key);
-          }
-        }
-      } else if (typeof obj === "string" || typeof obj === "number") {
-        if (String(obj) === number) {
-          isWin = true;
-          wonPrizes.push({ label: parentKey || "Prize" });
-        }
+        continue; // Skip flat-field traversal if prizes array exists
       }
-    };
 
-    if (latestResult.full_data) {
-      traverse(latestResult.full_data);
+      // ── Format 2: Flat field format (Lao Lotto, others) ─────────────────────
+      // Shape: { prizeResult: { last4Prize, last3Prize1, devNumberSet: { json: [] } } }
+      if (data.prizeResult) {
+        const pr = data.prizeResult as Record<string, unknown>;
+
+        // Map of fieldName -> prize label
+        const flatFields: Record<string, string> = {
+          last4Prize: "รางวัลที่ 1 (4 ตัว)",
+          last3Prize1: "เลขท้าย 3 ตัว (ชุด 1)",
+          last3Prize2: "เลขท้าย 3 ตัว (ชุด 2)",
+          last2Prize: "เลขท้าย 2 ตัว",
+        };
+
+        for (const [field, label] of Object.entries(flatFields)) {
+          if (pr[field] && String(pr[field]) === number) {
+            wonPrizes.push({ label, drawDate: res.draw_date, drawNo: res.draw_period || "" });
+          }
+        }
+
+        // devNumberSet.json is an array
+        const devSet = pr.devNumberSet as Record<string, unknown> | undefined;
+        if (devSet && Array.isArray(devSet.json)) {
+          if ((devSet.json as unknown[]).map(String).includes(number)) {
+            wonPrizes.push({ label: "เลขพัฒนา", drawDate: res.draw_date, drawNo: res.draw_period || "" });
+          }
+        }
+        continue;
+      }
+
+      // ── Format 3: Fallback generic traversal for unknown schemas ─────────────
+      const collectFromTraverse = (obj: unknown, parentKey?: string): void => {
+        if (Array.isArray(obj)) {
+          obj.forEach((item) => {
+            if (typeof item === "string" || typeof item === "number") {
+              if (String(item) === number) {
+                wonPrizes.push({ label: parentKey || "Prize", drawDate: res.draw_date, drawNo: res.draw_period || "" });
+              }
+            } else {
+              collectFromTraverse(item, parentKey);
+            }
+          });
+        } else if (obj !== null && typeof obj === "object") {
+          const record = obj as Record<string, unknown>;
+          if (String(record.number) === number || String(record.winningNumber) === number) {
+            wonPrizes.push({
+              label: String(record.name || record.prizeName || parentKey || "Prize"),
+              amount: record.prizeAmount != null ? String(record.prizeAmount) : undefined,
+              drawDate: res.draw_date,
+              drawNo: res.draw_period || "",
+            });
+          }
+          for (const [key, value] of Object.entries(record)) {
+            collectFromTraverse(value, key);
+          }
+        }
+      };
+      collectFromTraverse(data);
     }
+
+    const firstResult = dedupedResults[0];
+    const isWin = wonPrizes.length > 0;
 
     return {
       win: isWin,
-      prizes: wonPrizes.length > 0 ? wonPrizes : undefined,
-      drawDate: latestResult.draw_date,
-      drawNo: latestResult.draw_period || "",
+      prizes: isWin ? wonPrizes : undefined,
+      drawDate: firstResult?.draw_date || drawDate || "Unknown",
+      drawNo: firstResult?.draw_period || "",
     };
   }
 

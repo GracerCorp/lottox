@@ -21,8 +21,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Always start with "th" for consistent SSR — sync from localStorage after mount
-  const [language, setLanguageState] = useState<Language>("th");
+  // Always start with "en" for consistent SSR — sync from localStorage after mount
+  const [language, setLanguageState] = useState<Language>("en");
   const [dict, setDict] = useState<Dictionary>(defaultDict); // Default is sync
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (saved && (saved === "th" || saved === "en")) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguageState(saved);
-      if (saved !== "th") {
+      if (saved !== "en") {
         getDictionary(saved).then(setDict).catch(console.error);
       }
     }
@@ -46,7 +46,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     // Update HTML lang attribute
     document.documentElement.lang = lang;
     
-    if (lang === "th") {
+    if (lang === "en") {
       setDict(defaultDict);
     } else {
       getDictionary(lang).then(setDict).catch(console.error);
@@ -71,10 +71,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Safe default for SSR — components render with English defaults when
+// context is unavailable (e.g. during server pre-render or tests).
+const SSR_DEFAULTS: LanguageContextType = {
+  language: "en",
+  toggleLanguage: () => {},
+  setLanguage: () => {},
+  t: defaultDict,
+};
+
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
+  return context ?? SSR_DEFAULTS;
 }
