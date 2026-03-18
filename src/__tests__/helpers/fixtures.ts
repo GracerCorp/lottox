@@ -5,12 +5,14 @@ export const createMockCountry = (overrides?: Partial<countries>): countries => 
   name: "Thailand",
   code: "th",
   flag: null,
+  bg_image: null,
   draw_schedule: null,
   odds: null,
   is_active: true,
   created_at: new Date(),
   ...overrides,
 });
+
 
 export const createMockLottery = (overrides?: Partial<lotteries>): lotteries => ({
   id: 1,

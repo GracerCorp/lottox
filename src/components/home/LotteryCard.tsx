@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 
 interface LotteryCardProps {
   name: string;
@@ -63,9 +65,18 @@ export function LotteryCard({
 }: LotteryCardProps) {
   const [hovered, setHovered] = useState(false);
   const countdown = useCountdown(nextDrawDate);
+  const { t } = useLanguage();
+
+  const lc = (t as unknown as Record<string, Record<string, string>>)?.lotteryCard;
+  const dayLabel  = lc?.day  ?? "day";
+  const hrLabel   = lc?.hr   ?? "hr";
+  const minLabel  = lc?.min  ?? "min";
+  const secLabel  = lc?.sec  ?? "sec";
+  const firstPrizeLabel = lc?.firstPrize ?? "1st Prize";
 
   // Default prizes if none provided
-  const displayPrizes = prizes || [{ label: "1st Prize", amount: jackpot }];
+  const displayPrizes = prizes || [{ label: firstPrizeLabel, amount: jackpot }];
+
 
   // Split prizes: 1st is hero, rest are pairs
   const firstPrize = displayPrizes[0];
@@ -90,7 +101,19 @@ export function LotteryCard({
             ? "border-gold-400/40 shadow-2xl"
             : "border-white/10 shadow-lg",
         )}
+
+
       >
+        {/* Shimmer sweep — slides across on hover */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-20 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
+          style={{
+            background:
+              "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%)",
+          }}
+        />
+
         {/* Background Image */}
         {bgImage && (
           <div className="absolute inset-0 z-0">
@@ -104,20 +127,18 @@ export function LotteryCard({
           </div>
         )}
 
-        {/* Gradient overlay */}
-        <div
-          className={cn(
-            "absolute inset-0 bg-gradient-to-br opacity-70 mix-blend-overlay transition-opacity duration-300 group-hover:opacity-50",
-            isActive
-              ? "from-amber-700 to-amber-900"
-              : `${gradientFrom} ${gradientTo}`,
-          )}
-        />
-
-        {/* Active card — golden glow */}
-        {isActive && (
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-600/25 via-yellow-500/15 to-orange-600/25 z-[1]" />
+        {/* Gradient overlay — only when no background image */}
+        {!bgImage && (
+          <div
+            className={cn(
+              "absolute inset-0 bg-gradient-to-br opacity-70 mix-blend-overlay transition-opacity duration-300 group-hover:opacity-50",
+              `${gradientFrom} ${gradientTo}`,
+            )}
+          />
         )}
+
+
+
 
         {/* Content */}
         <div className="relative h-full p-5 flex flex-col z-10">
@@ -135,6 +156,7 @@ export function LotteryCard({
               <span className="text-[11px] font-semibold text-white/70 uppercase tracking-wider truncate">
                 {country}
               </span>
+
             </div>
             <h3 className="text-base md:text-lg font-bold text-white leading-tight truncate">
               {name}
@@ -149,6 +171,7 @@ export function LotteryCard({
                 <span className="block text-[10px] font-medium text-white/50 uppercase tracking-widest mb-0.5">
                   {firstPrize.label}
                 </span>
+
                 <span className="block text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
                   {firstPrize.amount}
                 </span>
@@ -172,6 +195,7 @@ export function LotteryCard({
                     <span className="block text-sm md:text-base font-bold text-white/80 tracking-tight">
                       {prize.amount}
                     </span>
+
                   </div>
                 ))}
               </div>
@@ -182,11 +206,14 @@ export function LotteryCard({
           <div className="flex items-center gap-2 mt-auto">
             {/* Timer bar */}
             <div className="flex-1 flex items-center justify-center gap-1 bg-navy-900/70 border border-white/10 rounded-lg px-3 py-2 backdrop-blur-sm">
+
+
               {[
-                { val: pad(countdown.days), label: "day" },
-                { val: pad(countdown.hours), label: "hr" },
-                { val: pad(countdown.minutes), label: "min" },
-                { val: pad(countdown.seconds), label: "sec" },
+                { val: pad(countdown.days),    label: dayLabel },
+                { val: pad(countdown.hours),   label: hrLabel },
+                { val: pad(countdown.minutes), label: minLabel },
+                { val: pad(countdown.seconds), label: secLabel },
+
               ].map((unit, i, arr) => (
                 <span key={i} className="flex items-center gap-0.5">
                   <span className="flex flex-col items-center">
@@ -196,9 +223,12 @@ export function LotteryCard({
                     <span className="text-[7px] text-white/30 uppercase tracking-wider leading-none">
                       {unit.label}
                     </span>
+
                   </span>
                   {i < arr.length - 1 && (
                     <span className="text-white/30 text-xs font-light mx-0.5">
+
+
                       :
                     </span>
                   )}

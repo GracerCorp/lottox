@@ -37,15 +37,16 @@ const mockItems = [
     name: "Lao Lotto",
     country: "Laos",
     flag: "la",
-    jackpot: "6,000 times",
+    jackpot: "6,000X",
     nextDraw: "Jan 16, 2026",
     gradientFrom: "#CE1126",
     gradientTo: "#002868",
     href: "/la/lao-lotto",
     bgImage: "https://example.com/bg-la.jpg",
-    prizes: [{ label: "1st Prize", amount: "6,000 times" }],
+    prizes: [{ label: "1st Prize", amount: "6,000X" }],
     nextDrawDate: new Date(Date.now() + 172800000).toISOString(),
   },
+
 ];
 
 function renderHero(props = {}) {

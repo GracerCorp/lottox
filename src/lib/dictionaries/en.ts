@@ -281,6 +281,18 @@ export default {
         br: "Brazil",
       },
     },
+    country: {
+      officialResults: "Official Results",
+      availableLotteries: "Available Lotteries",
+      noLotteries: "No active lotteries found for {{country}}.",
+    },
+    lotteryCard: {
+      day: "day",
+      hr: "hr",
+      min: "min",
+      sec: "sec",
+      firstPrize: "1st Prize",
+    },
     staticParams: {
       about: {
         title: "About LOTTOX",

@@ -8,7 +8,8 @@ import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 import { slugify } from "@/lib/utils/lotteryUtils";
 import { JsonLd } from "@/components/seo/JsonLd";
-import Link from "next/link";
+
+
 
 const DEFAULT_JACKPOT = "Play Now";
 
@@ -24,11 +25,11 @@ const JACKPOT_DATA: Record<string, { main: string; prizes: { label: string; amou
     ],
   },
   la: {
-    main: "6,000 times",
+    main: "6,000X",
     prizes: [
-      { label: "1st Prize", amount: "6,000 times" },
-      { label: "2nd Prize", amount: "500 times" },
-      { label: "3rd Prize", amount: "60 times" },
+      { label: "1st Prize", amount: "6,000X" },
+      { label: "2nd Prize", amount: "500X" },
+      { label: "3rd Prize", amount: "60X" },
     ],
   },
   jp: {
@@ -148,6 +149,7 @@ export default async function Home() {
           name: l.name,
           countryCode: c.code.toLowerCase(),
           countryName: c.name,
+          logo: l.logo ?? null,
         })),
     }))
     .filter((g) => g.lotteries.length > 0);
@@ -228,8 +230,39 @@ export default async function Home() {
   return (
     <div className="flex flex-col relative">
       <JsonLd />
-      {/* Background for entire homepage */}
-      <div className="absolute inset-0 bg-slate-50 dark:bg-navy-950 -z-10" />
+      {/* Background — dark mode: deep navy radial, light mode: soft sky-to-white radial */}
+      {/* Dark mode background */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #1e40af 0%, #0f172a 60%, #020617 100%)",
+        }}
+      />
+      {/* Light mode background */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #bfdbfe 0%, #e0f2fe 40%, #f8fafc 100%)",
+        }}
+      />
+      {/* Soft blue glow layer — adapts per theme */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(59,130,246,0.25) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(99,179,237,0.35) 0%, transparent 70%)",
+        }}
+      />
+
 
       {/* Section 1: Hero Carousel */}
       <HeroSection items={heroItems} />
@@ -246,15 +279,8 @@ export default async function Home() {
       {/* Section 5: Latest Update with Country Tabs */}
       <HomeResultsSection tabs={tabs} />
 
-      {/* Section 6: All Global Results CTA */}
-      <section className="container mx-auto px-4 py-8 flex justify-center">
-        <Link
-          href="/global-draws"
-          className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-sm tracking-wide shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
-        >
-          All Global Results
-        </Link>
-      </section>
+
+
     </div>
   );
 }

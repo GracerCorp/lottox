@@ -280,6 +280,19 @@ export default {
         br: "บราซิล",
       },
     },
+    country: {
+      officialResults: "ผลรางวัลทางการ",
+      availableLotteries: "ลอตเตอรี่ทั้งหมด",
+      noLotteries: "ไม่พบลอตเตอรี่ที่เปิดให้บริการสำหรับ {{country}}",
+    },
+    lotteryCard: {
+      day: "วัน",
+      hr: "ชม.",
+      min: "น.",
+      sec: "วิ.",
+      firstPrize: "รางวัลที่ 1",
+    },
+
     staticParams: {
       about: {
         title: "เกี่ยวกับ LOTTOX",

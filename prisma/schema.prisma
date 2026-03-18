@@ -126,6 +126,7 @@ model countries {
   code            String            @unique(map: "countries_code_unique")
   name            String
   flag            String?
+  bg_image        String?
   draw_schedule   String?
   odds            String?
   is_active       Boolean?          @default(true)

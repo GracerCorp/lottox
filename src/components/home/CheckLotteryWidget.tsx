@@ -15,7 +15,9 @@ export interface LotteryOption {
   name: string;
   countryCode: string;
   countryName: string;
+  logo?: string | null;
 }
+
 
 export interface LotteryGroup {
   countryCode: string;
@@ -189,15 +191,16 @@ export function CheckLotteryWidget({
               className="flex items-center gap-2 border-r border-gray-200 dark:border-white/10 pr-3 py-1 cursor-pointer hover:opacity-80 transition-opacity"
             >
               {selected && (
-                <div className="relative h-4 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
+                <div className="relative h-6 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
                   <Image
-                    src={getFlagUrl(selected.countryCode)}
-                    alt={selected.countryName}
+                    src={selected.logo ?? getFlagUrl(selected.countryCode)}
+                    alt={selected.name}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               )}
+
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap">
                 {triggerLabel}
               </span>
@@ -284,14 +287,15 @@ export function CheckLotteryWidget({
                           : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10",
                       )}
                     >
-                      <div className="relative h-5 w-7 overflow-hidden rounded shadow-sm flex-shrink-0">
+                      <div className="relative h-6 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
                         <Image
-                          src={getFlagUrl(lottery.countryCode)}
-                          alt={lottery.countryName}
+                          src={lottery.logo ?? getFlagUrl(lottery.countryCode)}
+                          alt={lottery.name}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </div>
+
                       <span
                         className={cn(
                           "text-sm font-medium truncate",
