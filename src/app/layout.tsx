@@ -5,6 +5,8 @@ import { Footer } from "@/components/layout/Footer";
 import { ClientProviders } from "@/components/ClientProviders";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { CookieConsent } from "@/components/ui/CookieConsent";
+import { SkipToContent } from "@/components/ui/SkipToContent";
+import { HtmlLangSync } from "@/components/ui/HtmlLangSync";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -97,7 +99,6 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -113,8 +114,10 @@ export default function RootLayout({
     >
       <body className="font-sans min-h-screen flex flex-col relative overflow-x-hidden">
         <ClientProviders>
+          <HtmlLangSync />
+          <SkipToContent />
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main id="main" className="flex-grow">{children}</main>
           <Footer />
           <ScrollToTop />
           <CookieConsent />

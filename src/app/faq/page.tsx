@@ -13,8 +13,28 @@ export default function FAQPage() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  // FAQPage JSON-LD for rich snippets
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.items.map((item: { q: string; a: string }) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 text-gray-900 dark:text-white">
+      {/* FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       <div className="max-w-3xl mx-auto space-y-10">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -43,6 +63,8 @@ export default function FAQPage() {
                 <button
                   onClick={() => toggleItem(index)}
                   className="w-full flex items-center justify-between p-6 text-left transition-colors"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                 >
                   <span className="flex items-center gap-4">
                     <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gold-500/10 text-gold-400 text-sm font-bold">
@@ -59,6 +81,9 @@ export default function FAQPage() {
                   />
                 </button>
                 <div
+                  id={`faq-answer-${index}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${index}`}
                   className={`overflow-hidden transition-all duration-300 ${
                     isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                   }`}

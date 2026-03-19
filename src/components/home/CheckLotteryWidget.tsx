@@ -320,9 +320,9 @@ export function CheckLotteryWidget({
         )}
       </div>
 
-      {/* Results feedback */}
+      {/* Results feedback — aria-live for screen reader announcements */}
       {(result || error) && (
-        <div className="w-full">
+        <div className="w-full" aria-live="polite" aria-atomic="true" role="status">
           {error ? (
             <div className="max-w-2xl mx-auto mt-6">
               <div className="p-5 rounded-xl border text-center animate-in fade-in slide-in-from-bottom-4 duration-500 bg-red-500/10 border-red-500/20 text-red-400">

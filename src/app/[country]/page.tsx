@@ -6,13 +6,52 @@ import { CheckLotteryWidget, type LotteryGroup } from "@/components/home/CheckLo
 import { getDictionary } from "@/lib/i18n";
 import Link from "next/link";
 import { Trophy } from "lucide-react";
+import type { Metadata } from "next";
 
 /** Max prizes shown per card — keeps layout clean */
 const MAX_CARD_PRIZES = 5;
 
+/** Country geo metadata for SEO */
+const GEO_DATA: Record<string, { region: string; placename: string; position: string; icbm: string }> = {
+  th: { region: "TH", placename: "Thailand", position: "15.870032;100.992541", icbm: "15.870032, 100.992541" },
+  la: { region: "LA", placename: "Laos", position: "19.856270;102.495496", icbm: "19.856270, 102.495496" },
+  jp: { region: "JP", placename: "Japan", position: "36.204824;138.252924", icbm: "36.204824, 138.252924" },
+  au: { region: "AU", placename: "Australia", position: "-25.274398;133.775136", icbm: "-25.274398, 133.775136" },
+};
+
+/** Country display names for metadata */
+const COUNTRY_NAMES: Record<string, string> = {
+  th: "Thailand", la: "Laos", jp: "Japan", au: "Australia",
+};
+
 interface PageProps {
   params: Promise<{ country: string }>;
 }
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { country } = await params;
+  const key = country.toLowerCase();
+  const name = COUNTRY_NAMES[key] ?? country;
+  const geo = GEO_DATA[key];
+
+  return {
+    title: `${name} Lottery Results | LOTTOX`,
+    description: `Check the latest ${name} lottery results, winning numbers, and prize breakdowns. Fast, accurate, and reliable.`,
+    alternates: {
+      canonical: `/${key}`,
+      languages: { en: `/${key}`, th: `/${key}` },
+    },
+    other: geo
+      ? {
+          "geo.region": geo.region,
+          "geo.placename": geo.placename,
+          "geo.position": geo.position,
+          ICBM: geo.icbm,
+        }
+      : {},
+  };
+}
+
 
 export default async function CountryPage({ params }: PageProps) {
   const resolvedParams = await params;
