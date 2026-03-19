@@ -30,6 +30,7 @@ model admins {
   password             String
   created_at           DateTime?              @default(now()) @db.Timestamp(6)
   role                 String                 @default("content_editor")
+  audit_logs           audit_logs[]
   prediction_feedback  prediction_feedback[]
   result_verifications result_verifications[]
 }
@@ -45,6 +46,9 @@ model ai_usage_logs {
   context       String?
   metadata      Json?
   created_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([created_at])
+  @@index([provider])
 }
 
 model api_keys {
@@ -89,6 +93,7 @@ model articles {
   shares_count            Int?                      @default(0)
   comments_count          Int?                      @default(0)
   raw_html                String?
+  approval_status         String?                   @default("draft")
   article_analytics_daily article_analytics_daily[]
   article_comments        article_comments[]
   article_reactions       article_reactions[]
@@ -126,11 +131,11 @@ model countries {
   code            String            @unique(map: "countries_code_unique")
   name            String
   flag            String?
-  bg_image        String?
   draw_schedule   String?
   odds            String?
   is_active       Boolean?          @default(true)
   created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  bg_image        String?
   lotteries       lotteries[]
   lottery_results lottery_results[]
 }
@@ -147,10 +152,12 @@ model lotteries {
   showing_prizes          String[]
   prize_amount_mode       String                    @default("fixed")
   default_prize_amounts   Json?                     @default("{}")
+  analytics_snapshots     analytics_snapshots[]
   articles                articles[]
   countries               countries?                @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")
   lottery_analytics_cache lottery_analytics_cache[]
   lottery_jobs            lottery_jobs[]
+  lottery_predictions     lottery_predictions[]
   lottery_results         lottery_results[]
   lottery_subscriptions   lottery_subscriptions[]
   prediction_feedback     prediction_feedback[]
@@ -246,9 +253,14 @@ model notifications {
   content    String
   read       Boolean?  @default(false)
   created_at DateTime? @default(now()) @db.Timestamp(6)
+  channel    String?   @default("in-app")
+  title      String?
+  action_url String?
+  metadata   Json?
   user       user?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "notifications_user_id_user_id_fk")
 
   @@index([user_id])
+  @@index([user_id, read], map: "notifications_read_idx")
 }
 
 model platform_settings {
@@ -273,6 +285,9 @@ model subscriptions {
   status             String?
   current_period_end DateTime? @db.Timestamp(6)
   user               user?     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
+
+  @@index([status])
+  @@index([user_id])
 }
 
 model user {
@@ -452,4 +467,63 @@ model scraper_logs {
   created_at    DateTime?     @default(now()) @db.Timestamp(6)
   lottery_jobs  lottery_jobs? @relation(fields: [job_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "scraper_logs_job_id_lottery_jobs_id_fk")
   lotteries     lotteries?    @relation(fields: [lottery_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "scraper_logs_lottery_id_lotteries_id_fk")
+}
+
+model analytics_snapshots {
+  id             Int        @id @default(autoincrement())
+  lottery_id     Int?
+  category       String
+  period         Int
+  base_draw_date String?
+  hot_numbers    Json?
+  cold_numbers   Json?
+  frequencies    Json?
+  droughts       Json?
+  patterns       Json?
+  predictions    Json?
+  insights       Json?
+  computed_at    DateTime?  @default(now()) @db.Timestamp(6)
+  lotteries      lotteries? @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "analytics_snapshots_lottery_id_lotteries_id_fk")
+
+  @@index([lottery_id, base_draw_date], map: "analytics_snapshots_base_draw_idx")
+  @@index([lottery_id, computed_at], map: "analytics_snapshots_lottery_date_idx")
+}
+
+model audit_logs {
+  id         Int       @id @default(autoincrement())
+  admin_id   Int?
+  action     String
+  resource   String
+  details    Json?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  admins     admins?   @relation(fields: [admin_id], references: [id], onUpdate: NoAction, map: "audit_logs_admin_id_admins_id_fk")
+
+  @@index([action])
+  @@index([admin_id])
+  @@index([created_at])
+  @@index([resource])
+}
+
+model lottery_predictions {
+  id                Int       @id @default(autoincrement())
+  lottery_id        Int
+  category          String    @default("first")
+  target_draw_date  String
+  algorithm         String    @default("monte_carlo")
+  predicted_numbers Json
+  algorithm_output  Json?
+  confidence        Float?    @db.Real
+  period            Int       @default(50)
+  evaluation_status String    @default("pending")
+  actual_numbers    Json?
+  match_count       Int?
+  evaluation_rating String?
+  evaluation_notes  String?
+  created_at        DateTime  @default(now()) @db.Timestamptz(6)
+  evaluated_at      DateTime? @db.Timestamptz(6)
+  lotteries         lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_predictions_lottery_id_lotteries_id_fk")
+
+  @@index([evaluation_status], map: "idx_predictions_eval_status")
+  @@index([lottery_id, algorithm], map: "idx_predictions_lottery_algo")
+  @@index([lottery_id, target_draw_date], map: "idx_predictions_lottery_target")
 }

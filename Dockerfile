@@ -1,21 +1,17 @@
-# Dockerfile
+FROM oven/bun:1 AS base
 
-# Stage 1: Build dependencies
-FROM oven/bun:1 AS deps
+
 WORKDIR /app
 COPY package.json bun.lockb ./
-RUN bun install --production
+RUN bun install
 
-# Stage 2: Build the app
-FROM oven/bun:1 AS builder
-WORKDIR /app
 COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN bunx prisma generate
 RUN bun run build
 
-# Stage 3: Runtime
-FROM oven/bun:1 AS runtime
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE 3000
 
-CMD [ "bun", "dist/index.js" ]
+CMD ["bun", "run", "start"]
