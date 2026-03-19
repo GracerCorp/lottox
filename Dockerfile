@@ -1,21 +1,21 @@
 # Dockerfile
 
 # Stage 1: Build dependencies
-FROM node:14 AS deps
+FROM oven/bun:1 AS deps
 WORKDIR /app
-COPY package-lock.json ./
-RUN npm install --only=production
+COPY package.json bun.lockb ./
+RUN bun install --production
 
 # Stage 2: Build the app
-FROM node:14 AS builder
+FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY . .
-RUN npm run build
+RUN bun run build
 
 # Stage 3: Runtime
-FROM node:14 AS runtime
+FROM oven/bun:1 AS runtime
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "bun", "dist/index.js" ]
