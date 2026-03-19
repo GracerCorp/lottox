@@ -589,6 +589,10 @@ export default {
         maxPinned: "คุณสามารถปักหมุดหวยได้สูงสุด 6 รายการ",
         selectLottery: "เลือกหวย",
         close: "ปิด",
+        pinYourLotteries: "ปักหมุดหวยของคุณ",
+        pinLotteryHint: "เลือกหวยได้สูงสุด 6 รายการเพื่อปักหมุดบนหน้าผลรางวัลของคุณ คุณสามารถลากเพื่อจัดเรียงลำดับได้",
+        selectedLotteries: "หวยที่เลือก",
+        confirm: "ยืนยัน",
       },
       vietnamDetails: {
         title: "รายละเอียดผลหวยฮานอย",

@@ -1,28 +1,29 @@
 import React from "react";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 // Mock next/link
-jest.mock("next/link", () => {
-  return ({ children, href, ...props }: any) => (
+vi.mock("next/link", () => ({
+  default: ({ children, href, ...props }: any) => (
     <a href={href} {...props}>{children}</a>
-  );
-});
+  ),
+}));
 
 // Mock next/image
-jest.mock("next/image", () => ({
+vi.mock("next/image", () => ({
   __esModule: true,
   default: (props: any) => <img {...props} />,
 }));
 
 // Mock lucide-react
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   Home: (props: any) => <span data-testid="home-icon" {...props} />,
   Search: (props: any) => <span data-testid="search-icon" {...props} />,
   ArrowRight: (props: any) => <span data-testid="arrow-icon" {...props} />,
 }));
 
 // Mock LanguageContext
-jest.mock("@/contexts/LanguageContext", () => ({
+vi.mock("@/contexts/LanguageContext", () => ({
   useLanguage: () => ({
     t: {
       common: {
@@ -32,7 +33,7 @@ jest.mock("@/contexts/LanguageContext", () => ({
       },
     },
     language: "en",
-    toggleLanguage: jest.fn(),
+    toggleLanguage: vi.fn(),
   }),
 }));
 

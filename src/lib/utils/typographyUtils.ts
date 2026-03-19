@@ -22,14 +22,26 @@ export const typography = {
   /** Body text — 12→14px fluid */
   body: "text-fs-sm",
 
+  /** Body large — 14→16px fluid */
+  bodyLarge: "text-fs-base",
+
   /** Labels, badges, captions — 9→11px fluid uppercase */
   label: "text-fs-badge uppercase tracking-wide font-medium",
+
+  /** Badge — 9→11px fluid semibold */
+  badge: "text-fs-badge font-semibold",
 
   /** Muted/secondary text — 10→12px fluid */
   muted: "text-fs-xs",
 
   /** Large prize numbers (hero) — 24→32px fluid */
   prizeMain: "text-fs-prize font-black",
+
+  /** Sub heading — 18→20px fluid */
+  subHeading: "text-fs-xl font-semibold",
+
+  /** Hero title — 28→36px fluid */
+  heroTitle: "text-fs-4xl font-black",
 
   /** Sub prize numbers — 16→18px fluid */
   prizeSub: "text-fs-lg font-bold",

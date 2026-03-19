@@ -588,6 +588,10 @@ export default {
         maxPinned: "You can pin up to 6 lotteries.",
         selectLottery: "Select a Lottery",
         close: "Close",
+        pinYourLotteries: "Pin your Lotteries",
+        pinLotteryHint: "Select up 6 lotteries to pin on your Global Result Page, You can drag Selected Lotteries to re-order",
+        selectedLotteries: "Selected Lotteries",
+        confirm: "Confirm",
       },
       vietnamDetails: {
         title: "Hanoi Lottery Details",

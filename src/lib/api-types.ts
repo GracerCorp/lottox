@@ -142,6 +142,24 @@ export interface CountryInfo {
   odds: string;
 }
 
+// GET /api/lotteries
+export interface LotteriesListResponse {
+  countries: LotteryCountryGroup[];
+}
+
+export interface LotteryCountryGroup {
+  code: string;
+  name: string;
+  flag: string | null;
+  lotteries: LotteryItem[];
+}
+
+export interface LotteryItem {
+  id: number;
+  name: string;
+  logo: string | null;
+}
+
 // GET /api/news
 export interface NewsListResponse {
   articles: NewsArticle[];

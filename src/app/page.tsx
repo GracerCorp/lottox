@@ -268,7 +268,7 @@ export default async function Home() {
       <HeroSection items={heroItems} />
 
       {/* Section 2: Live Ticker */}
-      <LiveTicker />
+      {/* <LiveTicker /> */}
 
       {/* Section 3: Find By Number */}
       <CheckLotteryWidget lotteryGroups={lotteryGroups} />

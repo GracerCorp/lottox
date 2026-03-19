@@ -1,15 +1,16 @@
 import React from "react";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 // Mock next/link
-jest.mock("next/link", () => {
-  return ({ children, href, ...props }: any) => (
+vi.mock("next/link", () => ({
+  default: ({ children, href, ...props }: any) => (
     <a href={href} {...props}>{children}</a>
-  );
-});
+  ),
+}));
 
 // Mock lucide-react
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   ChevronRight: (props: any) => <span data-testid="chevron" {...props} />,
 }));
 

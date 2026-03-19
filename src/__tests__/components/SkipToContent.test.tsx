@@ -1,12 +1,13 @@
 import React from "react";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 // Mock LanguageContext
-jest.mock("@/contexts/LanguageContext", () => ({
+vi.mock("@/contexts/LanguageContext", () => ({
   useLanguage: () => ({
     t: { common: { skipToContent: "Skip to content" } },
     language: "en",
-    toggleLanguage: jest.fn(),
+    toggleLanguage: vi.fn(),
   }),
 }));
 

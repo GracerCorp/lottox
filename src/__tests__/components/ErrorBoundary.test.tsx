@@ -1,9 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 
 // Mock lucide-react
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   AlertCircle: (props: any) => <span data-testid="alert-icon" {...props} />,
   RefreshCcw: (props: any) => <span data-testid="refresh-icon" {...props} />,
 }));
@@ -20,7 +21,7 @@ describe("ErrorBoundary", () => {
   // Suppress console.error for expected errors
   const originalError = console.error;
   beforeAll(() => {
-    console.error = jest.fn();
+    console.error = vi.fn();
   });
   afterAll(() => {
     console.error = originalError;

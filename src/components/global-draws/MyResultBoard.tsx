@@ -5,20 +5,24 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { PinnedLotteryTabs } from "./PinnedLotteryTabs";
 import { ResultBoardCard } from "./ResultBoardCard";
 import { AddLotteryModal } from "./AddLotteryModal";
+import type { PinnedLottery } from "./AddLotteryModal";
 
 const STORAGE_KEY = "lottox_pinned_lotteries";
 const MAX_PINNED = 6;
 
-interface PinnedLottery {
-  countryCode: string;
-  lotteryName: string;
-}
-
+/** Read pinned lotteries from localStorage, auto-migrating old format */
 function readPinned(): PinnedLottery[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as PinnedLottery[]) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Record<string, unknown>[];
+    // Migration: old format had { countryCode, lotteryName } without lotteryId
+    if (parsed.length > 0 && !("lotteryId" in parsed[0])) {
+      localStorage.removeItem(STORAGE_KEY);
+      return [];
+    }
+    return parsed as unknown as PinnedLottery[];
   } catch {
     return [];
   }
@@ -44,23 +48,24 @@ export function MyResultBoard() {
     setPinned(readPinned());
   }, []);
 
-  const handleAdd = useCallback(
-    (countryCode: string, lotteryName: string) => {
-      const next: PinnedLottery[] = [
-        ...pinned.filter((p) => p.countryCode !== countryCode),
-        { countryCode, lotteryName },
-      ].slice(-MAX_PINNED);
+  /** Handle batch confirm from AddLotteryModal */
+  const handleConfirm = useCallback(
+    (selected: PinnedLottery[]) => {
+      const next = selected.slice(0, MAX_PINNED);
       setPinned(next);
       writePinned(next);
-      setActiveIndex(next.length - 1);
+      // Keep active index in bounds
+      setActiveIndex((prev) =>
+        next.length === 0 ? 0 : Math.min(prev, next.length - 1)
+      );
       setModalOpen(false);
     },
-    [pinned],
+    [],
   );
 
   const handleRemove = useCallback(
-    (code: string) => {
-      const next = pinned.filter((p) => p.countryCode !== code);
+    (lotteryId: number) => {
+      const next = pinned.filter((p) => p.lotteryId !== lotteryId);
       setPinned(next);
       writePinned(next);
       setActiveIndex((prev) => Math.min(prev, Math.max(0, next.length - 1)));
@@ -115,10 +120,10 @@ export function MyResultBoard() {
       {/* Active Board Card */}
       {activePinned ? (
         <ResultBoardCard
-          key={activePinned.countryCode}
+          key={activePinned.lotteryId}
           lotteryName={activePinned.lotteryName}
           countryCode={activePinned.countryCode}
-          onRemove={() => handleRemove(activePinned.countryCode)}
+          onRemove={() => handleRemove(activePinned.lotteryId)}
         />
       ) : (
         <div
@@ -133,8 +138,8 @@ export function MyResultBoard() {
       {/* Modal */}
       {modalOpen && (
         <AddLotteryModal
-          pinnedCodes={pinned.map((p) => p.countryCode)}
-          onAdd={handleAdd}
+          pinned={pinned}
+          onConfirm={handleConfirm}
           onClose={() => setModalOpen(false)}
         />
       )}
