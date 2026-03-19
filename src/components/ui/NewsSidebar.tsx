@@ -71,7 +71,7 @@ export function NewsSidebar({
           <h4 className="text-sm font-bold text-gray-900 dark:text-gray-200 line-clamp-2 leading-snug">
             {news.title}
           </h4>
-          <div className="mt-1 flex items-center gap-1 text-[11px] text-gray-500">
+          <div className="mt-1 flex items-center gap-1 text-fs-badge text-gray-500">
             <Clock className="h-3 w-3" />
             {news.date}
           </div>

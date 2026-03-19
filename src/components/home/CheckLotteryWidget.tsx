@@ -267,7 +267,7 @@ export function CheckLotteryWidget({
                   <div className="h-px bg-gray-100 dark:bg-white/5 mx-3" />
                 )}
                 <div className="px-4 pt-3 pb-1">
-                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                  <span className="text-fs-badge font-semibold text-gray-500 uppercase tracking-wider">
                     {group.countryName}
                   </span>
                 </div>

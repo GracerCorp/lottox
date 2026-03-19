@@ -57,7 +57,7 @@ export function CountryListSection({
                 <span className="font-bold text-sm text-gray-900 dark:text-white truncate group-hover:text-gold-400 transition-colors">
                   {localizedName}
                 </span>
-                <span className="text-[10px] text-gray-500">
+                <span className="text-fs-badge text-gray-500">
                   {country.count} {t.countryList?.lotteries || "lottery"}
                 </span>
               </div>

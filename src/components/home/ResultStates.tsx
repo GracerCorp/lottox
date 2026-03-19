@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { Trophy, CheckCircle2, Ticket, AlertCircle, Facebook, Twitter, Link as LinkIcon, RefreshCcw } from "lucide-react";
@@ -14,8 +14,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export const ShareRow = ({ number }: { number: string }) => {
   const { t } = useLanguage();
 
+  // Defer window.location.href to avoid hydration mismatch
+  const [currentUrl, setCurrentUrl] = useState("https://lottox.today");
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
+
   const shareText = encodeURIComponent(`I checked lottery number ${number} on LOTTOX! 🎉`);
-  const shareUrl = encodeURIComponent(typeof window !== "undefined" ? window.location.href : "https://lottox.today");
+  const shareUrl = encodeURIComponent(currentUrl);
 
   const handleCopyLink = async () => {
     try {

@@ -123,20 +123,20 @@ export function DrawResult({
 
       <div className="relative z-10 p-6 sm:p-8">
         {(country || lotteryName) && (
-          <div className="mb-2 text-center text-sm uppercase tracking-widest text-gold-400">
+          <div className="mb-2 text-center text-fs-sm uppercase tracking-widest text-gold-400">
             {country}
           </div>
         )}
 
         <div className="mb-4 flex flex-col items-center justify-center gap-2">
           {lotteryName && (
-            <h2 className="bg-gradient-to-r from-gold-300 to-gold-600 bg-clip-text text-4xl font-black tracking-tight text-transparent drop-shadow-sm sm:text-5xl text-center leading-tight">
+            <h2 className="bg-gradient-to-r from-gold-300 to-gold-600 bg-clip-text text-fs-5xl font-black tracking-tight text-transparent drop-shadow-sm text-center leading-tight">
               {lotteryName}
             </h2>
           )}
 
           <div className="mt-2 inline-flex flex-col items-center justify-center rounded-2xl border border-gold-500/20 bg-white/50 px-6 py-3 shadow-[0_8px_30px_rgb(245,158,11,0.06)] backdrop-blur-sm sm:flex-row sm:gap-4 dark:bg-navy-900/50">
-            <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-xl font-bold text-transparent sm:text-2xl dark:from-white dark:to-gray-300">
+            <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-fs-2xl font-bold text-transparent dark:from-white dark:to-gray-300">
               {date}
             </span>
           </div>
@@ -145,7 +145,7 @@ export function DrawResult({
         {/* 1st Prize */}
         <div className="mb-8">
           <div className="mb-4 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/15 px-5 py-2 text-sm font-bold uppercase tracking-wider text-gold-400">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/15 px-5 py-2 text-fs-sm font-bold uppercase tracking-wider text-gold-400">
               <Trophy className="h-4 w-4" />
               {useDynamic ? getPrizeName(dynamicFirst!) : t.results.prize1} (
               {t.common.perPrize}{" "}
@@ -184,21 +184,21 @@ export function DrawResult({
                 key={idx}
                 className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80"
               >
-                <div className="mb-2 text-md font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   {getPrizeName(prize)}
                 </div>
                 <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                   {prize.winningNumbers.map((num, i) => (
                     <span
                       key={i}
-                      className="font-mono text-2xl font-bold tracking-widest text-gray-900 dark:text-white"
+                      className="font-mono text-fs-2xl font-bold tracking-widest text-gray-900 dark:text-white"
                     >
                       {num}
                     </span>
                   ))}
                 </div>
                 {prize.prizeAmount > 0 && (
-                  <span className="mt-1 block text-md text-gold-600 dark:text-gold-400">
+                  <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">
                     {prize.prizeAmount.toLocaleString()} {displayCurrency}
                   </span>
                 )}
@@ -216,21 +216,21 @@ export function DrawResult({
             <div className="mt-8 flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-white/10 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 shadow-sm">
               {front3.length > 0 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Front}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                     {front3.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-2xl font-bold tracking-widest text-gray-900 dark:text-white"
+                        className="font-mono text-fs-2xl font-bold tracking-widest text-gray-900 dark:text-white"
                       >
                         {num}
                       </span>
                     ))}
                   </div>
                   {front3Amount && (
-                    <span className="mt-1 block text-[10px] text-gold-600 dark:text-gold-400">
+                    <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">
                       {front3Amount} {t.common.baht}
                     </span>
                   )}
@@ -239,21 +239,21 @@ export function DrawResult({
 
               {back3.length > 0 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Back}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                     {back3.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-2xl font-bold tracking-widest text-gray-900 dark:text-white"
+                        className="font-mono text-fs-2xl font-bold tracking-widest text-gray-900 dark:text-white"
                       >
                         {num}
                       </span>
                     ))}
                   </div>
                   {back3Amount && (
-                    <span className="mt-1 block text-[10px] text-gold-600 dark:text-gold-400">
+                    <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">
                       {back3Amount} {t.common.baht}
                     </span>
                   )}
@@ -262,16 +262,16 @@ export function DrawResult({
 
               {last2 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+                  <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
                     {t.results.prize2}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
-                    <span className="font-mono text-4xl font-bold tracking-widest text-gold-600 dark:text-gold-400">
+                    <span className="font-mono text-fs-4xl font-bold tracking-widest text-gold-600 dark:text-gold-400">
                       {last2}
                     </span>
                   </div>
                   {last2Amount && (
-                    <span className="mt-1 block text-[10px] text-gray-900 dark:text-white">
+                    <span className="mt-1 block text-fs-badge text-gray-900 dark:text-white">
                       {last2Amount} {t.common.baht}
                     </span>
                   )}
@@ -280,21 +280,21 @@ export function DrawResult({
 
               {adjacent.length > 0 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.common.adjacent}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                     {adjacent.map((num, i) => (
                       <span
                         key={i}
-                        className="font-mono text-lg font-bold tracking-widest text-gray-900 dark:text-white sm:text-lg"
+                        className="font-mono text-fs-lg font-bold tracking-widest text-gray-900 dark:text-white"
                       >
                         {num}
                       </span>
                     ))}
                   </div>
                   {adjacentAmount && (
-                    <span className="mt-1 block text-[10px] text-gold-600 dark:text-gold-400">
+                    <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">
                       {adjacentAmount} {t.common.baht}
                     </span>
                   )}

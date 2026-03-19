@@ -37,9 +37,11 @@ function useCountdown(targetDate?: string) {
     };
   }, [targetDate]);
 
-  const [remaining, setRemaining] = useState(calcRemaining);
+  // Initialize with zeros to avoid hydration mismatch (Date.now() differs on server vs client)
+  const [remaining, setRemaining] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    setRemaining(calcRemaining());
     const id = setInterval(() => setRemaining(calcRemaining()), 1000);
     return () => clearInterval(id);
   }, [calcRemaining]);

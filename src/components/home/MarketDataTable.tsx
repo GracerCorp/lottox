@@ -107,7 +107,7 @@ export function MarketDataTable() {
                           <span className="font-bold text-cyan-400 group-hover:text-cyan-300">
                             {row.code}
                           </span>
-                          <span className="text-[10px] text-gray-600 uppercase">
+                          <span className="text-fs-badge text-gray-600 uppercase">
                             {row.name}
                           </span>
                         </div>
@@ -123,7 +123,7 @@ export function MarketDataTable() {
                           <span className="font-bold text-white group-hover:text-green-400 transition-colors">
                             {row.jackpot}
                           </span>
-                          <span className="text-[10px] text-gray-600">
+                          <span className="text-fs-badge text-gray-600">
                             {row.currency}
                           </span>
                         </div>
@@ -137,7 +137,7 @@ export function MarketDataTable() {
             </table>
           </div>
 
-          <div className="p-2 border-t border-gray-800 bg-gray-900/30 flex justify-between items-center text-[10px] text-gray-600 uppercase tracking-widest">
+          <div className="p-2 border-t border-gray-800 bg-gray-900/30 flex justify-between items-center text-fs-badge text-gray-600 uppercase tracking-widest">
             <span>{t.market.providedBy}</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-green-900 rounded-full animate-ping"></span>

@@ -279,7 +279,7 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
             <span className="block text-sm font-semibold text-gray-900 dark:text-white leading-tight truncate">
               {item.name}
             </span>
-            <span className="block text-[11px] text-gray-500 leading-tight">
+            <span className="block text-fs-badge text-gray-500 leading-tight">
               {item.time && <>{item.time} | </>}{item.date}
             </span>
           </div>
@@ -289,7 +289,7 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
         <div className="flex-1 flex items-center gap-4 md:gap-6 overflow-x-auto hide-scrollbar">
           {item.numbers.map((prize, idx) => (
             <div key={idx} className="shrink-0">
-              <span className="block text-[10px] font-medium text-gray-500 uppercase tracking-wide leading-tight whitespace-nowrap">
+              <span className="block text-fs-badge font-medium text-gray-500 uppercase tracking-wide leading-tight whitespace-nowrap">
                 {prize.label}
               </span>
               <div className="flex items-center gap-1 mt-0.5">
