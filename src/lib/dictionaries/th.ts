@@ -74,6 +74,7 @@ export default {
       findByNumber: "ตรวจรางวัลของคุณ",
       findByNumberDesc: "ตรวจเลขสลากของคุณกับผลรางวัลที่ออกล่าสุด",
       fillNumberPlaceholder: "กรอกเลขของคุณ",
+      enterNDigits: "กรุณากรอก {n} หลัก",
       searchBtn: "ค้นหา",
       somethingWrong: "เกิดข้อผิดพลาดบางอย่าง",
       noPrize: "เสียใจด้วย ไม่ถูกรางวัลในครั้งนี้",

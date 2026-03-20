@@ -75,6 +75,7 @@ export default {
       findByNumber: "Check My Number",
       findByNumberDesc: "Check my lottery number with results instantly.",
       fillNumberPlaceholder: "Fill your number here",
+      enterNDigits: "Enter {n} digits",
       searchBtn: "Search",
       somethingWrong: "Something went wrong",
       noPrize: "Sorry, no prize this time.",

@@ -3,12 +3,17 @@ import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 // Use vi.hoisted so the variable is available inside vi.mock factory
-const { mockCheckNumber } = vi.hoisted(() => ({
+const { mockCheckNumber, mockValidateNumber } = vi.hoisted(() => ({
   mockCheckNumber: vi.fn(),
+  mockValidateNumber: vi.fn(),
 }));
 
 vi.mock("@/lib/services/lotteryResultService", () => ({
   apiClient: { checkNumber: mockCheckNumber },
+}));
+
+vi.mock("@/lib/utils/lotteryValidation", () => ({
+  validateNumber: mockValidateNumber,
 }));
 
 vi.mock("@/lib/utils/apiErrorHandler", () => ({
@@ -30,6 +35,8 @@ function makeRequest(params: Record<string, string | undefined>) {
 describe("GET /api/check", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // By default, all numbers pass validation
+    mockValidateNumber.mockReturnValue({ valid: true });
   });
 
   // ─── Validation failures ───────────────────────────────────────────────────
@@ -53,8 +60,8 @@ describe("GET /api/check", () => {
     expect(body.error).toMatch(/numeric/i);
   });
 
-  it("returns 400 when number is longer than 6 digits", async () => {
-    const res = await GET(makeRequest({ number: "1234567", type: "glo" }));
+  it("returns 400 when number is longer than 7 digits", async () => {
+    const res = await GET(makeRequest({ number: "12345678", type: "glo" }));
     expect(res.status).toBe(400);
   });
 
@@ -115,5 +122,26 @@ describe("GET /api/check", () => {
     expect(res.status).toBe(500);
     const body = await res.json();
     expect(body.error).toBeDefined();
+  });
+
+  // ─── Country-specific validation ─────────────────────────────────────────
+
+  it("returns 400 when validateNumber fails", async () => {
+    mockValidateNumber.mockReturnValue({
+      valid: false,
+      error: "Number must be at least 6 digits",
+    });
+
+    const res = await GET(makeRequest({ number: "123", type: "th" }));
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toMatch(/6 digits/i);
+  });
+
+  it("passes type to validateNumber", async () => {
+    mockCheckNumber.mockResolvedValue({ isWinner: false, prizes: [] });
+
+    await GET(makeRequest({ number: "1234", type: "la" }));
+    expect(mockValidateNumber).toHaveBeenCalledWith("1234", "la");
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Search, Loader2, CheckCircle2, XCircle, ChevronDown } from "lucide-react";
@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { getFlagUrl } from "@/lib/flags";
 import { type Language } from "@/lib/i18n";
 import { JackpotResult, StandardWinResult, NoWinResult } from "./ResultStates";
+import { getRule, type LotteryNumberRule } from "@/lib/utils/lotteryValidation";
 
 /* ---------- Types ---------- */
 export interface LotteryOption {
@@ -109,9 +110,17 @@ export function CheckLotteryWidget({
         .filter((g) => g.lotteries.length > 0)
     : lotteryGroups;
 
+  // Compute validation rule based on selected lottery
+  const activeRule: LotteryNumberRule = useMemo(() => {
+    if (!selected) return getRule("default");
+    return getRule(selected.countryCode, selected.name);
+  }, [selected]);
+
+  const isNumberValid = number.length >= activeRule.minDigits && number.length <= activeRule.digits;
+
   const handleCheck = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!number || number.length < 2 || !selected) return;
+    if (!number || !isNumberValid || !selected) return;
 
     setLoading(true);
     setError(null);
@@ -217,16 +226,19 @@ export function CheckLotteryWidget({
           <input
             type="text"
             value={number}
-            onChange={(e) => setNumber(e.target.value.replace(/\D/g, ""))}
-            placeholder={t.common.fillNumberPlaceholder}
-            maxLength={6}
+            onChange={(e) => {
+              const filtered = e.target.value.replace(/\D/g, "");
+              setNumber(filtered.slice(0, activeRule.digits));
+            }}
+            placeholder={activeRule.placeholder}
+            maxLength={activeRule.digits}
             className="flex-1 min-w-0 bg-transparent border-none outline-none text-gray-900 dark:text-white text-sm py-2.5 px-2 placeholder:text-gray-400 dark:placeholder:text-gray-500 tracking-widest tabular-nums"
           />
 
           {/* Search button */}
           <button
             type="submit"
-            disabled={loading || number.length < 2}
+            disabled={loading || !isNumberValid}
             className="flex items-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-sm py-2.5 px-3 md:px-5 rounded-full shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:pointer-events-none flex-shrink-0"
           >
             {loading ? (
@@ -239,6 +251,14 @@ export function CheckLotteryWidget({
             )}
           </button>
         </form>
+
+        {/* Validation hint */}
+        {selected && number.length > 0 && !isNumberValid && (
+          <p className="text-xs text-amber-500 dark:text-amber-400 mt-2 text-center" data-testid="validation-hint">
+            {t.common.enterNDigits?.replace("{n}", String(activeRule.digits)) ??
+              `Enter ${activeRule.description}`}
+          </p>
+        )}
 
         {/* Dropdown Panel — full width of form, anchored to outer container */}
         {isOpen && (

@@ -85,7 +85,7 @@ describe("CheckLotteryWidget", () => {
 
   it("renders without crashing with default English text", () => {
     renderWidget();
-    expect(screen.getByText(/find by number/i)).toBeDefined();
+    expect(screen.getByText(/check my number/i)).toBeDefined();
   });
 
   it("renders with no lottery groups prop", () => {
@@ -112,18 +112,19 @@ describe("CheckLotteryWidget", () => {
     expect(input.getAttribute("maxLength")).toBe("6");
   });
 
-  it("disables search button below 2 chars", () => {
+  it("disables search button when no number entered", () => {
     renderWidget();
     const btn = screen.getByRole("button", { name: /search/i });
     expect(btn).toBeDisabled();
-
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1" } });
-    expect(btn).toBeDisabled();
   });
 
-  it("enables search button at 2+ chars", () => {
-    renderWidget();
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "12" } });
+  it("enables search button when valid number entered and lottery selected", () => {
+    const { container } = renderWidget();
+    // Select a lottery first (Lao = 4 digits)
+    fireEvent.click(container.querySelector("button[type='button']")!);
+    fireEvent.click(screen.getByText("Lao Lotto"));
+    // Type 4 digits (valid for Lao)
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "1234" } });
     expect(screen.getByRole("button", { name: /search/i })).not.toBeDisabled();
   });
 
@@ -169,7 +170,7 @@ describe("CheckLotteryWidget", () => {
 
   // ─── API result rendering ─────────────────────────────────────────────────
 
-  async function submitSearch(container: HTMLElement, number = "123456") {
+  async function submitSearch(container: HTMLElement, number = "1234") {
     fireEvent.click(container.querySelector("button[type='button']")!);
     fireEvent.click(screen.getByText("Lao Lotto"));
     fireEvent.change(screen.getByRole("textbox"), { target: { value: number } });
@@ -188,7 +189,7 @@ describe("CheckLotteryWidget", () => {
     });
 
     const { container } = renderWidget();
-    await submitSearch(container);
+    await submitSearch(container, "1234");
     expect(screen.getByText(/jackpot!/i)).toBeDefined();
     expect(screen.getByTestId("confetti")).toBeDefined();
   });
@@ -256,21 +257,21 @@ describe("CheckLotteryWidget", () => {
     // Select lottery + type number + search
     fireEvent.click(container.querySelector("button[type='button']")!);
     fireEvent.click(screen.getByText("Lao Lotto"));
-    fireEvent.change(input, { target: { value: "123456" } });
+    fireEvent.change(input, { target: { value: "1234" } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: /search/i }));
     });
 
-    // Confirm "123456" is shown in result
-    expect(screen.getByText("123456")).toBeDefined();
+    // Confirm "1234" is shown in result
+    expect(screen.getByText("1234")).toBeDefined();
 
-    // Now type something different in the field — result should still show "123456"
-    fireEvent.change(input, { target: { value: "999999" } });
-    expect(screen.getByText("123456")).toBeDefined();
+    // Now type something different in the field — result should still show "1234"
+    fireEvent.change(input, { target: { value: "9999" } });
+    expect(screen.getByText("1234")).toBeDefined();
     // The new value should NOT replace the frozen result
-    expect(screen.queryAllByText("999999").length === 0 ||
-      screen.queryAllByText("999999")[0]?.tagName === "INPUT").toBe(true);
+    expect(screen.queryAllByText("9999").length === 0 ||
+      screen.queryAllByText("9999")[0]?.tagName === "INPUT").toBe(true);
   });
 
   it("shows error state when fetch fails with network error", async () => {

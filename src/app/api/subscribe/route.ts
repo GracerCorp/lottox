@@ -7,7 +7,7 @@ import { z } from "zod";
 const EXTERNAL_API = process.env.CMS_API_URL || "https://lotto-x-cms.vercel.app";
 
 const bodySchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   lotteryId: z.number().int().positive("lotteryId must be a positive integer"),
 });
 
