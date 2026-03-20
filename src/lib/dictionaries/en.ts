@@ -141,6 +141,8 @@ export default {
       success: "Subscribed! We will send results to your email.",
       error: "Something went wrong. Please try again.",
       errorTitle: "Subscription Failed",
+      alreadyTitle: "Already Subscribed",
+      alreadyMessage: "You are already subscribed to this lottery. We'll notify you when results are available.",
       sending: "Sending...",
       done: "Done",
       retry: "Try Again",

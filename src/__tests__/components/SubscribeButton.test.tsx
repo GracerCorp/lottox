@@ -13,6 +13,8 @@ vi.mock("@/contexts/LanguageContext", () => ({
         success: "Subscribed! We will send results to your email.",
         error: "Something went wrong. Please try again.",
         errorTitle: "Subscription Failed",
+        alreadyTitle: "Already Subscribed",
+        alreadyMessage: "You are already subscribed to this lottery.",
         sending: "Sending...",
         done: "Done",
         retry: "Try Again",
@@ -89,13 +91,13 @@ describe("SubscribeButton", () => {
     expect(screen.getByText("Sending...")).toBeInTheDocument();
 
     await act(async () => {
-      resolvePromise!(new Response(null, { status: 200 }));
+      resolvePromise!(new Response(JSON.stringify({ success: true }), { status: 200 }));
     });
   });
 
   it("shows success state after successful subscription", async () => {
     vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(null, { status: 200 }),
+      new Response(JSON.stringify({ success: true }), { status: 200 }),
     );
 
     render(<SubscribeButton {...defaultProps} />);
@@ -115,7 +117,7 @@ describe("SubscribeButton", () => {
 
   it("closes dialog from success state", async () => {
     vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(null, { status: 200 }),
+      new Response(JSON.stringify({ success: true }), { status: 200 }),
     );
 
     render(<SubscribeButton {...defaultProps} />);
@@ -136,7 +138,7 @@ describe("SubscribeButton", () => {
 
   it("shows error state on API failure (non-200)", async () => {
     vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(null, { status: 500 }),
+      new Response(JSON.stringify({ success: false, error: "Server error" }), { status: 500 }),
     );
 
     render(<SubscribeButton {...defaultProps} />);
@@ -173,7 +175,7 @@ describe("SubscribeButton", () => {
 
   it("returns to form from error state on retry", async () => {
     vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(null, { status: 500 }),
+      new Response(JSON.stringify({ success: false, error: "Server error" }), { status: 500 }),
     );
 
     render(<SubscribeButton {...defaultProps} />);
@@ -195,7 +197,7 @@ describe("SubscribeButton", () => {
   it("sends the correct lotteryId in the API call", async () => {
     const fetchSpy = vi
       .spyOn(global, "fetch")
-      .mockResolvedValue(new Response(null, { status: 200 }));
+      .mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
 
     render(<SubscribeButton {...defaultProps} />);
     fireEvent.click(screen.getByTestId("subscribe-trigger"));
@@ -206,11 +208,34 @@ describe("SubscribeButton", () => {
     fireEvent.click(screen.getByTestId("subscribe-submit"));
 
     await waitFor(() => {
-      expect(fetchSpy).toHaveBeenCalledWith("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "test@example.com", lotteryId: 42 }),
-      });
+      expect(fetchSpy).toHaveBeenCalledOnce();
+      const calledUrl = fetchSpy.mock.calls[0][0] as string;
+      expect(calledUrl).toMatch(/\/api\/v1\/users\/_\/subscriptions$/);
+      const calledInit = fetchSpy.mock.calls[0][1];
+      const body = JSON.parse(calledInit?.body as string);
+      expect(body.email).toBe("test@example.com");
+      expect(body.lotteryId).toBe(42);
+    });
+  });
+
+  it("shows already-subscribed state when API returns already subscribed error", async () => {
+    vi.spyOn(global, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({ success: false, error: "Already subscribed to this lottery." }),
+        { status: 409 },
+      ),
+    );
+
+    render(<SubscribeButton {...defaultProps} />);
+    fireEvent.click(screen.getByTestId("subscribe-trigger"));
+
+    fireEvent.change(screen.getByTestId("subscribe-email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.click(screen.getByTestId("subscribe-submit"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Already Subscribed")).toBeInTheDocument();
     });
   });
 });

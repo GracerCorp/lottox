@@ -4,8 +4,7 @@ import { POST } from "@/app/api/subscribe/route";
 describe("/api/subscribe route", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.stubEnv("CMS_API_URL", "https://cms.example.com");
-    vi.stubEnv("API_KEY", "test-api-key");
+    vi.stubEnv("NEXT_PUBLIC_CMS_API_URL", "https://cms.example.com");
   });
 
   function makeRequest(body: unknown) {
@@ -49,9 +48,9 @@ describe("/api/subscribe route", () => {
     expect(res.status).toBe(200);
     expect(fetchSpy).toHaveBeenCalledOnce();
 
-    // Verify the URL ends with /api/subscribe
+    // Verify the URL ends with /api/v1/users/_/subscriptions
     const calledUrl = fetchSpy.mock.calls[0][0] as string;
-    expect(calledUrl).toMatch(/\/api\/subscribe$/);
+    expect(calledUrl).toMatch(/\/api\/v1\/users\/_\/subscriptions$/);
 
     // Verify the body sent to CMS contains the correct data
     const calledInit = fetchSpy.mock.calls[0][1];

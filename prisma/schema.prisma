@@ -243,6 +243,7 @@ model lottery_subscriptions {
   lottery    lotteries @relation(fields: [lottery_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "lottery_subscriptions_lottery_id_lottery_jobs_id_fk")
   user       user      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "subscriptions_user_id_user_id_fk")
 
+  @@unique([user_id, lottery_id], map: "user_lottery_unique")
   @@index([user_id, lottery_id], map: "user_lottery_idx")
 }
 

@@ -13,7 +13,7 @@ export function SubscribeButton({ lotteryId, lotteryName }: SubscribeButtonProps
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
-    "idle" | "sending" | "success" | "error"
+    "idle" | "sending" | "success" | "error" | "already"
   >("idle");
   const modalRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -70,15 +70,20 @@ export function SubscribeButton({ lotteryId, lotteryName }: SubscribeButtonProps
 
     setStatus("sending");
     try {
-      const res = await fetch("/api/subscribe", {
+      const cmsUrl = process.env.NEXT_PUBLIC_CMS_API_URL || "https://lotto-x-cms.vercel.app";
+      const res = await fetch(`${cmsUrl}/api/v1/users/_/subscriptions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, lotteryId }),
       });
 
-      if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success !== false) {
         setStatus("success");
         setEmail("");
+      } else if (data.error?.toLowerCase().includes("already subscribed")) {
+        setStatus("already");
       } else {
         setStatus("error");
       }
@@ -211,6 +216,29 @@ export function SubscribeButton({ lotteryId, lotteryName }: SubscribeButtonProps
                     {t.subscribe.close}
                   </button>
                 </div>
+              </div>
+            )}
+
+            {/* ── Already Subscribed State ── */}
+            {status === "already" && (
+              <div className="flex flex-col items-center px-5 py-8">
+                <div className="h-14 w-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-7 w-7 text-amber-500">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                  </svg>
+                </div>
+                <p className="text-gray-900 dark:text-white font-bold text-lg text-center">
+                  {t.subscribe.alreadyTitle || "Already Subscribed"}
+                </p>
+                <p className="text-amber-400 text-sm mt-2 text-center">
+                  {t.subscribe.alreadyMessage || "You are already subscribed to this lottery. We'll notify you when results are available."}
+                </p>
+                <button
+                  onClick={handleClose}
+                  className="mt-6 w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm transition-colors"
+                >
+                  {t.subscribe.close}
+                </button>
               </div>
             )}
 

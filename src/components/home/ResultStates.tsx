@@ -286,9 +286,9 @@ export const NoWinResult = ({
         </p>
 
         {/* Cross-sell / Retention Hook */}
-        <div className="w-full bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-500/20 rounded-xl p-4 mt-8 text-left">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+        <div className="w-full bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-500/20 rounded-xl p-4 mt-8 text-center">
+          <div className="flex flex-col items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0" />
             <div>
               <h4 className="font-semibold text-blue-900 dark:text-blue-400 text-sm">
                 {t.common.upcomingOpp}
