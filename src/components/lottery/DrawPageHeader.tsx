@@ -10,6 +10,7 @@ interface DrawPageHeaderProps {
   country: string;
   countryCode: string;
   lotteryName: string;
+  lotteryId: number;
   logo?: string | null;
 }
 
@@ -17,6 +18,7 @@ export function DrawPageHeader({
   country,
   countryCode,
   lotteryName,
+  lotteryId,
   logo,
 }: DrawPageHeaderProps) {
   const { t } = useLanguage();
@@ -69,7 +71,7 @@ export function DrawPageHeader({
         </div>
       </div>
       <div className="relative z-20">
-        <SubscribeButton type={countryCode} />
+        <SubscribeButton lotteryId={lotteryId} lotteryName={lotteryName} />
       </div>
     </header>
   );

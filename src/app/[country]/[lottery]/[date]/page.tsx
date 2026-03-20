@@ -72,6 +72,7 @@ export default async function DrawPage({ params }: PageProps) {
         country={countryInfo.name}
         countryCode={countryInfo.code}
         lotteryName={lotteryInfo.name}
+        lotteryId={lotteryInfo.id}
         lotterySlug={lottery}
         apiEndpoint={`/api/results/${apiType}/${date}`}
         logo={lotteryInfo.logo}

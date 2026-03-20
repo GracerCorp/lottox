@@ -27,6 +27,7 @@ export interface LotteryDetailProps {
   country: string;
   countryCode: string;
   lotteryName: string;
+  lotteryId: number;
   lotterySlug: string;
   apiEndpoint: string;
   logo?: string | null;
@@ -39,6 +40,7 @@ export default function LotteryDetail({
   country,
   countryCode,
   lotteryName,
+  lotteryId,
   lotterySlug,
   apiEndpoint,
   logo,
@@ -223,6 +225,7 @@ export default function LotteryDetail({
         country={country}
         countryCode={countryCode}
         lotteryName={lotteryName}
+        lotteryId={lotteryId}
         logo={logo}
       />
 

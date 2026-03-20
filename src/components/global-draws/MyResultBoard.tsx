@@ -38,14 +38,17 @@ export function MyResultBoard() {
   const { t } = useLanguage();
   const mb = t.staticParams.myBoard;
 
-  // Initialize empty to avoid hydration mismatch (localStorage not available on server)
+  // Use lazy initializer to load from localStorage immediately on client.
+  // The `hydrated` flag prevents flash of empty state during SSR/hydration.
+  const [hydrated, setHydrated] = useState(false);
   const [pinned, setPinned] = useState<PinnedLottery[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Sync from localStorage after mount
+  // Load pinned lotteries from localStorage after hydration
   useEffect(() => {
     setPinned(readPinned());
+    setHydrated(true);
   }, []);
 
   /** Handle batch confirm from AddLotteryModal */
@@ -125,7 +128,7 @@ export function MyResultBoard() {
           countryCode={activePinned.countryCode}
           onRemove={() => handleRemove(activePinned.lotteryId)}
         />
-      ) : (
+      ) : hydrated ? (
         <div
           className="text-center py-16 text-gray-500"
           data-testid="empty-board-state"
@@ -133,7 +136,7 @@ export function MyResultBoard() {
           <div className="text-4xl mb-2">📋</div>
           <p className="text-sm">{mb.noLotteryPinned}</p>
         </div>
-      )}
+      ) : null}
 
       {/* Modal */}
       {modalOpen && (

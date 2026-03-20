@@ -40,6 +40,7 @@ describe("LotteryDetail", () => {
             country="Thailand"
             countryCode="th"
             lotteryName="Thai Gov"
+            lotteryId={1}
             lotterySlug="thai-gov"
             apiEndpoint="/api/results/thai"
           />

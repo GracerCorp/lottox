@@ -139,7 +139,11 @@ export default {
       placeholder: "Enter your email",
       success: "Subscribed! We will send results to your email.",
       error: "Something went wrong. Please try again.",
+      errorTitle: "Subscription Failed",
       sending: "Sending...",
+      done: "Done",
+      retry: "Try Again",
+      close: "Close",
     },
     lottery: {
       thai: {

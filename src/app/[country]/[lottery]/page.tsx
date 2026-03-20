@@ -48,6 +48,7 @@ export default async function LotteryPage({ params }: PageProps) {
       country={countryInfo.name}
       countryCode={countryInfo.code}
       lotteryName={lotteryInfo.name}
+      lotteryId={lotteryInfo.id}
       lotterySlug={lottery}
       apiEndpoint={`/api/results/${apiType}`}
       logo={lotteryInfo.logo}
