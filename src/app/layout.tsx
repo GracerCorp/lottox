@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     url: "https://lottox.today",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo-text.png",
         width: 1200,
         height: 630,
         alt: "LOTTOX - Worldwide Lottery Results",

@@ -43,7 +43,10 @@ export function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        <nav
+          className="hidden md:flex items-center gap-8"
+          aria-label="Main navigation"
+        >
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -65,7 +68,7 @@ export function Header() {
           <button
             onClick={toggleLanguage}
             className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-black dark:hover:text-white"
-            aria-label={`Switch language to ${language === 'en' ? 'Thai' : 'English'}`}
+            aria-label={`Switch language to ${language === "en" ? "Thai" : "English"}`}
           >
             <Globe className="h-4 w-4" />
             <span>{language.toUpperCase()}</span>
@@ -92,7 +95,10 @@ export function Header() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="border-t border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900 md:hidden">
-          <nav className="flex flex-col p-4 space-y-4" aria-label="Mobile navigation">
+          <nav
+            className="flex flex-col p-4 space-y-4"
+            aria-label="Mobile navigation"
+          >
             {navItems.map((item) => (
               <Link
                 key={item.href}

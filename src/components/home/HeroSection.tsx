@@ -63,36 +63,39 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
   return (
     <section className="relative py-8 md:py-14 overflow-hidden">
       {/* Dynamic background image — crossfades with active card */}
-      {displayItems.map((item, index) => (
-        item.bgImage && (
-          <div
-            key={`bg-${index}`}
-            className="absolute inset-0 transition-opacity duration-700 ease-in-out z-0"
-            style={{ opacity: index === activeIndex ? 0.25 : 0 }}
-          >
-            <Image
-              src={item.bgImage}
-              alt=""
-              fill
-              className="object-cover"
-              priority={index === 0}
-              sizes="100vw"
-            />
-          </div>
-        )
-      ))}
+      {displayItems.map(
+        (item, index) =>
+          item.bgImage && (
+            <div
+              key={`bg-${index}`}
+              className="absolute inset-0 transition-opacity duration-700 ease-in-out z-0"
+              style={{ opacity: index === activeIndex ? 70 : 0 }}
+            >
+              <Image
+                src={item.bgImage}
+                alt=""
+                fill
+                className="object-cover"
+                priority={index === 0}
+                sizes="100vw"
+              />
+            </div>
+          ),
+      )}
 
       {/* Gradient overlay on top of bg image */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-100/80 via-slate-50/90 to-slate-50 dark:from-navy-950/80 dark:via-navy-950/90 dark:to-navy-950 pointer-events-none z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-80/80 via-slate-50/90 to-slate-50 dark:from-navy-950/60 dark:via-navy-950/60 dark:to-navy-950 pointer-events-none z-[1]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           {/* Left side — Title + Subtitle */}
           <div className="lg:w-[35%] text-center lg:text-left space-y-4 flex-shrink-0">
-            <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold leading-tight italic">
+            <h1 className="text-3xl md:text-5xl lg:text-5xl font-bold leading-tight">
               <span className="text-gold-400">{t.hero.titleHighlight}</span>
               <br />
-              <span className="text-gray-900 dark:text-white">{t.hero.titleSuffix}</span>
+              <span className="text-gray-900 dark:text-white">
+                {t.hero.titleSuffix}
+              </span>
             </h1>
             <p className="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto lg:mx-0">
               {t.hero.subtitle ||

@@ -54,7 +54,7 @@ export function CookieConsent() {
             <div className="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 flex-shrink-0">
               <button
                 onClick={acceptCookies}
-                className="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-xl transition-colors whitespace-nowrap"
+                className="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-white bg-gold-500 hover:bg-gold-600 dark:bg-gold-500 dark:hover:bg-gold-600 rounded-xl transition-colors whitespace-nowrap"
               >
                 ยอมรับ
               </button>
