@@ -28,17 +28,15 @@ export function Header() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+            <div className="relative h-10 w-auto overflow-hidden pt-2">
               <Image
-                src="/logo.png"
+                src="/logo-text.png"
                 alt="LOTTOX Logo"
-                fill
+                height={100}
+                width={100}
                 className="object-cover"
               />
             </div>
-            <span className="text-xl font-bold tracking-wider text-gray-900 dark:text-white">
-              LOTTO<span className="text-gold-500">X</span>
-            </span>
           </Link>
         </div>
 
