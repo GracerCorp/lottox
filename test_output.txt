@@ -1,0 +1,694 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90m/Users/kvivek/Documents/lottox[39m
+
+[90mstderr[2m | src/__tests__/components/AddLotteryModal.test.tsx[2m > [22m[2mAddLotteryModal[2m > [22m[2mrenders modal with country groups and lottery items
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mrenders modal with country groups and lottery items[32m 100[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mshows empty state when no lotteries are pinned[32m 122[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mshows Add button when under max pinned[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mpre-selects items from pinned prop[32m 108[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mopens modal when Add button is clicked[32m 243[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mShareRow[2m > [22mrenders share label with localized text[32m 55[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mrenders without crashing with items[32m 165[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mrenders with no items and shows fallback[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mrenders hero title in English by default[32m 41[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mrenders section title in English[32m 135[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mcloses modal when onClose is triggered[32m 147[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mShareRow[2m > [22mrenders Facebook and Twitter links with correct hrefs[33m 306[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mShareRow[2m > [22mrenders copy-link button and calls clipboard.writeText on click[32m 72[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mtoggles checkbox on lottery row click[33m 334[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mshows selected lotteries strip when items are selected[32m 69[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mrenders carousel navigation buttons[32m 155[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mshows slide counter[32m 85[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders without crashing with default English text[32m 42[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mbatch-confirms lotteries and shows result board card[32m 109[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mrenders all tab buttons[33m 455[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mhas first tab (All) active by default[32m 70[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mswitches active tab when clicked[32m 43[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mrenders flag images for tabs that have them[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mrenders with single tab[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mhas correct light/dark theme classes on section title[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HomeResultsSection.test.tsx[2m > [22mHomeResultsSection[2m > [22mhas correct light/dark theme classes on inactive tabs[32m 38[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22madvances to next slide when Next is clicked[32m 45[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mgoes to previous slide when Prev is clicked[32m 68[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mremoves lottery when onRemove is triggered[32m 96[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mJackpotResult[2m > [22mrenders confetti, jackpot title, number, and prize amount[32m 46[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mJackpotResult[2m > [22mshows fallback prize label when prizeName is missing[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mJackpotResult[2m > [22mshows prize fallback text when no amount provided[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mJackpotResult[2m > [22mcalls onReset when Check Another is clicked[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mJackpotResult[2m > [22mskips prize list when prizes is undefined[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mStandardWinResult[2m > [22mrenders no confetti for standard win[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mStandardWinResult[2m > [22mrenders congratulations title, number, and all prizes[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mStandardWinResult[2m > [22mfalls back to dash when prize amount is missing[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mStandardWinResult[2m > [22mcalls onReset when Check Another is clicked[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders with no lottery groups prop[33m 306[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mremoves lottery from strip when ✕ is clicked[32m 117[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mpersists pinned lotteries to localStorage[32m 111[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22mmigrates old format (no lotteryId) by clearing[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MyResultBoard.test.tsx[2m > [22mMyResultBoard[2m > [22msection has data-testid[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mStandardWinResult[2m > [22mrenders Play Next Draw link pointing to /global-draws[32m 76[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mNoWinResult[2m > [22mrenders not-this-time title and number with no-match description[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mNoWinResult[2m > [22mrenders upcoming opportunity retention card with view link[32m 35[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultStates.test.tsx[2m > [22mResultStates[2m > [22mNoWinResult[2m > [22mcalls onReset when Check Another Number is clicked[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mauto-advances slides on interval[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mcalls onConfirm with selected lotteries when Confirm is clicked[32m 171[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mcloses on ⊗ button click[32m 31[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mcloses on backdrop click[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22mcloses on Escape key[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/AddLotteryModal.test.tsx[2m > [22mAddLotteryModal[2m > [22menforces 6-lottery max — disables remaining options[32m 65[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mstrips non-numeric characters from input[32m 120[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mpauses auto-advance on mouse enter[32m 101[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mrenders background images for items with bgImage[32m 34[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mhas light/dark theme classes on gradient overlay[32m 33[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroSection.test.tsx[2m > [22mHeroSection[2m > [22mhas light/dark theme classes on navigation buttons[32m 134[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mlimits input to 6 digits (maxLength)[32m 227[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mdisables search button when no number entered[32m 93[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22menables search button when valid number entered and lottery selected[32m 113[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mopens dropdown when trigger clicked, closes on outside click[32m 33[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mselects a lottery from the dropdown and closes it[32m 69[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mfilters dropdown options by search query[32m 79[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22m[2mPinnedLotteryTabs[2m > [22m[2mrenders tab buttons for each pinned lottery
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mshows no-results message for unmatched search[32m 29[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders JackpotResult when prizes include 1st prize (by prizeName)[32m 244[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders JackpotResult when prizes include prize_1 category[32m 136[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mshows 'no pinned' text when empty[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mrenders tab buttons for each pinned lottery[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mhighlights active tab as selected[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mcalls onSelect when tab is clicked[32m 274[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mrenders lottery logos in tabs[32m 143[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/PinnedLotteryTabs.test.tsx[2m > [22mPinnedLotteryTabs[2m > [22mrenders tab without logo when logo is null[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders StandardWinResult for a non-jackpot prize[32m 127[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders NoWinResult when isWinner is false[32m 274[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mrenders NoWinResult when win field is false (legacy API shape)[32m 124[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mfreezes displayed number at search time (searchedNumber bug fix)[32m 91[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mreturns data on successful fetch[32m 66[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mreturns error on non-ok response[32m 69[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mreturns error on fetch exception[32m 67[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mshows error state when fetch fails with network error[32m 84[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mshows error state when API returns ok:false[32m 96[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mhandles non-Error exceptions[32m 55[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mdoes nothing when url is null[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useApi.test.ts[2m > [22museApi[2m > [22mrefetch re-triggers the fetch[32m 61[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mreturns to idle state after clicking Check Another[32m 266[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CheckLotteryWidget.test.tsx[2m > [22mCheckLotteryWidget[2m > [22mapplies correct light/dark class on the form[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mrenders page indicator[32m 35[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroCarousel.test.tsx[2m > [22mHeroCarousel[2m > [22mrenders lottery cards[32m 151[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FindByNumber.test.tsx[2m > [22mFindByNumber[2m > [22mrenders the search form[32m 65[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FindByNumber.test.tsx[2m > [22mFindByNumber[2m > [22mfinds matching numbers[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FindByNumber.test.tsx[2m > [22mFindByNumber[2m > [22mshows no results message when nothing matches[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/TicketVerifier.test.tsx[2m > [22mTicketVerifier[2m > [22mrenders correctly[33m 614[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/TicketVerifier.test.tsx[2m > [22mTicketVerifier[2m > [22mdoes not alert if input is empty[32m 56[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroCarousel.test.tsx[2m > [22mHeroCarousel[2m > [22mnavigates to next slide on right button click[33m 487[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroCarousel.test.tsx[2m > [22mHeroCarousel[2m > [22mnavigates to previous slide on left button click[32m 44[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/HeroCarousel.test.tsx[2m > [22mHeroCarousel[2m > [22mauto-scrolls after interval[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/TicketVerifier.test.tsx[2m > [22mTicketVerifier[2m > [22mcalls alert on check when valid input is provided[32m 63[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FindByNumber.test.tsx[2m > [22mFindByNumber[2m > [22mclears results when searching empty string[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FindByNumber.test.tsx[2m > [22mFindByNumber[2m > [22mfilters by digit count[32m 30[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mcalls onPrev when Prev button is clicked[33m 336[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mcalls onNext when Next button is clicked[32m 31[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mdisables Prev button on first page[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mdisables Next button on last page[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/BoardPagination.test.tsx[2m > [22mBoardPagination[2m > [22mhas data-testid[32m 1[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/LotteryDetail.test.tsx[2m > [22m[2mLotteryDetail[2m > [22m[2mrenders lottery details correctly in English
+[22m[39m[MSW] Error: intercepted a request without a matching request handler:
+
+  • GET /api/results/global?limit=6
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+[90mstderr[2m | src/__tests__/components/LotteryDetail.test.tsx[2m > [22m[2mLotteryDetail[2m > [22m[2mrenders lottery details correctly in Thai
+[22m[39m[MSW] Error: intercepted a request without a matching request handler:
+
+  • GET /api/results/global?limit=6
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+ [32m✓[39m src/__tests__/components/LotteryDetail.test.tsx[2m > [22mLotteryDetail[2m > [22mrenders lottery details correctly in English[33m 331[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryDetail.test.tsx[2m > [22mLotteryDetail[2m > [22mrenders lottery details correctly in Thai[32m 41[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SkipToContent.test.tsx[2m > [22mSkipToContent[2m > [22mrenders with correct href to #main[32m 33[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SkipToContent.test.tsx[2m > [22mSkipToContent[2m > [22mhas sr-only class for screen readers[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SkipToContent.test.tsx[2m > [22mSkipToContent[2m > [22mdisplays translated text[32m 18[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/CountryHeroSection.test.tsx[2m > [22m[2mCountryHeroSection[2m > [22m[2mrenders country name and flag
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+Received `true` for a non-boolean attribute `priority`.
+
+If you want to write it to the DOM, pass a string instead: priority="true" or priority={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/CountryHeroSection.test.tsx[2m > [22mCountryHeroSection[2m > [22mrenders country name and flag[32m 194[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryHeroSection.test.tsx[2m > [22mCountryHeroSection[2m > [22mrenders placeholder when no flag URL[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryHeroSection.test.tsx[2m > [22mCountryHeroSection[2m > [22muses fallback when t.country is undefined[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mrenders with main variant[32m 66[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mrenders with sidebar variant[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mrenders draw date dropdown with history[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mfilters non-numeric input[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mdisables submit when input is empty[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22menables submit when input has value[32m 32[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/InteractiveTicketVerifier.test.tsx[2m > [22mInteractiveTicketVerifier[2m > [22mshows latest draw date[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mrenders section title in English[32m 45[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mrenders all country chips[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mrenders correct lottery counts[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mrenders flag images for each country[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mcreates correct links for each country[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22muses grid layout[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mrenders with empty countries array[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mhas correct light/dark theme classes on chips[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mhas correct light/dark theme classes on title[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountryListSection.test.tsx[2m > [22mCountryListSection[2m > [22mhas correct light/dark theme classes on country names[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentGlobalDraws.test.tsx[2m > [22mRecentGlobalDraws[2m > [22mshows loading state initially[32m 35[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentGlobalDraws.test.tsx[2m > [22mRecentGlobalDraws[2m > [22mrenders draws after fetch[32m 54[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentGlobalDraws.test.tsx[2m > [22mRecentGlobalDraws[2m > [22mhandles fetch error gracefully[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentGlobalDraws.test.tsx[2m > [22mRecentGlobalDraws[2m > [22mexcludes specified country[32m 12[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentGlobalDraws.test.tsx[2m > [22mRecentGlobalDraws[2m > [22mextracts first prize from data.prizes fallback[32m 7[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/LotteryCard.test.tsx[2m > [22m[2mLotteryCard[2m > [22m[2mrenders country, name, and jackpot
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders country, name, and jackpot[33m 306[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders lottery balls[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders bonus ball when provided[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders with blue color[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders with purple color[32m 30[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/LotteryCard.test.tsx[2m > [22m[2mLotteryCard[2m > [22m[2mrenders with background image
+[22m[39mReceived `true` for a non-boolean attribute `unoptimized`.
+
+If you want to write it to the DOM, pass a string instead: unoptimized="true" or unoptimized={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders active state[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders with background image[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryCard.test.tsx[2m > [22mLotteryCard[2m > [22mrenders view details link[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CookieConsent.test.tsx[2m > [22mCookieConsent[2m > [22mshows consent banner after delay when no cookie_consent in localStorage[32m 110[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CookieConsent.test.tsx[2m > [22mCookieConsent[2m > [22mdoes not show banner when consent already given[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CookieConsent.test.tsx[2m > [22mCookieConsent[2m > [22maccepts cookies and hides banner[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CookieConsent.test.tsx[2m > [22mCookieConsent[2m > [22mdismisses banner on close click[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ThemeToggle.test.tsx[2m > [22mThemeToggle[2m > [22mrenders the toggle button after mounting[32m 50[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ThemeToggle.test.tsx[2m > [22mThemeToggle[2m > [22mcalls setTheme on click[32m 30[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentDrawsTable.test.tsx[2m > [22mRecentDrawsTable[2m > [22mrenders table with draws[32m 64[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentDrawsTable.test.tsx[2m > [22mRecentDrawsTable[2m > [22mrenders "View All Archive" link when slugs provided[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentDrawsTable.test.tsx[2m > [22mRecentDrawsTable[2m > [22mrenders "View All Archive" button when no slugs[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/RecentDrawsTable.test.tsx[2m > [22mRecentDrawsTable[2m > [22mrenders winning numbers[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawResult.test.tsx[2m > [22mDrawResult[2m > [22mrenders first prize with Thai-style static props[32m 75[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/LatestDrawCard.test.tsx[2m > [22m[2mLatestDrawCard[2m > [22m[2mrenders data correctly for a Thai lottery
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/LatestDrawCard.test.tsx[2m > [22mLatestDrawCard[2m > [22mrenders loading state correctly[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LatestDrawCard.test.tsx[2m > [22mLatestDrawCard[2m > [22mrenders error state correctly[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LatestDrawCard.test.tsx[2m > [22mLatestDrawCard[2m > [22mrenders data correctly for a Thai lottery[32m 61[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LatestDrawCard.test.tsx[2m > [22mLatestDrawCard[2m > [22mrenders fallback formatting properly for other lotteries[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawResult.test.tsx[2m > [22mDrawResult[2m > [22mrenders dynamic prizes for non-Thai lotteries[32m 29[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawResult.test.tsx[2m > [22mDrawResult[2m > [22mrenders country and lottery name when provided[32m 8[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/ResultBoardCard.test.tsx[2m > [22m[2mResultBoardCard[2m > [22m[2mshows loading state
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mshows loading state[32m 49[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mshows error state[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mshows empty state[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mrenders draw history rows with data[32m 53[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mrenders remove button and calls onRemove[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultBoardCard.test.tsx[2m > [22mResultBoardCard[2m > [22mshows pagination when more than 5 draws[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SubscribeButton.test.tsx[2m > [22mSubscribeButton[2m > [22mrenders correctly[32m 75[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SubscribeButton.test.tsx[2m > [22mSubscribeButton[2m > [22mopens modal on click[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SubscribeButton.test.tsx[2m > [22mSubscribeButton[2m > [22msubmits email successfully[32m 56[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/SubscribeButton.test.tsx[2m > [22mSubscribeButton[2m > [22mshows error state when subscription fails[32m 65[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mrenders all breadcrumb items[32m 41[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mrenders nav with aria-label='Breadcrumb'[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mmarks last item with aria-current='page'[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mrenders links for items with href[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mdoes not render link for last item[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mrenders separator chevrons between items[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumb[2m > [22mreturns null for empty items[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumbJsonLd[2m > [22mrenders script with application/ld+json type[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumbJsonLd[2m > [22mgenerates valid BreadcrumbList schema[32m 20[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Breadcrumb.test.tsx[2m > [22mBreadcrumbJsonLd[2m > [22momits item URL for items without href[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Header.test.tsx[2m > [22mHeader[2m > [22mrenders logo and navigation[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Header.test.tsx[2m > [22mHeader[2m > [22mtoggles language on button click[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Header.test.tsx[2m > [22mHeader[2m > [22mshows language code[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Header.test.tsx[2m > [22mHeader[2m > [22mopens and closes mobile menu[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Header.test.tsx[2m > [22mHeader[2m > [22mincludes the ThemeToggle[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawHistoryRow.test.tsx[2m > [22mDrawHistoryRow[2m > [22mrenders all four prize columns[32m 57[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawHistoryRow.test.tsx[2m > [22mDrawHistoryRow[2m > [22mrenders draw time and date[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawHistoryRow.test.tsx[2m > [22mDrawHistoryRow[2m > [22mrenders dash when digit is missing[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DrawHistoryRow.test.tsx[2m > [22mDrawHistoryRow[2m > [22mhas data-testid[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mrenders children when no error occurs[32m 25[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mrenders fallback UI when child throws[32m 32[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mdisplays error message in fallback[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mdisplays custom fallback message[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mdisplays custom retry label[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mhas role='alert' on fallback for screen readers[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mrenders retry button[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ErrorBoundary.test.tsx[2m > [22mErrorBoundary[2m > [22mdefaults to 'Something went wrong' and 'Try again'[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FormattedDate.test.tsx[2m > [22mFormattedDate[2m > [22mrenders a <time> element with datetime attribute[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FormattedDate.test.tsx[2m > [22mFormattedDate[2m > [22mdisplays ISO format by default[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FormattedDate.test.tsx[2m > [22mFormattedDate[2m > [22mdisplays long format when specified[32m 50[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FormattedDate.test.tsx[2m > [22mFormattedDate[2m > [22mpreserves datetime attribute in long format[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/FormattedDate.test.tsx[2m > [22mFormattedDate[2m > [22maccepts additional className[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/contexts/LanguageContext.test.tsx[2m > [22mLanguageContext[2m > [22mprovides default english context out of tree[32m 21[2mms[22m[39m
+ [32m✓[39m src/__tests__/contexts/LanguageContext.test.tsx[2m > [22mLanguageContext[2m > [22mloads saved language from localStorage on mount[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/contexts/LanguageContext.test.tsx[2m > [22mLanguageContext[2m > [22mallows setting language explicitly[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/contexts/LanguageContext.test.tsx[2m > [22mLanguageContext[2m > [22mallows toggling language[32m 10[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/UpcomingLotterySidebar.test.tsx[2m > [22m[2mUpcomingLotterySidebar[2m > [22m[2mrenders upcoming draws
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/UpcomingLotterySidebar.test.tsx[2m > [22mUpcomingLotterySidebar[2m > [22mshows loading state[32m 23[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/UpcomingLotterySidebar.test.tsx[2m > [22mUpcomingLotterySidebar[2m > [22mshows error state[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/UpcomingLotterySidebar.test.tsx[2m > [22mUpcomingLotterySidebar[2m > [22mshows empty state[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/UpcomingLotterySidebar.test.tsx[2m > [22mUpcomingLotterySidebar[2m > [22mrenders upcoming draws[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22museCountdown[2m > [22mreturns 0 when no targetDate provided[32m 27[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22museCountdown[2m > [22mreturns correct remaining time[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22museCountdown[2m > [22mdecrements every second[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22museCountdown[2m > [22mclamps to 0 when target is past[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22mCountdownTimer[2m > [22mrenders HH : MM : SS format[32m 20[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22mCountdownTimer[2m > [22mrenders 00 : 00 : 00 for past target[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22mCountdownTimer[2m > [22mapplies className prop[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/CountdownTimer.test.tsx[2m > [22mCountdownTimer[2m > [22mhas accessible aria-label[32m 1[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/LiveTicker.test.tsx[2m > [22m[2mLiveTicker[2m > [22m[2mrenders ticker items from API data
+[22m[39mReceived `true` for a non-boolean attribute `jsx`.
+
+If you want to write it to the DOM, pass a string instead: jsx="true" or jsx={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mrenders ticker items from API data[32m 58[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mdisplays lottery names[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mrenders gold dot indicator for each item[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mhas animation style for ticker[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mincludes keyframes style element[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mhas correct light/dark theme classes on container[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker[2m > [22mhas correct light/dark theme classes on pill items[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LiveTicker.test.tsx[2m > [22mLiveTicker - empty state[2m > [22mrenders nothing when API returns no results[32m 9[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/NewsSidebar.test.tsx[2m > [22m[2mNewsSidebar[2m > [22m[2mrenders correctly with article data (English)
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/NewsSidebar.test.tsx[2m > [22mNewsSidebar[2m > [22mrenders loading state correctly[32m 49[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NewsSidebar.test.tsx[2m > [22mNewsSidebar[2m > [22mrenders correctly with article data (English)[32m 14[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NewsSidebar.test.tsx[2m > [22mNewsSidebar[2m > [22mrenders correctly with article data (Thai fallback)[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NewsSidebar.test.tsx[2m > [22mNewsSidebar[2m > [22mrenders empty state correctly (English)[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NewsSidebar.test.tsx[2m > [22mNewsSidebar[2m > [22mrenders empty state correctly (Thai)[32m 3[2mms[22m[39m
+[90mstderr[2m | src/__tests__/lib/i18n.test.ts[2m > [22m[2mi18n[2m > [22m[2mfalls back to English for unknown language
+[22m[39mDictionary not found for xx, falling back to en
+
+ [32m✓[39m src/__tests__/lib/i18n.test.ts[2m > [22mi18n[2m > [22mreturns English dictionary by default[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/lib/i18n.test.ts[2m > [22mi18n[2m > [22mreturns Thai dictionary for 'th'[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/lib/i18n.test.ts[2m > [22mi18n[2m > [22mfalls back to English for unknown language[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/lib/i18n.test.ts[2m > [22mi18n[2m > [22mdictionary has required keys[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/lib/i18n.test.ts[2m > [22mi18n[2m > [22mboth dictionaries have matching keys[32m 0[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/NotFound.test.tsx[2m > [22m[2mNotFound (404 page)[2m > [22m[2mrenders 404 heading
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/NotFound.test.tsx[2m > [22mNotFound (404 page)[2m > [22mrenders 404 heading[32m 193[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NotFound.test.tsx[2m > [22mNotFound (404 page)[2m > [22mrenders translated title[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NotFound.test.tsx[2m > [22mNotFound (404 page)[2m > [22mrenders translated description[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NotFound.test.tsx[2m > [22mNotFound (404 page)[2m > [22mrenders Go Home link pointing to /[32m 15[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/NotFound.test.tsx[2m > [22mNotFound (404 page)[2m > [22mrenders popular lottery links[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Footer.test.tsx[2m > [22mFooter[2m > [22mrenders navigation links[32m 49[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Footer.test.tsx[2m > [22mFooter[2m > [22mrenders why title and description[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/Footer.test.tsx[2m > [22mFooter[2m > [22mrenders short disclaimer[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ScrollToTop.test.tsx[2m > [22mScrollToTop[2m > [22mrenders the button[32m 33[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ScrollToTop.test.tsx[2m > [22mScrollToTop[2m > [22mbecomes visible when scrollY > 300[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ScrollToTop.test.tsx[2m > [22mScrollToTop[2m > [22mscrolls to top on click[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when number param is missing[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when type param is missing[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when number contains non-numeric characters[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when number is longer than 7 digits[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when number is empty string[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mcalls checkNumber with correct args and returns data on win[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns no-win response without drawDate[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mpasses drawDate to checkNumber when provided[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22maccepts 2-digit number (minimum valid length)[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 500 when checkNumber throws[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when validateNumber fails[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check.test.ts[2m > [22mGET /api/check[2m > [22mpasses type to validateNumber[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MarketDataTable.test.tsx[2m > [22mMarketDataTable[2m > [22mrenders loading state[32m 34[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MarketDataTable.test.tsx[2m > [22mMarketDataTable[2m > [22mrenders error state[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MarketDataTable.test.tsx[2m > [22mMarketDataTable[2m > [22mrenders no data state[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/MarketDataTable.test.tsx[2m > [22mMarketDataTable[2m > [22mrenders data correctly[32m 50[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/ResultsTable.test.tsx[2m > [22m[2mResultsTable[2m > [22m[2mshows results when data loaded
+[22m[39mReceived `true` for a non-boolean attribute `fill`.
+
+If you want to write it to the DOM, pass a string instead: fill="true" or fill={value.toString()}.
+
+ [32m✓[39m src/__tests__/components/ResultsTable.test.tsx[2m > [22mResultsTable[2m > [22mshows loading state[32m 22[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultsTable.test.tsx[2m > [22mResultsTable[2m > [22mshows results when data loaded[32m 46[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/ResultsTable.test.tsx[2m > [22mResultsTable[2m > [22mshows no results when data is empty[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders number[32m 76[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders with gold color[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders with blue color[32m 19[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders with different sizes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders large size[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders bonus ball[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryBall.test.tsx[2m > [22mLotteryBall[2m > [22mrenders numeric input[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mshows loading state[32m 117[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mshows error state[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mshows empty state[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mrenders data rows[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mhandles filter clicks[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/DashboardTable.test.tsx[2m > [22mDashboardTable[2m > [22mshows pagination when multiple pages[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryResultJsonLd.test.tsx[2m > [22mLotteryResultJsonLd[2m > [22mrenders script with application/ld+json type[32m 45[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryResultJsonLd.test.tsx[2m > [22mLotteryResultJsonLd[2m > [22mgenerates valid Event schema[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/LotteryResultJsonLd.test.tsx[2m > [22mLotteryResultJsonLd[2m > [22momits offers when no jackpotAmount[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check-route.test.ts[2m > [22mGET /api/check[2m > [22mreturns check result for valid number[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check-route.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 for missing params[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check-route.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 for invalid number format[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/check-route.test.ts[2m > [22mGET /api/check[2m > [22mreturns 400 when validation fails[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetLatestResults[2m > [22mreturns latest results without type filter[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetLatestResults[2m > [22mfilters by type when provided[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetResultsByType[2m > [22mreturns results by type with pagination[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetResultsByType[2m > [22mreturns null latest when no results[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetGlobalResults[2m > [22mreturns global results with pagination[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetGlobalResults[2m > [22mfilters by country[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetGlobalResults[2m > [22mfilters by date and period[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mcheckNumber[2m > [22mreturns win=true when number matches prizes array[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mcheckNumber[2m > [22mreturns win=false when number does not match[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mcheckNumber[2m > [22mreturns win=false when no lotteries found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mcheckNumber[2m > [22mhandles prizeResult format (Lao)[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mcheckNumber[2m > [22mhandles generic traversal for unknown schemas[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetCountries[2m > [22mreturns active countries[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetNews[2m > [22mreturns paginated articles[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetNews[2m > [22mfilters by category and search[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetStatsOverview[2m > [22mreturns stats overview[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mgetStatsFrequency[2m > [22mreturns frequency placeholder[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mapiResponse / apiError helpers[2m > [22mcreates success response[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryResultService.test.ts[2m > [22mlotteryResultService[2m > [22mapiResponse / apiError helpers[2m > [22mcreates error response[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useDebounce.test.ts[2m > [22museDebounce[2m > [22mreturns initial value immediately[32m 28[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useDebounce.test.ts[2m > [22museDebounce[2m > [22mdoes not update value before delay[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useDebounce.test.ts[2m > [22museDebounce[2m > [22mupdates value after delay[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/hooks/useDebounce.test.ts[2m > [22museDebounce[2m > [22mresets timer on rapid changes[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/GlobalResultsSection.test.tsx[2m > [22mGlobalResultsSection[2m > [22mrenders section container[32m 37[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/GlobalResultsSection.test.tsx[2m > [22mGlobalResultsSection[2m > [22mrenders LatestDrawCard[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/GlobalResultsSection.test.tsx[2m > [22mGlobalResultsSection[2m > [22mrenders UpcomingLotterySidebar[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/GlobalResultsSection.test.tsx[2m > [22mGlobalResultsSection[2m > [22mrenders translated title and subtitle[32m 6[2mms[22m[39m
+[90mstderr[2m | src/__tests__/api/results-type-date.test.ts[2m > [22m[2mGET /api/results/[type]/[date][2m > [22m[2mhandles history fetch failure gracefully
+[22m[39mFailed to fetch history for date route
+
+ [32m✓[39m src/__tests__/api/results-type-date.test.ts[2m > [22mGET /api/results/[type]/[date][2m > [22mreturns result for valid type and date[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type-date.test.ts[2m > [22mGET /api/results/[type]/[date][2m > [22mreturns 400 for unsupported country code[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type-date.test.ts[2m > [22mGET /api/results/[type]/[date][2m > [22mreturns 404 when no result found for date[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type-date.test.ts[2m > [22mGET /api/results/[type]/[date][2m > [22mhandles history fetch failure gracefully[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type-date.test.ts[2m > [22mGET /api/results/[type]/[date][2m > [22mhandles service errors[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/statisticsService.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsOverview[2m > [22mreturns overview stats from transaction[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/statisticsService.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsFrequency[2m > [22mprocesses country specific frequency[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/statisticsService.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsFrequency[2m > [22mprocesses raw frequency across all draws[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/mocks/mock.test.ts[2m > [22mMSW Mock Server[2m > [22mshould intercept /api/countries request and return mocked data[32m 32[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news-detail.test.ts[2m > [22mGET /api/news/[slug][2m > [22mreturns news detail for valid slug[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news-detail.test.ts[2m > [22mGET /api/news/[slug][2m > [22mpasses lang query param[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news-detail.test.ts[2m > [22mGET /api/news/[slug][2m > [22mreturns 400 for empty slug[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news-detail.test.ts[2m > [22mGET /api/news/[slug][2m > [22mhandles service errors[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/components/JsonLd.test.tsx[2m > [22mJsonLd[2m > [22mrenders two script tags with JSON-LD data[32m 31[2mms[22m[39m
+[90mstderr[2m | src/__tests__/api/articles-slug-track-route.test.ts[2m > [22m[2mPOST /api/articles/[slug]/track[2m > [22m[2mhandles server error
+[22m[39m[API/Articles/Track] {
+  error: [32m'DB Error'[39m,
+  stack: [32m'Error: DB Error\n'[39m +
+    [32m'    at /Users/kvivek/Documents/lottox/src/__tests__/api/articles-slug-track-route.test.ts:44:59\n'[39m +
+    [32m'    at file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:296:11\n'[39m +
+    [32m'    at file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:1258:26\n'[39m +
+    [32m'    at file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:1681:20\n'[39m +
+    [32m'    at new Promise (<anonymous>)\n'[39m +
+    [32m'    at runWithCancel (file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:1678:10)\n'[39m +
+    [32m'    at file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:1660:20\n'[39m +
+    [32m'    at new Promise (<anonymous>)\n'[39m +
+    [32m'    at runWithTimeout (file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:1627:10)\n'[39m +
+    [32m'    at file:///Users/kvivek/Documents/lottox/node_modules/@vitest/runner/dist/index.js:2309:64'[39m,
+  timestamp: [32m'2026-03-22T12:23:27.674Z'[39m
+}
+
+ [32m✓[39m src/__tests__/api/articles-slug-track-route.test.ts[2m > [22mPOST /api/articles/[slug]/track[2m > [22mtracks an article successfully[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/articles-slug-track-route.test.ts[2m > [22mPOST /api/articles/[slug]/track[2m > [22mhandles invalid payload[32m 24[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/articles-slug-track-route.test.ts[2m > [22mPOST /api/articles/[slug]/track[2m > [22mhandles server error[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-upcoming.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mreturns upcoming draws[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-upcoming.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mrespects limit param[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-upcoming.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mreturns 400 for invalid limit[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mreturns null for null input[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mreturns null for input without data[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mreturns null for input without prizes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mtransforms standard Thai lottery result[32m 18[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mhandles result with single number (not array)[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryResultTransform.test.ts[2m > [22mtransformLotteryResult[2m > [22mhandles result with fallback by order[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mfinds by prizeName[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mfinds by category[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mfalls back to order when name/category miss[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mwraps scalar number in array[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mreturns undefined when nothing matches[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mreturns undefined for empty/missing prizes[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeNumber[2m > [22mhandles fallbackOrder miss gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mreturns amount by name[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mreturns prizeAmount by category[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mreturns reward as fallback field[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mfalls back to order[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mreturns undefined when nothing matches[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeAmount[2m > [22mreturns undefined for empty prizes[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mmaps Lao categories[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mmaps Thai categories[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mmaps running number categories[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mmaps nearby prize[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mfalls back to raw name when no mapping matches[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mgetPrizeName[2m > [22mhandles name-based matching (pName) when category is empty[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateDisplay[2m > [22mformats in English[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateDisplay[2m > [22mformats in Thai with Buddhist year[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateDisplay[2m > [22mreturns raw string for invalid date[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateDisplay[2m > [22mreturns dash for dash input[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateDisplay[2m > [22mreturns empty for empty input[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateShort[2m > [22mformats short in English[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateShort[2m > [22mformats short in Thai[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateShort[2m > [22mreturns raw string for invalid date[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mformatDateShort[2m > [22mhandles empty/dash[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mslugify[2m > [22mlowercases and hyphenates[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mslugify[2m > [22mstrips special characters[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryUtils.test.ts[2m > [22mslugify[2m > [22mhandles empty string[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics-route.test.ts[2m > [22mGET /api/statistics[2m > [22mreturns overview stats by default[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics-route.test.ts[2m > [22mGET /api/statistics[2m > [22mreturns frequency stats when type=frequency[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics-route.test.ts[2m > [22mGET /api/statistics[2m > [22mreturns frequency for country types[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics-route.test.ts[2m > [22mGET /api/statistics[2m > [22mreturns 400 for invalid type[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics-route.test.ts[2m > [22mGET /api/statistics[2m > [22mhandles service errors[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/rate-limit.test.ts[2m > [22mRate Limit Middleware[2m > [22mshould allow requests under the limit[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/rate-limit.test.ts[2m > [22mRate Limit Middleware[2m > [22mshould block requests over the global limit (60)[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/rate-limit.test.ts[2m > [22mRate Limit Middleware[2m > [22mshould have a stricter limit for subscribe route (10)[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/rate-limit.test.ts[2m > [22mRate Limit Middleware[2m > [22mshould reset the limit after the window expires[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/rate-limit.test.ts[2m > [22mRate Limit Middleware[2m > [22mshould bypass non-API routes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results.test.ts[2m > [22mGET /api/results/global[2m > [22mshould return global results on success[32m 11[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results.test.ts[2m > [22mGET /api/results/global[2m > [22mshould catch errors and return generic 500 response[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns TH rule for 'th'[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns LA rule for 'la'[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns JP default rule for 'jp' without lottery name[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns Loto 7 rule when lottery name contains 'Loto 7'[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns Mini Loto rule when lottery name contains 'Mini'[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns VN rule for 'vn'[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns AU rule for 'au' with minDigits=1[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mreturns default rule for unknown country[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mgetRule[2m > [22mis case-insensitive[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts valid 6-digit Thai number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects 5-digit Thai number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects 7-digit Thai number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts valid 4-digit Lao number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects 6-digit Lao number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts valid 7-digit Loto 7 number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects 6-digit Loto 7 number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts valid 5-digit Mini Loto number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts 2-digit AU number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22maccepts 6-digit AU number[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects empty string[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22mrejects non-numeric input[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/lotteryValidation.test.ts[2m > [22mlotteryValidation[2m > [22mvalidateNumber[2m > [22muses default rule for unknown country[32m 0[2mms[22m[39m
+[90mstderr[2m | src/__tests__/services/newsService.test.ts[2m > [22m[2mnewsService[2m > [22m[2mgetNews[2m > [22m[2mhandles unparseable content gracefully
+[22m[39m[getNews] Failed to parse content for article bad
+
+[90mstderr[2m | src/__tests__/services/newsService.test.ts[2m > [22m[2mnewsService[2m > [22m[2mgetNewsDetail[2m > [22m[2mhandles unparseable content in detail
+[22m[39m[getNewsDetail] Failed to parse content for article bad
+
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNews[2m > [22mreturns paginated articles[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNews[2m > [22mhandles unparseable content gracefully[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNews[2m > [22mfilters by category[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNews[2m > [22mfilters by search[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNews[2m > [22mhandles content as object (not string)[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNewsDetail[2m > [22mreturns article detail[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNewsDetail[2m > [22mthrows when article not found[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mgetNewsDetail[2m > [22mhandles unparseable content in detail[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mtrackAnalytics[2m > [22mtracks views and share clicks[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mtrackAnalytics[2m > [22mthrows when article not found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/newsService.test.ts[2m > [22mnewsService[2m > [22mtrackAnalytics[2m > [22mskips articles.update when no views or shares[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mallows GET requests through without origin check[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mallows POST with valid origin[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mblocks POST with unknown origin[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mallows POST with no origin and no referer (same-origin)[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mallows POST with valid referer (sendBeacon)[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mblocks POST with invalid referer[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/middleware/csrf-origin.test.ts[2m > [22mProxy — CSRF/Origin Validation[2m > [22mdoes not check non-api routes[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/subscribe-route.test.ts[2m > [22mPOST /api/subscribe[2m > [22mreturns 400 for invalid email[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/subscribe-route.test.ts[2m > [22mPOST /api/subscribe[2m > [22mreturns 400 for missing lotteryId[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/subscribe-route.test.ts[2m > [22mPOST /api/subscribe[2m > [22mreturns 400 for negative lotteryId[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mreturns upcoming draws with nextDrawAt as ISO string[32m 22[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mrespects limit query parameter[32m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mreturns 400 for invalid limit[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mreturns 500 on prisma error[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22meach upcoming draw has nextDrawAt in the future or same day[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/upcoming-route.test.ts[2m > [22mGET /api/results/upcoming[2m > [22mhandles empty active lottery list gracefully[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mreturns empty array when no lotteries found[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mreturns lottery card data with prizes from full_data[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mreturns null nextDrawDate when no matching job[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mfalls back gracefully when full_data has no prizes array[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mprefers verified chosen_data over raw full_data[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mbuilds correct href from countryCode and lottery name[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mskips prizes with prizeAmount of 0[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22mskips prizes with prizeAmount of '0' (string zero)[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22msupports alternative field names: name + value[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryCardData.test.ts[2m > [22mgetLotteryCardData[2m > [22msupports alternative field name: jackpot[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-latest.test.ts[2m > [22mGET /api/results/latest[2m > [22mreturns latest results successfully[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-latest.test.ts[2m > [22mGET /api/results/latest[2m > [22mpasses type param when provided[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-latest.test.ts[2m > [22mGET /api/results/latest[2m > [22mreturns 400 for invalid type[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-latest.test.ts[2m > [22mGET /api/results/latest[2m > [22mhandles service errors[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type.test.ts[2m > [22mGET /api/results/[type][2m > [22mreturns results by type successfully[32m 9[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type.test.ts[2m > [22mGET /api/results/[type][2m > [22mreturns 400 for unsupported type[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type.test.ts[2m > [22mGET /api/results/[type][2m > [22mpasses pagination params[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-type.test.ts[2m > [22mGET /api/results/[type][2m > [22mhandles service errors[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a pageTitle class string[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a sectionTitle class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a cardTitle class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a body class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a bodyLarge class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a muted class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export a label class string with uppercase tracking[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export prizeMain class string[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export prizeSub class string[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export badge class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export subHeading class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould export heroTitle class string[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mtypography semantic map[2m > [22mshould have all keys be non-empty strings[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mfontSizeScale[2m > [22mshould export all expected font size tokens[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mfontSizeScale[2m > [22mshould map every token to a text-fs-* class[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/utils/__tests__/typographyUtils.test.ts[2m > [22mtypographyUtils[2m > [22mfontSizeScale[2m > [22mshould have exactly 11 entries[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/countryService.test.ts[2m > [22mcountryService[2m > [22mgetCountries[2m > [22mreturns list of active countries[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/countryService.test.ts[2m > [22mcountryService[2m > [22mgetCountries[2m > [22mreturns empty array when none active[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/countryService.test.ts[2m > [22mcountryService[2m > [22mgetCountryDraws[2m > [22mreturns country info and draws[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/countryService.test.ts[2m > [22mcountryService[2m > [22mgetCountryDraws[2m > [22mthrows when country not found[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/countryService.test.ts[2m > [22mcountryService[2m > [22mgetCountryDraws[2m > [22mfalls back to full_data when no verification[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetActiveCountries[2m > [22mreturns active countries with lotteries[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteriesByCountry[2m > [22mreturns country with lotteries[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteriesByCountry[2m > [22mreturns null when country not found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryBySlug[2m > [22mfinds lottery by slug[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryBySlug[2m > [22mreturns null when country not found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryBySlug[2m > [22mreturns null when slug not found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryCardData[2m > [22mreturns lottery card data with prizes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryCardData[2m > [22muses verified chosen_data over full_data[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/lotteryService.test.ts[2m > [22mlotteryService[2m > [22mgetLotteryCardData[2m > [22mreturns empty prizes when no results[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/lotteries-route.test.ts[2m > [22mGET /api/lotteries[2m > [22mreturns lotteries grouped by country[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/lotteries-route.test.ts[2m > [22mGET /api/lotteries[2m > [22mhandles errors[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news.test.ts[2m > [22mGET /api/news[2m > [22mreturns news list successfully[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news.test.ts[2m > [22mGET /api/news[2m > [22mpasses query params correctly[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news.test.ts[2m > [22mGET /api/news[2m > [22mreturns 400 for invalid params[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/news.test.ts[2m > [22mGET /api/news[2m > [22mhandles service errors[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/lotteries.test.ts[2m > [22mGET /api/lotteries[2m > [22mreturns lotteries grouped by country[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/lotteries.test.ts[2m > [22mGET /api/lotteries[2m > [22mreturns empty array when no countries[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/lotteries.test.ts[2m > [22mGET /api/lotteries[2m > [22mreturns 500 when service throws[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mreturns real prizes when card has prizes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mfalls back to JACKPOT_FALLBACK when card prizes is empty[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mThai fallback has exactly 3 prizes (4th/5th removed)[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mfalls back for Laos country key — 3 prizes[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22muses 'X' notation — no 'times' string in Laos fallback[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mfalls back for Japan country key[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mfalls back for Australia country key — 1 prize[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mreturns empty array for unknown country with no fallback[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mcaps real prizes at MAX_CARD_PRIZES (5)[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mdoes not cap when prizes <= MAX_CARD_PRIZES[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/country-page.test.ts[2m > [22mCountry page prize resolution logic[2m > [22mdoes not mutate real prizes when they exist[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/setup.test.ts[2m > [22mTest setup[2m > [22mshould run tests successfully[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/setup.test.ts[2m > [22mTest setup[2m > [22mshould resolve path aliases[32m 7[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results-validation.test.ts[2m > [22mGET /api/results/global validation[2m > [22mshould parse page correctly from query[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results-validation.test.ts[2m > [22mGET /api/results/global validation[2m > [22mshould return 400 when page is less than 1[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results-validation.test.ts[2m > [22mGET /api/results/global validation[2m > [22mshould return 400 when limit is strictly greater than 100[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results-validation.test.ts[2m > [22mGET /api/results/global validation[2m > [22mshould return 400 when page is absurdly high[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/global-results-validation.test.ts[2m > [22mGET /api/results/global validation[2m > [22mshould default to page 1 limit 20 when missing[32m 1[2mms[22m[39m
+[90mstderr[2m | src/__tests__/services/news-service.test.ts[2m > [22m[2mNews Service[2m > [22m[2mshould gracefully handle non-JSON string content in getNews
+[22m[39m[getNews] Failed to parse content for article bad-json
+
+[90mstderr[2m | src/__tests__/services/news-service.test.ts[2m > [22m[2mNews Service[2m > [22m[2mshould correctly handle non-JSON string content in getNewsDetail
+[22m[39m[getNewsDetail] Failed to parse content for article bad-json-detail
+
+ [32m✓[39m src/__tests__/services/news-service.test.ts[2m > [22mNews Service[2m > [22mshould gracefully handle non-JSON string content in getNews[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/news-service.test.ts[2m > [22mNews Service[2m > [22mshould correctly handle non-JSON string content in getNewsDetail[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/news-service.test.ts[2m > [22mNews Service[2m > [22mshould correctly parse valid JSON in getNewsDetail[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/news-service.test.ts[2m > [22mNews Service[2m > [22mshould avoid parsing explicitly object-typed content[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/news-service.test.ts[2m > [22mNews Service[2m > [22mshould log a warning when JSON.parse fails[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/countries.test.ts[2m > [22mCountries API Route[2m > [22mshould return formatted country data on success[32m 8[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/countries.test.ts[2m > [22mCountries API Route[2m > [22mshould catch and sanitize internal errors[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-global.test.ts[2m > [22mGET /api/results/global[2m > [22mreturns global results with default params[32m 10[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-global.test.ts[2m > [22mGET /api/results/global[2m > [22mpasses query params to service[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/results-global.test.ts[2m > [22mGET /api/results/global[2m > [22mreturns 400 for invalid params[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/countries-route.test.ts[2m > [22mGET /api/countries[2m > [22mreturns countries list[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/countries-route.test.ts[2m > [22mGET /api/countries[2m > [22mhandles errors[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsOverview[2m > [22mreturns correct overview stats[32m 13[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsFrequency[2m > [22mresolves dynamic country code[32m 6[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsFrequency[2m > [22mhandles new dynamic country code[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/api/statistics.test.ts[2m > [22mstatisticsService[2m > [22mgetStatsFrequency[2m > [22mextracts data and builds frequencies correctly[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould return empty string if input is falsy[32m 5[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould preserve safe HTML tags[32m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould remove script tags and their contents[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould remove dangerous tags[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould remove on* event handlers[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould neutralize javascript: protocols in href and src[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/sanitizeHtml.test.ts[2m > [22msanitizeHtml[2m > [22mshould strip data: protocols unless it is an image[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/bannerService.test.ts[2m > [22mbannerService[2m > [22mreturns active banners[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/services/bannerService.test.ts[2m > [22mbannerService[2m > [22mreturns empty when no banners[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves legacy alias "thai" to "th"[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves legacy alias "lao" to "la"[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves legacy alias "laos" to "la"[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves legacy alias "vietnam" to "vn"[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves "government-lottery-office-glo" to "th"[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves case-insensitively[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mresolves from DB when not a legacy alias[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mresolveCountryCode[2m > [22mreturns null when not found[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22mgetDisplayType[2m > [22muppercases country code[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/utils/countryResolver.test.ts[2m > [22mcountryResolver[2m > [22m_legacyAliases[2m > [22mcontains expected aliases[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/helpers/fixtures.test.ts[2m > [22mPrisma Fixture Factories[2m > [22mshould create a default country with correct shape[32m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/helpers/fixtures.test.ts[2m > [22mPrisma Fixture Factories[2m > [22mshould allow partial overrides[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/helpers/fixtures.test.ts[2m > [22mPrisma Fixture Factories[2m > [22mshould create a valid lottery result[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/helpers/fixtures.test.ts[2m > [22mPrisma Fixture Factories[2m > [22mshould create valid article and banner factories[32m 0[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/sitemap.test.ts[2m > [22msitemap()[2m > [22mshould generate a proper sitemap array[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/robots.test.ts[2m > [22mrobots()[2m > [22mshould return valid robots.txt rules[32m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/app/manifest.test.ts[2m > [22mmanifest()[2m > [22mshould return a valid web app manifest object[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/app/news/ArticleContent.test.tsx[2m [ src/__tests__/app/news/ArticleContent.test.tsx ][22m
+[31m[1mError[22m: Failed to resolve import "../../app/news/[slug]/NewsArticleContent" from "src/__tests__/app/news/ArticleContent.test.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36m/Users/kvivek/Documents/lottox/src/__tests__/app/news/ArticleContent.test.tsx[39m:4:0
+[33m  79 |  const __vi_import_0__ = await import("react");
+  80 |  const __vi_import_1__ = await import("@testing-library/react");
+  81 |  const __vi_import_2__ = await import("../../app/news/[slug]/NewsArticleContent");
+     |                                       ^
+  82 |  const __vi_import_3__ = await import("@/contexts/LanguageContext");
+  83 |  const __vi_import_4__ = await import("react/jsx-dev-runtime");[39m
+[90m [2m❯[22m TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/node.js:[2m30209:39[22m[39m
+[90m [2m❯[22m TransformPluginContext.error node_modules/vite/dist/node/chunks/node.js:[2m30206:14[22m[39m
+[90m [2m❯[22m normalizeUrl node_modules/vite/dist/node/chunks/node.js:[2m27496:18[22m[39m
+[90m [2m❯[22m node_modules/vite/dist/node/chunks/node.js:[2m27559:30[22m[39m
+[90m [2m❯[22m TransformPluginContext.transform node_modules/vite/dist/node/chunks/node.js:[2m27527:4[22m[39m
+[90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/node.js:[2m29998:14[22m[39m
+[90m [2m❯[22m loadAndTransform node_modules/vite/dist/node/chunks/node.js:[2m24133:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m91 passed[39m[22m[90m (92)[39m
+[2m      Tests [22m [1m[32m548 passed[39m[22m[90m (548)[39m
+[2m   Start at [22m 19:23:11
+[2m   Duration [22m 21.94s[2m (transform 3.51s, setup 33.86s, import 10.41s, tests 14.70s, environment 71.69s)[22m
+

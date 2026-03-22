@@ -1,115 +1,93 @@
-import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import React, { useEffect } from 'vitest'; // Vitest polyfills standard React
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { LanguageProvider, useLanguage } from '../../contexts/LanguageContext';
 
-// Test component that uses the context
-function LanguageConsumer() {
-  const { language, setLanguage, t } = useLanguage();
+vi.mock('@/lib/i18n', () => ({
+  getDictionary: vi.fn(),
+  defaultDict: { common: { title: 'English' } },
+}));
+
+import { getDictionary } from '@/lib/i18n';
+
+// Test component to consume context
+function TestComponent() {
+  const { language, setLanguage, toggleLanguage, t } = useLanguage();
   return (
     <div>
-      <span data-testid="language">{language}</span>
-      <span data-testid="hero-title">{t.hero.title}</span>
-      <span data-testid="hero-subtitle">{t.hero.subtitle}</span>
-      <button onClick={() => setLanguage("th")}>Switch to Thai</button>
-      <button onClick={() => setLanguage("en")}>Switch to English</button>
+      <span data-testid="lang">{language}</span>
+      <span data-testid="dict">{(t as any).common.title}</span>
+      <button onClick={() => setLanguage('th')} data-testid="set-th">Set TH</button>
+      <button onClick={toggleLanguage} data-testid="toggle">Toggle</button>
     </div>
   );
 }
 
-describe("LanguageContext", () => {
-  it("defaults to English language", () => {
-    render(
-      <LanguageProvider>
-        <LanguageConsumer />
-      </LanguageProvider>
-    );
-    expect(screen.getByTestId("language").textContent).toBe("en");
+describe('LanguageContext', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+    document.documentElement.lang = 'en';
   });
 
-  it("provides English translations by default", () => {
-    render(
-      <LanguageProvider>
-        <LanguageConsumer />
-      </LanguageProvider>
-    );
-    // English hero title
-    const title = screen.getByTestId("hero-title").textContent;
-    expect(title?.toLowerCase()).toContain("worldwide");
+  it('provides default english context out of tree', () => {
+    render(<TestComponent />);
+    expect(screen.getByTestId('lang').textContent).toBe('en');
   });
 
-  it("switches to Thai when setLanguage('th') is called", async () => {
-    render(
-      <LanguageProvider>
-        <LanguageConsumer />
-      </LanguageProvider>
-    );
+  it('loads saved language from localStorage on mount', async () => {
+    localStorage.setItem('language', 'th');
+    (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
 
     await act(async () => {
-      fireEvent.click(screen.getByText("Switch to Thai"));
+      render(
+        <LanguageProvider>
+          <TestComponent />
+        </LanguageProvider>
+      );
     });
 
-    // Wait for async dictionary load
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
-    });
-
-    expect(screen.getByTestId("language").textContent).toBe("th");
+    expect(screen.getByTestId('lang').textContent).toBe('th');
+    expect(document.documentElement.lang).toBe('th');
   });
 
-  it("switches back to English", async () => {
+  it('allows setting language explicitly', async () => {
+    (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
+
     render(
       <LanguageProvider>
-        <LanguageConsumer />
+        <TestComponent />
       </LanguageProvider>
     );
 
-    // Switch to Thai first
     await act(async () => {
-      fireEvent.click(screen.getByText("Switch to Thai"));
-    });
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
+      fireEvent.click(screen.getByTestId('set-th'));
     });
 
-    // Switch back to English
-    await act(async () => {
-      fireEvent.click(screen.getByText("Switch to English"));
-    });
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
-    });
-
-    expect(screen.getByTestId("language").textContent).toBe("en");
+    expect(screen.getByTestId('lang').textContent).toBe('th');
+    expect(localStorage.getItem('language')).toBe('th');
+    expect(document.documentElement.lang).toBe('th');
   });
 
-  it("persists language to localStorage", async () => {
-    const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
+  it('allows toggling language', async () => {
+    (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
 
     render(
       <LanguageProvider>
-        <LanguageConsumer />
+        <TestComponent />
       </LanguageProvider>
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText("Switch to Thai"));
+      fireEvent.click(screen.getByTestId('toggle')); // Toggles from en to th
     });
 
-    expect(setItemSpy).toHaveBeenCalledWith("language", "th");
-    setItemSpy.mockRestore();
-  });
+    expect(screen.getByTestId('lang').textContent).toBe('th');
 
-  it("reads language from localStorage on mount", () => {
-    vi.spyOn(Storage.prototype, "getItem").mockReturnValue("th");
-    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {});
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('toggle')); // Toggles back to en
+    });
 
-    render(
-      <LanguageProvider>
-        <LanguageConsumer />
-      </LanguageProvider>
-    );
-
-    expect(screen.getByTestId("language").textContent).toBe("th");
-    vi.restoreAllMocks();
+    expect(screen.getByTestId('lang').textContent).toBe('en');
   });
 });

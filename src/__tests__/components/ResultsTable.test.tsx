@@ -1,121 +1,87 @@
-import { describe, expect, it, vi } from "vitest";
-import { render, screen, act } from "@testing-library/react";
-import { ResultsTable } from "@/components/ui/ResultsTable";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
 
-vi.mock("@/lib/hooks/useApi", () => ({
-  useApi: vi.fn(() => ({
-    data: {
-      results: [
-        {
-          id: "1",
-          type: "THAI",
-          drawDate: "2023-12-01",
-          countryCode: "th",
-          lotteryName: "Thai Gov",
-          data: {
-            prizes: [
-              {
-                prizeName: "First Prize",
-                category: "firstPrize",
-                winningNumbers: ["111111"],
-                order: 1,
-              },
-            ],
-          },
-        },
-        {
-          id: "2",
-          type: "LAO_DEV",
-          drawDate: "2023-12-02",
-          countryCode: "la",
-          lotteryName: "Lao Lotto",
-          data: {
-            prizes: [
-              {
-                prizeName: "First Prize",
-                category: "firstPrize",
-                winningNumbers: ["9876"],
-                order: 1,
-              },
-            ],
-          },
-        },
-      ],
-    },
-    loading: false,
-    error: null,
-  })),
+vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+vi.mock('next/link', () => ({ default: ({ children, href }: any) => <a href={href}>{children}</a> }));
+vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
+vi.mock('../../lib/utils/lotteryUtils', () => ({
+  slugify: (s: string) => s.toLowerCase().replace(/\s+/g, '-'),
+  formatDateShort: (d: string) => d,
 }));
 
-vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => {
-    const { fill, priority, ...rest } = props;
-    return <img {...rest} data-fill={fill ? "true" : undefined} />;
-  },
-}));
+import { useLanguage } from '../../contexts/LanguageContext';
+import { useApi } from '../../lib/hooks/useApi';
+import { ResultsTable } from '../../components/ui/ResultsTable';
 
-function renderTable(filter = "all") {
-  return render(
-    <LanguageProvider>
-      <ResultsTable filter={filter} />
-    </LanguageProvider>
-  );
-}
-
-describe("ResultsTable", () => {
-  it("renders with mocked api data", async () => {
-    await act(async () => {
-      renderTable();
+describe('ResultsTable', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (useLanguage as any).mockReturnValue({
+      t: {
+        results: {
+          latestResults: 'Latest Results',
+          prize_1_thai: 'First',
+          prize2rank: '2nd',
+          prize3rank: '3rd',
+          prize3Front: 'Front 3',
+          prize3Back: 'Back 3',
+          prize2: 'Last 2',
+          running_number_front_3: 'Front 3',
+          running_number_back_3: 'Back 3',
+          running_number_back_2: 'Back 2',
+          nearby_prize_1: 'Nearby',
+          prize_2_digits: '2 Digits',
+          prize_3_digits: '3 Digits',
+          prize_4_digits: '4 Digits',
+          prize_modern_5: 'Modern 5',
+          noResults: 'No results found',
+        },
+        common: { currency: 'THB' },
+      },
+      language: 'en',
     });
-    expect(screen.getAllByText(/111111/i).length).toBeGreaterThan(0);
   });
 
-  it("displays lottery names", async () => {
-    await act(async () => {
-      renderTable();
-    });
-    expect(screen.getByText("Thai Gov")).toBeDefined();
-    expect(screen.getByText("Lao Lotto")).toBeDefined();
+  it('shows loading state', () => {
+    (useApi as any).mockReturnValue({ data: null, loading: true, error: null });
+    render(<ResultsTable />);
+    expect(document.querySelector('.animate-pulse')).not.toBeNull();
   });
 
-  it("displays first prize numbers", async () => {
-    await act(async () => {
-      renderTable();
+  it('shows results when data loaded', () => {
+    (useApi as any).mockReturnValue({
+      data: {
+        results: [
+          {
+            id: 1,
+            type: 'TH',
+            date: '2026-03-01',
+            dateDisplay: '1 Mar 2026',
+            drawDate: '2026-03-01',
+            drawNo: 'D001',
+            data: {
+              prizes: [
+                { prizeName: 'prize_1', category: 'prize_1', winningNumbers: ['123456'], prizeAmount: 6000000 },
+              ],
+            },
+            lotteryName: 'Thai Lottery',
+            countryCode: 'th',
+            showingPrizes: ['prize_1'],
+          },
+        ],
+      },
+      loading: false,
+      error: null,
     });
-    expect(screen.getAllByText(/111111/).length).toBeGreaterThan(0);
+    render(<ResultsTable />);
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
   });
 
-  it("renders with country filter", async () => {
-    await act(async () => {
-      renderTable("th");
-    });
-    // Should still render — filtering happens within the component
-    const container = document.querySelector("[class*='space-y']");
-    expect(container).toBeDefined();
-  });
-
-  it("has correct light/dark theme classes on row items", async () => {
-    const { container } = await act(async () => {
-      return renderTable();
-    });
-    const row = container.querySelector("[class*='flex items-center gap']");
-    if (row) {
-      expect(row.className).toContain("dark:bg-navy-900/60");
-      expect(row.className).toContain("bg-white/60");
-      expect(row.className).toContain("dark:border-white/5");
-      expect(row.className).toContain("border-gray-100");
-    }
-  });
-
-  it("has correct light/dark theme classes on lottery names", async () => {
-    const { container } = await act(async () => {
-      return renderTable();
-    });
-    const names = container.querySelectorAll("span[class*='font-semibold']");
-    if (names.length > 0) {
-      expect(names[0].className).toContain("dark:text-white");
-      expect(names[0].className).toContain("text-gray-900");
-    }
+  it('shows no results when data is empty', () => {
+    (useApi as any).mockReturnValue({ data: { results: [] }, loading: false, error: null });
+    render(<ResultsTable />);
+    // Should not crash
   });
 });

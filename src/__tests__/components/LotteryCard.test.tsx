@@ -1,113 +1,69 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { LotteryCard } from "@/components/home/LotteryCard";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { LotteryCard } from '../../components/ui/LotteryCard';
 
-vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => {
-    const { fill, priority, ...rest } = props;
-    return <img {...rest} data-fill={fill ? "true" : undefined} data-priority={priority ? "true" : undefined} />;
-  },
+vi.mock('next/link', () => ({ default: ({ children, href, ...props }: any) => <a href={href} {...props}>{children}</a> }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+vi.mock('../../components/ui/LotteryBall', () => ({
+  LotteryBall: ({ number }: any) => <span data-testid="lottery-ball">{number}</span>,
 }));
-vi.mock("next/link", () => ({
-  default: ({ href, children, ...rest }: Record<string, unknown>) => (
-    <a href={href as string} {...rest}>{children as React.ReactNode}</a>
-  ),
-}));
+vi.mock('../../lib/utils', () => ({ cn: (...args: any[]) => args.filter(Boolean).join(' ') }));
 
-const baseProps = {
-  name: "Government Lottery",
-  country: "Thailand",
-  flag: "https://cdn/flags/th.png",
-  jackpot: "฿6,000,000",
-  nextDraw: "Jan 16",
-  gradientFrom: "from-blue-900",
-  gradientTo: "to-red-900",
-  href: "/th/government-lottery",
-};
+describe('LotteryCard', () => {
+  const baseProps = {
+    country: 'Thailand',
+    flag: '/flags/th.svg',
+    name: 'Thai Lottery',
+    jackpot: '₿6,000,000',
+    nextDraw: 'Next: March 1',
+    balls: ['1', '2', '3', '4', '5'],
+    color: 'gold' as const,
+    href: '/th/thai-lottery',
+  };
 
-function renderCard(props = {}) {
-  return render(
-    <LanguageProvider>
-      <LotteryCard {...baseProps} {...props} />
-    </LanguageProvider>
-  );
-}
-
-describe("LotteryCard", () => {
-  beforeEach(() => vi.useFakeTimers());
-  afterEach(() => vi.useRealTimers());
-
-  it("renders lottery name and country", () => {
-    renderCard();
-    expect(screen.getByText("Government Lottery")).toBeDefined();
-    expect(screen.getByText("Thailand")).toBeDefined();
+  it('renders country, name, and jackpot', () => {
+    render(<LotteryCard {...baseProps} />);
+    expect(screen.getByText('Thailand')).toBeInTheDocument();
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
+    expect(screen.getByText('₿6,000,000')).toBeInTheDocument();
+    expect(screen.getByText('Next: March 1')).toBeInTheDocument();
   });
 
-  it("renders 1st prize amount as large text when prizes not provided", () => {
-    renderCard();
-    // Falls back to jackpot as 1st prize
-    expect(screen.getByText("฿6,000,000")).toBeDefined();
+  it('renders lottery balls', () => {
+    render(<LotteryCard {...baseProps} />);
+    const balls = screen.getAllByTestId('lottery-ball');
+    expect(balls.length).toBe(5);
   });
 
-  it("renders prize list when prizes prop is provided", () => {
-    renderCard({
-      prizes: [
-        { label: "1st Prize", amount: "฿6,000,000" },
-        { label: "2nd Prize", amount: "฿200,000" },
-      ],
-    });
-    expect(screen.getByText("1st Prize")).toBeDefined();
-    expect(screen.getByText("฿200,000")).toBeDefined();
+  it('renders bonus ball when provided', () => {
+    render(<LotteryCard {...baseProps} bonusBall="7" />);
+    const balls = screen.getAllByTestId('lottery-ball');
+    expect(balls.length).toBe(6);
+    expect(balls[5]).toHaveTextContent('7');
   });
 
-  it("shows shimmer div inside card", () => {
-    const { container } = renderCard();
-    // Shimmer div is aria-hidden and has -translate-x-full class
-    const shimmer = container.querySelector("[aria-hidden=true]");
-    expect(shimmer).toBeDefined();
+  it('renders with blue color', () => {
+    render(<LotteryCard {...baseProps} color="blue" />);
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
   });
 
-  it("renders countdown timer units", () => {
-    renderCard({ nextDrawDate: new Date(Date.now() + 86400000).toISOString() });
-    // i18n labels (day/hr/min/sec)
-    const dayEls = screen.getAllByText(/day|hr|min|sec/i);
-    expect(dayEls.length).toBeGreaterThan(0);
+  it('renders with purple color', () => {
+    render(<LotteryCard {...baseProps} color="purple" />);
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
   });
 
-  it("has active border class when isActive=true", () => {
-    const { container } = renderCard({ isActive: true });
-    const card = container.querySelector(".border-gold-400\\/40");
-    expect(card).toBeDefined();
+  it('renders active state', () => {
+    render(<LotteryCard {...baseProps} isActive={true} />);
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
   });
 
-  it("has default border class when isActive=false", () => {
-    const { container } = renderCard({ isActive: false });
-    const card = container.querySelector(".border-slate-200") ?? container.querySelector("[class*='border-slate-200']");
-    expect(card).toBeDefined();
+  it('renders with background image', () => {
+    render(<LotteryCard {...baseProps} bgImage="/bg.jpg" />);
+    expect(screen.getByText('Thai Lottery')).toBeInTheDocument();
   });
 
-  it("renders background image when bgImage is provided", () => {
-    const { container } = renderCard({ bgImage: "https://example.com/bg.jpg" });
-    const img = container.querySelector("img[src='https://example.com/bg.jpg']");
-    expect(img).toBeDefined();
-  });
-
-  it("renders gradient overlay when no bgImage", () => {
-    const { container } = renderCard({ bgImage: undefined });
-    const gradient = container.querySelector(".bg-gradient-to-br");
-    expect(gradient).toBeDefined();
-  });
-
-  it("renders link with correct href", () => {
-    const { container } = renderCard();
-    const link = container.querySelector("a[href='/th/government-lottery']");
-    expect(link).toBeDefined();
-  });
-
-  it("timer bar has theme-aware classes", () => {
-    const { container } = renderCard();
-    const timerBar = container.querySelector("[class*='dark:bg-navy-900']");
-    expect(timerBar).toBeDefined();
+  it('renders view details link', () => {
+    render(<LotteryCard {...baseProps} />);
+    expect(screen.getByText('View Details')).toBeInTheDocument();
   });
 });

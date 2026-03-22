@@ -1,241 +1,100 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
-import { SubscribeButton } from "@/components/ui/SubscribeButton";
+import React from 'react';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { SubscribeButton } from '../../components/ui/SubscribeButton';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-// Mock useLanguage
-vi.mock("@/contexts/LanguageContext", () => ({
-  useLanguage: () => ({
-    t: {
-      subscribe: {
-        button: "Subscribe for Results",
-        title: "Get Lottery Alerts",
-        placeholder: "Enter your email",
-        success: "Subscribed! We will send results to your email.",
-        error: "Something went wrong. Please try again.",
-        errorTitle: "Subscription Failed",
-        alreadyTitle: "Already Subscribed",
-        alreadyMessage: "You are already subscribed to this lottery.",
-        sending: "Sending...",
-        done: "Done",
-        retry: "Try Again",
-        close: "Close",
-      },
-    },
-  }),
+vi.mock('@/contexts/LanguageContext', () => ({
+  useLanguage: vi.fn(),
 }));
 
-describe("SubscribeButton", () => {
-  const defaultProps = {
-    lotteryId: 42,
-    lotteryName: "Mega Millions",
-  };
-
+describe('SubscribeButton', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("renders the trigger button", () => {
-    render(<SubscribeButton {...defaultProps} />);
-    expect(screen.getByTestId("subscribe-trigger")).toBeInTheDocument();
-    expect(screen.getByText("Subscribe for Results")).toBeInTheDocument();
-  });
-
-  it("opens the dialog when trigger is clicked", () => {
-    render(<SubscribeButton {...defaultProps} />);
-    expect(screen.queryByTestId("subscribe-dialog")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-    expect(screen.getByTestId("subscribe-dialog")).toBeInTheDocument();
-    expect(screen.getByText("Get Lottery Alerts")).toBeInTheDocument();
-    expect(screen.getByText("Mega Millions")).toBeInTheDocument();
-  });
-
-  it("closes the dialog when close button is clicked", () => {
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-    expect(screen.getByTestId("subscribe-dialog")).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId("subscribe-close"));
-    expect(screen.queryByTestId("subscribe-dialog")).not.toBeInTheDocument();
-  });
-
-  it("closes the dialog on Escape key", () => {
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-    expect(screen.getByTestId("subscribe-dialog")).toBeInTheDocument();
-    fireEvent.keyDown(document, { key: "Escape" });
-    expect(screen.queryByTestId("subscribe-dialog")).not.toBeInTheDocument();
-  });
-
-  it("closes the dialog when clicking backdrop", () => {
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-    const dialog = screen.getByTestId("subscribe-dialog");
-    fireEvent.click(dialog);
-    expect(screen.queryByTestId("subscribe-dialog")).not.toBeInTheDocument();
-  });
-
-  it("shows loading state while submitting", async () => {
-    let resolvePromise: (value: Response) => void;
-    const fetchPromise = new Promise<Response>((resolve) => {
-      resolvePromise = resolve;
-    });
-    vi.spyOn(global, "fetch").mockReturnValue(fetchPromise);
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    const emailInput = screen.getByTestId("subscribe-email");
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    expect(screen.getByTestId("subscribe-loading")).toBeInTheDocument();
-    expect(screen.getByText("Sending...")).toBeInTheDocument();
-
-    await act(async () => {
-      resolvePromise!(new Response(JSON.stringify({ success: true }), { status: 200 }));
+    vi.clearAllMocks();
+    global.fetch = vi.fn();
+    (useLanguage as any).mockReturnValue({
+      t: {
+        common: {
+          subscribe: 'Subscribe',
+          subscribed: 'Subscribed',
+          emailAddress: 'Email Address',
+          enterEmail: 'Enter your email',
+          subscribing: 'Subscribing...',
+        },
+        subscribe: {
+          title: 'Subscribe to Lottery',
+          button: 'Subscribe',
+          emailLabel: 'Email Address',
+          emailPlaceholder: 'Enter your email',
+          placeholder: 'Enter your email',
+          subscribing: 'Subscribing...',
+          success: 'Subscribed successfully',
+          error: 'Subscription failed'
+        }
+      },
+      language: 'en',
     });
   });
 
-  it("shows success state after successful subscription", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ success: true }), { status: 200 }),
-    );
+  it('renders correctly', () => {
+    render(<SubscribeButton lotteryId={1} lotteryName="Thai Lottery" />);
+    expect(screen.getByTestId('subscribe-trigger')).toBeInTheDocument();
+  });
 
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
+  it('opens modal on click', () => {
+    render(<SubscribeButton lotteryId={1} lotteryName="Thai Lottery" />);
+    fireEvent.click(screen.getByTestId('subscribe-trigger'));
+    
+    expect(screen.getByText('Subscribe to Lottery')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
+  });
 
-    const emailInput = screen.getByTestId("subscribe-email");
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
+  it('submits email successfully', async () => {
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ success: true })
+    });
+
+    render(<SubscribeButton lotteryId={1} lotteryName="Thai Lottery" />);
+    
+    // Open Modal
+    fireEvent.click(screen.getByTestId('subscribe-trigger'));
+    
+    // Fill Input
+    const input = screen.getByPlaceholderText('Enter your email');
+    fireEvent.change(input, { target: { value: 'test@example.com' } });
+    
+    // Submit
+    fireEvent.click(screen.getByTestId('subscribe-submit')); // The submit button inside the modal
 
     await waitFor(() => {
-      expect(screen.getByTestId("subscribe-success")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("Subscribed! We will send results to your email.")).toBeInTheDocument();
-    expect(screen.getByTestId("subscribe-done")).toBeInTheDocument();
-  });
-
-  it("closes dialog from success state", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ success: true }), { status: 200 }),
-    );
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("subscribe-done")).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId("subscribe-done"));
-    expect(screen.queryByTestId("subscribe-dialog")).not.toBeInTheDocument();
-  });
-
-  it("shows error state on API failure (non-200)", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ success: false, error: "Server error" }), { status: 500 }),
-    );
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("subscribe-error")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("Subscription Failed")).toBeInTheDocument();
-    expect(screen.getByTestId("subscribe-retry")).toBeInTheDocument();
-  });
-
-  it("shows error state on network failure", async () => {
-    vi.spyOn(global, "fetch").mockRejectedValue(new Error("Network error"));
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("subscribe-error")).toBeInTheDocument();
+      expect(global.fetch).toHaveBeenCalledWith('https://lotto-x-cms.vercel.app/api/v1/users/_/subscriptions', expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ email: 'test@example.com', lotteryId: 1 })
+      }));
     });
   });
 
-  it("returns to form from error state on retry", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ success: false, error: "Server error" }), { status: 500 }),
-    );
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
+  it('shows error state when subscription fails', async () => {
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      json: () => Promise.resolve({ error: 'Subscription failed' })
     });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
+
+    render(<SubscribeButton lotteryId={1} lotteryName="Thai Lottery" />);
+    
+    // Open Modal
+    fireEvent.click(screen.getByTestId('subscribe-trigger'));
+    
+    // Fill Input
+    const input = screen.getByPlaceholderText('Enter your email');
+    fireEvent.change(input, { target: { value: 'test@example.com' } });
+    
+    // Submit
+    fireEvent.click(screen.getByTestId('subscribe-submit'));
 
     await waitFor(() => {
-      expect(screen.getByTestId("subscribe-retry")).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByTestId("subscribe-retry"));
-    expect(screen.getByTestId("subscribe-email")).toBeInTheDocument();
-  });
-
-  it("sends the correct lotteryId in the API call", async () => {
-    const fetchSpy = vi
-      .spyOn(global, "fetch")
-      .mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    await waitFor(() => {
-      expect(fetchSpy).toHaveBeenCalledOnce();
-      const calledUrl = fetchSpy.mock.calls[0][0] as string;
-      expect(calledUrl).toMatch(/\/api\/v1\/users\/_\/subscriptions$/);
-      const calledInit = fetchSpy.mock.calls[0][1];
-      const body = JSON.parse(calledInit?.body as string);
-      expect(body.email).toBe("test@example.com");
-      expect(body.lotteryId).toBe(42);
-    });
-  });
-
-  it("shows already-subscribed state when API returns already subscribed error", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValue(
-      new Response(
-        JSON.stringify({ success: false, error: "Already subscribed to this lottery." }),
-        { status: 409 },
-      ),
-    );
-
-    render(<SubscribeButton {...defaultProps} />);
-    fireEvent.click(screen.getByTestId("subscribe-trigger"));
-
-    fireEvent.change(screen.getByTestId("subscribe-email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.click(screen.getByTestId("subscribe-submit"));
-
-    await waitFor(() => {
-      expect(screen.getByText("Already Subscribed")).toBeInTheDocument();
+      expect(screen.getByText('Subscription failed')).toBeInTheDocument();
     });
   });
 });

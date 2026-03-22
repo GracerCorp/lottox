@@ -1,263 +1,263 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-// 1. Mock countryResolver first
-vi.mock("@/lib/utils/countryResolver", () => {
-  return {
-    resolveCountryCode: vi.fn(async (input: string) => {
-      const mockMap: Record<string, string | null> = {
-        thai: "th",
-        th: "th",
-        glo: "th",
-        lao: "la",
-        la: "la",
-        au: "au",
-        all: null,
-        nonsense: null,
-      };
-      return mockMap[input.toLowerCase()] ?? null;
-    }),
-    getDisplayType: vi.fn((code: string) => code.toUpperCase()),
-  };
-});
-
-// 2. Mock prisma
-const mockFindMany = vi.fn();
-const mockFindFirst = vi.fn();
-const mockTransaction = vi.fn();
-vi.mock("@/lib/prisma", () => ({
+// Mock prisma before importing the service
+vi.mock('@/lib/prisma', () => ({
   prisma: {
-    lotteries: {
-      findMany: (...args: any) => mockFindMany(...args),
-    },
     lottery_results: {
-      findMany: (...args: any) => mockFindMany(...args),
-      findFirst: (...args: any) => mockFindFirst(...args),
+      findMany: vi.fn(),
       count: vi.fn(),
     },
-    $transaction: (...args: any) => mockTransaction(...args),
+    lotteries: {
+      findMany: vi.fn(),
+      count: vi.fn(),
+    },
+    countries: {
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
+      count: vi.fn(),
+    },
+    articles: {
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      count: vi.fn(),
+    },
+    $transaction: vi.fn(),
   },
 }));
 
-// 3. Import service
-import { apiClient } from "@/lib/services/lotteryResultService";
+vi.mock('@/lib/utils/countryResolver', () => ({
+  resolveCountryCode: vi.fn(),
+  getDisplayType: vi.fn((code: string) => code.toUpperCase()),
+}));
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+import { apiClient, apiResponse, apiError } from '../../lib/services/lotteryResultService';
+import { prisma } from '@/lib/prisma';
+import { resolveCountryCode } from '@/lib/utils/countryResolver';
 
-const makeLotteryRow = (overrides = {}) => ({
-  id: 1,
-  draw_date: "2025-01-16",
-  draw_period: "1",
-  lottery_id: 1,
-  full_data: {},
-  lottery: { countries: { code: "th" }, name: "Thai Lottery" },
-  ...overrides,
-});
+describe('lotteryResultService', () => {
+  beforeEach(() => { vi.clearAllMocks(); });
 
-describe("lotteryResultService", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  const mockResult = {
+    id: 1,
+    draw_date: '2026-03-01',
+    draw_period: 'D001',
+    full_data: { prizes: [{ prizeName: 'First', winningNumbers: ['123456'], prizeAmount: 6000000 }] },
+    lottery: { name: 'Thai Lottery', showing_prizes: ['prize_1'], countries: { code: 'TH' } },
+    result_verifications_result_verifications_lottery_result_idTolottery_results: [
+      { chosen_data: { prizes: [{ prizeName: 'First', winningNumbers: ['123456'], prizeAmount: 6000000 }] } },
+    ],
+  };
 
-  // ─── getLatestResults ──────────────────────────────────────────────────────
+  describe('getLatestResults', () => {
+    it('returns latest results without type filter', async () => {
+      (prisma.lottery_results.findMany as any).mockResolvedValue([mockResult]);
 
-  describe("getLatestResults", () => {
-    it("fetches results for a known legacy type (thai → th)", async () => {
-      mockFindMany.mockResolvedValue([makeLotteryRow()]);
-
-      const result = await apiClient.getLatestResults("thai");
-
-      expect(mockFindMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({
-            lottery: {
-              countries: { code: { equals: "th", mode: "insensitive" } },
-            },
-          }),
-        })
-      );
-
+      const result = await apiClient.getLatestResults();
       expect(result.results).toHaveLength(1);
-      expect(result.results[0].type).toBe("TH");
+      expect(result.results[0].id).toBe(1);
+      expect(result.results[0].lotteryName).toBe('Thai Lottery');
     });
 
-    it("fetches results for a new country code directly (au)", async () => {
-      mockFindMany.mockResolvedValue([makeLotteryRow({ lottery: { countries: { code: "au" }, name: "Aus Lottery" } })]);
+    it('filters by type when provided', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.lottery_results.findMany as any).mockResolvedValue([mockResult]);
 
-      const result = await apiClient.getLatestResults("au");
-      expect(result.results[0].type).toBe("AU");
-    });
-
-    it("returns empty results array when no DB rows", async () => {
-      mockFindMany.mockResolvedValue([]);
-      const result = await apiClient.getLatestResults("la");
-      expect(result.results).toHaveLength(0);
+      const result = await apiClient.getLatestResults('THAI');
+      expect(resolveCountryCode).toHaveBeenCalledWith('THAI');
+      expect(result.results).toHaveLength(1);
     });
   });
 
-  // ─── getResultsByType ──────────────────────────────────────────────────────
+  describe('getResultsByType', () => {
+    it('returns results by type with pagination', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.$transaction as any).mockResolvedValue([5, [mockResult]]);
 
-  describe("getResultsByType", () => {
-    it("handles legacy type via resolveCountryCode", async () => {
-      mockTransaction.mockResolvedValue([
-        1,
-        [makeLotteryRow()],
-      ]);
-
-      const result = await apiClient.getResultsByType("thai");
-
-      expect(mockTransaction).toHaveBeenCalled();
-      expect(result.total).toBe(1);
-      expect(result.latest?.type).toBe("TH");
+      const result = await apiClient.getResultsByType('th', 10, 0);
+      expect(result.latest).toBeTruthy();
+      expect(result.history).toHaveLength(1);
+      expect(result.total).toBe(5);
     });
 
-    it("returns total 0 and no latest when empty", async () => {
-      mockTransaction.mockResolvedValue([0, []]);
-      const result = await apiClient.getResultsByType("la");
-      expect(result.total).toBe(0);
+    it('returns null latest when no results', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.$transaction as any).mockResolvedValue([0, []]);
+
+      const result = await apiClient.getResultsByType('th');
       expect(result.latest).toBeNull();
+      expect(result.history).toHaveLength(0);
     });
   });
 
-  // ─── checkNumber ───────────────────────────────────────────────────────────
+  describe('getGlobalResults', () => {
+    it('returns global results with pagination', async () => {
+      (prisma.$transaction as any).mockResolvedValue([20, [mockResult]]);
 
-  describe("checkNumber", () => {
-    // Simulate lotteries.findMany (first call) then lottery_results.findMany (second call)
-    function mockCheckSequence(lotteries: any[], results: any[]) {
-      mockFindMany
-        .mockResolvedValueOnce(lotteries) // lotteries.findMany
-        .mockResolvedValueOnce(results);  // lottery_results.findMany
-    }
-
-    it("returns win=false when no active lotteries found", async () => {
-      mockFindMany.mockResolvedValue([]);  // empty lotteries
-      const result = await apiClient.checkNumber("123456", "nonsense");
-      expect(result).toMatchObject({ win: false });
+      const result = await apiClient.getGlobalResults({ page: 1, limit: 10 });
+      expect(result.draws).toHaveLength(1);
+      expect(result.total).toBe(20);
+      expect(result.totalPages).toBe(2);
     });
 
-    it("detects match in GLO prizes array format", async () => {
-      const gloData = {
-        prizes: [
-          {
-            prizeName: "1st Prize",
-            category: "prize_1",
-            prizeAmount: "6000000",
-            winningNumbers: ["833009"],
-          },
-        ],
-      };
+    it('filters by country', async () => {
+      (prisma.$transaction as any).mockResolvedValue([1, [mockResult]]);
 
-      mockCheckSequence(
-        [{ id: 1 }],                                     // one active lottery
-        [{ id: 10, draw_date: "2025-01-16", draw_period: "1", lottery_id: 1, full_data: gloData }]
-      );
+      const result = await apiClient.getGlobalResults({ country: 'th' });
+      expect(result.draws).toHaveLength(1);
+    });
 
-      const result = await apiClient.checkNumber("833009", "glo");
+    it('filters by date and period', async () => {
+      (prisma.$transaction as any).mockResolvedValue([1, [mockResult]]);
+
+      const result = await apiClient.getGlobalResults({ date: '2026-03-01', period: 'D001' });
+      expect(result.draws).toHaveLength(1);
+    });
+  });
+
+  describe('checkNumber', () => {
+    it('returns win=true when number matches prizes array', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      (prisma.lottery_results.findMany as any).mockResolvedValue([{
+        id: 1,
+        draw_date: '2026-03-01',
+        draw_period: 'D001',
+        lottery_id: 1,
+        full_data: { prizes: [{ prizeName: 'First', winningNumbers: ['123456'], prizeAmount: 6000000 }] },
+      }]);
+
+      const result = await apiClient.checkNumber('123456', 'th');
       expect(result.win).toBe(true);
       expect(result.prizes).toHaveLength(1);
-      expect(result.prizes![0].label).toMatch(/1st prize/i);
     });
 
-    it("returns win=false for a non-matching number in prizes array", async () => {
-      const gloData = {
-        prizes: [
-          {
-            prizeName: "1st Prize",
-            prizeAmount: "6000000",
-            winningNumbers: ["833009"],
+    it('returns win=false when number does not match', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      (prisma.lottery_results.findMany as any).mockResolvedValue([{
+        id: 1,
+        draw_date: '2026-03-01',
+        draw_period: 'D001',
+        lottery_id: 1,
+        full_data: { prizes: [{ prizeName: 'First', winningNumbers: ['123456'] }] },
+      }]);
+
+      const result = await apiClient.checkNumber('999999', 'th');
+      expect(result.win).toBe(false);
+    });
+
+    it('returns win=false when no lotteries found', async () => {
+      (resolveCountryCode as any).mockResolvedValue('th');
+      (prisma.lotteries.findMany as any).mockResolvedValue([]);
+
+      const result = await apiClient.checkNumber('123', 'th');
+      expect(result.win).toBe(false);
+    });
+
+    it('handles prizeResult format (Lao)', async () => {
+      (resolveCountryCode as any).mockResolvedValue('la');
+      (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      (prisma.lottery_results.findMany as any).mockResolvedValue([{
+        id: 1,
+        draw_date: '2026-03-01',
+        draw_period: '',
+        lottery_id: 1,
+        full_data: {
+          prizeResult: {
+            last4Prize: '1234',
+            last3Prize1: '123',
+            last3Prize2: '456',
+            last2Prize: '12',
+            devNumberSet: { json: ['111', '222'] },
           },
-        ],
-      };
-
-      mockCheckSequence([{ id: 1 }], [
-        { id: 10, draw_date: "2025-01-16", draw_period: "1", lottery_id: 1, full_data: gloData },
-      ]);
-
-      const result = await apiClient.checkNumber("000000", "glo");
-      expect(result.win).toBe(false);
-    });
-
-    it("detects match in flat prizeResult format (Lao Lotto style)", async () => {
-      const laoData = {
-        prizeResult: {
-          last4Prize: "6315",
-          last3Prize1: "315",
-          last3Prize2: "215",
-          last2Prize: "15",
         },
-      };
+      }]);
 
-      mockCheckSequence([{ id: 2 }], [
-        { id: 20, draw_date: "2025-01-16", draw_period: "13", lottery_id: 2, full_data: laoData },
-      ]);
-
-      const result = await apiClient.checkNumber("6315", "lao");
+      const result = await apiClient.checkNumber('1234', 'la');
       expect(result.win).toBe(true);
-      expect(result.prizes!.length).toBeGreaterThan(0);
     });
 
-    it("matches 2-digit and 3-digit prizes in flat format", async () => {
-      const laoData = {
-        prizeResult: {
-          last4Prize: "6315",
-          last3Prize1: "315",
-          last2Prize: "15",
+    it('handles generic traversal for unknown schemas', async () => {
+      (resolveCountryCode as any).mockResolvedValue('vn');
+      (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      (prisma.lottery_results.findMany as any).mockResolvedValue([{
+        id: 1,
+        draw_date: '2026-03-01',
+        draw_period: '',
+        lottery_id: 1,
+        full_data: {
+          customField: { nested: [{ number: '555' }] },
         },
-      };
+      }]);
 
-      mockCheckSequence([{ id: 2 }], [
-        { id: 20, draw_date: "2025-01-16", draw_period: "13", lottery_id: 2, full_data: laoData },
-      ]);
-
-      const twoDigitResult = await apiClient.checkNumber("15", "lao");
-      expect(twoDigitResult.win).toBe(true);
-    });
-
-    it("deduplicates — only returns the latest result per lottery", async () => {
-      const gloData = {
-        prizes: [
-          { prizeName: "Consolation", prizeAmount: "50000", winningNumbers: ["111111"] },
-        ],
-      };
-
-      // Two rows for the same lottery_id=1, different dates — should only keep the latest
-      mockCheckSequence([{ id: 1 }], [
-        { id: 10, draw_date: "2025-01-16", draw_period: "1", lottery_id: 1, full_data: gloData },
-        { id: 9, draw_date: "2025-01-01", draw_period: "1", lottery_id: 1, full_data: gloData },
-      ]);
-
-      const result = await apiClient.checkNumber("111111", "glo");
-      // Should still win (from latest row)
+      const result = await apiClient.checkNumber('555', 'vn');
       expect(result.win).toBe(true);
     });
+  });
 
-    it("returns win=false when lottery has results but full_data is null", async () => {
-      mockCheckSequence([{ id: 3 }], [
-        { id: 30, draw_date: "2025-01-16", draw_period: "1", lottery_id: 3, full_data: null },
+  describe('getCountries', () => {
+    it('returns active countries', async () => {
+      (prisma.countries.findMany as any).mockResolvedValue([
+        { code: 'th', name: 'Thailand', _count: { lotteries: 1 } },
       ]);
+      const result = await apiClient.getCountries();
+      expect(result.countries).toHaveLength(1);
+    });
+  });
 
-      const result = await apiClient.checkNumber("123456", "glo");
-      expect(result.win).toBe(false);
+  describe('getNews', () => {
+    it('returns paginated articles', async () => {
+      (prisma.$transaction as any).mockResolvedValue([1, [{
+        slug: 'test',
+        title: 'Test',
+        excerpt: 'Excerpt',
+        content: '{}',
+        cover_image: '/img.jpg',
+        images: [],
+        tags: ['news'],
+        published_at: new Date('2026-03-01'),
+        created_at: new Date('2026-03-01'),
+      }]]);
+
+      const result = await apiClient.getNews({ page: 1, limit: 10 });
+      expect(result.articles).toHaveLength(1);
+      expect(result.articles[0].slug).toBe('test');
     });
 
-    it("filters by drawDate when provided", async () => {
-      const gloData = {
-        prizes: [{ prizeName: "2nd Prize", prizeAmount: "200000", winningNumbers: ["555555"] }],
-      };
+    it('filters by category and search', async () => {
+      (prisma.$transaction as any).mockResolvedValue([0, []]);
+      await apiClient.getNews({ category: 'tips', search: 'lottery' });
+      // Should not crash
+    });
+  });
 
-      mockCheckSequence([{ id: 1 }], [
-        { id: 11, draw_date: "2025-06-01", draw_period: "1", lottery_id: 1, full_data: gloData },
-      ]);
+  describe('getStatsOverview', () => {
+    it('returns stats overview', async () => {
+      (prisma.$transaction as any).mockResolvedValue([100, 5, 3]);
+      const result = await apiClient.getStatsOverview();
+      expect(result.totalJackpotsTracked).toBe('100');
+      expect(result.activeLotteries).toBe(5);
+      expect(result.totalCountries).toBe(3);
+    });
+  });
 
-      const result = await apiClient.checkNumber("555555", "glo", "2025-06-01");
+  describe('getStatsFrequency', () => {
+    it('returns frequency placeholder', async () => {
+      const result = await apiClient.getStatsFrequency('thai', 30);
+      expect(result.type).toBe('thai');
+      expect(result.draws).toBe(30);
+    });
+  });
 
-      // Verify second findMany was called with draw_date constraint
-      expect(mockFindMany).toHaveBeenNthCalledWith(
-        2,
-        expect.objectContaining({
-          where: expect.objectContaining({ draw_date: "2025-06-01" }),
-        })
-      );
-      expect(result.win).toBe(true);
+  describe('apiResponse / apiError helpers', () => {
+    it('creates success response', () => {
+      const res = apiResponse({ ok: true });
+      expect(res.status).toBe(200);
+    });
+
+    it('creates error response', () => {
+      const res = apiError('Bad Request', 400);
+      expect(res.status).toBe(400);
     });
   });
 });

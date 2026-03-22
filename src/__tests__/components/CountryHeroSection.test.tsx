@@ -1,79 +1,34 @@
-import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { CountryHeroSection } from "@/components/country/CountryHeroSection";
-import { LanguageProvider } from "@/contexts/LanguageContext";
+import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { CountryHeroSection } from '../../components/country/CountryHeroSection';
+import { useLanguage } from '../../contexts/LanguageContext';
 
-// Mock Next.js Image component
-vi.mock("next/image", () => ({
-  default: (props: Record<string, unknown>) => {
-    const { fill, priority, alt, src, ...rest } = props;
-    return (
-      <img
-        {...rest}
-        src={src as string}
-        alt={alt as string}
-        data-fill={fill ? "true" : undefined}
-        data-priority={priority ? "true" : undefined}
-      />
-    );
-  },
-}));
+vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 
-function renderWithProvider(ui: React.ReactNode) {
-  return render(<LanguageProvider>{ui}</LanguageProvider>);
-}
-
-describe("CountryHeroSection", () => {
-  it("renders country name", () => {
-    renderWithProvider(
-      <CountryHeroSection countryName="Thailand" countryCode="th" flag={null} />,
-    );
-    expect(screen.getByTestId("country-name")).toHaveTextContent("Thailand");
+describe('CountryHeroSection', () => {
+  beforeEach(() => {
+    (useLanguage as any).mockReturnValue({
+      t: { country: { officialResults: 'Official Results' } },
+    });
   });
 
-  it("renders official-results label", () => {
-    renderWithProvider(
-      <CountryHeroSection countryName="Japan" countryCode="jp" flag={null} />,
-    );
-    const label = screen.getByTestId("official-results-label");
-    expect(label).toBeInTheDocument();
-    // Should contain some text (either translated or fallback)
-    expect(label.textContent).toBeTruthy();
+  it('renders country name and flag', () => {
+    render(<CountryHeroSection countryName="Thailand" countryCode="th" flag="/flags/th.svg" />);
+    expect(screen.getByTestId('country-name')).toHaveTextContent('Thailand');
+    expect(screen.getByTestId('country-flag')).toBeInTheDocument();
+    expect(screen.getByTestId('official-results-label')).toHaveTextContent('Official Results');
   });
 
-  it("renders flag image when flag URL is provided", () => {
-    const flagUrl = "https://example.com/th.png";
-    renderWithProvider(
-      <CountryHeroSection
-        countryName="Thailand"
-        countryCode="th"
-        flag={flagUrl}
-      />,
-    );
-    const flagEl = screen.getByTestId("country-flag");
-    expect(flagEl).toBeInTheDocument();
-    const img = flagEl.querySelector("img");
-    expect(img).toHaveAttribute("src", flagUrl);
-    expect(img).toHaveAttribute("alt", "Thailand flag");
+  it('renders placeholder when no flag URL', () => {
+    render(<CountryHeroSection countryName="Laos" countryCode="la" flag={null} />);
+    expect(screen.getByTestId('country-flag-placeholder')).toHaveTextContent('LA');
+    expect(screen.getByTestId('country-name')).toHaveTextContent('Laos');
   });
 
-  it("renders placeholder when no flag provided", () => {
-    renderWithProvider(
-      <CountryHeroSection countryName="Japan" countryCode="jp" flag={null} />,
-    );
-    const placeholder = screen.getByTestId("country-flag-placeholder");
-    expect(placeholder).toBeInTheDocument();
-    expect(placeholder).toHaveTextContent("JP");
-  });
-
-  it("renders the section wrapper with correct test-id", () => {
-    renderWithProvider(
-      <CountryHeroSection
-        countryName="Australia"
-        countryCode="au"
-        flag={null}
-      />,
-    );
-    expect(screen.getByTestId("country-hero")).toBeInTheDocument();
+  it('uses fallback when t.country is undefined', () => {
+    (useLanguage as any).mockReturnValue({ t: {} });
+    render(<CountryHeroSection countryName="Vietnam" countryCode="vn" flag="/flags/vn.svg" />);
+    expect(screen.getByTestId('official-results-label')).toHaveTextContent('Official Results');
   });
 });
