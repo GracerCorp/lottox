@@ -330,7 +330,7 @@ describe("CheckLotteryWidget", () => {
   it("applies correct light/dark class on the form", () => {
     const { container } = renderWidget();
     const form = container.querySelector("form");
-    expect(form?.className).toContain("dark:bg-navy-900/60");
+    expect(form?.className).toContain("dark:bg-neutral-900/60");
     expect(form?.className).toContain("bg-white/80");
   });
 });

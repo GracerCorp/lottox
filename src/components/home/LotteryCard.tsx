@@ -125,7 +125,7 @@ export function LotteryCard({
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-navy-950/75 group-hover:bg-navy-950/65 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-neutral-950/75 group-hover:bg-neutral-950/65 transition-colors duration-300" />
           </div>
         )}
 
@@ -207,7 +207,7 @@ export function LotteryCard({
           {/* Bottom — Countdown timer + Hover arrow */}
           <div className="flex items-center gap-2 mt-auto">
             {/* Timer bar */}
-            <div className="flex-1 flex items-center justify-center gap-1 bg-navy-900/70 border border-white/10 rounded-lg px-3 py-2 backdrop-blur-sm">
+            <div className="flex-1 flex items-center justify-center gap-1 bg-neutral-900/70 border border-white/10 rounded-lg px-3 py-2 backdrop-blur-sm">
 
 
               {[
@@ -241,7 +241,7 @@ export function LotteryCard({
             {/* Hover arrow button — only on active + hovered */}
             <div
               className={cn(
-                "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-gold-400 text-navy-950 shadow-lg transition-all duration-300",
+                "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-gold-400 text-neutral-950 shadow-lg transition-all duration-300",
                 isActive && hovered
                   ? "opacity-100 translate-x-0 scale-100"
                   : "opacity-0 translate-x-2 scale-75 pointer-events-none",

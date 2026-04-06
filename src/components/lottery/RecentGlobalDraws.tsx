@@ -76,13 +76,13 @@ export function RecentGlobalDraws({
   if (loading) {
     return (
       <section
-        className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/80 p-6 shadow-sm dark:shadow-none animate-pulse"
+        className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/80 p-6 shadow-sm dark:shadow-none animate-pulse"
         data-testid="recent-global-draws"
       >
-        <div className="h-6 w-48 rounded bg-slate-100 dark:bg-navy-700/60 mb-4" />
+        <div className="h-6 w-48 rounded bg-slate-100 dark:bg-neutral-700/60 mb-4" />
         <div className="space-y-3">
           {Array.from({ length: limit }).map((_, i) => (
-            <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-navy-700/60" />
+            <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-neutral-700/60" />
           ))}
         </div>
       </section>
@@ -93,7 +93,7 @@ export function RecentGlobalDraws({
 
   return (
     <section
-      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/80 p-6 shadow-sm dark:shadow-none"
+      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/80 p-6 shadow-sm dark:shadow-none"
       data-testid="recent-global-draws"
     >
       <h3 className="mb-4 flex items-center gap-2 text-fs-xl font-bold text-gray-900 dark:text-white">

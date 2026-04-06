@@ -73,7 +73,7 @@ export async function CountryGrid() {
             </div>
 
             <div className="relative z-10 text-left flex-1">
-              <div className="text-base font-bold text-navy-900 group-hover:text-blue-700 transition-colors">
+              <div className="text-base font-bold text-neutral-900 group-hover:text-blue-700 transition-colors">
                 {country.nameLocal}
                 <span className="ml-2 text-xs font-normal text-gray-500">
                   ({country.name})

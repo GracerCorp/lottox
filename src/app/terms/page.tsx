@@ -28,7 +28,7 @@ export default function TermsPage() {
             (section: { title: string; content: string }, index: number) => (
               <div
                 key={index}
-                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm hover:border-purple-500/50 dark:hover:border-purple-500/20 transition-colors shadow-sm"
+                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 backdrop-blur-sm hover:border-purple-500/50 dark:hover:border-purple-500/20 transition-colors shadow-sm"
               >
                 <h2 className="text-xl font-semibold text-purple-600 dark:text-purple-400 mb-3">
                   {section.title}

@@ -119,13 +119,13 @@ export const JackpotResult = ({
         </div>
       )}
 
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gold-500/20 via-navy-900 to-navy-950 border-2 border-gold-500/50 shadow-[0_0_50px_rgba(234,179,8,0.3)] p-6 md:p-8 text-center">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gold-500/20 via-neutral-900 to-neutral-950 border-2 border-gold-500/50 shadow-[0_0_50px_rgba(234,179,8,0.3)] p-6 md:p-8 text-center">
         {/* Glow effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gold-500/20 blur-[100px] -z-10 rounded-full" />
 
         <div className="flex flex-col items-center gap-4 relative z-10">
           <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-gold-400 to-yellow-200 flex items-center justify-center shadow-lg shadow-gold-500/30 animate-bounce">
-            <Trophy className="w-10 h-10 text-navy-950" />
+            <Trophy className="w-10 h-10 text-neutral-950" />
           </div>
 
           <h3 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-gold-500 uppercase tracking-tight drop-shadow-sm">
@@ -146,7 +146,7 @@ export const JackpotResult = ({
               {result.prizes.map((p, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-center bg-navy-950/80 p-4 rounded-xl border border-gold-500/30 shadow-inner"
+                  className="flex justify-between items-center bg-neutral-950/80 p-4 rounded-xl border border-gold-500/30 shadow-inner"
                 >
                   <span className="text-sm font-medium text-gold-200">
                     {p.prizeName || p.label || t.results.prize1}
@@ -162,7 +162,7 @@ export const JackpotResult = ({
           )}
 
           <div className="flex flex-col sm:flex-row gap-3 w-full mt-6">
-            <button className="flex-1 py-3 px-6 rounded-full bg-gradient-to-r from-gold-400 to-yellow-400 text-navy-950 font-bold shadow-lg hover:scale-105 transition-transform">
+            <button className="flex-1 py-3 px-6 rounded-full bg-gradient-to-r from-gold-400 to-yellow-400 text-neutral-950 font-bold shadow-lg hover:scale-105 transition-transform">
               {t.common.jackpotHowToClaim}
             </button>
             <button
@@ -196,7 +196,7 @@ export const StandardWinResult = ({
 
   return (
     <div className="relative w-full max-w-2xl mx-auto mt-8 animate-in slide-in-from-bottom-8 duration-500">
-      <div className="rounded-2xl bg-white dark:bg-navy-900 border border-emerald-500/30 shadow-xl overflow-hidden">
+      <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-emerald-500/30 shadow-xl overflow-hidden">
         {/* Top green accent bar */}
         <div className="h-2 w-full bg-gradient-to-r from-emerald-400 to-green-500" />
 
@@ -221,7 +221,7 @@ export const StandardWinResult = ({
               {result.prizes.map((p, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-center bg-gray-50 dark:bg-navy-800 p-3 rounded-lg border border-gray-100 dark:border-emerald-500/10"
+                  className="flex justify-between items-center bg-gray-50 dark:bg-neutral-800 p-3 rounded-lg border border-gray-100 dark:border-emerald-500/10"
                 >
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     {p.prizeName || p.label || t.results.prize1}
@@ -237,7 +237,7 @@ export const StandardWinResult = ({
           <div className="flex flex-col sm:flex-row gap-3 w-full mt-8 max-w-md">
             <button
               onClick={onReset}
-              className="flex-1 py-2.5 px-4 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-navy-800 dark:hover:bg-navy-700 text-gray-900 dark:text-white font-medium transition-colors flex items-center justify-center gap-2"
+              className="flex-1 py-2.5 px-4 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-gray-900 dark:text-white font-medium transition-colors flex items-center justify-center gap-2"
             >
               <RefreshCcw className="w-4 h-4" />
               {t.common.checkAnotherNumber}
@@ -270,8 +270,8 @@ export const NoWinResult = ({
 
   return (
     <div className="relative w-full max-w-2xl mx-auto mt-8 animate-in fade-in duration-300">
-      <div className="rounded-2xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-white/10 shadow-lg p-6 md:p-8 flex flex-col items-center text-center">
-        <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-navy-800 flex items-center justify-center mb-4">
+      <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 shadow-lg p-6 md:p-8 flex flex-col items-center text-center">
+        <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
           <Ticket className="w-8 h-8 text-gray-400" />
         </div>
 

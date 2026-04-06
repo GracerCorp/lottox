@@ -72,7 +72,7 @@ describe("CountryListSection", () => {
   it("has correct light/dark theme classes on chips", () => {
     const { container } = renderSection();
     const chip = container.querySelector("a");
-    expect(chip?.className).toContain("dark:bg-navy-900/60");
+    expect(chip?.className).toContain("dark:bg-neutral-900/60");
     expect(chip?.className).toContain("bg-white/60");
     expect(chip?.className).toContain("dark:border-white/10");
     expect(chip?.className).toContain("border-gray-200");

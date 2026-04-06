@@ -152,7 +152,7 @@ export default async function CountryPage({ params }: PageProps) {
         className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #1e40af 0%, #0f172a 60%, #020617 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #262626 0%, #171717 60%, #0a0a0a 100%)",
         }}
       />
       {/* Light mode */}
@@ -160,7 +160,7 @@ export default async function CountryPage({ params }: PageProps) {
         className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #bfdbfe 0%, #e0f2fe 40%, #f8fafc 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #fef3c7 0%, #f5f5f5 40%, #ffffff 100%)",
         }}
       />
       {/* Soft glow — dark */}
@@ -168,7 +168,7 @@ export default async function CountryPage({ params }: PageProps) {
         className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
         style={{
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(59,130,246,0.25) 0%, transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 70%)",
         }}
       />
       {/* Soft glow — light */}
@@ -176,7 +176,7 @@ export default async function CountryPage({ params }: PageProps) {
         className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(99,179,237,0.35) 0%, transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(223,177,41,0.15) 0%, transparent 70%)",
         }}
       />
 

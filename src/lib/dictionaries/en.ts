@@ -134,6 +134,14 @@ export default {
       providedBy: "Data provided by LOTTOX Financial",
       realtime: "Realtime",
     },
+    globalStats: {
+      title: "Leading the World in Lottery Data",
+      subtitle: "Experience the most comprehensive and verified lottery results from across the globe, updated in real-time.",
+      countries: "Countries",
+      lotteries: "Lotteries",
+      maxPrize: "Max Prize Pool",
+      verified: "Verified Source",
+    },
     subscribe: {
       button: "Subscribe for Results",
       title: "Get Lottery Alerts",

@@ -93,7 +93,7 @@ export function MyResultBoard() {
         {canAdd && (
           <button
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-300 text-navy-950 font-bold rounded-xl text-sm transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold rounded-xl text-sm transition-colors"
             data-testid="add-lottery-button"
           >
             <svg

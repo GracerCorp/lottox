@@ -16,7 +16,7 @@ export function UpcomingLotterySidebar() {
 
   return (
     <div
-      className="bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-5 flex flex-col gap-4 shadow-sm dark:shadow-none"
+      className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-5 flex flex-col gap-4 shadow-sm dark:shadow-none"
       data-testid="upcoming-lottery-sidebar"
     >
       <h2 className="text-sm font-bold text-gray-700 dark:text-white uppercase tracking-wider">
@@ -28,7 +28,7 @@ export function UpcomingLotterySidebar() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-16 rounded-xl bg-slate-100 dark:bg-navy-700/60"
+              className="h-16 rounded-xl bg-slate-100 dark:bg-neutral-700/60"
             />
           ))}
         </div>
@@ -49,7 +49,7 @@ export function UpcomingLotterySidebar() {
           {data.upcoming.map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-between bg-slate-50 dark:bg-navy-800/60 rounded-xl px-4 py-3 border border-slate-200 dark:border-white/5"
+              className="flex items-center justify-between bg-slate-50 dark:bg-neutral-800/60 rounded-xl px-4 py-3 border border-slate-200 dark:border-white/5"
               data-testid="upcoming-item"
             >
               <div className="flex items-center gap-2 min-w-0">

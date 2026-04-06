@@ -71,7 +71,7 @@ export function PrizeTierSection({
 
   return (
     <section
-      className="overflow-hidden rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/50 shadow-sm dark:shadow-none"
+      className="overflow-hidden rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 shadow-sm dark:shadow-none"
       data-testid="prize-tier-section"
     >
       {/* Section Header */}

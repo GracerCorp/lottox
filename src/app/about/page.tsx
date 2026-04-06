@@ -34,7 +34,7 @@ export default function AboutPage() {
         </div>
 
         {/* Intro */}
-        <div className="p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
+        <div className="p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 backdrop-blur-sm shadow-sm">
           <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             {about.intro}
           </p>
@@ -42,7 +42,7 @@ export default function AboutPage() {
 
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-2xl border border-gold-500/30 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
+          <div className="p-8 rounded-2xl border border-gold-500/30 bg-white dark:bg-neutral-900/50 backdrop-blur-sm shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-gold-500/10 text-gold-400">
                 <Target className="w-6 h-6" />
@@ -56,7 +56,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-2xl border border-purple-500/30 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
+          <div className="p-8 rounded-2xl border border-purple-500/30 bg-white dark:bg-neutral-900/50 backdrop-blur-sm shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
                 <Eye className="w-6 h-6" />
@@ -83,7 +83,7 @@ export default function AboutPage() {
                 return (
                   <div
                     key={index}
-                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 hover:border-gold-500/50 dark:hover:border-gold-500/30 transition-colors group shadow-sm"
+                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 hover:border-gold-500/50 dark:hover:border-gold-500/30 transition-colors group shadow-sm"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 rounded-lg bg-gold-500/10 text-gold-400 group-hover:bg-gold-500/20 transition-colors">
@@ -115,7 +115,7 @@ export default function AboutPage() {
                 return (
                   <div
                     key={index}
-                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 text-center shadow-sm"
+                    className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 text-center shadow-sm"
                   >
                     <div className="inline-flex p-3 rounded-full bg-emerald-500/10 text-emerald-400 mb-4">
                       <Icon className="w-6 h-6" />

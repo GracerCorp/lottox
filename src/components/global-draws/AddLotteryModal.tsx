@@ -98,7 +98,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
     >
       <div
         ref={modalRef}
-        className="bg-navy-900 border border-white/10 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[85vh]"
+        className="bg-neutral-900 border border-white/10 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[85vh]"
       >
         {/* Header */}
         <div className="flex items-start justify-between px-5 pt-5 pb-2">
@@ -121,7 +121,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
 
         {/* Scrollable Lottery List */}
         <div
-          className="overflow-y-auto flex-1 mx-4 my-3 rounded-xl bg-navy-950/60 border border-white/5"
+          className="overflow-y-auto flex-1 mx-4 my-3 rounded-xl bg-neutral-950/60 border border-white/5"
           data-testid="lottery-list"
         >
           {loading && (
@@ -173,7 +173,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
                       >
                         {checked && (
                           <svg
-                            className="w-3 h-3 text-navy-950"
+                            className="w-3 h-3 text-neutral-950"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -269,7 +269,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
         <div className="px-5 pb-5 pt-2">
           <button
             onClick={() => onConfirm(selected)}
-            className="w-full py-3 bg-amber-400 hover:bg-amber-300 text-navy-950 font-bold rounded-xl text-sm transition-colors"
+            className="w-full py-3 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold rounded-xl text-sm transition-colors"
             data-testid="confirm-button"
           >
             {mb.confirm}

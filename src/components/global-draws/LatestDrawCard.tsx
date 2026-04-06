@@ -112,20 +112,20 @@ export function LatestDrawCard() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 animate-pulse min-h-[300px] shadow-sm dark:shadow-none" data-testid="latest-draw-card-loading" />
+      <div className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 animate-pulse min-h-[300px] shadow-sm dark:shadow-none" data-testid="latest-draw-card-loading" />
     );
   }
 
   if (error || !draw) {
     return (
-      <div className="bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 text-red-500 text-sm shadow-sm dark:shadow-none" data-testid="latest-draw-card-error">
+      <div className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 text-red-500 text-sm shadow-sm dark:shadow-none" data-testid="latest-draw-card-error">
         {gd.errorLoading}
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-5 flex flex-col gap-4 shadow-sm dark:shadow-none" data-testid="latest-draw-card">
+    <div className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-5 flex flex-col gap-4 shadow-sm dark:shadow-none" data-testid="latest-draw-card">
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-fs-badge text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest">
@@ -173,7 +173,7 @@ export function LatestDrawCard() {
           {draw.mainNumbers.slice(0, 6).map((digit, i) => (
             <div
               key={i}
-              className="w-12 h-12 rounded-xl bg-amber-400 flex items-center justify-center text-white dark:text-navy-950 text-fs-2xl font-black shadow-md"
+              className="w-12 h-12 rounded-xl bg-amber-400 flex items-center justify-center text-white dark:text-neutral-950 text-fs-2xl font-black shadow-md"
             >
               {digit}
             </div>
@@ -188,7 +188,7 @@ export function LatestDrawCard() {
             const key = p.label as keyof typeof gd;
             const label = (gd as Record<string, string>)[key] ?? p.label;
             return (
-              <div key={i} className="bg-slate-50 dark:bg-navy-800/60 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-center">
+              <div key={i} className="bg-slate-50 dark:bg-neutral-800/60 border border-slate-200 dark:border-white/5 rounded-xl p-3 text-center">
                 <div className="text-fs-badge text-gray-500 uppercase tracking-wide mb-1">{label}</div>
                 <div className="flex justify-center gap-1">
                   {p.values.map((v, vi) => (

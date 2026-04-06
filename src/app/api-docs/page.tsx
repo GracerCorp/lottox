@@ -16,7 +16,7 @@ export default function APIDocsPage() {
           <h1 className="text-4xl font-bold">{t.staticParams.api.title}</h1>
         </div>
 
-        <div className="p-8 rounded-2xl bg-white/50 dark:bg-navy-900/50 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
+        <div className="p-8 rounded-2xl bg-white/50 dark:bg-neutral-900/50 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
           <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
             {t.staticParams.api.desc}
           </p>
@@ -35,7 +35,7 @@ export default function APIDocsPage() {
                 Check a number against the latest Thai Government Lottery draw.
               </p>
 
-              <div className="bg-gray-100 dark:bg-navy-950 p-4 rounded-lg font-mono text-xs text-gray-800 dark:text-gray-300 overflow-x-auto">
+              <div className="bg-gray-100 dark:bg-neutral-950 p-4 rounded-lg font-mono text-xs text-gray-800 dark:text-gray-300 overflow-x-auto">
                 {`{
   "win": true,
   "prize": "prize1",
@@ -59,7 +59,7 @@ export default function APIDocsPage() {
                 Subscribe a user email to receive notifications.
               </p>
 
-              <div className="bg-gray-100 dark:bg-navy-950 p-4 rounded-lg font-mono text-xs text-gray-800 dark:text-gray-300 overflow-x-auto">
+              <div className="bg-gray-100 dark:bg-neutral-950 p-4 rounded-lg font-mono text-xs text-gray-800 dark:text-gray-300 overflow-x-auto">
                 {`{
   "email": "user@example.com",
   "type": "ALL"

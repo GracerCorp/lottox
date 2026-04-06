@@ -86,7 +86,7 @@ export default function ContactPage() {
             return (
               <div
                 key={index}
-                className={`p-6 rounded-xl border ${colors.border} bg-white dark:bg-navy-900/50 backdrop-blur-sm flex flex-col shadow-sm`}
+                className={`p-6 rounded-xl border ${colors.border} bg-white dark:bg-neutral-900/50 backdrop-blur-sm flex flex-col shadow-sm`}
               >
                 <div
                   className={`inline-flex p-3 rounded-full ${colors.bg} ${colors.text} mb-4 self-start`}
@@ -112,7 +112,7 @@ export default function ContactPage() {
         </div>
 
         {/* Response Time */}
-        <div className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm">
+        <div className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 backdrop-blur-sm shadow-sm">
           <div className="flex items-start gap-4">
             <div className="p-2 rounded-lg bg-gold-500/10 text-gold-400 flex-shrink-0">
               <Clock className="w-6 h-6" />

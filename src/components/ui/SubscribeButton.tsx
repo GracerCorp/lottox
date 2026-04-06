@@ -132,7 +132,7 @@ export function SubscribeButton({ lotteryId, lotteryName }: SubscribeButtonProps
         >
           <div
             ref={modalRef}
-            className="bg-white dark:bg-navy-900 border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-sm mx-4 shadow-2xl"
+            className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-sm mx-4 shadow-2xl"
           >
             {/* ── Sending State ── */}
             {status === "sending" && (

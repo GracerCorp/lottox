@@ -47,7 +47,7 @@ export function DrawPageHeader({
         </div>
         <div className="mt-3 flex items-center gap-3">
           {logo ? (
-            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-slate-200 dark:border-white/10 shadow-sm bg-white dark:bg-navy-900">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-slate-200 dark:border-white/10 shadow-sm bg-white dark:bg-neutral-900">
               <Image
                 src={logo}
                 alt={`${lotteryName} logo`}

@@ -84,7 +84,7 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
       )}
 
       {/* Gradient overlay on top of bg image */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-80/80 via-slate-50/90 to-slate-50 dark:from-navy-950/60 dark:via-navy-950/60 dark:to-navy-950 pointer-events-none z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-80/80 via-slate-50/90 to-slate-50 dark:from-neutral-950/60 dark:via-neutral-950/60 dark:to-neutral-950 pointer-events-none z-[1]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
@@ -167,7 +167,7 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
               {/* Prev Arrow */}
               <button
                 onClick={handlePrev}
-                className="rounded-full border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-navy-900/60 p-2.5 text-gray-700 dark:text-white backdrop-blur-md transition-all hover:bg-gray-100 dark:hover:bg-navy-800 hover:scale-110 flex-shrink-0"
+                className="rounded-full border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-2.5 text-gray-700 dark:text-white backdrop-blur-md transition-all hover:bg-gray-100 dark:hover:bg-neutral-800 hover:scale-110 flex-shrink-0"
                 aria-label="Previous"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -176,7 +176,7 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
               {/* Next Arrow */}
               <button
                 onClick={handleNext}
-                className="rounded-full border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-navy-900/60 p-2.5 text-gray-700 dark:text-white backdrop-blur-md transition-all hover:bg-gray-100 dark:hover:bg-navy-800 hover:scale-110 flex-shrink-0"
+                className="rounded-full border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 p-2.5 text-gray-700 dark:text-white backdrop-blur-md transition-all hover:bg-gray-100 dark:hover:bg-neutral-800 hover:scale-110 flex-shrink-0"
                 aria-label="Next"
               >
                 <ChevronRight className="h-5 w-5" />

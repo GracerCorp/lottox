@@ -64,16 +64,16 @@ export default function LotteryDetail({
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 animate-pulse">
-        <div className="mb-8 h-20 rounded-lg bg-slate-100 dark:bg-navy-800/50" />
+        <div className="mb-8 h-20 rounded-lg bg-slate-100 dark:bg-neutral-800/50" />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
-            <div className="h-96 rounded-2xl bg-slate-100 dark:bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-slate-100 dark:bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-slate-100 dark:bg-navy-800/50" />
+            <div className="h-96 rounded-2xl bg-slate-100 dark:bg-neutral-800/50" />
+            <div className="h-48 rounded-xl bg-slate-100 dark:bg-neutral-800/50" />
+            <div className="h-48 rounded-xl bg-slate-100 dark:bg-neutral-800/50" />
           </div>
           <div className="space-y-6">
-            <div className="h-48 rounded-xl bg-slate-100 dark:bg-navy-800/50" />
-            <div className="h-48 rounded-xl bg-slate-100 dark:bg-navy-800/50" />
+            <div className="h-48 rounded-xl bg-slate-100 dark:bg-neutral-800/50" />
+            <div className="h-48 rounded-xl bg-slate-100 dark:bg-neutral-800/50" />
           </div>
         </div>
       </div>
@@ -266,7 +266,7 @@ export default function LotteryDetail({
           <RecentGlobalDraws excludeCountry={countryCode} />
 
           {/* 7. History Table */}
-          <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/80 shadow-sm dark:shadow-none">
+          <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/80 shadow-sm dark:shadow-none">
             <div className="border-b border-slate-200 dark:border-white/10 px-6 py-4">
               <h3 className="font-bold text-gray-900 dark:text-white">
                 {t.results.history}

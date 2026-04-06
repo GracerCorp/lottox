@@ -49,7 +49,7 @@ export default function PrivacyPage() {
               return (
                 <div
                   key={index}
-                  className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm hover:border-emerald-500/50 dark:hover:border-emerald-500/30 transition-colors shadow-sm"
+                  className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 backdrop-blur-sm hover:border-emerald-500/50 dark:hover:border-emerald-500/30 transition-colors shadow-sm"
                 >
                   <div className="flex items-start gap-4">
                     <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 flex-shrink-0 mt-0.5">

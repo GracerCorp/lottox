@@ -49,9 +49,9 @@ export function DashboardTable() {
   }
 
   return (
-    <div className="bg-white dark:bg-navy-900 rounded-3xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl">
+    <div className="bg-white dark:bg-neutral-900 rounded-3xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl">
       {/* Controls Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-navy-800/50">
+      <div className="p-6 border-b border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-neutral-800/50">
         <div className="flex gap-2">
           {filters.map((f) => (
             <button
@@ -60,7 +60,7 @@ export function DashboardTable() {
                 setPeriod(f.value);
                 setPage(1);
               }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${period === f.value ? "bg-gray-200 dark:bg-navy-600 text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700"}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${period === f.value ? "bg-gray-200 dark:bg-neutral-600 text-gray-900 dark:text-white" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-700"}`}
             >
               {f.label}
             </button>
@@ -84,9 +84,9 @@ export function DashboardTable() {
               key={i}
               className="flex items-center gap-4 px-5 py-3 animate-pulse"
             >
-              <div className="h-5 w-7 bg-gray-200 dark:bg-navy-700 rounded" />
-              <div className="h-4 w-32 bg-gray-200 dark:bg-navy-700 rounded" />
-              <div className="h-6 w-24 bg-gray-200 dark:bg-navy-700 rounded ml-auto" />
+              <div className="h-5 w-7 bg-gray-200 dark:bg-neutral-700 rounded" />
+              <div className="h-4 w-32 bg-gray-200 dark:bg-neutral-700 rounded" />
+              <div className="h-6 w-24 bg-gray-200 dark:bg-neutral-700 rounded ml-auto" />
             </div>
           ))}
         </div>
@@ -105,7 +105,7 @@ export function DashboardTable() {
           {Object.entries(groupedRows).map(([dateKey, dateRows]) => (
             <div key={dateKey}>
               {/* Date Separator */}
-              <div className="px-6 py-2 bg-gray-50 dark:bg-navy-950/30 text-gray-500 text-xs font-bold uppercase">
+              <div className="px-6 py-2 bg-gray-50 dark:bg-neutral-950/30 text-gray-500 text-xs font-bold uppercase">
                 {dateKey}
               </div>
               <div className="flex flex-col gap-0 divide-y divide-gray-100 dark:divide-white/5">
@@ -130,7 +130,7 @@ export function DashboardTable() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
@@ -140,7 +140,7 @@ export function DashboardTable() {
           <button
             onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
             disabled={page >= data.totalPages}
-            className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>

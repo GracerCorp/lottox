@@ -203,7 +203,7 @@ export default function NewsArticleContent({
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
               <span className="mb-2 inline-block rounded bg-gold-500/90 px-2.5 py-1 text-xs font-bold text-black">
                 {category}
@@ -331,7 +331,7 @@ export default function NewsArticleContent({
             <Link
               key={news.slug}
               href={`/news/${news.slug}`}
-              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/5 bg-white dark:bg-navy-800 transition-all hover:border-gold-500/50 dark:hover:border-gold-500/20 shadow-sm"
+              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/5 bg-white dark:bg-neutral-800 transition-all hover:border-gold-500/50 dark:hover:border-gold-500/20 shadow-sm"
             >
               {news.image && (
                 <div className="relative h-36 w-full overflow-hidden">
@@ -341,7 +341,7 @@ export default function NewsArticleContent({
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-800 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-800 via-transparent to-transparent" />
                 </div>
               )}
               <div className="p-4">
@@ -458,13 +458,13 @@ function TipTapRenderer({ node }: { node: any }) {
       );
     case "blockquote":
       return (
-        <blockquote className="border-l-4 border-gold-500 bg-gray-50 dark:bg-navy-800/50 p-4 my-6 italic text-gray-700 dark:text-gray-300 rounded-r-lg">
+        <blockquote className="border-l-4 border-gold-500 bg-gray-50 dark:bg-neutral-800/50 p-4 my-6 italic text-gray-700 dark:text-gray-300 rounded-r-lg">
           {renderChildren()}
         </blockquote>
       );
     case "codeBlock":
       return (
-        <pre className="my-6 rounded-lg bg-navy-900 p-4 text-sm text-gray-100 overflow-x-auto whitespace-pre-wrap font-mono">
+        <pre className="my-6 rounded-lg bg-neutral-900 p-4 text-sm text-gray-100 overflow-x-auto whitespace-pre-wrap font-mono">
           <code>{renderChildren()}</code>
         </pre>
       );

@@ -23,7 +23,7 @@ export default function NotFound() {
       </div>
 
       {/* 404 */}
-      <h1 className="text-fs-5xl font-black text-gray-200 dark:text-navy-700 mb-2">
+      <h1 className="text-fs-5xl font-black text-gray-200 dark:text-neutral-700 mb-2">
         404
       </h1>
       <h2 className="text-fs-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -36,7 +36,7 @@ export default function NotFound() {
       {/* Go Home */}
       <Link
         href="/"
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-navy-950 font-bold transition-colors shadow-lg mb-10"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold transition-colors shadow-lg mb-10"
       >
         <Home className="w-5 h-5" />
         {t.common?.goHome ?? "Go Home"}
@@ -52,7 +52,7 @@ export default function NotFound() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 hover:border-gold-400 dark:hover:border-gold-500/30 transition-colors group"
+              className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 hover:border-gold-400 dark:hover:border-gold-500/30 transition-colors group"
             >
               <span className="text-fs-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
                 {item.label}

@@ -133,6 +133,14 @@ export default {
       providedBy: "ข้อมูลโดย LOTTOX Financial",
       realtime: "เรียลไทม์",
     },
+    globalStats: {
+      title: "ผู้นำข้อมูลลอตเตอรี่ระดับโลก",
+      subtitle: "พบกับผลลอตเตอรี่ที่ครอบคลุมและผ่านการตรวจสอบจากทั่วโลก อัปเดตแบบเรียลไทม์",
+      countries: "ประเทศ",
+      lotteries: "ลอตเตอรี่",
+      maxPrize: "เงินรางวัลรวมสูงสุด",
+      verified: "แหล่งที่มาที่ตรวจสอบได้",
+    },
     subscribe: {
       button: "รับผลหวยทางอีเมล",
       title: "รับแจ้งเตือนผลหวย",

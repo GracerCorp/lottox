@@ -114,7 +114,7 @@ export function InteractiveTicketVerifier({
   };
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/80 p-6 backdrop-blur-md shadow-lg">
+    <section className="relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/80 p-6 backdrop-blur-md shadow-lg">
       {/* Background design elements */}
       <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gold-400/5 blur-[80px]"></div>
       <div className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-blue-500/5 blur-[80px]"></div>
@@ -158,7 +158,7 @@ export function InteractiveTicketVerifier({
               <select
                 value={currentSelectedDate || ""}
                 onChange={handleDateChange}
-                className="w-full appearance-none rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-10 text-gray-900 dark:text-white outline-none transition-all focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20"
+                className="w-full appearance-none rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-neutral-900/50 py-3.5 pl-11 pr-10 text-gray-900 dark:text-white outline-none transition-all focus:border-gold-500 focus:bg-white dark:focus:bg-neutral-900 focus:ring-2 focus:ring-gold-500/20"
               >
                 <option value="">
                   {t.common.latestDraw} ({latestDateDisplay})
@@ -202,7 +202,7 @@ export function InteractiveTicketVerifier({
                 }
                 placeholder={`${t.common.inputPlaceholder}`}
                 disabled={isChecking}
-                className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-navy-900/50 py-3.5 pl-11 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-navy-900 focus:ring-2 focus:ring-gold-500/20 disabled:opacity-50"
+                className="w-full rounded-xl border border-gray-300 dark:border-white/10 bg-gray-50/50 dark:bg-neutral-900/50 py-3.5 pl-11 pr-4 font-mono text-lg tracking-widest text-gray-900 dark:text-white outline-none transition-all placeholder:font-sans placeholder:text-sm placeholder:tracking-normal focus:border-gold-500 focus:bg-white dark:focus:bg-neutral-900 focus:ring-2 focus:ring-gold-500/20 disabled:opacity-50"
               />
               <Ticket className="absolute left-4 h-5 w-5 text-gray-400" />
             </div>

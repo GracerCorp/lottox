@@ -53,7 +53,7 @@ describe("LiveTicker", () => {
   it("has correct light/dark theme classes on container", () => {
     const { container } = render(<LiveTicker />);
     const ticker = container.firstElementChild;
-    expect(ticker?.className).toContain("dark:bg-navy-950/80");
+    expect(ticker?.className).toContain("dark:bg-neutral-950/80");
     expect(ticker?.className).toContain("bg-gray-50/80");
     expect(ticker?.className).toContain("dark:border-white/5");
     expect(ticker?.className).toContain("border-gray-200");
@@ -62,7 +62,7 @@ describe("LiveTicker", () => {
   it("has correct light/dark theme classes on pill items", () => {
     const { container } = render(<LiveTicker />);
     const pill = container.querySelector("span[class*='inline-flex']");
-    expect(pill?.className).toContain("dark:bg-navy-800/80");
+    expect(pill?.className).toContain("dark:bg-neutral-800/80");
     expect(pill?.className).toContain("bg-white/80");
     expect(pill?.className).toContain("dark:text-gray-300");
     expect(pill?.className).toContain("text-gray-600");

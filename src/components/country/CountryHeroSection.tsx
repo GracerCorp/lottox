@@ -32,7 +32,7 @@ export function CountryHeroSection({
         className="pointer-events-none absolute inset-0 hidden dark:block"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #1e40af 0%, #0f172a 60%, #020617 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #262626 0%, #171717 60%, #0a0a0a 100%)",
         }}
       />
       {/* Light mode background */}
@@ -41,7 +41,7 @@ export function CountryHeroSection({
         className="pointer-events-none absolute inset-0 block dark:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #bfdbfe 0%, #e0f2fe 40%, #f8fafc 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #fef3c7 0%, #f5f5f5 40%, #ffffff 100%)",
         }}
       />
 
@@ -51,7 +51,7 @@ export function CountryHeroSection({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 20%, rgba(59,130,246,0.35) 0%, transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 20%, rgba(212,175,55,0.15) 0%, transparent 70%)",
         }}
       />
       {/* Bottom fade to page background — dark */}
@@ -60,7 +60,7 @@ export function CountryHeroSection({
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 hidden dark:block"
         style={{
           background:
-            "linear-gradient(to bottom, transparent, rgba(2,6,23,0.85))",
+            "linear-gradient(to bottom, transparent, rgba(10,10,10,0.85))",
         }}
       />
       {/* Bottom fade to page background — light */}
@@ -69,7 +69,7 @@ export function CountryHeroSection({
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 block dark:hidden"
         style={{
           background:
-            "linear-gradient(to bottom, transparent, rgba(240,249,255,0.85))",
+            "linear-gradient(to bottom, transparent, rgba(255,255,255,0.85))",
         }}
       />
 

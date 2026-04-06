@@ -56,8 +56,8 @@ export default function FAQPage() {
                 key={index}
                 className={`rounded-xl border backdrop-blur-sm overflow-hidden transition-all duration-300 shadow-sm ${
                   isOpen
-                    ? "bg-white/70 dark:bg-navy-900/70 border-gold-500/50"
-                    : "bg-white/50 dark:bg-navy-900/50 border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20"
+                    ? "bg-white/70 dark:bg-neutral-900/70 border-gold-500/50"
+                    : "bg-white/50 dark:bg-neutral-900/50 border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20"
                 }`}
               >
                 <button

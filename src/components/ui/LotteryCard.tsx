@@ -34,10 +34,10 @@ export function LotteryCard({
   isActive = false,
 }: LotteryCardProps) {
   const gradients = {
-    gold: "from-white via-amber-50 to-amber-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-gold-900/20 border-amber-200 dark:border-gold-500/50 hover:border-amber-400 dark:hover:border-gold-400 shadow-[0_0_30px_-5px_rgba(245,158,11,0.1)] dark:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_0_rgba(245,158,11,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(245,158,11,0.5)]",
-    blue: "from-white via-blue-50 to-blue-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-blue-900/20 border-blue-200 dark:border-blue-500/50 hover:border-blue-400 dark:hover:border-blue-400 shadow-[0_0_30px_-5px_rgba(59,130,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)] hover:shadow-[0_0_50px_0_rgba(59,130,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(59,130,246,0.5)]",
+    gold: "from-white via-amber-50 to-amber-100/50 dark:from-neutral-900 dark:via-neutral-800 dark:to-gold-900/20 border-amber-200 dark:border-gold-500/50 hover:border-amber-400 dark:hover:border-gold-400 shadow-[0_0_30px_-5px_rgba(245,158,11,0.1)] dark:shadow-[0_0_30px_-5px_rgba(245,158,11,0.3)] hover:shadow-[0_0_50px_0_rgba(245,158,11,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(245,158,11,0.5)]",
+    blue: "from-white via-blue-50 to-blue-100/50 dark:from-neutral-900 dark:via-neutral-800 dark:to-blue-900/20 border-blue-200 dark:border-blue-500/50 hover:border-blue-400 dark:hover:border-blue-400 shadow-[0_0_30px_-5px_rgba(59,130,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)] hover:shadow-[0_0_50px_0_rgba(59,130,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(59,130,246,0.5)]",
     purple:
-      "from-white via-purple-50 to-purple-100/50 dark:from-navy-900 dark:via-navy-800 dark:to-purple-900/20 border-purple-200 dark:border-purple-500/50 hover:border-purple-400 dark:hover:border-purple-400 shadow-[0_0_30px_-5px_rgba(139,92,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_0_rgba(139,92,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(139,92,246,0.5)]",
+      "from-white via-purple-50 to-purple-100/50 dark:from-neutral-900 dark:via-neutral-800 dark:to-purple-900/20 border-purple-200 dark:border-purple-500/50 hover:border-purple-400 dark:hover:border-purple-400 shadow-[0_0_30px_-5px_rgba(139,92,246,0.1)] dark:shadow-[0_0_30px_-5px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_0_rgba(139,92,246,0.2)] dark:hover:shadow-[0_0_50px_0_rgba(139,92,246,0.5)]",
   };
 
   const glowColors = {
@@ -94,7 +94,7 @@ export function LotteryCard({
             className="object-cover opacity-80 transition-transform duration-700 group-hover:scale-110"
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-600/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-600/50 to-transparent" />
         </div>
       )}
 
@@ -166,7 +166,7 @@ export function LotteryCard({
             number={num}
             size="sm"
             color="gray"
-            className="border-gray-200 dark:border-white/10 bg-white dark:bg-navy-950/50"
+            className="border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-950/50"
           />
         ))}
         {bonusBall && (

@@ -1,8 +1,10 @@
 import { HeroSection, HeroItem } from "@/components/home/HeroSection";
+import { HeroSectionV2 } from "@/components/home/HeroSectionV2";
 import { LiveTicker } from "@/components/home/LiveTicker";
 import { CheckLotteryWidget, LotteryGroup } from "@/components/home/CheckLotteryWidget";
-import { CountryListSection } from "@/components/home/CountryListSection";
-import { HomeResultsSection } from "@/components/home/HomeResultsSection";
+import { CountryMarqueeSection } from "@/components/home/CountryMarqueeSection";
+import { LatestUpdateSection } from "@/components/home/LatestUpdate/LatestUpdateSection";
+import { GlobalStatsBanner } from "@/components/home/GlobalStatsBanner";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
@@ -236,7 +238,7 @@ export default async function Home() {
         className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #1e40af 0%, #0f172a 60%, #020617 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #262626 0%, #171717 60%, #0a0a0a 100%)",
         }}
       />
       {/* Light mode background */}
@@ -244,7 +246,7 @@ export default async function Home() {
         className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 0%, #bfdbfe 0%, #e0f2fe 40%, #f8fafc 100%)",
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #fef3c7 0%, #f5f5f5 40%, #ffffff 100%)",
         }}
       />
       {/* Soft blue glow layer — adapts per theme */}
@@ -252,34 +254,36 @@ export default async function Home() {
         className="pointer-events-none fixed inset-0 -z-10 hidden dark:block"
         style={{
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(59,130,246,0.25) 0%, transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 70%)",
         }}
       />
       <div
         className="pointer-events-none fixed inset-0 -z-10 block dark:hidden"
         style={{
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(99,179,237,0.35) 0%, transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 15%, rgba(223,177,41,0.15) 0%, transparent 70%)",
         }}
       />
 
 
       {/* Section 1: Hero Carousel */}
-      <HeroSection items={heroItems} />
+      <HeroSectionV2 items={heroItems} />
 
-      {/* Section 2: Live Ticker */}
+      {/* Section 2: Lottery By Country Marquee */}
+      <CountryMarqueeSection countries={countryListItems} />
+
+      {/* Section 3: Live Ticker */}
       {/* <LiveTicker /> */}
 
-      {/* Section 3: Find By Number */}
-      <CheckLotteryWidget lotteryGroups={lotteryGroups} />
+      {/* Section 4: Find By Number
+      <CheckLotteryWidget lotteryGroups={lotteryGroups} /> */}
 
-      {/* Section 4: Lottery By Country */}
-      <CountryListSection countries={countryListItems} />
+      <GlobalStatsBanner 
+        countriesCount={countryListItems.length}
+        lotteriesCount={lotteryGroups.reduce((acc, curr) => acc + curr.lotteries.length, 0)}
+      />
 
-      {/* Section 5: Latest Update with Country Tabs */}
-      <HomeResultsSection tabs={tabs} />
-
-
+      <LatestUpdateSection />
 
     </div>
   );

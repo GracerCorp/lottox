@@ -38,7 +38,7 @@ export default function DisclaimerPage() {
             (section: { title: string; content: string }, index: number) => (
               <div
                 key={index}
-                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900/50 backdrop-blur-sm shadow-sm"
+                className="p-6 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900/50 backdrop-blur-sm shadow-sm"
               >
                 <div className="flex items-start gap-4">
                   <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-500/10 text-red-400 text-sm font-bold mt-0.5">

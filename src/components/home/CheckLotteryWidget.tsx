@@ -190,7 +190,7 @@ export function CheckLotteryWidget({
       <div className="max-w-2xl mx-auto relative">
         <form
           onSubmit={handleCheck}
-          className="flex flex-wrap md:flex-nowrap items-center gap-2 bg-white/80 dark:bg-navy-900/60 border border-gray-200 dark:border-white/10 rounded-2xl md:rounded-full p-2 md:p-1.5 md:pl-4 backdrop-blur-md shadow-lg"
+          className="flex flex-wrap md:flex-nowrap items-center gap-2 bg-white/80 dark:bg-neutral-900/60 border border-gray-200 dark:border-white/10 rounded-2xl md:rounded-full p-2 md:p-1.5 md:pl-4 backdrop-blur-md shadow-lg"
         >
           {/* Custom Dropdown Trigger */}
           <div ref={dropdownRef} className="flex-shrink-0">
@@ -239,7 +239,7 @@ export function CheckLotteryWidget({
           <button
             type="submit"
             disabled={loading || !isNumberValid}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-navy-950 font-bold text-sm py-2.5 px-3 md:px-5 rounded-full shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:pointer-events-none flex-shrink-0"
+            className="flex items-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-neutral-950 font-bold text-sm py-2.5 px-3 md:px-5 rounded-full shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:pointer-events-none flex-shrink-0"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -262,7 +262,7 @@ export function CheckLotteryWidget({
 
         {/* Dropdown Panel — full width of form, anchored to outer container */}
         {isOpen && (
-          <div ref={panelRef} className="absolute left-0 right-0 mt-2 max-h-[360px] overflow-hidden rounded-xl bg-white dark:bg-navy-900 border border-gray-200 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col">
+          <div ref={panelRef} className="absolute left-0 right-0 mt-2 max-h-[360px] overflow-hidden rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col">
             {/* Search Input */}
             <div className="p-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
               <div className="relative">
@@ -273,7 +273,7 @@ export function CheckLotteryWidget({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t.common.searchLotteryPlaceholder}
-                  className="w-full bg-gray-50 dark:bg-navy-800 border border-gray-200 dark:border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-gold-400/50"
+                  className="w-full bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-gold-400/50"
                 />
               </div>
             </div>
@@ -303,7 +303,7 @@ export function CheckLotteryWidget({
                       className={cn(
                         "w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors duration-150",
                         isSelected
-                          ? "bg-gold-500/90 text-navy-950"
+                          ? "bg-gold-500/90 text-neutral-950"
                           : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10",
                       )}
                     >

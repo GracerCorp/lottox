@@ -59,7 +59,7 @@ export default function StatisticsPage() {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className={`bg-white dark:bg-navy-800 p-6 rounded-2xl border border-gray-200 dark:border-white/5 flex items-center gap-4 shadow-sm ${loading ? "animate-pulse" : ""}`}
+            className={`bg-white dark:bg-neutral-800 p-6 rounded-2xl border border-gray-200 dark:border-white/5 flex items-center gap-4 shadow-sm ${loading ? "animate-pulse" : ""}`}
           >
             <div
               className={`w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center ${stat.color}`}
@@ -78,8 +78,8 @@ export default function StatisticsPage() {
         ))}
       </div>
 
-      <div className="bg-white dark:bg-navy-800 rounded-3xl p-8 border border-gray-200 dark:border-white/5 text-center py-20 shadow-sm">
-        <PieChart className="w-20 h-20 text-blue-500 dark:text-navy-600 mx-auto mb-6" />
+      <div className="bg-white dark:bg-neutral-800 rounded-3xl p-8 border border-gray-200 dark:border-white/5 text-center py-20 shadow-sm">
+        <PieChart className="w-20 h-20 text-blue-500 dark:text-neutral-600 mx-auto mb-6" />
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Advanced Analytics Coming Soon
         </h2>

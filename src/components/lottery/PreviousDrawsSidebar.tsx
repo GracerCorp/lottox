@@ -23,7 +23,7 @@ export function PreviousDrawsSidebar({
 
   return (
     <div
-      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/80 p-6 shadow-sm dark:shadow-none"
+      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/80 p-6 shadow-sm dark:shadow-none"
       data-testid="previous-draws-sidebar"
     >
       <h3 className="mb-4 flex items-center gap-2 text-fs-lg font-bold text-gray-900 dark:text-white">

@@ -23,7 +23,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-navy-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-navy-950/60 transition-colors duration-300 shadow-sm dark:shadow-none">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-950/60 transition-colors duration-300 shadow-sm dark:shadow-none">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -92,7 +92,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="border-t border-gray-200 dark:border-white/10 bg-white dark:bg-navy-900 md:hidden">
+        <div className="border-t border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-900 md:hidden">
           <nav
             className="flex flex-col p-4 space-y-4"
             aria-label="Mobile navigation"

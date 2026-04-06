@@ -38,7 +38,7 @@ export default function NewsPage() {
           </div>
           <input
             type="text"
-            className="block w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-navy-800/50 p-2.5 pl-10 text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-gold-500 focus:ring-gold-500 shadow-sm transition-colors"
+            className="block w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-neutral-800/50 p-2.5 pl-10 text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-gold-500 focus:ring-gold-500 shadow-sm transition-colors"
             placeholder={
               language === "th" ? "ค้นหาข่าวสาร..." : "Search news..."
             }
@@ -54,13 +54,13 @@ export default function NewsPage() {
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="animate-pulse rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 shadow-sm"
+              className="animate-pulse rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/30 shadow-sm"
             >
-              <div className="aspect-video w-full bg-gray-200 dark:bg-navy-700 rounded-t-xl" />
+              <div className="aspect-video w-full bg-gray-200 dark:bg-neutral-700 rounded-t-xl" />
               <div className="p-4 space-y-3">
-                <div className="h-3 bg-gray-200 dark:bg-navy-700 rounded w-1/3" />
-                <div className="h-4 bg-gray-200 dark:bg-navy-700 rounded w-full" />
-                <div className="h-4 bg-gray-200 dark:bg-navy-700 rounded w-3/4" />
+                <div className="h-3 bg-gray-200 dark:bg-neutral-700 rounded w-1/3" />
+                <div className="h-4 bg-gray-200 dark:bg-neutral-700 rounded w-full" />
+                <div className="h-4 bg-gray-200 dark:bg-neutral-700 rounded w-3/4" />
               </div>
             </div>
           ))}
@@ -94,7 +94,7 @@ export default function NewsPage() {
           </p>
           <button
             onClick={() => setSearchQuery("")}
-            className="mt-6 rounded-lg bg-gray-100 dark:bg-navy-700 px-6 py-2.5 text-sm font-medium text-gray-900 dark:text-white transition-colors hover:bg-gray-200 dark:hover:bg-navy-600 hover:text-gold-600 dark:hover:text-gold-400"
+            className="mt-6 rounded-lg bg-gray-100 dark:bg-neutral-700 px-6 py-2.5 text-sm font-medium text-gray-900 dark:text-white transition-colors hover:bg-gray-200 dark:hover:bg-neutral-600 hover:text-gold-600 dark:hover:text-gold-400"
           >
             {language === "th" ? "ล้างการค้นหา" : "Clear search"}
           </button>
@@ -109,7 +109,7 @@ export default function NewsPage() {
               <Link
                 key={article.slug}
                 href={`/news/${article.slug}`}
-                className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 transition-all hover:-translate-y-1 hover:border-gold-500/50 dark:hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/10 shadow-sm"
+                className="group overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/30 transition-all hover:-translate-y-1 hover:border-gold-500/50 dark:hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/10 shadow-sm"
               >
                 {article.image && (
                   <div className="relative aspect-video w-full overflow-hidden">

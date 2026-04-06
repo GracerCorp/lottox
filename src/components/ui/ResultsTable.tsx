@@ -213,8 +213,19 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
     }
   }
 
-  const results =
-    filter === "all" ? rawResults : rawResults.filter((r) => r.countryId === filter);
+  const continentMappings: Record<string, string[]> = {
+    'southeast-asia': ['th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'kh', 'mm', 'bn', 'tl'],
+    'asia': ['jp', 'tw', 'hk', 'kr', 'th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'in', 'cn', 'kh', 'mm', 'bn', 'tl'],
+    'europe': ['gb', 'fr', 'de', 'it', 'es', 'pt', 'ru', 'nl', 'se', 'pl', 'uk', 'ie', 'ch', 'no', 'dk', 'fi'],
+    'america': ['us', 'ca', 'br', 'ar', 'mx', 'cl', 'co', 'pe'],
+    'oceania': ['au', 'nz', 'fj'],
+  };
+
+  const results = filter === "all"
+    ? rawResults
+    : continentMappings[filter]
+      ? rawResults.filter((r) => continentMappings[filter].includes(r.countryId))
+      : rawResults.filter((r) => r.countryId === filter);
 
   if (loading) {
     return (
@@ -222,7 +233,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-xl bg-navy-900/60 border border-white/5 h-16"
+            className="animate-pulse rounded-xl bg-neutral-900/60 border border-white/5 h-16"
           />
         ))}
       </div>
@@ -244,7 +255,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
       ))}
 
       {results.length === 0 && (
-        <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-navy-900/50 p-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-neutral-900/50 p-6 text-center text-sm text-gray-500 dark:text-gray-400">
           {t.common.error}
         </div>
       )}
@@ -259,7 +270,7 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
       href={item.href}
       className="group block rounded-xl transition-all duration-200"
     >
-      <div className="flex items-center gap-3 md:gap-4 rounded-xl border border-gray-100 dark:border-white/5 bg-white/60 dark:bg-navy-900/60 px-4 md:px-5 py-3 transition-all duration-200 hover:border-gold-400/60 hover:bg-gray-50 dark:hover:bg-navy-800/50">
+      <div className="flex items-center gap-3 md:gap-4 rounded-xl border border-gray-100 dark:border-white/5 bg-white/60 dark:bg-neutral-900/60 px-4 md:px-5 py-3 transition-all duration-200 hover:border-gold-400/60 hover:bg-gray-50 dark:hover:bg-neutral-800/50">
         {/* Colored dot indicator */}
         <div className="shrink-0 hidden md:block">
           <div className="w-2 h-2 rounded-full bg-gold-400" />

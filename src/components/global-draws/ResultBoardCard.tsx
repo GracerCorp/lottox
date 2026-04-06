@@ -112,11 +112,11 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove }: ResultBo
 
   return (
     <div
-      className="bg-white dark:bg-navy-900/80 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-sm dark:shadow-none"
+      className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden flex flex-col shadow-sm dark:shadow-none"
       data-testid={`result-board-card-${countryCode}`}
     >
       {/* Card header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-navy-800/60 border-b border-slate-200 dark:border-white/5">
+      <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-neutral-800/60 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-2 min-w-0">
           <div className="relative h-4 w-6 shrink-0 overflow-hidden rounded shadow">
             <Image src={getFlagUrl(countryCode)} alt={countryCode} fill className="object-cover" />
@@ -143,8 +143,8 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove }: ResultBo
       <div className="flex-1 flex flex-col">
         {loading && (
           <div className="p-4 animate-pulse" data-testid="board-card-loading">
-            <div className="h-4 bg-slate-100 dark:bg-navy-700/60 rounded mb-2" />
-            <div className="h-4 bg-slate-100 dark:bg-navy-700/60 rounded mb-2 w-3/4" />
+            <div className="h-4 bg-slate-100 dark:bg-neutral-700/60 rounded mb-2" />
+            <div className="h-4 bg-slate-100 dark:bg-neutral-700/60 rounded mb-2 w-3/4" />
           </div>
         )}
         {error && !loading && (

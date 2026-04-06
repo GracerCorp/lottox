@@ -42,7 +42,7 @@ export function PinnedLotteryTabs({
           className={[
             "flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors",
             i === activeIndex
-              ? "bg-amber-400 text-navy-950 border-amber-400"
+              ? "bg-amber-400 text-neutral-950 border-amber-400"
               : "bg-transparent text-gray-500 dark:text-gray-400 border-slate-300 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:text-gray-900 dark:hover:text-white",
           ].join(" ")}
           data-testid={`tab-${item.countryCode}`}

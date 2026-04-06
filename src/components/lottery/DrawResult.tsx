@@ -117,7 +117,7 @@ export function DrawResult({
   const dynamicRest = sortedDynamic.slice(1);
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-gold-500/20 bg-gradient-to-br from-white via-gray-50 to-white dark:from-navy-900 dark:via-navy-800 dark:to-navy-900 shadow-2xl">
+    <section className="relative overflow-hidden rounded-2xl border border-gold-500/20 bg-gradient-to-br from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 shadow-2xl">
       <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-gold-500/10 blur-3xl" />
       <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-neon-blue/10 blur-3xl" />
 
@@ -135,7 +135,7 @@ export function DrawResult({
             </h2>
           )}
 
-          <div className="mt-2 inline-flex flex-col items-center justify-center rounded-2xl border border-gold-500/20 bg-white/50 px-6 py-3 shadow-[0_8px_30px_rgb(245,158,11,0.06)] backdrop-blur-sm sm:flex-row sm:gap-4 dark:bg-navy-900/50">
+          <div className="mt-2 inline-flex flex-col items-center justify-center rounded-2xl border border-gold-500/20 bg-white/50 px-6 py-3 shadow-[0_8px_30px_rgb(245,158,11,0.06)] backdrop-blur-sm sm:flex-row sm:gap-4 dark:bg-neutral-900/50">
             <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-fs-2xl font-bold text-transparent dark:from-white dark:to-gray-300">
               {date}
             </span>
@@ -178,11 +178,11 @@ export function DrawResult({
 
         {/* Dynamic prizes rendering (for non-Thai lotteries like Lao, Vietnam) */}
         {useDynamic && dynamicRest.length > 0 && (
-          <div className="mt-8 flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-white/10 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 shadow-sm">
+          <div className="mt-8 flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-white/10 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/60 shadow-sm">
             {dynamicRest.map((prize, idx) => (
               <div
                 key={idx}
-                className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80"
+                className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80"
               >
                 <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   {getPrizeName(prize)}
@@ -213,9 +213,9 @@ export function DrawResult({
             back3.length > 0 ||
             last2 ||
             adjacent.length > 0) && (
-            <div className="mt-8 flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-white/10 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/60 shadow-sm">
+            <div className="mt-8 flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-gray-200 dark:divide-white/10 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/60 shadow-sm">
               {front3.length > 0 && (
-                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
+                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Front}
                   </div>
@@ -238,7 +238,7 @@ export function DrawResult({
               )}
 
               {back3.length > 0 && (
-                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
+                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.results.prize3Back}
                   </div>
@@ -261,7 +261,7 @@ export function DrawResult({
               )}
 
               {last2 && (
-                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
+                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
                     {t.results.prize2}
                   </div>
@@ -279,7 +279,7 @@ export function DrawResult({
               )}
 
               {adjacent.length > 0 && (
-                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-navy-800/80">
+                <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                     {t.common.adjacent}
                   </div>

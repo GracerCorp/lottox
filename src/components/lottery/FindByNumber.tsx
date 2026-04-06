@@ -46,7 +46,7 @@ export function FindByNumber({ countryCode, prizes }: FindByNumberProps) {
 
   return (
     <section
-      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-navy-900/80 p-6 shadow-sm dark:shadow-none"
+      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-neutral-900/80 p-6 shadow-sm dark:shadow-none"
       data-testid="find-by-number"
     >
       <div className="mb-4 flex items-center gap-2">
@@ -69,7 +69,7 @@ export function FindByNumber({ countryCode, prizes }: FindByNumberProps) {
         <select
           value={digitFilter}
           onChange={(e) => setDigitFilter(e.target.value)}
-          className="rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-navy-800/60 px-3 py-2.5 text-fs-sm text-gray-700 dark:text-gray-200 outline-none focus:border-amber-400"
+          className="rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-neutral-800/60 px-3 py-2.5 text-fs-sm text-gray-700 dark:text-gray-200 outline-none focus:border-amber-400"
           data-testid="digit-filter-select"
         >
           <option value="all">{dd.selectDigits}</option>
@@ -86,14 +86,14 @@ export function FindByNumber({ countryCode, prizes }: FindByNumberProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={dd.enterNumber}
-            className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-navy-800/60 px-4 py-2.5 pr-10 text-fs-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none focus:border-amber-400"
+            className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-neutral-800/60 px-4 py-2.5 pr-10 text-fs-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none focus:border-amber-400"
             data-testid="find-number-input"
           />
         </div>
 
         <button
           type="submit"
-          className="flex items-center gap-2 rounded-xl bg-amber-400 hover:bg-amber-300 px-5 py-2.5 text-fs-sm font-bold text-navy-950 transition-colors"
+          className="flex items-center gap-2 rounded-xl bg-amber-400 hover:bg-amber-300 px-5 py-2.5 text-fs-sm font-bold text-neutral-950 transition-colors"
           data-testid="find-number-search-btn"
         >
           <SearchIcon className="h-4 w-4" />

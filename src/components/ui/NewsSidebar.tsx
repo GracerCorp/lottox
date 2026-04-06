@@ -81,7 +81,7 @@ export function NewsSidebar({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-navy-800/30 shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-neutral-800/30 shadow-sm">
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/10 px-5 py-3">
         {icon}
         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -93,11 +93,11 @@ export function NewsSidebar({
         <div className="divide-y divide-gray-200 dark:divide-white/5">
           {Array.from({ length: limit }, (_, i) => (
             <div key={i} className="flex gap-3 px-4 py-4 animate-pulse">
-              <div className="h-20 w-20 shrink-0 rounded-lg bg-gray-200 dark:bg-navy-700" />
+              <div className="h-20 w-20 shrink-0 rounded-lg bg-gray-200 dark:bg-neutral-700" />
               <div className="flex-1 space-y-2 py-2">
-                <div className="h-3 w-1/3 rounded bg-gray-200 dark:bg-navy-700" />
-                <div className="h-4 w-full rounded bg-gray-200 dark:bg-navy-700" />
-                <div className="h-3 w-1/2 rounded bg-gray-200 dark:bg-navy-700" />
+                <div className="h-3 w-1/3 rounded bg-gray-200 dark:bg-neutral-700" />
+                <div className="h-4 w-full rounded bg-gray-200 dark:bg-neutral-700" />
+                <div className="h-3 w-1/2 rounded bg-gray-200 dark:bg-neutral-700" />
               </div>
             </div>
           ))}

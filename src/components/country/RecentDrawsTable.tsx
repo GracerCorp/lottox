@@ -22,7 +22,7 @@ export function RecentDrawsTable({
   lotterySlug,
 }: RecentDrawsTableProps) {
   return (
-    <div className="bg-white dark:bg-navy-800 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-xl mt-8">
+    <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-xl mt-8">
       <div className="p-6 border-b border-gray-200 dark:border-white/5 flex justify-between items-center">
         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
           Recent Official Results
@@ -43,7 +43,7 @@ export function RecentDrawsTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-gray-50 dark:bg-navy-950/50 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-neutral-950/50 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
               <th className="p-4">Date</th>
               <th className="p-4">Draw #</th>
               <th className="p-4">Winning Numbers</th>
@@ -67,7 +67,7 @@ export function RecentDrawsTable({
                     {draw.numbers.map((num, i) => (
                       <span
                         key={i}
-                        className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm ${i === draw.numbers.length - 1 ? "bg-gold-500 text-navy-900 shadow-md" : "bg-gray-200 dark:bg-navy-700 text-gray-700 dark:text-white shadow-inner"}`}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm ${i === draw.numbers.length - 1 ? "bg-gold-500 text-neutral-900 shadow-md" : "bg-gray-200 dark:bg-neutral-700 text-gray-700 dark:text-white shadow-inner"}`}
                       >
                         {num}
                       </span>

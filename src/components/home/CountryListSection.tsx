@@ -43,7 +43,7 @@ export function CountryListSection({
             <Link
               key={country.id}
               href={`/${country.id}`}
-              className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-navy-900/60 hover:bg-gray-50 dark:hover:bg-navy-800/80 hover:border-gold-500/30 backdrop-blur-sm transition-all duration-200 hover:scale-105 shadow-sm"
+              className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white/60 dark:bg-neutral-900/60 hover:bg-gray-50 dark:hover:bg-neutral-800/80 hover:border-gold-500/30 backdrop-blur-sm transition-all duration-200 hover:scale-105 shadow-sm"
             >
               <div className="relative w-8 h-5 flex-shrink-0 overflow-hidden rounded shadow-sm">
                 <Image

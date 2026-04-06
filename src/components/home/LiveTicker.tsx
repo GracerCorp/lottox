@@ -21,7 +21,7 @@ export function LiveTicker() {
   if (displayItems.length === 0) return null;
 
   return (
-    <div className="w-full bg-gray-50/80 dark:bg-navy-950/80 border-y border-gray-200 dark:border-white/5 py-3 overflow-hidden">
+    <div className="w-full bg-gray-50/80 dark:bg-neutral-950/80 border-y border-gray-200 dark:border-white/5 py-3 overflow-hidden">
       <div className="flex items-center">
         <div className="relative flex overflow-hidden w-full">
           <div
@@ -33,7 +33,7 @@ export function LiveTicker() {
             {displayItems.map((item, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1.5 rounded-full bg-white/80 dark:bg-navy-800/80 border border-gray-200 dark:border-white/5 px-4 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-navy-700/80 hover:text-gray-900 dark:hover:text-white transition-colors cursor-default"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/80 dark:bg-neutral-800/80 border border-gray-200 dark:border-white/5 px-4 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700/80 hover:text-gray-900 dark:hover:text-white transition-colors cursor-default"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-gold-400" />
                 {item.name}

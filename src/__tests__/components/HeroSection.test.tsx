@@ -157,14 +157,14 @@ describe("HeroSection", () => {
 
   it("has light/dark theme classes on gradient overlay", () => {
     const { container } = renderHero();
-    const overlays = container.querySelectorAll("[class*='dark:from-navy-950']");
+    const overlays = container.querySelectorAll("[class*='dark:from-neutral-950']");
     expect(overlays.length).toBeGreaterThan(0);
   });
 
   it("has light/dark theme classes on navigation buttons", () => {
     renderHero();
     const prevBtn = screen.getByLabelText("Previous");
-    expect(prevBtn.className).toContain("dark:bg-navy-900/60");
+    expect(prevBtn.className).toContain("dark:bg-neutral-900/60");
     expect(prevBtn.className).toContain("bg-white/60");
   });
 });
