@@ -26,7 +26,22 @@ function formatLotteryResult(
   const verification =
     res
       .result_verifications_result_verifications_lottery_result_idTolottery_results?.[0];
-  const dataToUse = verification?.chosen_data || res.full_data;
+  let dataToUse = verification?.chosen_data || res.full_data;
+
+  if (dataToUse && typeof dataToUse === "object") {
+    const rawData = dataToUse as Record<string, any>;
+    // Count sources to decide whether to use unified or raw lottery result
+    const sourceKeys = Object.keys(rawData).filter(k => k !== 'unified_result' && k !== 'lottery_result' && k !== 'metadata' && k !== 'updatedAt' && k !== 'createdAt');
+    const hasMultipleSources = sourceKeys.length > 1;
+
+    if (hasMultipleSources && rawData.unified_result) {
+      dataToUse = rawData.unified_result;
+    } else if (rawData.lottery_result) {
+      dataToUse = rawData.lottery_result;
+    } else if (rawData.unified_result) {
+      dataToUse = rawData.unified_result;
+    }
+  }
 
   // The type logic dynamically assigns uppercase countryCode, explicit type, or lottery name
   const displayType = countryCode

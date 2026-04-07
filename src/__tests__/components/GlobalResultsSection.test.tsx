@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { GlobalResultsSection } from "@/components/global-draws/GlobalResultsSection";
+import { GlobalResultsSection } from "@/components/global-results/GlobalResultsSection";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
-vi.mock("@/components/global-draws/LatestDrawCard", () => ({
+vi.mock("@/components/global-results/LatestDrawCard", () => ({
   LatestDrawCard: () => <div data-testid="latest-draw-card" />,
 }));
-vi.mock("@/components/global-draws/UpcomingLotterySidebar", () => ({
+vi.mock("@/components/global-results/UpcomingLotterySidebar", () => ({
   UpcomingLotterySidebar: () => <div data-testid="upcoming-lottery-sidebar" />,
 }));
 

@@ -1,7 +1,7 @@
 export default {
     header: {
       home: "Home",
-      results: "Latest Results",
+      results: "Global Results",
       news: "News",
       verified: "Verified",
     },

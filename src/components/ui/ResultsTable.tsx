@@ -162,20 +162,99 @@ export function mapApiResultToRow(
     });
   }
 
-  // Fallback if numbers is empty
-  if (numbers.length === 0) {
-    let formattedDefaultP1 = `${defaultP1} ${currency}`;
-    if (type.includes("LAO")) {
-      formattedDefaultP1 = `1 Kip x ${defaultP1}`;
-    }
-    numbers = [
-      {
+  // Fallback if numbers is empty (Handle flat mapping for Thai, Lao, VN)
+  if (numbers.length === 0 && d) {
+    // Determine if flat format exists
+    if (d?.firstPrize || d?.first || d?.first3 || d?.last2 || d?.digit4 || d?.firstPrizeAmount) {
+      const rp1Num = [d?.first || d?.firstPrize || d?.digit4 || d?.digit3].flat().filter(Boolean);
+      const rFirstPrize = rp1Num.length > 0 ? rp1Num : ["-"];
+      const rFirstPrizeAmount = d?.firstPrizeAmount || d?.firstAmount || d?.digit4Multiplier || d?.digit3Multiplier || defaultP1;
+      
+      let formattedFirstPrize = `${rFirstPrizeAmount} ${currency}`;
+      if (type.includes("LAO")) {
+        formattedFirstPrize = `1 Kip x ${rFirstPrizeAmount}`;
+      }
+
+      numbers.push({
         label: t.results?.prize1 || "Prize 1",
-        value: ["-"],
-        prize: formattedDefaultP1,
+        value: rFirstPrize,
+        prize: formattedFirstPrize,
         isMain: true,
-      },
-    ];
+      });
+
+      // Front 3
+      const rf3 = d?.first3?.number || d?.last3f || d?.front3 || [];
+      const rFront3 = (Array.isArray(rf3) ? rf3 : [rf3]).filter(Boolean);
+      if (rFront3.length > 0) {
+        numbers.push({
+          label: t.results?.prize3Front || "3 Front",
+          value: rFront3.map(String),
+          prize: `${d?.front3Amount || d?.first3?.amount || "4,000"} ${currency}`,
+          isMain: false,
+        });
+      }
+
+      // Back 3
+      const rb3 = d?.last3?.number || d?.last3b || d?.back3 || [];
+      const rBack3 = (Array.isArray(rb3) ? rb3 : [rb3]).filter(Boolean);
+      if (rBack3.length > 0) {
+        numbers.push({
+          label: t.results?.prize3Back || "3 Back",
+          value: rBack3.map(String),
+          prize: `${d?.back3Amount || d?.last3?.amount || "4,000"} ${currency}`,
+          isMain: false,
+        });
+      }
+
+      // Last 2
+      const rl2Num = d?.last2?.number || d?.last2;
+      const rLast2 = (Array.isArray(rl2Num) ? rl2Num : [rl2Num]).filter(Boolean);
+      if (rLast2.length > 0 && rLast2[0] !== undefined) {
+        numbers.push({
+          label: t.results?.prize2 || "2 Bottom",
+          value: rLast2.map(String),
+          prize: `${d?.last2Amount || d?.last2?.amount || "2,000"} ${currency}`,
+          isMain: false,
+        });
+      }
+
+      // Fill remaining to up to 4 items from other properties if available, e.g. digit3 for Lao
+      if (numbers.length < 4 && d?.digit3 && !d?.digit4) { 
+        // if digit4 wasn't matched above, we don't duplicate it. Here handled naturally. 
+      }
+      if (numbers.length < 4 && type.includes("LAO") && d?.digit3) {
+        numbers.push({
+          label: t.results?.prize3 || "3 Digits",
+          value: [String(d.digit3)],
+          prize: `1 Kip x ${d?.digit3Multiplier || "500"}`,
+          isMain: false,
+        });
+      }
+      if (numbers.length < 4 && type.includes("LAO") && d?.digit2) {
+        numbers.push({
+          label: t.results?.prize2 || "2 Digits",
+          value: [String(d.digit2)],
+          prize: `1 Kip x ${d?.digit2Multiplier || "60"}`,
+          isMain: false,
+        });
+      }
+    }
+    
+    // Absolute fallback
+    if (numbers.length === 0) {
+      let formattedDefaultP1 = `${defaultP1} ${currency}`;
+      if (type.includes("LAO")) {
+        formattedDefaultP1 = `1 Kip x ${defaultP1}`;
+      }
+      numbers = [
+        {
+          label: t.results?.prize1 || "Prize 1",
+          value: ["-"],
+          prize: formattedDefaultP1,
+          isMain: true,
+        },
+      ];
+    }
   }
 
   // Use the draw date directly for the href path

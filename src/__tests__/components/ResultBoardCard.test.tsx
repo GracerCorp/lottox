@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ResultBoardCard } from '../../components/global-draws/ResultBoardCard';
+import { ResultBoardCard } from '../../components/global-results/ResultBoardCard';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useApi } from '../../lib/hooks/useApi';
 
@@ -8,10 +8,10 @@ vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
-vi.mock('../../components/global-draws/DrawHistoryRow', () => ({
+vi.mock('../../components/global-results/DrawHistoryRow', () => ({
   DrawHistoryRow: (props: any) => <div data-testid="draw-history-row">{props.digits6}</div>,
 }));
-vi.mock('../../components/global-draws/BoardPagination', () => ({
+vi.mock('../../components/global-results/BoardPagination', () => ({
   BoardPagination: (props: any) => <div data-testid="board-pagination" />,
 }));
 

@@ -234,14 +234,14 @@ describe("ResultStates", () => {
       expect(mockOnReset).toHaveBeenCalledTimes(1);
     });
 
-    it("renders Play Next Draw link pointing to /global-draws", () => {
+    it("renders Play Next Draw link pointing to /global-results", () => {
       render(
         <LanguageProvider>
           <StandardWinResult result={standardResult} number="510" onReset={mockOnReset} />
         </LanguageProvider>
       );
       const playLink = screen.getByRole("link", { name: /play next draw/i });
-      expect(playLink.getAttribute("href")).toBe("/global-draws");
+      expect(playLink.getAttribute("href")).toBe("/global-results");
     });
   });
 
@@ -267,7 +267,7 @@ describe("ResultStates", () => {
       );
       expect(screen.getByText(/upcoming opportunity/i)).toBeDefined();
       const viewLink = screen.getByRole("link", { name: /view upcoming draws/i });
-      expect(viewLink.getAttribute("href")).toBe("/global-draws");
+      expect(viewLink.getAttribute("href")).toBe("/global-results");
     });
 
     it("calls onReset when Check Another Number is clicked", () => {

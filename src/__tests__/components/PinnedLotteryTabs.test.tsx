@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PinnedLotteryTabs } from "@/components/global-draws/PinnedLotteryTabs";
+import { PinnedLotteryTabs } from "@/components/global-results/PinnedLotteryTabs";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import type { PinnedLottery } from "@/components/global-draws/AddLotteryModal";
+import type { PinnedLottery } from "@/components/global-results/AddLotteryModal";
 
 vi.mock("next/image", () => ({
   __esModule: true,

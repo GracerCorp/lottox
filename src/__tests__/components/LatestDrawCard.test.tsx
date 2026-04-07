@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { LatestDrawCard } from '../../components/global-draws/LatestDrawCard';
+import { LatestDrawCard } from '../../components/global-results/LatestDrawCard';
 import { useApi } from '../../lib/hooks/useApi';
 import { useLanguage } from '../../contexts/LanguageContext';
 

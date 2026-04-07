@@ -2,12 +2,22 @@
 
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "next-themes";
+import { FeatureToggleProvider } from "@/contexts/FeatureToggleContext";
 import type { ReactNode } from "react";
 
-export function ClientProviders({ children }: { children: ReactNode }) {
+interface ClientProvidersProps {
+  children: ReactNode;
+  featureToggles: Record<string, boolean>;
+}
+
+export function ClientProviders({ children, featureToggles }: ClientProvidersProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <LanguageProvider>{children}</LanguageProvider>
+      <LanguageProvider>
+        <FeatureToggleProvider initialToggles={featureToggles}>
+          {children}
+        </FeatureToggleProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

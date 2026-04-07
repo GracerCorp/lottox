@@ -1,5 +1,5 @@
-import { GlobalResultsSection } from "@/components/global-draws/GlobalResultsSection";
-import { MyResultBoard } from "@/components/global-draws/MyResultBoard";
+import { GlobalResultsSection } from "@/components/global-results/GlobalResultsSection";
+import { MyResultBoard } from "@/components/global-results/MyResultBoard";
 
 export default function GlobalDrawsPage() {
   return (

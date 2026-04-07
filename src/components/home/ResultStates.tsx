@@ -243,7 +243,7 @@ export const StandardWinResult = ({
               {t.common.checkAnotherNumber}
             </button>
             <Link
-              href="/global-draws"
+              href="/global-results"
               className="flex-1 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition-colors flex items-center justify-center gap-2"
             >
               <Ticket className="w-4 h-4" />
@@ -297,7 +297,7 @@ export const NoWinResult = ({
                 {t.common.upcomingDesc}
               </p>
               <Link
-                href="/global-draws"
+                href="/global-results"
                 className="inline-flex items-center text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition-colors"
               >
                 {t.common.viewUpcoming}

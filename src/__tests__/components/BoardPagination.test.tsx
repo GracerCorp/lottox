@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { BoardPagination } from "@/components/global-draws/BoardPagination";
+import { BoardPagination } from "@/components/global-results/BoardPagination";
 
 describe("BoardPagination", () => {
   it("renders page indicator", () => {

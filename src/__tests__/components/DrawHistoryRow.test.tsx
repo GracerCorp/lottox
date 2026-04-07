@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { DrawHistoryRow } from "@/components/global-draws/DrawHistoryRow";
+import { DrawHistoryRow } from "@/components/global-results/DrawHistoryRow";
 
 const defaultLabels = {
   digits6: "6-Digit",

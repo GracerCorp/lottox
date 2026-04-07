@@ -7,6 +7,8 @@ import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { CookieConsent } from "@/components/ui/CookieConsent";
 import { SkipToContent } from "@/components/ui/SkipToContent";
 import { HtmlLangSync } from "@/components/ui/HtmlLangSync";
+import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -101,11 +103,32 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch active feature toggles globally with cache
+  let featureToggles: Record<string, boolean> = {};
+  try {
+    const getCachedToggles = unstable_cache(
+      async () => {
+        const dbToggles = await prisma.feature_toggles.findMany();
+        return dbToggles.reduce((acc, toggle) => {
+          // A feature is enabled only if active=true AND value="true"
+          acc[toggle.key] = toggle.active === true && toggle.value === "true";
+          return acc;
+        }, {} as Record<string, boolean>);
+      },
+      ["feature-toggles"],
+      { revalidate: 60, tags: ["feature-toggles"] }
+    );
+
+    featureToggles = await getCachedToggles();
+  } catch (err) {
+    console.error("Failed to fetch feature toggles:", err);
+  }
+
   return (
     <html
       lang="en"
@@ -113,7 +136,7 @@ export default function RootLayout({
       className={`${inter.variable} ${notoSansThai.variable}`}
     >
       <body className="font-sans min-h-screen flex flex-col relative overflow-x-hidden">
-        <ClientProviders>
+        <ClientProviders featureToggles={featureToggles}>
           <HtmlLangSync />
           <SkipToContent />
           <Header />

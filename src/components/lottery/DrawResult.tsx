@@ -37,6 +37,12 @@ interface DrawResultProps {
   adjacent?: string[];
   adjacentAmount?: string;
   currency?: string;
+  prizeLabels?: {
+    firstPrize?: string;
+    last3f?: string;
+    last3b?: string;
+    last2?: string;
+  };
 }
 
 export function DrawResult({
@@ -55,6 +61,7 @@ export function DrawResult({
   adjacent = [],
   adjacentAmount,
   currency,
+  prizeLabels,
 }: DrawResultProps) {
   const { t } = useLanguage();
   const displayCurrency = currency || t.common.currency;
@@ -147,7 +154,7 @@ export function DrawResult({
           <div className="mb-4 text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/15 px-5 py-2 text-fs-sm font-bold uppercase tracking-wider text-gold-400">
               <Trophy className="h-4 w-4" />
-              {useDynamic ? getPrizeName(dynamicFirst!) : t.results.prize1} (
+              {useDynamic ? getPrizeName(dynamicFirst!) : (prizeLabels?.firstPrize || t.results.prize1)} (
               {t.common.perPrize}{" "}
               <span className="text-gray-900 dark:text-white ml-1">
                 {useDynamic
@@ -217,7 +224,7 @@ export function DrawResult({
               {front3.length > 0 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t.results.prize3Front}
+                    {prizeLabels?.last3f || t.results.prize3Front}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                     {front3.map((num, i) => (
@@ -240,7 +247,7 @@ export function DrawResult({
               {back3.length > 0 && (
                 <div className="flex-1 p-5 text-center transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800/80">
                   <div className="mb-2 text-fs-badge font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t.results.prize3Back}
+                    {prizeLabels?.last3b || t.results.prize3Back}
                   </div>
                   <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
                     {back3.map((num, i) => (

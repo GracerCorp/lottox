@@ -1,12 +1,12 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MyResultBoard } from "@/components/global-draws/MyResultBoard";
+import { MyResultBoard } from "@/components/global-results/MyResultBoard";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import type { PinnedLottery } from "@/components/global-draws/AddLotteryModal";
+import type { PinnedLottery } from "@/components/global-results/AddLotteryModal";
 
 // Mock child components that do their own API calls
-vi.mock("@/components/global-draws/ResultBoardCard", () => ({
+vi.mock("@/components/global-results/ResultBoardCard", () => ({
   ResultBoardCard: ({ lotteryName, onRemove }: { lotteryName: string; onRemove?: () => void }) => (
     <div data-testid="result-board-card">
       {lotteryName}
@@ -15,7 +15,7 @@ vi.mock("@/components/global-draws/ResultBoardCard", () => ({
   ),
 }));
 
-vi.mock("@/components/global-draws/AddLotteryModal", () => ({
+vi.mock("@/components/global-results/AddLotteryModal", () => ({
   AddLotteryModal: ({
     onConfirm,
     onClose,
@@ -40,7 +40,7 @@ vi.mock("@/components/global-draws/AddLotteryModal", () => ({
   ),
 }));
 
-vi.mock("@/components/global-draws/PinnedLotteryTabs", () => ({
+vi.mock("@/components/global-results/PinnedLotteryTabs", () => ({
   PinnedLotteryTabs: ({
     pinned,
     onSelect,

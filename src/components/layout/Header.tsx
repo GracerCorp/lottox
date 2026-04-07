@@ -8,19 +8,34 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { useFeatureToggles } from "@/contexts/FeatureToggleContext";
 
 export function Header() {
   const { t, language, toggleLanguage } = useLanguage();
+  const { isFeatureEnabled, toggles } = useFeatureToggles();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const navItems = [
-    { label: t.header.home, href: "/" },
-    { label: t.header.results, href: "/global-draws" },
-    { label: t.header.news, href: "/news" },
+  const allNavItems = [
+    { label: t.header.home, href: "/", featureKey: "nav_home" },
+    { label: t.header.results, href: "/global-results", featureKey: "nav_global_result" },
+    { label: t.header.news, href: "/news", featureKey: "nav_articles" },
   ];
+
+  // If a toggle is missing from DB or active=false, we hide the menu item.
+  // We check if it is explicitly enabled. 
+  // For backwards compatibility or default-on, you could change this check.
+  const navItems = allNavItems.filter((item) => {
+    // We treat it as enabled if it's either true in DB, 
+    // or if the toggle isn't defined at all in DB we can default to true (optional)
+    // Here we'll strictly require it to be true if it exists, or fallback to true if not defined.
+    if (toggles[item.featureKey] !== undefined) {
+      return toggles[item.featureKey] === true;
+    }
+    return true; // Default to true if not present in DB
+  });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-950/60 transition-colors duration-300 shadow-sm dark:shadow-none">

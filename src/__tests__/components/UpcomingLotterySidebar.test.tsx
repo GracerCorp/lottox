@@ -9,7 +9,7 @@ vi.mock('../../components/ui/CountdownTimer', () => ({
   CountdownTimer: ({ targetDate }: any) => <span data-testid="countdown">{targetDate}</span>,
 }));
 
-import { UpcomingLotterySidebar } from '../../components/global-draws/UpcomingLotterySidebar';
+import { UpcomingLotterySidebar } from '../../components/global-results/UpcomingLotterySidebar';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useApi } from '../../lib/hooks/useApi';
 

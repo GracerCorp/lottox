@@ -24,7 +24,7 @@ describe('RecentGlobalDraws', () => {
   it('shows loading state initially', () => {
     global.fetch = vi.fn().mockImplementation(() => new Promise(() => {})); // never resolves
     render(<RecentGlobalDraws />);
-    expect(screen.getByTestId('recent-global-draws')).toBeInTheDocument();
+    expect(screen.getByTestId('recent-global-results')).toBeInTheDocument();
   });
 
   it('renders draws after fetch', async () => {
