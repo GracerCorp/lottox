@@ -11,6 +11,7 @@ import { GET } from '@/app/api/news/[slug]/route';
 import { newsService } from '@/lib/services/newsService';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -19,6 +20,7 @@ describe('GET /api/news/[slug]', () => {
 
   it('returns news detail for valid slug', async () => {
     const mockData = { title: 'Test Article', body: 'Content' };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNewsDetail as any).mockResolvedValue(mockData);
 
     const response = await GET(
@@ -32,6 +34,7 @@ describe('GET /api/news/[slug]', () => {
   });
 
   it('passes lang query param', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNewsDetail as any).mockResolvedValue({});
 
     await GET(
@@ -50,6 +53,7 @@ describe('GET /api/news/[slug]', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNewsDetail as any).mockRejectedValue(new Error('fail'));
     await GET(
       mockRequest('http://localhost:3001/api/news/test'),

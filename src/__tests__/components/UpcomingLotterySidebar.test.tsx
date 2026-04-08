@@ -3,9 +3,11 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
 vi.mock('../../components/ui/CountdownTimer', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CountdownTimer: ({ targetDate }: any) => <span data-testid="countdown">{targetDate}</span>,
 }));
 
@@ -16,6 +18,7 @@ import { useApi } from '../../lib/hooks/useApi';
 describe('UpcomingLotterySidebar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         staticParams: {
@@ -30,24 +33,28 @@ describe('UpcomingLotterySidebar', () => {
   });
 
   it('shows loading state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: true, error: null });
     render(<UpcomingLotterySidebar />);
     expect(screen.getByTestId('upcoming-loading')).toBeInTheDocument();
   });
 
   it('shows error state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: false, error: 'Error' });
     render(<UpcomingLotterySidebar />);
     expect(screen.getByTestId('upcoming-error')).toHaveTextContent('Error loading');
   });
 
   it('shows empty state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: { upcoming: [] }, loading: false, error: null });
     render(<UpcomingLotterySidebar />);
     expect(screen.getByText('No upcoming draws')).toBeInTheDocument();
   });
 
   it('renders upcoming draws', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: {
         upcoming: [

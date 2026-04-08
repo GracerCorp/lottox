@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
 
     const { page, limit, country, period, date } = result.data;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = await (apiClient as any).getGlobalResults({
       page,
       limit,

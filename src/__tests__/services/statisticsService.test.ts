@@ -21,6 +21,7 @@ describe('statisticsService', () => {
 
   describe('getStatsOverview', () => {
     it('returns overview stats from transaction', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1000, 50, 20]);
       
       const result = await statisticsService.getStatsOverview();
@@ -32,6 +33,7 @@ describe('statisticsService', () => {
 
   describe('getStatsFrequency', () => {
     it('processes country specific frequency', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([
         {
           full_data: null,
@@ -60,6 +62,7 @@ describe('statisticsService', () => {
     });
 
     it('processes raw frequency across all draws', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([
         {
           full_data: ['999999', '111111'],

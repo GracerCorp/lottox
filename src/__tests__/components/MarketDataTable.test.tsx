@@ -49,22 +49,26 @@ describe('MarketDataTable', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ t: mockT, language: 'en' });
   });
 
   it('renders loading state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: true, error: null, data: null });
     render(<MarketDataTable />);
     expect(screen.getByText('LOADING...')).toBeInTheDocument();
   });
 
   it('renders error state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: 'API Error', data: null });
     render(<MarketDataTable />);
     expect(screen.getByText('ERROR API Error')).toBeInTheDocument();
   });
 
   it('renders no data state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: null, data: { results: [] } });
     render(<MarketDataTable />);
     expect(screen.getByText('NO DATA AVAILABLE')).toBeInTheDocument();
@@ -78,6 +82,7 @@ describe('MarketDataTable', () => {
         { id: 'invalid', name: 'Invalid' }, // Should be filtered out by mapApiResultToRow returning null
       ]
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: null, data: mockData });
     render(<MarketDataTable />);
     

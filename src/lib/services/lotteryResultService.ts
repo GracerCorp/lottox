@@ -29,6 +29,7 @@ function formatLotteryResult(
   let dataToUse = verification?.chosen_data || res.full_data;
 
   if (dataToUse && typeof dataToUse === "object") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rawData = dataToUse as Record<string, any>;
     // Count sources to decide whether to use unified or raw lottery result
     const sourceKeys = Object.keys(rawData).filter(k => k !== 'unified_result' && k !== 'lottery_result' && k !== 'metadata' && k !== 'updatedAt' && k !== 'createdAt');

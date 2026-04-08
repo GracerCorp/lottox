@@ -18,6 +18,7 @@ import { apiClient } from '@/lib/services/lotteryResultService';
 import { resolveCountryCode } from '@/lib/utils/countryResolver';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -25,7 +26,9 @@ describe('GET /api/results/[type]/[date]', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns result for valid type and date', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockResolvedValue({
       draws: [{
         drawDate: '2026-03-01',
@@ -33,6 +36,7 @@ describe('GET /api/results/[type]/[date]', () => {
         data: { prizes: [] },
       }],
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockResolvedValue({
       history: [{ id: 1 }],
     });
@@ -48,6 +52,7 @@ describe('GET /api/results/[type]/[date]', () => {
   });
 
   it('returns 400 for unsupported country code', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue(null);
 
     const response = await GET(
@@ -58,8 +63,11 @@ describe('GET /api/results/[type]/[date]', () => {
   });
 
   it('returns 404 when no result found for date', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockResolvedValue({ draws: [] });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockResolvedValue({ history: [] });
 
     const response = await GET(
@@ -70,10 +78,13 @@ describe('GET /api/results/[type]/[date]', () => {
   });
 
   it('handles history fetch failure gracefully', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockResolvedValue({
       draws: [{ drawDate: '2026-03-01', drawNo: '1', data: {} }],
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockRejectedValue(new Error('fail'));
 
     const response = await GET(
@@ -88,7 +99,9 @@ describe('GET /api/results/[type]/[date]', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockRejectedValue(new Error('DB Error'));
     await GET(
       mockRequest('http://localhost:3001/api/results/th/2026-03-01'),

@@ -2,6 +2,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LotteryBall } from '../../components/ui/LotteryBall';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('../../lib/utils', () => ({ cn: (...args: any[]) => args.filter(Boolean).join(' ') }));
 
 describe('LotteryBall', () => {

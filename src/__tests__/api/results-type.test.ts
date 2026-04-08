@@ -15,6 +15,7 @@ import { apiClient } from '@/lib/services/lotteryResultService';
 import { resolveCountryCode } from '@/lib/utils/countryResolver';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -22,8 +23,10 @@ describe('GET /api/results/[type]', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns results by type successfully', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
     const mockData = { results: [{ id: 1 }], total: 1 };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockResolvedValue(mockData);
 
     const response = await GET(
@@ -37,6 +40,7 @@ describe('GET /api/results/[type]', () => {
   });
 
   it('returns 400 for unsupported type', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue(null);
 
     const response = await GET(
@@ -47,7 +51,9 @@ describe('GET /api/results/[type]', () => {
   });
 
   it('passes pagination params', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockResolvedValue({ results: [] });
 
     await GET(
@@ -58,7 +64,9 @@ describe('GET /api/results/[type]', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (resolveCountryCode as any).mockResolvedValue('th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getResultsByType as any).mockRejectedValue(new Error('fail'));
     await GET(
       mockRequest('http://localhost:3001/api/results/th'),

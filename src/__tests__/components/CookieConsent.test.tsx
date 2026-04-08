@@ -3,11 +3,14 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { CookieConsent } from '../../components/ui/CookieConsent';
 
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href }: any) => <a href={href}>{children}</a>,
 }));
 
 vi.mock('framer-motion', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   motion: { div: ({ children, ...props }: any) => <div {...props}>{children}</div> },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 

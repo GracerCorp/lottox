@@ -1,4 +1,4 @@
-export default {
+const en = {
     header: {
       home: "Home",
       results: "Global Results",
@@ -621,4 +621,7 @@ export default {
           "Running Lower: Pays 4.2 : 1",
         ],
       },
-    }}
+    }
+};
+
+export default en;

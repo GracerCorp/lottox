@@ -15,6 +15,7 @@ describe('countryService', () => {
 
   describe('getCountries', () => {
     it('returns list of active countries', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findMany as any).mockResolvedValue([
         { code: 'th', name: 'Thailand', _count: { lotteries: 2 } },
         { code: 'la', name: 'Laos', _count: { lotteries: 1 } },
@@ -26,6 +27,7 @@ describe('countryService', () => {
     });
 
     it('returns empty array when none active', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findMany as any).mockResolvedValue([]);
       const result = await countryService.getCountries();
       expect(result.countries).toHaveLength(0);
@@ -34,6 +36,7 @@ describe('countryService', () => {
 
   describe('getCountryDraws', () => {
     it('returns country info and draws', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({
         code: 'th',
         name: 'Thailand',
@@ -54,6 +57,7 @@ describe('countryService', () => {
         ],
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([
         {
           id: 10,
@@ -74,11 +78,13 @@ describe('countryService', () => {
     });
 
     it('throws when country not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue(null);
       await expect(countryService.getCountryDraws('zz')).rejects.toThrow('Country not found');
     });
 
     it('falls back to full_data when no verification', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({
         code: 'la',
         name: 'Laos',
@@ -97,6 +103,7 @@ describe('countryService', () => {
         ],
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([
         {
           id: 20,

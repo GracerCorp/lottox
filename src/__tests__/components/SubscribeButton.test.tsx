@@ -12,6 +12,7 @@ describe('SubscribeButton', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         common: {
@@ -50,6 +51,7 @@ describe('SubscribeButton', () => {
   });
 
   it('submits email successfully', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global.fetch as any).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({ success: true })
@@ -76,6 +78,7 @@ describe('SubscribeButton', () => {
   });
 
   it('shows error state when subscription fails', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global.fetch as any).mockResolvedValueOnce({
       ok: false,
       json: () => Promise.resolve({ error: 'Subscription failed' })

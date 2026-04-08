@@ -79,6 +79,7 @@ vi.mock('next/navigation', () => ({
 describe('LotteryDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       language: 'en',
       t: {
@@ -123,6 +124,7 @@ describe('LotteryDetail', () => {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: mockResults,
       isLoading: false,
@@ -172,6 +174,7 @@ describe('LotteryDetail', () => {
   });
 
   it('renders lottery details correctly in Thai', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       language: 'th',
       t: { 

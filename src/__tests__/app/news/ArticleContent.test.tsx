@@ -15,6 +15,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next/image', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => <img {...props} />,
 }));
 
@@ -34,6 +35,7 @@ vi.mock('lucide-react', () => ({
 
 // Mock related components
 vi.mock('@/components/ui/Container', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Container: ({ children }: any) => <div data-testid="container">{children}</div>,
 }));
 vi.mock('@/components/ui/JsonLd', () => ({
@@ -46,6 +48,7 @@ vi.mock('@/components/news/NewsSidebar', () => ({
 describe('ArticleContent', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       language: 'en',
       t: {
@@ -88,6 +91,7 @@ describe('ArticleContent', () => {
   });
 
   it('renders fallback native content when lang is th', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ 
       language: 'th', 
       t: { 

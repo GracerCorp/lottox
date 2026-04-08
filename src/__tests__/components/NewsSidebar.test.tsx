@@ -14,16 +14,19 @@ vi.mock('@/lib/hooks/useApi', () => ({
 }));
 
 vi.mock('next/image', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => <img {...props} />,
 }));
 
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href, className }: any) => <a href={href} className={className}>{children}</a>,
 }));
 
 describe('NewsSidebar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { common: { newsTitle: 'Latest News' } },
       language: 'en',
@@ -31,6 +34,7 @@ describe('NewsSidebar', () => {
   });
 
   it('renders loading state correctly', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: true });
 
     const { container } = render(<NewsSidebar limit={3} />);
@@ -44,6 +48,7 @@ describe('NewsSidebar', () => {
   });
 
   it('renders correctly with article data (English)', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: {
         articles: [
@@ -71,11 +76,13 @@ describe('NewsSidebar', () => {
   });
 
   it('renders correctly with article data (Thai fallback)', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { common: { newsTitle: 'ข่าวสาร' } },
       language: 'th',
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: {
         articles: [
@@ -100,6 +107,7 @@ describe('NewsSidebar', () => {
   });
 
   it('renders empty state correctly (English)', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: { articles: [] },
       loading: false,
@@ -110,10 +118,12 @@ describe('NewsSidebar', () => {
   });
 
   it('renders empty state correctly (Thai)', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { common: { newsTitle: 'ข่าวสาร' } },
       language: 'th',
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: null, // Test edge case where data itself is null
       loading: false,

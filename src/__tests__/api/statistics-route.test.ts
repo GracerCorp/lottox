@@ -14,6 +14,7 @@ import { GET } from '@/app/api/statistics/route';
 import { statisticsService } from '@/lib/services/statisticsService';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -22,6 +23,7 @@ describe('GET /api/statistics', () => {
 
   it('returns overview stats by default', async () => {
     const mockData = { totalLotteries: 5 };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (statisticsService.getStatsOverview as any).mockResolvedValue(mockData);
 
     const response = await GET(mockRequest('http://localhost:3001/api/statistics'));
@@ -33,6 +35,7 @@ describe('GET /api/statistics', () => {
 
   it('returns frequency stats when type=frequency', async () => {
     const mockData = { frequencies: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (statisticsService.getStatsFrequency as any).mockResolvedValue(mockData);
 
     const response = await GET(mockRequest('http://localhost:3001/api/statistics?type=frequency&draws=50'));
@@ -44,6 +47,7 @@ describe('GET /api/statistics', () => {
 
   it('returns frequency for country types', async () => {
     const mockData = { frequencies: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (statisticsService.getStatsFrequency as any).mockResolvedValue(mockData);
 
     await GET(mockRequest('http://localhost:3001/api/statistics?type=thai'));
@@ -56,6 +60,7 @@ describe('GET /api/statistics', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (statisticsService.getStatsOverview as any).mockRejectedValue(new Error('fail'));
     await GET(mockRequest('http://localhost:3001/api/statistics'));
     const { handleApiError } = await import('@/lib/utils/apiErrorHandler');

@@ -3,12 +3,15 @@ import { describe, expect, it, vi } from 'vitest';
 import { ClientProviders } from '@/components/ClientProviders';
 
 vi.mock('next-themes', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ThemeProvider: ({ children }: any) => <div data-testid="theme-provider">{children}</div>
 }));
 vi.mock('@/contexts/LanguageContext', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LanguageProvider: ({ children }: any) => <div data-testid="language-provider">{children}</div>
 }));
 vi.mock('@/contexts/FeatureToggleContext', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FeatureToggleProvider: ({ children }: any) => <div data-testid="feature-toggle-provider">{children}</div>
 }));
 

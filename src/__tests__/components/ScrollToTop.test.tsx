@@ -24,6 +24,7 @@ describe('ScrollToTop', () => {
   });
 
   it('scrolls to top on click', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     window.scrollTo = vi.fn() as any;
     render(<ScrollToTop />);
     fireEvent.click(screen.getByLabelText('Scroll to top'));

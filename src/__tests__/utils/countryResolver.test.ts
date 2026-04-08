@@ -38,11 +38,13 @@ describe('countryResolver', () => {
     });
 
     it('resolves from DB when not a legacy alias', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({ code: 'au' });
       expect(await resolveCountryCode('au')).toBe('au');
     });
 
     it('returns null when not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue(null);
       expect(await resolveCountryCode('zzz')).toBeNull();
     });

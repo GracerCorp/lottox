@@ -4,10 +4,12 @@ import { CountryHeroSection } from '../../components/country/CountryHeroSection'
 import { useLanguage } from '../../contexts/LanguageContext';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 
 describe('CountryHeroSection', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { country: { officialResults: 'Official Results' } },
     });
@@ -27,6 +29,7 @@ describe('CountryHeroSection', () => {
   });
 
   it('uses fallback when t.country is undefined', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ t: {} });
     render(<CountryHeroSection countryName="Vietnam" countryCode="vn" flag="/flags/vn.svg" />);
     expect(screen.getByTestId('official-results-label')).toHaveTextContent('Official Results');

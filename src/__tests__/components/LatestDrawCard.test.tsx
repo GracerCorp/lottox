@@ -18,10 +18,12 @@ vi.mock('../../lib/flags', () => ({
 
 // Mock Next.js Image and Link
 vi.mock('next/image', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => <img {...props} />
 }));
 
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href }: any) => <a href={href}>{children}</a>
 }));
 
@@ -42,16 +44,19 @@ describe('LatestDrawCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ t: mockT });
   });
 
   it('renders loading state correctly', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: true, error: null, data: null });
     render(<LatestDrawCard />);
     expect(screen.getByTestId('latest-draw-card-loading')).toBeInTheDocument();
   });
 
   it('renders error state correctly', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: 'API Error', data: null });
     render(<LatestDrawCard />);
     expect(screen.getByTestId('latest-draw-card-error')).toHaveTextContent('ERROR LOADING');
@@ -76,6 +81,7 @@ describe('LatestDrawCard', () => {
       ]
     };
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: null, data: mockData });
     render(<LatestDrawCard />);
     
@@ -117,6 +123,7 @@ describe('LatestDrawCard', () => {
       ]
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ loading: false, error: null, data: mockData });
     render(<LatestDrawCard />);
     

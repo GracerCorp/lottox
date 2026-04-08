@@ -14,12 +14,14 @@ describe('HtmlLangSync', () => {
   });
 
   it('syncs HTML lang attribute when language changes', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ language: 'th' });
     render(<HtmlLangSync />);
     expect(document.documentElement.lang).toBe('th');
   });
 
   it('does nothing if lang is already the same', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ language: 'en' });
     render(<HtmlLangSync />);
     expect(document.documentElement.lang).toBe('en');

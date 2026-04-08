@@ -8,11 +8,13 @@ vi.mock('../../contexts/LanguageContext', () => ({
 }));
 
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href }: any) => <a href={href}>{children}</a>,
 }));
 
 describe('Footer', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         footer: {

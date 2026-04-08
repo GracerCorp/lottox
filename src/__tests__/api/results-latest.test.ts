@@ -12,6 +12,7 @@ import { GET } from '@/app/api/results/latest/route';
 import { apiClient } from '@/lib/services/lotteryResultService';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -20,6 +21,7 @@ describe('GET /api/results/latest', () => {
 
   it('returns latest results successfully', async () => {
     const mockData = { results: [{ id: 1 }] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getLatestResults as any).mockResolvedValue(mockData);
 
     const response = await GET(mockRequest('http://localhost:3001/api/results/latest'));
@@ -31,6 +33,7 @@ describe('GET /api/results/latest', () => {
 
   it('passes type param when provided', async () => {
     const mockData = { results: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getLatestResults as any).mockResolvedValue(mockData);
 
     await GET(mockRequest('http://localhost:3001/api/results/latest?type=THAI'));
@@ -43,6 +46,7 @@ describe('GET /api/results/latest', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getLatestResults as any).mockRejectedValue(new Error('DB Error'));
     await GET(mockRequest('http://localhost:3001/api/results/latest'));
     const { handleApiError } = await import('@/lib/utils/apiErrorHandler');

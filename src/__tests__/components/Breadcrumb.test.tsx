@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 
 // Mock next/link
 vi.mock("next/link", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href, ...props }: any) => (
     <a href={href} {...props}>{children}</a>
   ),
@@ -11,6 +12,7 @@ vi.mock("next/link", () => ({
 
 // Mock lucide-react
 vi.mock("lucide-react", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ChevronRight: (props: any) => <span data-testid="chevron" {...props} />,
 }));
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const file = '/Users/kvivek/Documents/lottox/src/lib/services/lotteryResultService.ts';
 let code = fs.readFileSync(file, 'utf8');

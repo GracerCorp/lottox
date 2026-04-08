@@ -50,6 +50,7 @@ describe('lotteryResultService', () => {
 
   describe('getLatestResults', () => {
     it('returns latest results without type filter', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([mockResult]);
 
       const result = await apiClient.getLatestResults();
@@ -59,7 +60,9 @@ describe('lotteryResultService', () => {
     });
 
     it('filters by type when provided', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([mockResult]);
 
       const result = await apiClient.getLatestResults('THAI');
@@ -70,7 +73,9 @@ describe('lotteryResultService', () => {
 
   describe('getResultsByType', () => {
     it('returns results by type with pagination', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([5, [mockResult]]);
 
       const result = await apiClient.getResultsByType('th', 10, 0);
@@ -80,7 +85,9 @@ describe('lotteryResultService', () => {
     });
 
     it('returns null latest when no results', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([0, []]);
 
       const result = await apiClient.getResultsByType('th');
@@ -91,6 +98,7 @@ describe('lotteryResultService', () => {
 
   describe('getGlobalResults', () => {
     it('returns global results with pagination', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([20, [mockResult]]);
 
       const result = await apiClient.getGlobalResults({ page: 1, limit: 10 });
@@ -100,6 +108,7 @@ describe('lotteryResultService', () => {
     });
 
     it('filters by country', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [mockResult]]);
 
       const result = await apiClient.getGlobalResults({ country: 'th' });
@@ -107,6 +116,7 @@ describe('lotteryResultService', () => {
     });
 
     it('filters by date and period', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [mockResult]]);
 
       const result = await apiClient.getGlobalResults({ date: '2026-03-01', period: 'D001' });
@@ -116,8 +126,11 @@ describe('lotteryResultService', () => {
 
   describe('checkNumber', () => {
     it('returns win=true when number matches prizes array', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([{
         id: 1,
         draw_date: '2026-03-01',
@@ -132,8 +145,11 @@ describe('lotteryResultService', () => {
     });
 
     it('returns win=false when number does not match', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([{
         id: 1,
         draw_date: '2026-03-01',
@@ -147,7 +163,9 @@ describe('lotteryResultService', () => {
     });
 
     it('returns win=false when no lotteries found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('th');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([]);
 
       const result = await apiClient.checkNumber('123', 'th');
@@ -155,8 +173,11 @@ describe('lotteryResultService', () => {
     });
 
     it('handles prizeResult format (Lao)', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('la');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([{
         id: 1,
         draw_date: '2026-03-01',
@@ -178,8 +199,11 @@ describe('lotteryResultService', () => {
     });
 
     it('handles generic traversal for unknown schemas', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (resolveCountryCode as any).mockResolvedValue('vn');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([{ id: 1 }]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lottery_results.findMany as any).mockResolvedValue([{
         id: 1,
         draw_date: '2026-03-01',
@@ -197,6 +221,7 @@ describe('lotteryResultService', () => {
 
   describe('getCountries', () => {
     it('returns active countries', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findMany as any).mockResolvedValue([
         { code: 'th', name: 'Thailand', _count: { lotteries: 1 } },
       ]);
@@ -207,6 +232,7 @@ describe('lotteryResultService', () => {
 
   describe('getNews', () => {
     it('returns paginated articles', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [{
         slug: 'test',
         title: 'Test',
@@ -225,6 +251,7 @@ describe('lotteryResultService', () => {
     });
 
     it('filters by category and search', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([0, []]);
       await apiClient.getNews({ category: 'tips', search: 'lottery' });
       // Should not crash
@@ -233,6 +260,7 @@ describe('lotteryResultService', () => {
 
   describe('getStatsOverview', () => {
     it('returns stats overview', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([100, 5, 3]);
       const result = await apiClient.getStatsOverview();
       expect(result.totalJackpotsTracked).toBe('100');

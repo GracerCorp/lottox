@@ -8,10 +8,12 @@ vi.mock('../../contexts/LanguageContext', () => ({
 }));
 
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href, ...rest }: any) => <a href={href} {...rest}>{children}</a>,
 }));
 
 vi.mock('next/image', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => <img {...props} />,
 }));
 
@@ -28,6 +30,7 @@ describe('Header', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         header: { home: 'Home', results: 'Results', news: 'News' },

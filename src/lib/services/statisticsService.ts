@@ -18,6 +18,7 @@ export const statisticsService = {
   },
 
   async getStatsFrequency(type: string, draws: number = 30) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
       result_verifications_result_verifications_lottery_result_idTolottery_results: {
         some: { status: "verified" },
@@ -57,6 +58,7 @@ export const statisticsService = {
           ?.chosen_data || row.full_data;
 
       // Deep extract to identify suffixes
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const extract = (obj: any) => {
         if (Array.isArray(obj)) {
           obj.forEach(extract);

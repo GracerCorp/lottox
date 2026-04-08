@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 
 // Mock next/link
 vi.mock("next/link", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href, ...props }: any) => (
     <a href={href} {...props}>{children}</a>
   ),
@@ -12,13 +13,17 @@ vi.mock("next/link", () => ({
 // Mock next/image
 vi.mock("next/image", () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => <img {...props} />,
 }));
 
 // Mock lucide-react
 vi.mock("lucide-react", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Home: (props: any) => <span data-testid="home-icon" {...props} />,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Search: (props: any) => <span data-testid="search-icon" {...props} />,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ArrowRight: (props: any) => <span data-testid="arrow-icon" {...props} />,
 }));
 

@@ -16,6 +16,7 @@ function TestComponent() {
   return (
     <div>
       <span data-testid="lang">{language}</span>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       <span data-testid="dict">{(t as any).common.title}</span>
       <button onClick={() => setLanguage('th')} data-testid="set-th">Set TH</button>
       <button onClick={toggleLanguage} data-testid="toggle">Toggle</button>
@@ -37,6 +38,7 @@ describe('LanguageContext', () => {
 
   it('loads saved language from localStorage on mount', async () => {
     localStorage.setItem('language', 'th');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
 
     await act(async () => {
@@ -52,6 +54,7 @@ describe('LanguageContext', () => {
   });
 
   it('allows setting language explicitly', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
 
     render(
@@ -70,6 +73,7 @@ describe('LanguageContext', () => {
   });
 
   it('allows toggling language', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getDictionary as any).mockResolvedValue({ common: { title: 'Thai' } });
 
     render(

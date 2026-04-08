@@ -36,17 +36,20 @@ vi.mock("framer-motion", async () => {
   return {
     ...actual,
     motion: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       div: ({ children, className, onClick }: any) => (
         <div className={className} onClick={onClick}>
           {children}
         </div>
       ),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       button: ({ children, className, onClick }: any) => (
         <button className={className} onClick={onClick}>
           {children}
         </button>
       ),
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     AnimatePresence: ({ children }: any) => <>{children}</>,
   };
 });
@@ -169,6 +172,7 @@ describe("ResultStates", () => {
       const resultNoPrizes = { isWinner: true };
       const { container } = render(
         <LanguageProvider>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           <JackpotResult result={resultNoPrizes as any} number="999999" onReset={mockOnReset} />
         </LanguageProvider>
       );
@@ -218,6 +222,7 @@ describe("ResultStates", () => {
       };
       render(
         <LanguageProvider>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           <StandardWinResult result={resultNoAmount as any} number="123" onReset={mockOnReset} />
         </LanguageProvider>
       );

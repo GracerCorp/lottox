@@ -8,6 +8,7 @@ vi.mock('../../contexts/LanguageContext', () => ({
 }));
 
 vi.mock('../../components/ui/LotteryBall', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LotteryBall: ({ number }: any) => <span data-testid="lottery-ball">{number}</span>,
 }));
 
@@ -41,6 +42,7 @@ describe('DrawResult', () => {
   };
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ t: mockT });
   });
 

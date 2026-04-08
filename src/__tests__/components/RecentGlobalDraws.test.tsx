@@ -4,7 +4,9 @@ import { RecentGlobalDraws } from '../../components/lottery/RecentGlobalDraws';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/link', () => ({ default: ({ children, href }: any) => <a href={href}>{children}</a> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
 vi.mock('../../lib/utils/lotteryUtils', () => ({
@@ -15,6 +17,7 @@ vi.mock('../../lib/utils/lotteryUtils', () => ({
 describe('RecentGlobalDraws', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { staticParams: { drawDetail: { recentGlobalDraws: 'Recent Global Draws' } } },
       language: 'en',

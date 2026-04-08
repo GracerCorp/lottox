@@ -14,6 +14,7 @@ describe('GET /api/lotteries', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns lotteries grouped by country', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getActiveCountries as any).mockResolvedValue([
       {
         code: 'th',
@@ -30,6 +31,7 @@ describe('GET /api/lotteries', () => {
   });
 
   it('handles errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getActiveCountries as any).mockRejectedValue(new Error('DB error'));
     const res = await GET();
     expect(res.status).toBe(500);

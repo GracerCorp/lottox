@@ -110,6 +110,7 @@ export const newsService = {
       throw new Error("Article not found");
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let contentData: Record<string, any> = {};
     if (typeof article.content === "string") {
       try {
@@ -119,6 +120,7 @@ export const newsService = {
         contentData = {};
       }
     } else if (article.content) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       contentData = article.content as Record<string, any>;
     }
 

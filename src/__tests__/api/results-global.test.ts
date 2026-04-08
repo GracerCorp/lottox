@@ -15,6 +15,7 @@ describe('GET /api/results/global', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns global results with default params', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockResolvedValue({
       draws: [{ id: 1, type: 'TH', date: '2026-03-01' }],
       total: 1,
@@ -28,6 +29,7 @@ describe('GET /api/results/global', () => {
   });
 
   it('passes query params to service', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.getGlobalResults as any).mockResolvedValue({ draws: [], total: 0, page: 1, totalPages: 0 });
     const req = new NextRequest('http://localhost/api/results/global?page=2&limit=5&country=th');
     await GET(req);

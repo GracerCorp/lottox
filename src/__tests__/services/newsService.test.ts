@@ -23,6 +23,7 @@ describe('newsService', () => {
 
   describe('getNews', () => {
     it('returns paginated articles', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [{
         slug: 'test-news',
         title: 'Test Article',
@@ -43,6 +44,7 @@ describe('newsService', () => {
     });
 
     it('handles unparseable content gracefully', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [{
         slug: 'bad',
         title: 'Bad',
@@ -61,18 +63,21 @@ describe('newsService', () => {
     });
 
     it('filters by category', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([0, []]);
       await newsService.getNews({ category: 'tips' });
       // Should not crash
     });
 
     it('filters by search', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([0, []]);
       await newsService.getNews({ search: 'lottery' });
       // Should not crash
     });
 
     it('handles content as object (not string)', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.$transaction as any).mockResolvedValue([1, [{
         slug: 'obj',
         title: 'Obj',
@@ -92,6 +97,7 @@ describe('newsService', () => {
 
   describe('getNewsDetail', () => {
     it('returns article detail', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue({
         slug: 'test',
         title: 'Test',
@@ -115,11 +121,13 @@ describe('newsService', () => {
     });
 
     it('throws when article not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue(null);
       await expect(newsService.getNewsDetail('nonexistent')).rejects.toThrow('Article not found');
     });
 
     it('handles unparseable content in detail', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue({
         slug: 'bad',
         title: 'Bad',
@@ -143,8 +151,11 @@ describe('newsService', () => {
 
   describe('trackAnalytics', () => {
     it('tracks views and share clicks', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue({ id: 1, view_count: 10, shares_count: 5 });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.update as any).mockResolvedValue({});
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.article_analytics_daily.upsert as any).mockResolvedValue({});
 
       await newsService.trackAnalytics('test', { views: 1, shareClick: true });
@@ -153,13 +164,16 @@ describe('newsService', () => {
     });
 
     it('throws when article not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue(null);
       await expect(newsService.trackAnalytics('missing', { views: 1 }))
         .rejects.toThrow('Article not found');
     });
 
     it('skips articles.update when no views or shares', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.articles.findUnique as any).mockResolvedValue({ id: 1, view_count: 0, shares_count: 0 });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.article_analytics_daily.upsert as any).mockResolvedValue({});
 
       await newsService.trackAnalytics('test', { activeSeconds: 30 });

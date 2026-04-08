@@ -8,7 +8,9 @@ vi.mock('next/navigation', () => ({
   useParams: vi.fn(() => ({ country: 'th', lottery: 'thai-lottery' })),
 }));
 vi.mock('framer-motion', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   motion: { div: ({ children, ...props }: any) => <div {...props}>{children}</div> },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 vi.mock('lucide-react', () => ({
@@ -59,6 +61,7 @@ describe('InteractiveTicketVerifier', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({ t: mockT });
   });
 

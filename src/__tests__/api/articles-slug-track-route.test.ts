@@ -11,6 +11,7 @@ describe('POST /api/articles/[slug]/track', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('tracks an article successfully', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.trackAnalytics as any).mockResolvedValue(true);
 
     const req = new Request('http://localhost/api/articles/test-article/track', {
@@ -19,6 +20,7 @@ describe('POST /api/articles/[slug]/track', () => {
       body: JSON.stringify({ views: 1, activeSeconds: 10, bounceRate: 0.5 }),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await POST(req as any, { params: Promise.resolve({ slug: 'test-article' }) });
     const data = await res.json();
 
@@ -33,6 +35,7 @@ describe('POST /api/articles/[slug]/track', () => {
       body: JSON.stringify({ views: "not a number" }),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await POST(req as any, { params: Promise.resolve({ slug: 'test-article' }) });
     const data = await res.json();
 
@@ -41,6 +44,7 @@ describe('POST /api/articles/[slug]/track', () => {
   });
 
   it('handles server error', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.trackAnalytics as any).mockRejectedValue(new Error('DB Error'));
 
     const req = new Request('http://localhost/api/articles/test-article/track', {
@@ -49,6 +53,7 @@ describe('POST /api/articles/[slug]/track', () => {
       body: JSON.stringify({ views: 1 }),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const res = await POST(req as any, { params: Promise.resolve({ slug: 'test-article' }) });
     expect(res.status).toBe(500);
   });

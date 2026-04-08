@@ -37,6 +37,7 @@ describe('getPrizeNumber', () => {
 
   it('returns undefined for empty/missing prizes', () => {
     expect(getPrizeNumber({}, ['Prize 1'])).toBeUndefined();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(getPrizeNumber({ prizes: null as any }, ['Prize 1'])).toBeUndefined();
   });
 

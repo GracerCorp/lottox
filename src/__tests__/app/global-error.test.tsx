@@ -8,6 +8,7 @@ vi.mock('@sentry/nextjs', () => ({
 }));
 
 vi.mock('next/error', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ statusCode }: any) => <div data-testid="next-error">NextError: {statusCode}</div>
 }));
 

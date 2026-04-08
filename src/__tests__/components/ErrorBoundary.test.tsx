@@ -5,7 +5,9 @@ import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 
 // Mock lucide-react
 vi.mock("lucide-react", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   AlertCircle: (props: any) => <span data-testid="alert-icon" {...props} />,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   RefreshCcw: (props: any) => <span data-testid="refresh-icon" {...props} />,
 }));
 

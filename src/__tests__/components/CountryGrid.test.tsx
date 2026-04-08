@@ -10,6 +10,7 @@ vi.mock('@/lib/flags', () => ({
   getFlagUrl: (c: string) => `/flags/${c}.svg`
 }));
 vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: ({ children, href }: any) => <a href={href} data-testid="mock-link">{children}</a>
 }));
 vi.mock('next/image', () => ({
@@ -21,6 +22,7 @@ vi.mock('lucide-react', () => ({
 
 describe('CountryGrid', () => {
   it('renders successfully with empty countries', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getActiveCountries as any).mockResolvedValue([]);
     const Component = await CountryGrid();
     render(Component);
@@ -28,6 +30,7 @@ describe('CountryGrid', () => {
   });
 
   it('renders countries correctly with localization', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getActiveCountries as any).mockResolvedValue([
       {
         id: 1,

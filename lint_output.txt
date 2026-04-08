@@ -1,0 +1,539 @@
+
+> lotto-x@0.1.0 lint
+> eslint
+
+
+/Users/kvivek/Documents/lottox/.codacy/tools-configs/eslint.config.mjs
+  1:1  warning  Assign array to a variable before exporting as module default  import/no-anonymous-default-export
+
+/Users/kvivek/Documents/lottox/coverage/block-navigation.js
+  1:1  warning  Unused eslint-disable directive (no problems were reported)
+
+/Users/kvivek/Documents/lottox/coverage/lcov-report/block-navigation.js
+  1:1  warning  Unused eslint-disable directive (no problems were reported)
+
+/Users/kvivek/Documents/lottox/patch_service.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/query_laos.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/query_lottery.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/query_lotto.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/query_thai.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/replace_gradients.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/replace_theme.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/split-i18n.mjs
+  14:7  warning  '_enEnd' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/articles-slug-track-route.test.ts
+  14:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/check-route.test.ts
+  22:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/check.test.ts
+  20:26  warning  '_err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/countries-route.test.ts
+  17:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  29:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/global-results-validation.test.ts
+  3:10  warning  'NextRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/lotteries-route.test.ts
+  17:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/lotteries.test.ts
+  13:26  warning  '_err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/news-detail.test.ts
+  14:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/news.test.ts
+  14:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/results-global.test.ts
+  18:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/results-latest.test.ts
+  15:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  46:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/results-type-date.test.ts
+  21:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  29:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  51:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  63:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  77:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  91:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  92:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/results-type.test.ts
+  18:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  25:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  40:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  51:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/results-upcoming.test.ts
+  20:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/statistics-route.test.ts
+  17:64  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  25:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  59:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/statistics.test.ts
+  26:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  31:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/api/upcoming-route.test.ts
+  53:11  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/app/global-error.test.tsx
+  11:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/app/news/ArticleContent.test.tsx
+   6:13  warning  'navigation' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  18:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  18:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  18:28  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  37:29  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  49:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  91:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/AddLotteryModal.test.tsx
+  45:48  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  45:48  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/BackgroundFlare.test.tsx
+  2:32  warning  'vi' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/Breadcrumb.test.tsx
+   7:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/CheckLotteryWidget.test.tsx
+  40:7  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  40:7  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ClientProviders.test.tsx
+   6:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   9:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/CookieConsent.test.tsx
+   6:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/CountryGrid.test.tsx
+  13:33  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  16:18  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  24:28  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  31:28  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/CountryHeroSection.test.tsx
+   7:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   7:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   7:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  11:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  30:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/CountryListSection.test.tsx
+  8:19  warning  'priority' is assigned a value but never used                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  9:12  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  9:12  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/DashboardTable.test.tsx
+   9:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   9:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   9:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  10:61  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  16:29  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  27:29  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  37:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  41:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  47:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  53:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  63:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  80:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  92:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/DrawResult.test.tsx
+  11:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ErrorBoundary.test.tsx
+  8:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  9:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/FindByNumber.test.tsx
+   7:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   7:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   7:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  12:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/Footer.test.tsx
+  11:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  16:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/Header.test.tsx
+  11:42  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  15:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  15:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  15:28  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  31:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/HeroCarousel.test.tsx
+  6:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/HeroSection.test.tsx
+  10:7  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  10:7  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/HtmlLangSync.test.tsx
+  17:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/InteractiveTicketVerifier.test.tsx
+  11:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/JsonLd.test.tsx
+  2:18  warning  'screen' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/LatestDrawCard.test.tsx
+   21:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   21:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   21:28  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   25:33  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   45:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   49:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   55:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   79:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  120:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/LatestUpdateSection.test.tsx
+  32:19  warning  'priority' is assigned a value but never used                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  33:12  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  33:12  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/LotteryBall.test.tsx
+  1:36  warning  'beforeEach' is defined but never used    @typescript-eslint/no-unused-vars
+  5:51  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/LotteryCard.test.tsx
+   5:71  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   6:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   6:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   6:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   8:29  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  10:51  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/LotteryDetail.test.tsx
+   82:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/MarketDataTable.test.tsx
+  17:34  warning  't' is defined but never used             @typescript-eslint/no-unused-vars
+  17:37  warning  'lang' is defined but never used          @typescript-eslint/no-unused-vars
+  52:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:16  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  62:16  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:16  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  81:16  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/NewsSidebar.test.tsx
+   17:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   17:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   17:28  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   21:44  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   27:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   34:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   47:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   74:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   79:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  103:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  113:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  117:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/NotFound.test.tsx
+   7:43  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  15:20  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  15:28  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  15:28  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  20:17  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  21:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  22:23  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/PinnedLotteryTabs.test.tsx
+  10:48  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  10:48  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/RecentDrawsTable.test.tsx
+  5:61  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/RecentGlobalDraws.test.tsx
+   7:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   7:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   7:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   8:61  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  18:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ResultBoardCard.test.tsx
+   9:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   9:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   9:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+  12:27  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  15:21  warning  'props' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  15:28  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  30:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  36:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  42:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  48:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  69:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  81:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  96:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ResultStates.test.tsx
+   39:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   44:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   50:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  172:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  221:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ResultsTable.test.tsx
+   6:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   6:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   6:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   7:61  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  21:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  48:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  54:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  83:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/ScrollToTop.test.tsx
+  27:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/SubscribeButton.test.tsx
+  15:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  79:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/TicketVerifier.test.tsx
+  15:21  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  39:9   warning  'mockLottery' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/components/UpcomingLotterySidebar.test.tsx
+   6:49  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   6:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   6:57  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images                                                                                                                                                                                jsx-a11y/alt-text
+   9:36  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  19:21  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  33:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  39:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  45:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  51:16  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/contexts/LanguageContext.test.tsx
+   1:17  warning  'useEffect' is defined but never used     @typescript-eslint/no-unused-vars
+   2:48  warning  'afterEach' is defined but never used     @typescript-eslint/no-unused-vars
+  19:39  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  40:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/helpers/fixtures.test.ts
+  4:3  warning  'createMockLottery' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/helpers/prisma-mock.ts
+  1:10  warning  'PrismaClient' is defined but never used  @typescript-eslint/no-unused-vars
+  2:10  warning  'mockDeep' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/bannerService.test.ts
+  16:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/countryService.test.ts
+   18:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   29:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   37:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   57:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   77:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/lotteryResultService.test.ts
+   53:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   62:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   74:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   84:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   94:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  110:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  120:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  136:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  150:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  151:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  158:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  159:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  160:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  181:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  182:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  183:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  200:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  210:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  228:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  236:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/lotteryService.test.ts
+   21:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   32:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   40:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   48:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   57:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/newsService.test.ts
+   26:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   46:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   64:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   70:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   76:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  118:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  147:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  148:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  162:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  163:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/services/statisticsService.test.ts
+  24:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  63:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/utils/countryResolver.test.ts
+  41:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  46:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/__tests__/utils/lotteryResultTransform.test.ts
+  18:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  26:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  41:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/components/global-results/MyResultBoard.tsx
+  52:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+
+/Users/kvivek/Documents/lottox/src/components/home/LatestUpdate/LatestUpdateSection.tsx
+  17:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/components/home/LotteryCard.tsx
+  46:34  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+  61:3   warning  'nextDraw' is defined but never used                                                                @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/components/layout/Header.tsx
+  15:11  warning  'isFeatureEnabled' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/components/lottery/LotteryDetail.tsx
+  11:25  warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+  11:52  warning  'Calendar' is defined but never used    @typescript-eslint/no-unused-vars
+  11:62  warning  'Award' is defined but never used       @typescript-eslint/no-unused-vars
+  13:8   warning  'Link' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/components/ui/CountdownTimer.tsx
+  37:34  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/set-state-in-effect')
+
+/Users/kvivek/Documents/lottox/src/lib/services/lotteryResultService.ts
+  32:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/lib/services/newsService.ts
+   55:18  warning  '_e' is defined but never used            @typescript-eslint/no-unused-vars
+  113:37  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:16  warning  '_e' is defined but never used            @typescript-eslint/no-unused-vars
+  122:55  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/lib/services/statisticsService.ts
+  21:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/kvivek/Documents/lottox/src/lib/utils/__tests__/typographyUtils.test.ts
+  76:44  warning  'key' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/src/lib/utils/lotteryResultTransform.ts
+  25:64  warning  't' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/test_db.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/test_db2.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/Users/kvivek/Documents/lottox/time_getLotteryCardData.ts
+  5:9  warning  'res' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/kvivek/Documents/lottox/time_getLotteryCardDataQuery.ts
+  5:9  warning  'lotteries' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 343 problems (266 errors, 77 warnings)
+  0 errors and 5 warnings potentially fixable with the `--fix` option.
+

@@ -4,11 +4,13 @@ import { FindByNumber } from '../../components/lottery/FindByNumber';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
 
 describe('FindByNumber', () => {
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         staticParams: {

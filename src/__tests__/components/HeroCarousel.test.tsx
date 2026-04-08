@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { HeroCarousel } from '../../components/ui/HeroCarousel';
 
 vi.mock('../../components/ui/LotteryCard', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LotteryCard: ({ country, isActive }: any) => (
     <div data-testid="lottery-card" data-active={isActive}>{country}</div>
   ),

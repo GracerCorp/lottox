@@ -18,6 +18,7 @@ describe('lotteryService', () => {
 
   describe('getActiveCountries', () => {
     it('returns active countries with lotteries', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findMany as any).mockResolvedValue([
         { code: 'th', name: 'Thailand', lotteries: [{ id: 1, name: 'Thai Lottery' }] },
       ]);
@@ -29,6 +30,7 @@ describe('lotteryService', () => {
 
   describe('getLotteriesByCountry', () => {
     it('returns country with lotteries', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({
         code: 'th', name: 'Thailand', lotteries: [{ id: 1, name: 'Thai Lottery' }],
       });
@@ -37,6 +39,7 @@ describe('lotteryService', () => {
     });
 
     it('returns null when country not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue(null);
       const result = await getLotteriesByCountry('zz');
       expect(result).toBeNull();
@@ -45,6 +48,7 @@ describe('lotteryService', () => {
 
   describe('getLotteryBySlug', () => {
     it('finds lottery by slug', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({
         code: 'th', lotteries: [{ id: 1, name: 'Thai Lottery', is_active: true }],
       });
@@ -54,12 +58,14 @@ describe('lotteryService', () => {
     });
 
     it('returns null when country not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue(null);
       const result = await getLotteryBySlug('zz', 'test');
       expect(result).toBeNull();
     });
 
     it('returns null when slug not found', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.countries.findFirst as any).mockResolvedValue({
         code: 'th', lotteries: [{ id: 1, name: 'Thai Lottery' }],
       });
@@ -70,6 +76,7 @@ describe('lotteryService', () => {
 
   describe('getLotteryCardData', () => {
     it('returns lottery card data with prizes', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([
         {
           id: 1,
@@ -100,6 +107,7 @@ describe('lotteryService', () => {
     });
 
     it('uses verified chosen_data over full_data', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([
         {
           id: 1,
@@ -123,6 +131,7 @@ describe('lotteryService', () => {
     });
 
     it('returns empty prizes when no results', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prisma.lotteries.findMany as any).mockResolvedValue([
         {
           id: 1,

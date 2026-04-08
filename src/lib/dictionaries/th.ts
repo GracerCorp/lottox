@@ -1,4 +1,4 @@
-export default {
+const th = {
     header: {
       home: "หน้าแรก",
       results: "ผลรางวัลล่าสุด",
@@ -622,4 +622,7 @@ export default {
           "วิ่งล่าง จ่าย 4.2 : 1",
         ],
       },
-    }}
+    }
+};
+
+export default th;

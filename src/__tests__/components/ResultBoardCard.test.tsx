@@ -6,12 +6,15 @@ import { useApi } from '../../lib/hooks/useApi';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
 vi.mock('../../components/global-results/DrawHistoryRow', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   DrawHistoryRow: (props: any) => <div data-testid="draw-history-row">{props.digits6}</div>,
 }));
 vi.mock('../../components/global-results/BoardPagination', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   BoardPagination: (props: any) => <div data-testid="board-pagination" />,
 }));
 
@@ -27,24 +30,28 @@ describe('ResultBoardCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: { staticParams: { globalDraws: mockGd } },
     });
   });
 
   it('shows loading state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: true, error: null });
     render(<ResultBoardCard lotteryName="Thai" countryCode="th" />);
     expect(screen.getByTestId('board-card-loading')).toBeInTheDocument();
   });
 
   it('shows error state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: false, error: 'fail' });
     render(<ResultBoardCard lotteryName="Thai" countryCode="th" />);
     expect(screen.getByTestId('board-card-error')).toHaveTextContent('Error loading');
   });
 
   it('shows empty state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: { draws: [], total: 0, page: 1, totalPages: 1 },
       loading: false,
@@ -66,6 +73,7 @@ describe('ResultBoardCard', () => {
         },
       },
     ];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: { draws, total: 1, page: 1, totalPages: 1 },
       loading: false,
@@ -78,6 +86,7 @@ describe('ResultBoardCard', () => {
 
   it('renders remove button and calls onRemove', () => {
     const onRemove = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: { draws: [], total: 0, page: 1, totalPages: 1 },
       loading: false,
@@ -93,6 +102,7 @@ describe('ResultBoardCard', () => {
       drawDate: `2026-03-0${i + 1}T00:00:00Z`,
       data: { prizes: [{ category: 'prize_1', winningNumbers: ['000000'] }] },
     }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: { draws, total: 7, page: 1, totalPages: 2 },
       loading: false,

@@ -14,6 +14,7 @@ describe('GET /api/countries', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns countries list', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (countryService.getCountries as any).mockResolvedValue({
       countries: [
         { code: 'th', name: 'Thailand' },
@@ -26,6 +27,7 @@ describe('GET /api/countries', () => {
   });
 
   it('handles errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (countryService.getCountries as any).mockRejectedValue(new Error('DB error'));
     const res = await GET();
     expect(res.status).toBe(500);

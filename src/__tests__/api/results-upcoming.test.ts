@@ -17,6 +17,7 @@ describe('GET /api/results/upcoming', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns upcoming draws', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (prisma.lotteries.findMany as any).mockResolvedValue([
       { name: 'Thai Lottery', countries: { code: 'TH', name: 'Thailand' } },
     ]);
@@ -30,6 +31,7 @@ describe('GET /api/results/upcoming', () => {
   });
 
   it('respects limit param', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (prisma.lotteries.findMany as any).mockResolvedValue([]);
     const req = new NextRequest('http://localhost/api/results/upcoming?limit=5');
     await GET(req);

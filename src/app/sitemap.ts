@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })
 
   // Query some recent results to generate dynamic URLs for past draws
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recentResults: any[] = await prisma.lottery_results.findMany({
     take: 1000,
     orderBy: { draw_date: 'desc' },

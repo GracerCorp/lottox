@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/link', () => ({ default: ({ children, href }: any) => <a href={href}>{children}</a> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));
 vi.mock('../../lib/utils/lotteryUtils', () => ({
@@ -18,6 +20,7 @@ import { ResultsTable } from '../../components/ui/ResultsTable';
 describe('ResultsTable', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useLanguage as any).mockReturnValue({
       t: {
         results: {
@@ -45,12 +48,14 @@ describe('ResultsTable', () => {
   });
 
   it('shows loading state', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: null, loading: true, error: null });
     render(<ResultsTable />);
     expect(document.querySelector('.animate-pulse')).not.toBeNull();
   });
 
   it('shows results when data loaded', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
       data: {
         results: [
@@ -80,6 +85,7 @@ describe('ResultsTable', () => {
   });
 
   it('shows no results when data is empty', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({ data: { results: [] }, loading: false, error: null });
     render(<ResultsTable />);
     // Should not crash

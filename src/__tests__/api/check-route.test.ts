@@ -19,6 +19,7 @@ describe('GET /api/check', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns check result for valid number', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (apiClient.checkNumber as any).mockResolvedValue({ win: true, prizes: [{ label: 'First', amount: '6M' }] });
     const req = new NextRequest('http://localhost/api/check?number=123456&type=th');
     const res = await GET(req);
@@ -39,6 +40,7 @@ describe('GET /api/check', () => {
   });
 
   it('returns 400 when validation fails', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (validateNumber as any).mockReturnValue({ valid: false, error: 'Invalid number' });
     const req = new NextRequest('http://localhost/api/check?number=123456&type=th');
     const res = await GET(req);

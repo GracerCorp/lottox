@@ -11,6 +11,7 @@ import { GET } from '@/app/api/news/route';
 import { newsService } from '@/lib/services/newsService';
 
 function mockRequest(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { nextUrl: new URL(url, 'http://localhost:3001') } as any;
 }
 
@@ -19,6 +20,7 @@ describe('GET /api/news', () => {
 
   it('returns news list successfully', async () => {
     const mockData = { articles: [{ title: 'Test' }], total: 1 };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNews as any).mockResolvedValue(mockData);
 
     const response = await GET(mockRequest('http://localhost:3001/api/news'));
@@ -31,6 +33,7 @@ describe('GET /api/news', () => {
   });
 
   it('passes query params correctly', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNews as any).mockResolvedValue({ articles: [] });
 
     await GET(mockRequest('http://localhost:3001/api/news?page=2&limit=5&category=tech&search=test'));
@@ -45,6 +48,7 @@ describe('GET /api/news', () => {
   });
 
   it('handles service errors', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (newsService.getNews as any).mockRejectedValue(new Error('DB down'));
     await GET(mockRequest('http://localhost:3001/api/news'));
     const { handleApiError } = await import('@/lib/utils/apiErrorHandler');

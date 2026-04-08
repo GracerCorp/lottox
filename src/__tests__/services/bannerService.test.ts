@@ -13,6 +13,7 @@ describe('bannerService', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
   it('returns active banners', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (prisma.banners.findMany as any).mockResolvedValue([
       {
         id: 1,
@@ -32,6 +33,7 @@ describe('bannerService', () => {
   });
 
   it('returns empty when no banners', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (prisma.banners.findMany as any).mockResolvedValue([]);
     const result = await getActiveBanners();
     expect(result).toHaveLength(0);

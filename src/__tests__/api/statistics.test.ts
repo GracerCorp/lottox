@@ -23,11 +23,14 @@ const mockTransaction = vi.fn();
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     lottery_results: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       findMany: (...args: any) => mockFindMany(...args),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       count: (...args: any) => mockCount(...args),
     },
     lotteries: { count: vi.fn() },
     countries: { count: vi.fn() },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     $transaction: (...args: any) => mockTransaction(...args),
   },
 }));

@@ -15,14 +15,17 @@ describe('transformLotteryResult', () => {
   };
 
   it('returns null for null input', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(transformLotteryResult(null as any, t)).toBeNull();
   });
 
   it('returns null for input without data', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(transformLotteryResult({} as any, t)).toBeNull();
   });
 
   it('returns null for input without prizes', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(transformLotteryResult({ data: {} } as any, t)).toBeNull();
   });
 
@@ -38,6 +41,7 @@ describe('transformLotteryResult', () => {
       },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = transformLotteryResult(rawData as any, t);
     expect(result).toBeTruthy();
     expect(typeof result).toBe('object');
@@ -52,6 +56,7 @@ describe('transformLotteryResult', () => {
       },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = transformLotteryResult(rawData as any, t);
     expect(result).toBeTruthy();
   });
@@ -65,6 +70,7 @@ describe('transformLotteryResult', () => {
       },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = transformLotteryResult(rawData as any, t);
     expect(result).toBeTruthy();
   });

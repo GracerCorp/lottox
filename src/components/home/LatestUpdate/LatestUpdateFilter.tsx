@@ -16,6 +16,7 @@ export function LatestUpdateFilter({
 }: LatestUpdateFilterProps) {
   const { t } = useLanguage();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tAny = t as any;
 
   const tabs = [
