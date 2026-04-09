@@ -10,7 +10,8 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:watch": "vitest --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.19.2",
