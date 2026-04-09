@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, Mock } from "vitest";
 import { GET } from "@/app/api/results/global/route";
 import { NextRequest } from "next/server";
 import { apiClient } from "@/lib/services/lotteryResultService";
@@ -15,10 +15,10 @@ vi.mock("@/lib/services/lotteryResultService", () => {
 describe("GET /api/results/global validation", () => {
   const createRequest = (query: string) => ({
     nextUrl: { searchParams: new URLSearchParams(query) }
-  } as any);
+  } as unknown as NextRequest);
 
   it("should parse page correctly from query", async () => {
-    (apiClient.getGlobalResults as any).mockResolvedValueOnce({
+    (apiClient.getGlobalResults as Mock).mockResolvedValueOnce({
       total: 10, totalPages: 1, page: 1, results: []
     });
 
@@ -45,7 +45,7 @@ describe("GET /api/results/global validation", () => {
   });
 
   it("should default to page 1 limit 20 when missing", async () => {
-    (apiClient.getGlobalResults as any).mockResolvedValueOnce({
+    (apiClient.getGlobalResults as Mock).mockResolvedValueOnce({
       total: 10, totalPages: 1, page: 1, results: []
     });
 

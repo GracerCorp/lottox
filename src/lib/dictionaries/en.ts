@@ -13,6 +13,15 @@ const en = {
       estimatedJackpot: "Estimated Jackpot",
       titleHighlight: "Worldwide Lottery",
       titleSuffix: "Result",
+      exploreGlobalResults: "Explore Global Results",
+    },
+    regions: {
+      trending: "Trending",
+      southeastAsia: "Southeast Asia",
+      asia: "Asia",
+      europe: "Europe",
+      america: "America",
+      oceania: "Oceania",
     },
     common: {
       date: "Date",
@@ -137,6 +146,7 @@ const en = {
     globalStats: {
       title: "Leading the World in Lottery Data",
       subtitle: "Experience the most comprehensive and verified lottery results from across the globe, updated in real-time.",
+      worldStats: "World Stats",
       countries: "Countries",
       lotteries: "Lotteries",
       maxPrize: "Max Prize Pool",

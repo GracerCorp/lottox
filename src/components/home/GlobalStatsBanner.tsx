@@ -55,12 +55,10 @@ export function GlobalStatsBanner({
           {/* Left Hand Text - Right Aligned on Desktop */}
           <div className="text-center lg:text-right flex flex-col justify-center lg:pr-8">
             <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-tight mb-4 text-[#D8B05F]">
-              Leading the World <br className="hidden md:block" />
-              in Lottery Data
+              {t.globalStats?.worldStats || "World Stats"}
             </h2>
             <p className="text-[#a0a0a0] text-sm md:text-base max-w-md mx-auto lg:mx-0 lg:ml-auto">
-              Experience the most comprehensive and verified lottery results
-              from across the globe, updated in real-time.
+              {t.globalStats?.subtitle || "Experience the most comprehensive and verified lottery results from across the globe, updated in real-time."}
             </p>
           </div>
 

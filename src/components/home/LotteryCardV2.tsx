@@ -39,7 +39,7 @@ export function LotteryCardV2({
     <Link href={href} className={cn("block group/card w-full mb-4 md:mb-6", isHoverable && "hover-enabled")}>
       <div className={cn(
         "relative overflow-hidden rounded-[20px] aspect-[9/11] bg-neutral-900 border border-white/5 shadow-2xl transition-all duration-300",
-        isHoverable && "group-hover/card:scale-[1.02] group-hover/card:ring-1 group-hover/card:ring-gold-new/50 group-hover/card:shadow-gold-new/20"
+        isHoverable && "group-hover/card:scale-[1.02] group-hover/card:ring-1 group-hover/card:ring-gold-new/50 group-hover/card:shadow-[0_0_20px_rgba(216,176,95,0.4)]"
       )}>
         
         {/* Background Image & Gradient */}

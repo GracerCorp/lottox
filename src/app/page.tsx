@@ -1,5 +1,6 @@
 import { HeroSection, HeroItem } from "@/components/home/HeroSection";
 import { HeroSectionV2 } from "@/components/home/HeroSectionV2";
+import { HeroSectionV3 } from "@/components/home/HeroSectionV3";
 import { LiveTicker } from "@/components/home/LiveTicker";
 import { CheckLotteryWidget, LotteryGroup } from "@/components/home/CheckLotteryWidget";
 import { CountryMarqueeSection } from "@/components/home/CountryMarqueeSection";
@@ -267,7 +268,7 @@ export default async function Home() {
 
 
       {/* Section 1: Hero Carousel */}
-      <HeroSectionV2 items={heroItems} />
+      <HeroSectionV3 items={heroItems} />
 
       {/* Section 2: Lottery By Country Marquee */}
       <CountryMarqueeSection countries={countryListItems} />

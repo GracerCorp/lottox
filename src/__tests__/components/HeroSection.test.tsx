@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { HeroSection } from "@/components/home/HeroSection";
+import { render, screen } from "@testing-library/react";
+import { HeroSectionV3 as HeroSection } from "@/components/home/HeroSectionV3";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 vi.mock("next/image", () => ({
@@ -22,7 +22,7 @@ const mockItems = [
     id: "glo",
     name: "Government Lottery",
     country: "Thailand",
-    flag: "th",
+    flag: "/th",
     jackpot: "฿6,000,000",
     nextDraw: "Jan 16, 2026",
     gradientFrom: "#D4AF37",
@@ -36,7 +36,7 @@ const mockItems = [
     id: "lao",
     name: "Lao Lotto",
     country: "Laos",
-    flag: "la",
+    flag: "/la",
     jackpot: "6,000X",
     nextDraw: "Jan 16, 2026",
     gradientFrom: "#CE1126",
@@ -46,7 +46,6 @@ const mockItems = [
     prizes: [{ label: "1st Prize", amount: "6,000X" }],
     nextDrawDate: new Date(Date.now() + 172800000).toISOString(),
   },
-
 ];
 
 function renderHero(props = {}) {
@@ -57,7 +56,7 @@ function renderHero(props = {}) {
   );
 }
 
-describe("HeroSection", () => {
+describe("HeroSection (V3)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -73,98 +72,33 @@ describe("HeroSection", () => {
     expect(h1?.textContent?.toLowerCase()).toContain("worldwide");
   });
 
-  it("renders with no items and shows fallback", () => {
+  it("renders with no items without crashing", () => {
     render(
       <LanguageProvider>
         <HeroSection items={[]} />
       </LanguageProvider>
     );
-    // Should show error/empty message
     const section = document.querySelector("section");
     expect(section).toBeDefined();
   });
 
-  it("renders hero title in English by default", () => {
+  it("renders hero title text", () => {
     const { container } = renderHero();
     const title = container.querySelector("h1");
     expect(title?.textContent?.toLowerCase()).toContain("result");
   });
 
-  it("renders carousel navigation buttons", () => {
+  it("renders the action chips and Explore Global Results button", () => {
     renderHero();
-    expect(screen.getByLabelText("Previous")).toBeDefined();
-    expect(screen.getByLabelText("Next")).toBeDefined();
-  });
-
-  it("shows slide counter", () => {
-    renderHero();
-    // Counter should show position like "1/6"
-    const counters = screen.getAllByText(/\/\d+/);
-    expect(counters.length).toBeGreaterThan(0);
-  });
-
-  it("advances to next slide when Next is clicked", () => {
-    const { container } = renderHero();
-    const nextBtn = screen.getByLabelText("Next");
-    // Clicking should not throw
-    fireEvent.click(nextBtn);
-    // Section still renders
-    expect(container.querySelector("section")).toBeDefined();
-  });
-
-  it("goes to previous slide when Prev is clicked", () => {
-    const { container } = renderHero();
-    const prevBtn = screen.getByLabelText("Previous");
-    // Go back, should not throw
-    fireEvent.click(prevBtn);
-    expect(container.querySelector("section")).toBeDefined();
-  });
-
-  it("auto-advances slides on interval", () => {
-    const { container } = renderHero();
-    // Advancing time should not crash the component
-    act(() => {
-      vi.advanceTimersByTime(15000); // 3 intervals
-    });
-    expect(container.querySelector("section")).toBeDefined();
-  });
-
-  it("pauses auto-advance on mouse enter", () => {
-    const { container } = renderHero();
-    const carouselArea = container.querySelector("[class*='lg:w-[65%]']");
-    expect(carouselArea).toBeDefined();
-
-    // Mouse enter to pause — should not throw
-    fireEvent.mouseEnter(carouselArea!);
-    act(() => {
-      vi.advanceTimersByTime(10000);
-    });
-
-    // Mouse leave to resume — should not throw
-    fireEvent.mouseLeave(carouselArea!);
-    act(() => {
-      vi.advanceTimersByTime(5000);
-    });
-    expect(container.querySelector("section")).toBeDefined();
+    expect(screen.getByText("Explore Global Results")).toBeDefined();
+    expect(screen.getByText("Trending")).toBeDefined();
+    expect(screen.getByText("Southeast Asia")).toBeDefined();
   });
 
   it("renders background images for items with bgImage", () => {
     const { container } = renderHero();
-    const bgImages = container.querySelectorAll("img[alt='']");
-    // Each item with bgImage should have a background image rendered
+    const bgImages = container.querySelectorAll("img[alt='Government Lottery']");
     expect(bgImages.length).toBeGreaterThan(0);
   });
-
-  it("has light/dark theme classes on gradient overlay", () => {
-    const { container } = renderHero();
-    const overlays = container.querySelectorAll("[class*='dark:from-neutral-950']");
-    expect(overlays.length).toBeGreaterThan(0);
-  });
-
-  it("has light/dark theme classes on navigation buttons", () => {
-    renderHero();
-    const prevBtn = screen.getByLabelText("Previous");
-    expect(prevBtn.className).toContain("dark:bg-neutral-900/60");
-    expect(prevBtn.className).toContain("bg-white/60");
-  });
 });
+

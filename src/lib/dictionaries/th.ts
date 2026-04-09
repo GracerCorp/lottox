@@ -12,6 +12,15 @@ const th = {
       estimatedJackpot: "เงินรางวัลโดยประมาณ",
       titleHighlight: "ผลหวยออนไลน์",
       titleSuffix: "ทั่วโลก",
+      exploreGlobalResults: "ดูผลรางวัลทั่วโลก",
+    },
+    regions: {
+      trending: "ยอดนิยม",
+      southeastAsia: "เอเชียตะวันออกเฉียงใต้",
+      asia: "เอเชีย",
+      europe: "ยุโรป",
+      america: "อเมริกา",
+      oceania: "โอเชียเนีย",
     },
     common: {
       date: "วันที่",
@@ -136,6 +145,7 @@ const th = {
     globalStats: {
       title: "ผู้นำข้อมูลลอตเตอรี่ระดับโลก",
       subtitle: "พบกับผลลอตเตอรี่ที่ครอบคลุมและผ่านการตรวจสอบจากทั่วโลก อัปเดตแบบเรียลไทม์",
+      worldStats: "สถิติโลก",
       countries: "ประเทศ",
       lotteries: "ลอตเตอรี่",
       maxPrize: "เงินรางวัลรวมสูงสุด",
