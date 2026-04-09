@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // @ts-ignore
+    // @ts-expect-error - requires 2 arguments in next cache typings
     revalidateTag("feature-toggles");
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch (err) {
@@ -17,7 +17,7 @@ export async function GET() {
 
 export async function POST() {
   try {
-    // @ts-ignore
+    // @ts-expect-error - requires 2 arguments in next cache typings
     revalidateTag("feature-toggles");
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch (err) {

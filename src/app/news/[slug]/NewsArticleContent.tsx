@@ -14,7 +14,7 @@ import {
   Link as LinkIcon,
   Check,
 } from "lucide-react";
-import { useMemo, useState, useEffect, useRef, useCallback } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { DrawResult } from "@/components/lottery/DrawResult";
 import { transformLotteryResult } from "@/lib/utils/lotteryResultTransform";
@@ -46,7 +46,11 @@ export default function NewsArticleContent({
   article: ArticleProps;
 }) {
   const { t, language } = useLanguage();
-  const startTimeRef = useRef<number>(Date.now());
+  const startTimeRef = useRef<number>(0);
+  
+  useEffect(() => {
+    startTimeRef.current = Date.now();
+  }, []);
   const activeSecondsRef = useRef<number>(0);
   const isTabActiveRef = useRef<boolean>(true);
   const viewTrackedRef = useRef<boolean>(false);
@@ -122,7 +126,9 @@ export default function NewsArticleContent({
   // Use SSR-safe fallback origin, then sync real origin after mount to prevent hydration mismatch
   const [origin, setOrigin] = useState("https://lottox.today");
   useEffect(() => {
-    setOrigin(window.location.origin);
+    setTimeout(() => {
+      setOrigin(window.location.origin);
+    }, 0);
   }, []);
   const shareUrl = `${origin}${pathname}`;
 

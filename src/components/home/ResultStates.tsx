@@ -17,7 +17,9 @@ export const ShareRow = ({ number }: { number: string }) => {
   // Defer window.location.href to avoid hydration mismatch
   const [currentUrl, setCurrentUrl] = useState("https://lottox.today");
   useEffect(() => {
-    setCurrentUrl(window.location.href);
+    setTimeout(() => {
+      setCurrentUrl(window.location.href);
+    }, 0);
   }, []);
 
   const shareText = encodeURIComponent(`I checked lottery number ${number} on LOTTOX! 🎉`);
@@ -97,7 +99,9 @@ export const JackpotResult = ({
   const [reducedMotion, setReducedMotion] = useState(false);
   useEffect(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mql.matches);
+    setTimeout(() => {
+      setReducedMotion(mql.matches);
+    }, 0);
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);

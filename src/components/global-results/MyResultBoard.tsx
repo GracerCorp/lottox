@@ -47,8 +47,10 @@ export function MyResultBoard() {
 
   // Load pinned lotteries from localStorage after hydration
   useEffect(() => {
-    setPinned(readPinned());
-    setHydrated(true);
+    setTimeout(() => {
+      setPinned(readPinned());
+      setHydrated(true);
+    }, 0);
   }, []);
 
   /** Handle batch confirm from AddLotteryModal */

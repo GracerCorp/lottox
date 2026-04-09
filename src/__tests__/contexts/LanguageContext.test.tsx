@@ -1,5 +1,5 @@
-import React, { useEffect } from 'vitest'; // Vitest polyfills standard React
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import React from 'react';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { LanguageProvider, useLanguage } from '../../contexts/LanguageContext';
 
@@ -16,7 +16,7 @@ function TestComponent() {
   return (
     <div>
       <span data-testid="lang">{language}</span>
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <span data-testid="dict">{(t as any).common.title}</span>
       <button onClick={() => setLanguage('th')} data-testid="set-th">Set TH</button>
       <button onClick={toggleLanguage} data-testid="toggle">Toggle</button>

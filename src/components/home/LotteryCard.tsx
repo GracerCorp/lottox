@@ -41,9 +41,14 @@ function useCountdown(targetDate?: string) {
   const [remaining, setRemaining] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    setRemaining(calcRemaining());
+    const initialTimeout = setTimeout(() => {
+      setRemaining(calcRemaining());
+    }, 0);
     const id = setInterval(() => setRemaining(calcRemaining()), 1000);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(id);
+    };
   }, [calcRemaining]);
 
   return remaining;
@@ -56,7 +61,6 @@ export function LotteryCard({
   country,
   flag,
   jackpot,
-  nextDraw,
   gradientFrom,
   gradientTo,
   href = "#",

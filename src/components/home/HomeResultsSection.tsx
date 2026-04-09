@@ -34,8 +34,10 @@ function HomeResultsContent({ tabs }: HomeResultsSectionProps) {
   useEffect(() => {
     const tabParam = searchParams.get('tab');
     if (tabParam) {
-      if (tabParam === 'trending') setActiveTab('all');
-      else setActiveTab(tabParam);
+      setTimeout(() => {
+        if (tabParam === 'trending') setActiveTab('all');
+        else setActiveTab(tabParam);
+      }, 0);
       
       // Delay scrolling slightly to let the page render properly
       setTimeout(() => {

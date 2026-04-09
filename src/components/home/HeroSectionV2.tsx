@@ -6,6 +6,29 @@ import { Compass } from "lucide-react";
 import Link from "next/link";
 import { HeroItem } from "./HeroSection";
 
+// Helper for scrolling columns
+const ScrollingColumn = ({ colItems, speedStr, reverse = false, className = "", isHoverable = false }: { colItems: HeroItem[], speedStr: string, reverse?: boolean, className?: string, isHoverable?: boolean }) => {
+  // Duplicate the items for seamless infinite scrolling
+  const doubleItems = [...colItems, ...colItems];
+
+  return (
+    <div className={`relative flex flex-col gap-4 md:gap-6 overflow-hidden ${className}`} style={{ height: "100%", paddingBottom: "24px" }}>
+      <div 
+        className="flex flex-col gap-4 md:gap-6 w-full scroll-animate"
+        style={{
+          animation: `${reverse ? "scrollDown" : "scrollUp"} ${speedStr} linear infinite`,
+        }}
+      >
+        {doubleItems.map((item, idx) => (
+          <div key={`${item.id}-${idx}`} className="w-full flex-shrink-0">
+            <LotteryCardV2 {...item} isHoverable={isHoverable} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
   const { t } = useLanguage();
 
@@ -20,29 +43,6 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
   const col2 = displayItems.filter((_, i) => i % 4 === 1);
   const col3 = displayItems.filter((_, i) => i % 4 === 2);
   const col4 = displayItems.filter((_, i) => i % 4 === 3);
-
-  // Helper for scrolling columns
-  const ScrollingColumn = ({ colItems, speedStr, reverse = false, className = "", isHoverable = false }: { colItems: HeroItem[], speedStr: string, reverse?: boolean, className?: string, isHoverable?: boolean }) => {
-    // Duplicate the items for seamless infinite scrolling
-    const doubleItems = [...colItems, ...colItems];
-
-    return (
-      <div className={`relative flex flex-col gap-4 md:gap-6 overflow-hidden ${className}`} style={{ height: "100%", paddingBottom: "24px" }}>
-        <div 
-          className="flex flex-col gap-4 md:gap-6 w-full scroll-animate"
-          style={{
-            animation: `${reverse ? "scrollDown" : "scrollUp"} ${speedStr} linear infinite`,
-          }}
-        >
-          {doubleItems.map((item, idx) => (
-            <div key={`${item.id}-${idx}`} className="w-full flex-shrink-0">
-              <LotteryCardV2 {...item} isHoverable={isHoverable} />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   const actionChips = [
     { label: "Trending", href: "?tab=trending#latest-results" },

@@ -14,7 +14,7 @@ export function LatestUpdateSection() {
       {/* Header Container */}
       <div className="flex flex-col items-center justify-center text-center space-y-3 mb-10 w-full max-w-2xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {(t as any).common?.latestUpdate || "Latest Update"}
         </h2>
         <p className="text-gray-400 text-sm md:text-base">

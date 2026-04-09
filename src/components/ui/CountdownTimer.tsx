@@ -32,9 +32,14 @@ export function useCountdown(targetDate?: string): TimeRemaining {
   const [remaining, setRemaining] = useState<TimeRemaining>({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    setRemaining(calc());
+    const initialTimeout = setTimeout(() => {
+      setRemaining(calc());
+    }, 0);
     const id = setInterval(() => setRemaining(calc()), 1000);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(id);
+    };
   }, [calc]);
 
   return remaining;
