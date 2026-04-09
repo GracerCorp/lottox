@@ -79,6 +79,7 @@ export const createMockArticle = (overrides?: Partial<articles>): articles => ({
   shares_count: 0,
   comments_count: 0,
   raw_html: null,
+  approval_status: null,
   ...overrides,
 });
 
