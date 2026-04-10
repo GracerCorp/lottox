@@ -23,6 +23,8 @@ interface ResultBoardCardProps {
   lotteryName: string;
   countryCode: string;
   onRemove?: () => void;
+  pinned?: boolean;
+  onTogglePin?: () => void;
 }
 
 const PAGE_SIZE = 5;
@@ -91,7 +93,7 @@ function extractNumbers(data: unknown): {
 }
 
 
-export function ResultBoardCard({ lotteryName, countryCode, onRemove }: ResultBoardCardProps) {
+export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, onTogglePin }: ResultBoardCardProps) {
   const { t } = useLanguage();
   const gd = t.staticParams.globalDraws;
 
@@ -135,6 +137,44 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove }: ResultBo
             data-testid="remove-button"
           >
             &times;
+          </button>
+        )}
+        {onTogglePin && (
+          <button
+            onClick={onTogglePin}
+            aria-label={pinned ? "Unpin" : "Pin"}
+            className={`ml-2 p-1 rounded transition-colors ${
+              pinned 
+                ? "text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300"
+                : "text-gray-300 hover:text-gray-400 dark:text-gray-600 dark:hover:text-gray-500"
+            }`}
+            data-testid="pin-button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill={pinned ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={pinned ? 1 : 2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5v14"
+                transform={pinned ? "rotate(45 12 12)" : ""}
+                style={{ display: pinned ? 'none' : 'block' }}
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.155 10.518C16.892 9.043 17 6.444 17 6H7c0 .444.108 3.043.845 4.518a4 4 0 001.077 1.341c.214.168.423.361.616.587l.793.924C11.135 14.185 11.5 15.066 11.5 16v3.5a.5.5 0 001 0V16c0-.934.365-1.815 1.169-2.63l.793-.924a4.015 4.015 0 00.616-.587 4 4 0 001.077-1.341z"
+                style={{ display: pinned ? 'block' : 'none' }}
+              />
+              {!pinned && (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.3c.7-1.4.9-3.9.9-4.3H8.1c0 .4.2 2.9.9 4.3.4.8 1 1.5 1.5 2.1l.6.7c.4.5.6 1.1.6 1.7V18l.6 1v-4.2c0-.6.2-1.2.6-1.7l.6-.7c.5-.6 1.1-1.3 1.5-2.1z" />
+              )}
+            </svg>
           </button>
         )}
       </div>

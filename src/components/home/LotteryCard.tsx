@@ -151,13 +151,17 @@ export function LotteryCard({
           {/* Header — Flag + Country + Name */}
           <div className="mb-1">
             <div className="flex items-center gap-2 mb-1">
-              <div className="relative h-4 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
-                <Image
-                  src={flag}
-                  alt={`${country} flag`}
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-4 w-6 overflow-hidden rounded shadow-sm flex-shrink-0 flex items-center justify-center bg-white/5">
+                {!flag.includes("/") ? (
+                  <span className="text-xs leading-none">{flag}</span>
+                ) : (
+                  <Image
+                    src={flag}
+                    alt={`${country} flag`}
+                    fill
+                    className="object-cover"
+                  />
+                )}
               </div>
               <span className="text-[11px] font-semibold text-white/70 uppercase tracking-wider truncate">
                 {country}

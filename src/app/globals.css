@@ -19,8 +19,8 @@
   --color-neon-pink: #ff00ff;
 
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-marquee-left: marquee-left 40s linear infinite;
-  --animate-marquee-right: marquee-right 40s linear infinite;
+  --animate-marquee-left: marquee-left 80s linear infinite;
+  --animate-marquee-right: marquee-right 80s linear infinite;
 
   --font-sans: var(--font-noto-sans-thai), var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MyResultBoard } from "@/components/global-results/MyResultBoard";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import type { PinnedLottery } from "@/components/global-results/AddLotteryModal";
+import type { PinnedLottery } from "@/lib/api-types";
 
 // Mock child components that do their own API calls
 vi.mock("@/components/global-results/ResultBoardCard", () => ({

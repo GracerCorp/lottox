@@ -23,6 +23,8 @@ export const createMockLottery = (overrides?: Partial<lotteries>): lotteries => 
   showing_prizes: ["prize_1", "running_number_front_3"],
   prize_amount_mode: "default",
   default_prize_amounts: {},
+  how_to_play_text: null,
+  how_to_play_image: null,
   is_active: true,
   created_at: new Date(),
   updated_at: new Date(),

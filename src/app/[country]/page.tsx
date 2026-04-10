@@ -254,9 +254,9 @@ export default async function CountryPage({ params }: PageProps) {
         )}
 
         {/* Find By Number Section */}
-        <div className="mt-14 overflow-visible rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+        {/* <div className="mt-14 overflow-visible rounded-2xl border border-white/10 bg-slate-900/60 p-6">
           <CheckLotteryWidget lotteryGroups={lotteryGroups} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

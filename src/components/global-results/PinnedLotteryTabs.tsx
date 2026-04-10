@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
-import type { PinnedLottery } from "./AddLotteryModal";
+import type { PinnedLottery } from "@/lib/api-types";
 
 interface PinnedLotteryTabsProps {
   pinned: PinnedLottery[];

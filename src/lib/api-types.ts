@@ -65,6 +65,7 @@ export interface LaoResultData {
   digit2Multiplier: string;
   digit1?: string;
   digit1Multiplier?: string;
+  animals?: { name: string; number: string; icon?: string; translation?: string }[] | string[];
 }
 
 // Vietnam Data shape
@@ -85,12 +86,14 @@ export interface ResultsByTypeResponse {
     drawNo: string;
     daysAgo: string;
     data: ThaiResultData | LaoResultData | VietnamResultData;
+    fullData?: any;
   };
   history: {
     date: string;
     dateDisplay: string;
     drawNo: string;
     data: ThaiResultData | LaoResultData | VietnamResultData;
+    fullData?: any;
   }[];
   total: number;
 }
@@ -114,6 +117,7 @@ export interface GlobalDraw {
   jackpot: string;
   drawDate: string;
   status: string;
+  fullData?: any;
 }
 
 // GET /api/check
@@ -158,6 +162,13 @@ export interface LotteryItem {
   id: number;
   name: string;
   logo: string | null;
+}
+
+export interface PinnedLottery {
+  lotteryId: number;
+  lotteryName: string;
+  logo: string | null;
+  countryCode: string;
 }
 
 // GET /api/news

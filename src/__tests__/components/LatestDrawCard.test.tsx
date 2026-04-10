@@ -88,7 +88,7 @@ describe('LatestDrawCard', () => {
     expect(screen.getByTestId('latest-draw-card')).toBeInTheDocument();
     expect(screen.getByText('Thai Govt')).toBeInTheDocument();
     expect(screen.getByText('LATEST DRAW')).toBeInTheDocument();
-    expect(screen.getByText('6,000,000')).toBeInTheDocument(); // Formatted amount
+    expect(screen.getByText('฿6,000,000')).toBeInTheDocument(); // Formatted amount
 
     // Check main digits
     const digitsContainer = screen.getByTestId('main-numbers');

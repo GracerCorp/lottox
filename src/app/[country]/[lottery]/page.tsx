@@ -53,6 +53,7 @@ export default async function LotteryPage({ params }: PageProps) {
     last2: r.prize2 ?? "2 Bottom",
   };
 
+
   return (
     <LotteryDetail
       country={countryInfo.name}
@@ -64,7 +65,10 @@ export default async function LotteryPage({ params }: PageProps) {
       logo={lotteryInfo.logo}
       currency={lotteryInfo.currency}
       initialData={initialData as import("@/lib/api-types").ResultsByTypeResponse | undefined}
+      howToPlayText={lotteryInfo.how_to_play_text}
+      howToPlayImage={lotteryInfo.how_to_play_image}
       prizeLabels={prizeLabels}
+      hideVerification={true}
     />
   );
 }

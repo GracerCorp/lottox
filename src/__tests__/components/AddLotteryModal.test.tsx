@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AddLotteryModal } from "@/components/global-results/AddLotteryModal";
-import type { PinnedLottery } from "@/components/global-results/AddLotteryModal";
+import type { PinnedLottery } from "@/lib/api-types";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 // Mock useApi to return lottery data grouped by country

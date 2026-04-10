@@ -80,15 +80,19 @@ export function CountryHeroSection({
           {flag ? (
             <div
               data-testid="country-flag"
-              className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-white/20 shadow-xl"
+              className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-white/20 shadow-xl flex items-center justify-center bg-white/5"
             >
-              <Image
-                src={flag}
-                alt={`${countryName} flag`}
-                fill
-                className="object-cover"
-                priority
-              />
+              {!flag.includes("/") ? (
+                <span className="text-4xl">{flag}</span>
+              ) : (
+                <Image
+                  src={flag}
+                  alt={`${countryName} flag`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
             </div>
           ) : (
             <div

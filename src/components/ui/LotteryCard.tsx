@@ -112,14 +112,18 @@ export function LotteryCard({
       <div className="relative z-10 flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-            <div className="relative h-5 w-8 overflow-hidden rounded shadow-sm">
-              <Image
-                src={flag}
-                alt={`${country} flag`}
-                fill
-                className="object-cover"
-                sizes="32px"
-              />
+            <div className="relative h-5 w-8 overflow-hidden rounded shadow-sm flex items-center justify-center bg-white/5">
+              {!flag.includes("/") ? (
+                <span className="text-sm leading-none">{flag}</span>
+              ) : (
+                <Image
+                  src={flag}
+                  alt={`${country} flag`}
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              )}
             </div>
             <span>{country}</span>
           </div>

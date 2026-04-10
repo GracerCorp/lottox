@@ -25,6 +25,8 @@ const makeLottery = (overrides: Record<string, unknown> = {}) => ({
   showing_prizes: [],
   prize_amount_mode: "fixed",
   default_prize_amounts: {},
+  how_to_play_text: null,
+  how_to_play_image: null,
   created_at: new Date(),
   updated_at: new Date(),
   countries: { code: "th", name: "Thailand", flag: "https://cdn/th.png", bg_image: null },

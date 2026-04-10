@@ -11,6 +11,8 @@ type LotteryResultWithIncludes = {
   lottery: {
     name: string;
     showing_prizes?: string[];
+    how_to_play_text?: string | null;
+    how_to_play_image?: string | null;
     countries: { code: string } | null;
   } | null;
   result_verifications_result_verifications_lottery_result_idTolottery_results?: {
@@ -58,9 +60,12 @@ function formatLotteryResult(
     drawNo: res.draw_period || "",
     daysAgo: "", // Added from getResultsByType
     data: dataToUse,
+    fullData: res.full_data, // Expose full_data directly to the frontend for any custom format rendering
     lotteryName: res.lottery?.name || "",
     countryCode: countryCode,
     showingPrizes: res.lottery?.showing_prizes || [],
+    howToPlayText: res.lottery?.how_to_play_text || null,
+    howToPlayImage: res.lottery?.how_to_play_image || null,
   };
 }
 
@@ -81,11 +86,19 @@ class ApiClient {
       }
     }
 
-    // Filter only those with verified result_verification
-    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+    // Filter only those with verified result_verification, EXCEPT for Australia which bypasses verification
+    whereClause.OR = [
       {
-        some: { status: "verified" },
-      };
+        result_verifications_result_verifications_lottery_result_idTolottery_results: {
+          some: { status: "verified" },
+        },
+      },
+      {
+        lottery: {
+          countries: { code: { equals: "au", mode: "insensitive" } },
+        },
+      },
+    ];
 
     const latestResults = await prisma.lottery_results.findMany({
       where: whereClause,
@@ -96,6 +109,8 @@ class ApiClient {
           select: {
             name: true,
             showing_prizes: true,
+            how_to_play_text: true,
+            how_to_play_image: true,
             countries: { select: { code: true } },
           },
         },
@@ -128,11 +143,19 @@ class ApiClient {
         }
       : {};
 
-    // Filter only those with verified result_verification
-    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+    // Filter only those with verified result_verification, EXCEPT for Australia which bypasses verification
+    whereClause.OR = [
       {
-        some: { status: "verified" },
-      };
+        result_verifications_result_verifications_lottery_result_idTolottery_results: {
+          some: { status: "verified" },
+        },
+      },
+      {
+        lottery: {
+          countries: { code: { equals: "au", mode: "insensitive" } },
+        },
+      },
+    ];
 
     const [total, results] = await prisma.$transaction([
       prisma.lottery_results.count({ where: whereClause }),
@@ -146,6 +169,8 @@ class ApiClient {
             select: {
               name: true,
               showing_prizes: true,
+              how_to_play_text: true,
+              how_to_play_image: true,
               countries: { select: { code: true } },
             },
           },
@@ -200,11 +225,19 @@ class ApiClient {
       whereClause.draw_period = period;
     }
 
-    // Filter only those with verified result_verification
-    whereClause.result_verifications_result_verifications_lottery_result_idTolottery_results =
+    // Filter only those with verified result_verification, EXCEPT for Australia which bypasses verification
+    whereClause.OR = [
       {
-        some: { status: "verified" },
-      };
+        result_verifications_result_verifications_lottery_result_idTolottery_results: {
+          some: { status: "verified" },
+        },
+      },
+      {
+        lottery: {
+          countries: { code: { equals: "au", mode: "insensitive" } },
+        },
+      },
+    ];
 
     const [total, results] = await prisma.$transaction([
       prisma.lottery_results.count({ where: whereClause }),
@@ -218,6 +251,8 @@ class ApiClient {
             select: {
               name: true,
               showing_prizes: true,
+              how_to_play_text: true,
+              how_to_play_image: true,
               countries: { select: { code: true } },
             },
           },

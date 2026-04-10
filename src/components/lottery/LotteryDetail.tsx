@@ -1,5 +1,6 @@
 "use client";
 
+import ReactMarkdown from "react-markdown";
 import { DrawResult } from "./DrawResult";
 import { DrawPageHeader } from "./DrawPageHeader";
 import { PrizeTierSection } from "./PrizeTierSection";
@@ -8,6 +9,7 @@ import { FindByNumber } from "./FindByNumber";
 import { RecentGlobalDraws } from "./RecentGlobalDraws";
 import { NewsSidebar } from "@/components/ui/NewsSidebar";
 import { InteractiveTicketVerifier } from "./InteractiveTicketVerifier";
+import { LaoAnimalList } from "./LaoAnimalList";
 import { NewspaperIcon, ArrowRight, AlertTriangle, Calendar, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
@@ -22,6 +24,16 @@ import {
   formatDateDisplay,
   GenericPrizeData,
 } from "@/lib/utils/lotteryUtils";
+
+const formatAmount = (val: string | number | undefined | null): string => {
+  if (!val) return "0";
+  const numText = String(val).replace(/,/g, '').trim();
+  const num = Number(numText);
+  if (!isNaN(num) && numText !== '') {
+    return new Intl.NumberFormat('en-US').format(num);
+  }
+  return String(val);
+};
 
 export interface LotteryDetailProps {
   country: string;
@@ -40,6 +52,9 @@ export interface LotteryDetailProps {
     last3b: string;
     last2: string;
   };
+  howToPlayText?: string | null;
+  howToPlayImage?: string | null;
+  hideVerification?: boolean;
 }
 
 export default function LotteryDetail({
@@ -53,6 +68,9 @@ export default function LotteryDetail({
   currency,
   initialData,
   prizeLabels,
+  howToPlayText,
+  howToPlayImage,
+  hideVerification = false,
 }: LotteryDetailProps) {
   const { t, language } = useLanguage();
   const dd = t.staticParams.drawDetail;
@@ -103,13 +121,14 @@ export default function LotteryDetail({
   const historyItems = activeData?.history ?? [];
   const latestData = latest?.data as ThaiResultData | undefined;
   const rawData = latestData as unknown as GenericPrizeData;
+  const fullData = latest?.fullData as any;
 
   // 1st Prize
   const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize", "First Prize", "First Prize (4 Digits)"];
   const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial", "prize_4_digits"];
   const p1Num = getPrizeNumber(rawData, p1Names, p1Cats, 1) || [rawData?.first || rawData?.firstPrize];
   const firstPrize = p1Num && p1Num.length > 0 && p1Num[0] !== undefined ? p1Num[0] : "-";
-  const firstPrizeAmount = getPrizeAmount(rawData, p1Names, p1Cats, 1) || rawData?.firstPrizeAmount || "6,000,000";
+  const firstPrizeAmount = getPrizeAmount(rawData, p1Names, p1Cats, 1) || rawData?.firstPrizeAmount || "6000000";
 
   // 3-digit front
   const pFront3Names = ["3 Front", "เลขหน้า 3 ตัว", "รางวัลเลขหน้า 3 ตัว"];
@@ -150,12 +169,57 @@ export default function LotteryDetail({
     const sorted = [...rawPrizes].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
     sorted.forEach((p) => {
-      const pNumbers = p.winningNumbers || p.number || [];
-      const nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers])
+      const name = (p.prizeName || p.category || "").toLowerCase();
+
+      let pNumbers = p.winningNumbers || p.number || [];
+      
+      // Forcefully pull correct numbers natively from fullData for Australia to avoid verification artifact bugs
+      if (countryCode === "au" && fullData) {
+        if (name.includes("main") || name.includes("winning")) {
+          pNumbers = fullData.mainNumbers || pNumbers;
+        } else if (name.includes("supp") || name.includes("bonus")) {
+          pNumbers = fullData.supplementary || pNumbers;
+        } else if (name.includes("powerball")) {
+          pNumbers = fullData.powerball || pNumbers;
+        }
+      }
+
+      let nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers])
         .map(String)
         .filter((s) => s !== "undefined" && s !== "null" && s !== "");
 
-      const name = (p.prizeName || p.category || "").toLowerCase();
+      // Protect against scraper bugs where Australia supplementary arrays contain 40+ previous historical balls
+      if (countryCode === "au") {
+        const lowerLottoName = lotteryName?.toLowerCase() || "";
+        if (
+          name.includes("supp") ||
+          name.includes("bonus") ||
+          name.includes("powerball")
+        ) {
+          let maxSupps = 1;
+          if (lowerLottoName.includes("oz lotto")) maxSupps = 3;
+          else if (
+            lowerLottoName.includes("saturday") ||
+            lowerLottoName.includes("monday") ||
+            lowerLottoName.includes("wednesday") ||
+            lowerLottoName.includes("set for life") ||
+            lowerLottoName.includes("weekday windfall")
+          ) {
+            maxSupps = 2;
+          }
+          if (nums.length > maxSupps) nums = nums.slice(0, maxSupps);
+        } else if (name.includes("main") || name.includes("winning")) {
+          let maxMain = 6;
+          if (
+            lowerLottoName.includes("oz lotto") ||
+            lowerLottoName.includes("powerball") ||
+            lowerLottoName.includes("set for life")
+          ) {
+            maxMain = 7;
+          }
+          if (nums.length > maxMain) nums = nums.slice(0, maxMain);
+        }
+      }
       let isHero = false;
 
       if (dynamicHeroPrizes.length === 0) {
@@ -191,7 +255,7 @@ export default function LotteryDetail({
         dynamicTierPrizes.push({
           title: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
           count: nums.length,
-          amount: String(p.amount || p.prizeAmount || p.reward || p.prize_amount || "0"),
+          amount: formatAmount(p.amount || p.prizeAmount || p.reward || p.prize_amount || "0"),
           numbers: nums,
         });
       }
@@ -205,16 +269,16 @@ export default function LotteryDetail({
     date: formattedDate,
     currency: currency || undefined,
     firstPrize: String(firstPrize || "-"),
-    firstPrizeAmount: String(firstPrizeAmount),
+    firstPrizeAmount: formatAmount(firstPrizeAmount),
     dynamicPrizes: isNonThai ? dynamicHeroPrizes : [],
     front3: (Array.isArray(front3) ? front3 : [front3]).map(String).filter((s) => s !== "undefined"),
-    front3Amount: String(getPrizeAmount(rawData, pFront3Names, pFront3Cats) || rawData?.first3?.amount || rawData?.front3Amount || "4,000"),
+    front3Amount: formatAmount(getPrizeAmount(rawData, pFront3Names, pFront3Cats) || rawData?.first3?.amount || rawData?.front3Amount || "4000"),
     back3: (Array.isArray(back3) ? back3 : [back3]).map(String).filter((s) => s !== "undefined"),
-    back3Amount: String(getPrizeAmount(rawData, pBack3Names, pBack3Cats) || rawData?.last3?.amount || rawData?.back3Amount || "4,000"),
+    back3Amount: formatAmount(getPrizeAmount(rawData, pBack3Names, pBack3Cats) || rawData?.last3?.amount || rawData?.back3Amount || "4000"),
     last2: String(last2 || "-"),
-    last2Amount: String(getPrizeAmount(rawData, p2Names, p2Cats) || rawData?.last2?.amount || rawData?.last2Amount || "2,000"),
+    last2Amount: formatAmount(getPrizeAmount(rawData, p2Names, p2Cats) || rawData?.last2?.amount || rawData?.last2Amount || "2000"),
     adjacent: (getPrizeNumber(rawData, pAdjNames, pAdjCats) || rawData?.adjacent || [])?.map(String),
-    adjacentAmount: String(getPrizeAmount(rawData, pAdjNames, pAdjCats) || rawData?.adjacentAmount || "100,000"),
+    adjacentAmount: formatAmount(getPrizeAmount(rawData, pAdjNames, pAdjCats) || rawData?.adjacentAmount || "100000"),
   };
 
   /* ---------- Prize Tier Data ---------- */
@@ -224,16 +288,16 @@ export default function LotteryDetail({
     prizeTiers = dynamicTierPrizes;
   } else {
     prizeTiers = [
-      { title: t.results.prize2rank, names: ["Prize 2", "รางวัลที่ 2"], cats: ["prize_2"], fallback: rawData?.prize2, amountFallback: rawData?.prize2Amount || "200,000" },
-      { title: t.results.prize3rank, names: ["Prize 3", "รางวัลที่ 3"], cats: ["prize_3"], fallback: rawData?.prize3, amountFallback: rawData?.prize3Amount || "80,000" },
-      { title: t.results.prize4rank, names: ["Prize 4", "รางวัลที่ 4"], cats: ["prize_4"], fallback: rawData?.prize4, amountFallback: rawData?.prize4Amount || "40,000" },
-      { title: t.results.prize5rank, names: ["Prize 5", "รางวัลที่ 5"], cats: ["prize_5"], fallback: rawData?.prize5, amountFallback: rawData?.prize5Amount || "20,000" },
+      { title: t.results.prize2rank, names: ["Prize 2", "รางวัลที่ 2"], cats: ["prize_2"], fallback: rawData?.prize2, amountFallback: rawData?.prize2Amount || "200000" },
+      { title: t.results.prize3rank, names: ["Prize 3", "รางวัลที่ 3"], cats: ["prize_3"], fallback: rawData?.prize3, amountFallback: rawData?.prize3Amount || "80000" },
+      { title: t.results.prize4rank, names: ["Prize 4", "รางวัลที่ 4"], cats: ["prize_4"], fallback: rawData?.prize4, amountFallback: rawData?.prize4Amount || "40000" },
+      { title: t.results.prize5rank, names: ["Prize 5", "รางวัลที่ 5"], cats: ["prize_5"], fallback: rawData?.prize5, amountFallback: rawData?.prize5Amount || "20000" },
     ].map((tier) => {
       const numbers = getPrizeNumber(rawData, tier.names, tier.cats) || tier.fallback || [];
       return {
         title: tier.title,
         count: numbers?.length || 0,
-        amount: String(getPrizeAmount(rawData, tier.names, tier.cats) || tier.amountFallback),
+        amount: formatAmount(getPrizeAmount(rawData, tier.names, tier.cats) || tier.amountFallback),
         numbers: numbers || [],
       };
     });
@@ -252,7 +316,7 @@ export default function LotteryDetail({
         const nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers]).map(String).filter((s: string) => s !== "undefined" && s !== "null");
         allPrizes.push({
           name: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
-          amount: String(p.amount || p.prizeAmount || p.reward || "0"),
+          amount: formatAmount(p.amount || p.prizeAmount || p.reward || "0"),
           numbers: nums,
         });
       },
@@ -289,9 +353,9 @@ export default function LotteryDetail({
       const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || [d?.first || d?.firstPrize];
       rFirstPrize = rp1Num && rp1Num.length > 0 && rp1Num[0] !== undefined ? rp1Num[0] : "-";
       const rf3 = getPrizeNumber(d, pFront3Names, pFront3Cats) || d?.first3?.number || d?.last3f || d?.front3 || [];
-      rFront3 = String((Array.isArray(rf3) ? rf3 : [rf3])[0] || "-");
+      rFront3 = String(Array.isArray(rf3) ? rf3.join(" ") : rf3) || "-";
       const rb3 = getPrizeNumber(d, pBack3Names, pBack3Cats, 2) || d?.last3?.number || d?.last3b || d?.back3 || [];
-      rBack3 = String((Array.isArray(rb3) ? rb3 : [rb3])[0] || "-");
+      rBack3 = String(Array.isArray(rb3) ? rb3.join(" ") : rb3) || "-";
       const rl2Num = getPrizeNumber(d, p2Names, p2Cats, 3) || d?.last2?.number || [d?.last2];
       rLast2 = String(Array.isArray(rl2Num) ? rl2Num[0] : rl2Num) || "-";
       if (rLast2 === "undefined") rLast2 = "-";
@@ -324,6 +388,11 @@ export default function LotteryDetail({
           {/* 2. Hero — Draw Result */}
           <DrawResult {...drawResultProps} />
 
+          {/* Lao Animal List (Dynamic rendering if animals data is available) */}
+          {((rawData as any)?.animals || fullData?.animals) && (((rawData as any)?.animals || fullData?.animals).length > 0) && (
+            <LaoAnimalList animals={(rawData as any)?.animals || fullData?.animals} />
+          )}
+
           {/* 3. Prize Grids (2nd–5th) */}
           {prizeTiers
             .filter((tier) => tier.numbers.length > 0)
@@ -340,16 +409,47 @@ export default function LotteryDetail({
             ))}
 
           {/* 4. Inline Ticket Verifier */}
-          <InteractiveTicketVerifier
-            countryCode={countryCode}
-            lotterySlug={lotterySlug}
-            latestDateDisplay={latest?.dateDisplay || latest?.date || t.common.current}
-            historyItems={historyItems}
-            prizes={allPrizes}
-          />
+          {!hideVerification && (
+            <InteractiveTicketVerifier
+              countryCode={countryCode}
+              lotterySlug={lotterySlug}
+              latestDateDisplay={latest?.dateDisplay || latest?.date || t.common.current}
+              historyItems={historyItems}
+              prizes={allPrizes}
+            />
+          )}
+
+          {/* 4.5. How to Play */}
+          {(howToPlayText || howToPlayImage) && (
+            <div className="bg-white dark:bg-neutral-900/80 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none mb-8">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                How to Play {lotteryName}
+              </h3>
+              <div className="flex flex-col lg:flex-row gap-8">
+                {howToPlayImage && (
+                  <div className="lg:w-1/3 flex-shrink-0">
+                    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50">
+                      <Image 
+                        src={howToPlayImage} 
+                        alt={`How to play ${lotteryName}`} 
+                        width={600} 
+                        height={800} 
+                        className="object-contain w-full"
+                      />
+                    </div>
+                  </div>
+                )}
+                {howToPlayText && (
+                  <div className="lg:flex-1 prose prose-slate dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                    <ReactMarkdown>{howToPlayText}</ReactMarkdown>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* 5. Find By Number */}
-          <FindByNumber countryCode={countryCode} prizes={allPrizes} />
+          {!hideVerification && <FindByNumber countryCode={countryCode} prizes={allPrizes} />}
 
           {/* 6. Recent Global Draws */}
           <RecentGlobalDraws excludeCountry={countryCode} />
@@ -457,28 +557,30 @@ export default function LotteryDetail({
         {/* -------- Sidebar (1/3) -------- */}
         <aside className="space-y-6">
           {/* Sidebar Ticket Verifier */}
-          <InteractiveTicketVerifier
+          {/* <InteractiveTicketVerifier
             variant="sidebar"
             countryCode={countryCode}
             lotterySlug={lotterySlug}
             latestDateDisplay={latest?.dateDisplay || latest?.date || t.common.current}
             historyItems={historyItems}
             prizes={allPrizes}
-          />
+          /> */}
 
           {/* Previous Draws */}
           <PreviousDrawsSidebar
             countryCode={countryCode}
             lotterySlug={lotterySlug}
             historyItems={historyItems}
+            recentResults={recentResults}
+            prizeLabels={prizeLabels}
           />
 
           {/* News Sidebar */}
-          <NewsSidebar
+          {/* <NewsSidebar
             accentColor="gold"
             icon={<NewspaperIcon className="h-4 w-4 text-amber-600 dark:text-gold-400" />}
             category={countryCode}
-          />
+          /> */}
         </aside>
       </div>
     </div>

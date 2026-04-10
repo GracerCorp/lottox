@@ -8,6 +8,7 @@ interface CountdownTimerProps {
 }
 
 interface TimeRemaining {
+  days: number;
   hours: number;
   minutes: number;
   seconds: number;
@@ -19,17 +20,18 @@ function pad(n: number): string {
 
 export function useCountdown(targetDate?: string): TimeRemaining {
   const calc = useCallback((): TimeRemaining => {
-    if (!targetDate) return { hours: 0, minutes: 0, seconds: 0 };
+    if (!targetDate) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     const diff = Math.max(0, new Date(targetDate).getTime() - Date.now());
     return {
-      hours: Math.floor(diff / 3_600_000),
+      days: Math.floor(diff / 86_400_000),
+      hours: Math.floor((diff % 86_400_000) / 3_600_000),
       minutes: Math.floor((diff % 3_600_000) / 60_000),
       seconds: Math.floor((diff % 60_000) / 1000),
     };
   }, [targetDate]);
 
   // Initialize with zeros to avoid hydration mismatch (Date.now() differs on server vs client)
-  const [remaining, setRemaining] = useState<TimeRemaining>({ hours: 0, minutes: 0, seconds: 0 });
+  const [remaining, setRemaining] = useState<TimeRemaining>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     const initialTimeout = setTimeout(() => {
@@ -46,18 +48,18 @@ export function useCountdown(targetDate?: string): TimeRemaining {
 }
 
 /**
- * Displays a live HH : MM : SS countdown to `targetDate`.
+ * Displays a live DD : HH : MM : SS countdown to `targetDate`.
  */
 export function CountdownTimer({ targetDate, className }: CountdownTimerProps) {
-  const { hours, minutes, seconds } = useCountdown(targetDate);
+  const { days, hours, minutes, seconds } = useCountdown(targetDate);
 
   return (
     <span
       className={className}
-      aria-label={`${pad(hours)} hours ${pad(minutes)} minutes ${pad(seconds)} seconds`}
+      aria-label={`${days} days ${pad(hours)} hours ${pad(minutes)} minutes ${pad(seconds)} seconds`}
       data-testid="countdown-timer"
     >
-      {pad(hours)} : {pad(minutes)} : {pad(seconds)}
+      {pad(days)} : {pad(hours)} : {pad(minutes)} : {pad(seconds)}
     </span>
   );
 }

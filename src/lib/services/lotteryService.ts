@@ -103,6 +103,8 @@ export interface LotteryCardData {
   prizes: { label: string; amount: string }[];
   nextDrawDate: string | null;
   href: string;
+  howToPlayText: string | null;
+  howToPlayImage: string | null;
 }
 
 /**
@@ -223,6 +225,8 @@ export async function getLotteryCardData(
       prizes,
       nextDrawDate,
       href: `/${countryCode.toLowerCase()}/${lotterySlug}`,
+      howToPlayText: lottery.how_to_play_text ?? null,
+      howToPlayImage: lottery.how_to_play_image ?? null,
     };
   });
 }

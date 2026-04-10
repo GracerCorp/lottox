@@ -37,12 +37,16 @@ export function LatestUpdateCard({
           {/* Logo/Flag Circle */}
           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/10 shadow-sm bg-neutral-900 flex items-center justify-center">
             {flag ? (
-              <Image
-                src={flag}
-                alt={`${country} flag`}
-                fill
-                className="object-cover"
-              />
+              !flag.includes("/") ? (
+                <span className="text-xl leading-none">{flag}</span>
+              ) : (
+                <Image
+                  src={flag}
+                  alt={`${country} flag`}
+                  fill
+                  className="object-cover"
+                />
+              )
             ) : (
               <div className="w-full h-full bg-neutral-800" />
             )}

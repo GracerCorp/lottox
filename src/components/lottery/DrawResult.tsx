@@ -4,6 +4,26 @@ import { LotteryBall } from "@/components/ui/LotteryBall";
 import { Trophy } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+const getBalls = (numbersStrOrArr: string[] | string): string[] => {
+  if (!numbersStrOrArr) return [];
+  if (Array.isArray(numbersStrOrArr)) {
+    if (numbersStrOrArr.length > 1) return numbersStrOrArr;
+    if (numbersStrOrArr.length === 1) {
+      const item = String(numbersStrOrArr[0]);
+      if (item.includes(",")) return item.split(",").map(s => s.trim()).filter(Boolean);
+      if (item.includes(" ")) return item.split(" ").map(s => s.trim()).filter(Boolean);
+      if (item.includes("-")) return item.split("-").map(s => s.trim()).filter(Boolean);
+      return item.split("");
+    }
+    return [];
+  }
+  const s = String(numbersStrOrArr || "");
+  if (s.includes(",")) return s.split(",").map(x => x.trim()).filter(Boolean);
+  if (s.includes(" ")) return s.split(" ").map(x => x.trim()).filter(Boolean);
+  if (s.includes("-")) return s.split("-").map(x => x.trim()).filter(Boolean);
+  return s.split("");
+};
+
 interface Prize {
   name: string;
   amount: string;
@@ -123,6 +143,67 @@ export function DrawResult({
   const dynamicFirst = sortedDynamic[0];
   const dynamicRest = sortedDynamic.slice(1);
 
+  const isAustraliaUI = country?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("powerball") || lotteryName?.toLowerCase().includes("oz lotto");
+
+  if (isAustraliaUI) {
+    return (
+      <section className="relative overflow-hidden rounded-[1.5rem] bg-[#1d1d1d] border border-white/5 shadow-2xl p-6 sm:p-8">
+        {/* Date Pill */}
+        <div className="flex justify-center mb-8">
+          <div className="border border-[#786134] rounded-full px-6 py-2 text-[#C0A062] text-sm font-medium tracking-wide">
+            {date}
+          </div>
+        </div>
+
+        {/* Labels Row */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+          <div className="flex items-center gap-3 bg-[#382b13]/40 rounded-xl px-5 py-3 border border-[#6b5526]/30">
+            <Trophy className="w-6 h-6 text-[#DFC38E]" />
+            <span className="text-[#DFC38E] font-bold text-lg tracking-wide">Winning No.</span>
+          </div>
+          <div className="text-gray-400 font-medium text-sm sm:text-base">
+            1st Prize - <span className="text-[#DFC38E] font-bold">{(useDynamic ? dynamicFirst?.prizeAmount?.toLocaleString() : firstPrizeAmount) || 0} {displayCurrency}</span>
+          </div>
+        </div>
+
+        {/* Main Balls */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-4">
+          {getBalls(useDynamic ? dynamicFirst?.winningNumbers || [] : [firstPrize]).map((n, i) => (
+            <LotteryBall
+              key={i}
+              number={n}
+              size="xl"
+              shape="squircle"
+              color="gold"
+              className="!bg-gradient-to-b !from-[#ECD299] !to-[#D5AB63] !text-[#181818] shadow-[0_4px_10px_rgba(0,0,0,0.5)] border-none"
+            />
+          ))}
+        </div>
+
+        {/* Bonus Section inside the hero */}
+        {useDynamic && dynamicRest.length > 0 && (
+          <div className="flex justify-center mt-10">
+            <div className="border border-white/10 bg-white/[0.04] rounded-2xl px-12 py-6">
+              <div className="text-center text-white font-bold text-base mb-5 tracking-wide">Bonus Number</div>
+              <div className="flex flex-row justify-center gap-4">
+                {dynamicRest.map((prize) => getBalls(prize.winningNumbers).map((num, i) => (
+                  <LotteryBall
+                    key={`${prize.prizeName}-${i}`}
+                    number={num}
+                    size="lg"
+                    shape="squircle"
+                    color="dark-gray"
+                    className="!w-[3.5rem] !h-[3rem] sm:!w-[4.25rem] sm:!h-[3.5rem] !bg-[#535353] !border-[#666] !rounded-2xl !text-xl"
+                  />
+                )))}
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+    );
+  }
+
   return (
     <section className="relative overflow-hidden rounded-2xl border border-gold-500/20 bg-gradient-to-br from-white via-gray-50 to-white dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 shadow-2xl">
       <div className="absolute right-0 top-0 -mr-20 -mt-20 h-64 w-64 rounded-full bg-gold-500/10 blur-3xl" />
@@ -165,13 +246,11 @@ export function DrawResult({
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            {(
-              (useDynamic
-                ? dynamicFirst?.winningNumbers?.[0] || firstPrize
-                : firstPrize) || ""
-            )
-              .split("")
-              .map((n, i) => (
+            {getBalls(
+              useDynamic
+                ? dynamicFirst?.winningNumbers || []
+                : [firstPrize]
+            ).map((n, i) => (
                 <LotteryBall
                   key={i}
                   number={n}
@@ -195,14 +274,19 @@ export function DrawResult({
                   {getPrizeName(prize)}
                 </div>
                 <div className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-1">
-                  {prize.winningNumbers.map((num, i) => (
-                    <span
-                      key={i}
-                      className="font-mono text-fs-2xl font-bold tracking-widest text-gray-900 dark:text-white"
-                    >
-                      {num}
-                    </span>
-                  ))}
+                  {getBalls(prize.winningNumbers).map((num, i) => {
+                    const isSpecial = prize.prizeName?.toLowerCase().includes("power") || prize.prizeName?.toLowerCase().includes("mega") || prize.prizeName?.toLowerCase().includes("bonus");
+                    return (
+                      <LotteryBall
+                        key={i}
+                        number={num}
+                        size="md"
+                        color={isSpecial ? "blue" : "gray"}
+                        isBonus={isSpecial}
+                        className="h-10 w-10 text-xl font-bold sm:h-12 sm:w-12 sm:text-2xl"
+                      />
+                    );
+                  })}
                 </div>
                 {prize.prizeAmount > 0 && (
                   <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">

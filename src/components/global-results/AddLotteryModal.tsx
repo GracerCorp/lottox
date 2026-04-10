@@ -3,15 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
-import type { LotteriesListResponse } from "@/lib/api-types";
+import type { LotteriesListResponse, PinnedLottery } from "@/lib/api-types";
 import Image from "next/image";
-
-export interface PinnedLottery {
-  lotteryId: number;
-  lotteryName: string;
-  logo: string | null;
-  countryCode: string;
-}
 
 interface AddLotteryModalProps {
   pinned: PinnedLottery[];

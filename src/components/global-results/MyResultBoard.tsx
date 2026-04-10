@@ -5,34 +5,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { PinnedLotteryTabs } from "./PinnedLotteryTabs";
 import { ResultBoardCard } from "./ResultBoardCard";
 import { AddLotteryModal } from "./AddLotteryModal";
-import type { PinnedLottery } from "./AddLotteryModal";
+import type { PinnedLottery } from "@/lib/api-types";
+import { getPinnedLotteries, setPinnedLotteries } from "@/lib/utils/cookies";
 
-const STORAGE_KEY = "lottox_pinned_lotteries";
 const MAX_PINNED = 6;
-
-/** Read pinned lotteries from localStorage, auto-migrating old format */
-function readPinned(): PinnedLottery[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as Record<string, unknown>[];
-    // Migration: old format had { countryCode, lotteryName } without lotteryId
-    if (parsed.length > 0 && !("lotteryId" in parsed[0])) {
-      localStorage.removeItem(STORAGE_KEY);
-      return [];
-    }
-    return parsed as unknown as PinnedLottery[];
-  } catch {
-    return [];
-  }
-}
-
-function writePinned(pinned: PinnedLottery[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(pinned));
-  } catch { /* ignore */ }
-}
 
 export function MyResultBoard() {
   const { t } = useLanguage();
@@ -45,10 +21,10 @@ export function MyResultBoard() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Load pinned lotteries from localStorage after hydration
+  // Load pinned lotteries from cookies after hydration
   useEffect(() => {
     setTimeout(() => {
-      setPinned(readPinned());
+      setPinned(getPinnedLotteries());
       setHydrated(true);
     }, 0);
   }, []);
@@ -58,7 +34,7 @@ export function MyResultBoard() {
     (selected: PinnedLottery[]) => {
       const next = selected.slice(0, MAX_PINNED);
       setPinned(next);
-      writePinned(next);
+      setPinnedLotteries(next);
       // Keep active index in bounds
       setActiveIndex((prev) =>
         next.length === 0 ? 0 : Math.min(prev, next.length - 1)
@@ -72,7 +48,7 @@ export function MyResultBoard() {
     (lotteryId: number) => {
       const next = pinned.filter((p) => p.lotteryId !== lotteryId);
       setPinned(next);
-      writePinned(next);
+      setPinnedLotteries(next);
       setActiveIndex((prev) => Math.min(prev, Math.max(0, next.length - 1)));
     },
     [pinned],

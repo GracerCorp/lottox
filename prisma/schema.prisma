@@ -153,6 +153,8 @@ model lotteries {
   showing_prizes          String[]
   prize_amount_mode       String                    @default("fixed")
   default_prize_amounts   Json?                     @default("{}")
+  how_to_play_text        String?
+  how_to_play_image       String?
   analytics_snapshots     analytics_snapshots[]
   articles                articles[]
   countries               countries?                @relation(fields: [country_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "lotteries_country_id_countries_id_fk")

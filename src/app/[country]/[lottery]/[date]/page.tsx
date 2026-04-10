@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { getLotteryBySlug } from "@/lib/services/lotteryService";
 import { Breadcrumb, BreadcrumbJsonLd } from "@/components/ui/Breadcrumb";
 import { LotteryResultJsonLd } from "@/components/seo/LotteryResultJsonLd";
+import { getDictionary } from "@/lib/i18n";
 
 interface PageProps {
   params: Promise<{
@@ -55,6 +56,16 @@ export default async function DrawPage({ params }: PageProps) {
     { label: date },
   ];
 
+  const dict = await getDictionary("en");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const r = (dict as any)?.results ?? {};
+  const prizeLabels = {
+    firstPrize: r.prize1 ?? "1st Prize",
+    last3f: r.prize3Front ?? "3 Front",
+    last3b: r.prize3Back ?? "3 Back",
+    last2: r.prize2 ?? "2 Bottom",
+  };
+
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
@@ -65,7 +76,7 @@ export default async function DrawPage({ params }: PageProps) {
         currency={lotteryInfo.currency ?? undefined}
         url={`https://lottox.today/${country}/${lottery}/${date}`}
       />
-      <div className="container mx-auto px-4 pt-4">
+      <div className="container mx-auto px-4 pt-4 relative z-50">
         <Breadcrumb items={breadcrumbItems} />
       </div>
       <LotteryDetail
@@ -77,6 +88,10 @@ export default async function DrawPage({ params }: PageProps) {
         apiEndpoint={`/api/results/${apiType}/${date}`}
         logo={lotteryInfo.logo}
         currency={lotteryInfo.currency}
+        howToPlayText={lotteryInfo.how_to_play_text}
+        howToPlayImage={lotteryInfo.how_to_play_image}
+        prizeLabels={prizeLabels}
+        hideVerification={true}
       />
     </>
   );

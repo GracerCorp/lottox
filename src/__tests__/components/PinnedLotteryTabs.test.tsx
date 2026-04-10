@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PinnedLotteryTabs } from "@/components/global-results/PinnedLotteryTabs";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import type { PinnedLottery } from "@/components/global-results/AddLotteryModal";
+import type { PinnedLottery } from "@/lib/api-types";
 
 vi.mock("next/image", () => ({
   __esModule: true,
