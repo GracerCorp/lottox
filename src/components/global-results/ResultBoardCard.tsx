@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import { getFlagUrl } from "@/lib/flags";
 import { DrawHistoryRow } from "./DrawHistoryRow";
 import { BoardPagination } from "./BoardPagination";
+import { slugify } from "@/lib/utils/lotteryUtils";
 import type { LatestResultsResponse } from "@/lib/api-types";
 
 /** Shape of our formatLotteryResult responses. Extended from the LatestResult contract. */
@@ -22,12 +24,14 @@ interface GlobalDrawsApiResponse {
 interface ResultBoardCardProps {
   lotteryName: string;
   countryCode: string;
+  logo?: string | null;
   onRemove?: () => void;
   pinned?: boolean;
   onTogglePin?: () => void;
+  onMoveToTop?: () => void;
 }
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 2;
 
 function extractNumbers(data: unknown): {
   digits6: string;
@@ -93,7 +97,7 @@ function extractNumbers(data: unknown): {
 }
 
 
-export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, onTogglePin }: ResultBoardCardProps) {
+export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinned, onTogglePin, onMoveToTop }: ResultBoardCardProps) {
   const { t } = useLanguage();
   const gd = t.staticParams.globalDraws;
 
@@ -103,7 +107,9 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
   const [page, setPage] = useState(1);
 
   const draws = data?.draws ?? [];
-  const totalPages = Math.max(1, Math.ceil(draws.length / PAGE_SIZE));
+  const maxContentPages = Math.min(3, Math.ceil(draws.length / PAGE_SIZE));
+  const totalPages = draws.length > 0 ? maxContentPages + 1 : 0;
+  
   const paginated = draws.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const first = draws[0];
@@ -111,6 +117,10 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
 
   const handlePrev = useCallback(() => setPage((p) => Math.max(1, p - 1)), []);
   const handleNext = useCallback(() => setPage((p) => Math.min(totalPages, p + 1)), [totalPages]);
+
+  if (!loading && !error && draws.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -120,8 +130,8 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
       {/* Card header */}
       <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-neutral-800/60 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-2 min-w-0">
-          <div className="relative h-4 w-6 shrink-0 overflow-hidden rounded shadow">
-            <Image src={getFlagUrl(countryCode)} alt={countryCode} fill className="object-cover" />
+          <div className={`relative shrink-0 overflow-hidden rounded ${logo ? 'h-6 w-6' : 'h-4 w-6 shadow'}`}>
+            <Image src={logo || getFlagUrl(countryCode)} alt={lotteryName} fill className={logo ? "object-contain" : "object-cover"} />
           </div>
           <span className="text-gray-900 dark:text-white text-sm font-bold truncate">{lotteryName}</span>
         </div>
@@ -139,44 +149,43 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
             &times;
           </button>
         )}
-        {onTogglePin && (
-          <button
-            onClick={onTogglePin}
-            aria-label={pinned ? "Unpin" : "Pin"}
-            className={`ml-2 p-1 rounded transition-colors ${
-              pinned 
-                ? "text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300"
-                : "text-gray-300 hover:text-gray-400 dark:text-gray-600 dark:hover:text-gray-500"
-            }`}
-            data-testid="pin-button"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill={pinned ? "currentColor" : "none"}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={pinned ? 1 : 2}
+        <div className="flex items-center ml-2">
+          {pinned && onMoveToTop && (
+            <button
+              onClick={onMoveToTop}
+              title="Move to top"
+              className="p-1 rounded text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300 transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 12h14M12 5v14"
-                transform={pinned ? "rotate(45 12 12)" : ""}
-                style={{ display: pinned ? 'none' : 'block' }}
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.155 10.518C16.892 9.043 17 6.444 17 6H7c0 .444.108 3.043.845 4.518a4 4 0 001.077 1.341c.214.168.423.361.616.587l.793.924C11.135 14.185 11.5 15.066 11.5 16v3.5a.5.5 0 001 0V16c0-.934.365-1.815 1.169-2.63l.793-.924a4.015 4.015 0 00.616-.587 4 4 0 001.077-1.341z"
-                style={{ display: pinned ? 'block' : 'none' }}
-              />
-              {!pinned && (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.3c.7-1.4.9-3.9.9-4.3H8.1c0 .4.2 2.9.9 4.3.4.8 1 1.5 1.5 2.1l.6.7c.4.5.6 1.1.6 1.7V18l.6 1v-4.2c0-.6.2-1.2.6-1.7l.6-.7c.5-.6 1.1-1.3 1.5-2.1z" />
-              )}
-            </svg>
-          </button>
-        )}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </button>
+          )}
+          {onTogglePin && (
+            <button
+              onClick={onTogglePin}
+              aria-label={pinned ? "Unpin" : "Pin"}
+              className={`p-1 rounded transition-colors ${
+                pinned 
+                  ? "text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300"
+                  : "text-gray-300 hover:text-gray-400 dark:text-gray-600 dark:hover:text-gray-500"
+              }`}
+              data-testid="pin-button"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 rotate-45"
+                fill={pinned ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 17v5" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16h14v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Body */}
@@ -190,16 +199,23 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
         {error && !loading && (
           <p className="text-red-500 dark:text-red-400 text-xs p-4" data-testid="board-card-error">{gd.errorLoading}</p>
         )}
-        {!loading && !error && draws.length === 0 && (
-          <div className="text-center py-10 text-gray-400 dark:text-gray-500" data-testid="board-card-empty">
-            <div className="text-3xl mb-2">🔍</div>
-            <p className="text-sm">{gd.noResults}</p>
+
+        {!loading && !error && page === totalPages && (
+          <div className="flex-1 flex items-center justify-center p-6 min-h-[140px]">
+            <Link 
+              href={`/${countryCode.toLowerCase()}/${slugify(lotteryName)}`}
+              className="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-neutral-900 font-bold rounded-xl transition-colors shadow-sm"
+            >
+              View Lottery
+            </Link>
           </div>
         )}
-        {!loading && !error && paginated.map((draw, idx) => {
+
+        {!loading && !error && page < totalPages && paginated.map((draw, idx) => {
           const row = extractNumbers(draw.data);
           let drawTime = "";
           let drawDate = "";
+          let rawDateSlug = "";
           try {
             const dt = new Date(draw.drawDate);
             if (!isNaN(dt.getTime())) {
@@ -207,11 +223,20 @@ export function ResultBoardCard({ lotteryName, countryCode, onRemove, pinned, on
               const mn = dt.getUTCMinutes().toString().padStart(2, "0");
               drawTime = `${h}:${mn}`;
               drawDate = dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit", timeZone: "UTC" });
+              
+              const yyyy = dt.getUTCFullYear();
+              const mm = String(dt.getUTCMonth() + 1).padStart(2, '0');
+              const dd = String(dt.getUTCDate()).padStart(2, '0');
+              rawDateSlug = `${yyyy}-${mm}-${dd}`;
             }
           } catch { /* ignore */ }
+          
+          const href = rawDateSlug ? `/${countryCode.toLowerCase()}/${slugify(lotteryName)}/${rawDateSlug}` : undefined;
+          
           return (
             <DrawHistoryRow
               key={idx}
+              href={href}
               drawTime={drawTime}
               drawDate={drawDate}
               digits6={row.digits6}

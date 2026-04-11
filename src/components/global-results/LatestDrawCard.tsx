@@ -141,7 +141,7 @@ export function LatestDrawCard() {
   const draw = extractedDraws[activeIndex];
 
   return (
-    <div className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col shadow-lg w-full relative group" data-testid="latest-draw-card">
+    <div className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col shadow-lg w-full h-full relative group" data-testid="latest-draw-card">
       
       {/* Header */}
       <div className="flex items-center justify-between text-sm text-gray-400 font-medium mb-4 z-10 relative">
@@ -239,7 +239,7 @@ export function LatestDrawCard() {
       </div>
 
       {/* Carousel Dots */}
-      <div className="flex justify-center items-center gap-2.5 mt-2 mb-2 z-10 relative min-h-[6px]">
+      <div className="flex justify-center items-center gap-2.5 mt-auto mb-2 z-10 relative min-h-[6px]">
         {extractedDraws.length > 1 && extractedDraws.map((_, i) => (
           <button
             key={i}

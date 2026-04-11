@@ -55,7 +55,9 @@ function rateLimit(request: NextRequest): NextResponse | null {
   const windowMs = 60 * 1000; // 1 minute
   const maxLimit = request.nextUrl.pathname.startsWith("/api/subscribe")
     ? 10
-    : 60;
+    : request.nextUrl.pathname.startsWith("/api/results")
+    ? 300 // higher limit for results endpoints
+    : 100;
 
   const now = Date.now();
   const entry = inMemoryCache.get(ip);

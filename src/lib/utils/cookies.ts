@@ -41,19 +41,36 @@ export function setPinnedLotteries(pinned: PinnedLottery[]): void {
 /**
  * Toggles a lottery pin state and returns the new array.
  */
-export function togglePinnedLottery(lottery: PinnedLottery, maxPinned: number = 6): PinnedLottery[] {
+export function togglePinnedLottery(lottery: PinnedLottery, maxPinned: number = 9): PinnedLottery[] {
   let pinned = getPinnedLotteries();
   const exists = pinned.some((p) => p.lotteryId === lottery.lotteryId);
 
   if (exists) {
     pinned = pinned.filter((p) => p.lotteryId !== lottery.lotteryId);
   } else {
-    // Optional limit
+    // Push new logic to index 0
     if (pinned.length < maxPinned) {
-      pinned.push(lottery);
+      pinned.unshift(lottery);
     }
   }
 
   setPinnedLotteries(pinned);
+  return pinned;
+}
+
+/**
+ * Moves an already pinned lottery to the beginning of the pinned array.
+ */
+export function movePinnedLotteryToTop(lotteryId: number): PinnedLottery[] {
+  let pinned = getPinnedLotteries();
+  const index = pinned.findIndex(p => p.lotteryId === lotteryId);
+  
+  if (index > 0) {
+    const item = pinned[index];
+    pinned.splice(index, 1);
+    pinned.unshift(item);
+    setPinnedLotteries(pinned);
+  }
+  
   return pinned;
 }

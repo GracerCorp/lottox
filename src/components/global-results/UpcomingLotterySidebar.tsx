@@ -15,7 +15,7 @@ export function UpcomingLotterySidebar() {
   );
 
   return (
-    <div className="flex flex-col gap-6 w-full" data-testid="upcoming-lottery-sidebar">
+    <div className="flex flex-col gap-6 w-full h-full" data-testid="upcoming-lottery-sidebar">
       {loading && (
         <div className="flex flex-col gap-6 animate-pulse" data-testid="upcoming-loading">
           {[1, 2, 3].map((i) => (
@@ -37,7 +37,7 @@ export function UpcomingLotterySidebar() {
       {!loading && !error && data?.upcoming && data.upcoming.map((item, i) => (
         <div
           key={i}
-          className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col gap-5 shadow-lg w-full"
+          className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col gap-5 shadow-lg w-full flex-1 justify-center"
           data-testid="upcoming-item"
         >
           {/* Header Row */}

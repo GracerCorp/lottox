@@ -37,9 +37,22 @@ export function BoardPagination({
         </svg>
       </button>
 
-      <span className="text-gray-500 dark:text-gray-400 text-sm tabular-nums" data-testid="pagination-info">
-        {page} / {totalPages}
-      </span>
+      <div className="flex items-center gap-1.5 px-2" data-testid="pagination-dots">
+        {Array.from({ length: totalPages }).map((_, i) => {
+          const p = i + 1;
+          const isActive = p === page;
+          return (
+            <div
+              key={p}
+              className={`rounded-full transition-all duration-300 ${
+                isActive
+                  ? "bg-gray-400 w-4 h-1.5 dark:bg-white"
+                  : "bg-gray-200 w-1.5 h-1.5 dark:bg-white/20"
+              }`}
+            />
+          );
+        })}
+      </div>
 
       <button
         onClick={onNext}

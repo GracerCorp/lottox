@@ -13,7 +13,10 @@ interface DrawHistoryRowProps {
     digits3Last: string;
     digits2Last: string;
   };
+  href?: string;
 }
+
+import Link from "next/link";
 
 export function DrawHistoryRow({
   drawTime,
@@ -23,8 +26,9 @@ export function DrawHistoryRow({
   digits3Last,
   digits2Last,
   labels,
+  href,
 }: DrawHistoryRowProps) {
-  return (
+  const content = (
     <div
       className="flex flex-wrap items-center gap-x-6 gap-y-2 py-3 px-4 border-b border-slate-100 dark:border-white/5 last:border-0"
       data-testid="draw-history-row"
@@ -59,4 +63,14 @@ export function DrawHistoryRow({
       ))}
     </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
