@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LotteryCardV2 } from "./LotteryCardV2";
 import { Compass } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { HeroItem } from "./HeroSection";
 
 // Helper for scrolling columns
@@ -31,6 +32,16 @@ const ScrollingColumn = ({ colItems, speedStr, reverse = false, className = "", 
 
 export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
   const { t } = useLanguage();
+  const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/regions")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.regions) setRegions(data.regions);
+      })
+      .catch((err) => console.error("Failed to load regions:", err));
+  }, []);
 
   // Ensure we have enough items to display a full grid
   // We want at least 12 items to make the columns look full before duplicating.
@@ -45,12 +56,15 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
   const col4 = displayItems.filter((_, i) => i % 4 === 3);
 
   const actionChips = [
-    { label: "Trending", href: "?tab=trending#latest-results" },
-    { label: "Southeast Asia", href: "?tab=southeast-asia#latest-results" },
-    { label: "Asia", href: "?tab=asia#latest-results" },
-    { label: "Europe", href: "?tab=europe#latest-results" },
-    { label: "America", href: "?tab=america#latest-results" },
-    { label: "Oceania", href: "?tab=oceania#latest-results" },
+    { label: t.regions.trending, href: "?tab=trending#latest-results" },
+    ...regions.map(r => {
+      // Find the localized region name from dictionary if it exists. Fall back to r.name
+      const dictKey = r.id.toLowerCase().replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+      return { 
+        label: (t.regions as any)[dictKey] || r.name, 
+        href: `?tab=${r.id}#latest-results` 
+      };
+    })
   ];
 
   return (
@@ -76,11 +90,11 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
           <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col gap-8 flex-shrink-0 z-20">
             <div className="space-y-4 text-center lg:text-left">
               <h1 className="text-4xl md:text-5xl lg:text-[54px] font-bold leading-[1.1]">
-                <span className="text-gold-new">Worldwide</span>
+                <span className="text-gold-new">{t.hero.titleHighlight}</span>
                 <br className="hidden md:block"/>
-                <span className="text-gold-new"> Lottery Result</span>
+                <span className="text-gold-new"> {t.hero.titleSuffix}</span>
               </h1>
-              <p className="text-base md:text-lg text-white/70 max-w-lg mx-auto lg:mx-0">
+              <p className="text-base md:text-lg text-neutral-600 dark:text-white/70 max-w-lg mx-auto lg:mx-0">
                 {t.hero?.subtitle || "Fast, Accurate, and reliable worldwide lottery results platform"}
               </p>
             </div>
@@ -88,17 +102,17 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <Link 
                 href="/global-results"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-white/5 text-white hover:bg-white/10 transition-colors shadow-sm backdrop-blur-md font-medium text-sm"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-neutral-200 dark:border-white/20 bg-white/50 dark:bg-white/5 text-neutral-700 dark:text-white hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm backdrop-blur-md font-medium text-sm"
               >
                 <Compass className="w-4 h-4 text-gold-new" strokeWidth={2.5}/>
-                <span>Explore Global Results</span>
+                <span>{t.hero.exploreGlobalResults}</span>
               </Link>
               
               {actionChips.map((chip, idx) => (
                 <Link
                   key={idx}
                   href={chip.href}
-                  className="px-5 py-2.5 rounded-full border border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white transition-colors shadow-sm backdrop-blur-md font-medium text-sm"
+                  className="px-5 py-2.5 rounded-full border border-neutral-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-neutral-600 dark:text-white/80 hover:bg-white dark:hover:bg-white/15 dark:hover:text-white transition-colors shadow-sm backdrop-blur-md font-medium text-sm"
                 >
                   {chip.label}
                 </Link>
@@ -107,7 +121,7 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
           </div>
 
           {/* Right Side: The Masonry Scroll */}
-          <div className="w-full lg:w-[55%] xl:w-[60%] relative h-[600px] md:h-[700px] rounded-3xl overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-24 before:bg-gradient-to-b before:from-neutral-950 before:to-transparent before:z-10 after:absolute after:inset-x-0 after:bottom-0 after:h-24 after:bg-gradient-to-t after:from-neutral-950 after:to-transparent after:z-10 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
+          <div className="w-full lg:w-[55%] xl:w-[60%] relative h-[600px] md:h-[700px] rounded-3xl overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-24 before:bg-gradient-to-b before:from-white/90 dark:before:from-neutral-950 before:to-transparent before:z-10 after:absolute after:inset-x-0 after:bottom-0 after:h-24 after:bg-gradient-to-t after:from-white/90 dark:after:from-neutral-950 after:to-transparent after:z-10 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
             
             {/* The Grid */}
             <div className="hero-masonry-grid grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 h-full items-start">

@@ -34,7 +34,7 @@ export function MarketDataTable() {
       .filter((r): r is NonNullable<typeof r> => r !== null) || [];
 
   return (
-    <section className="py-12 bg-[#0a0f1c]">
+    <section className="py-12 bg-white dark:bg-[#0a0f1c]">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -52,23 +52,23 @@ export function MarketDataTable() {
           </div>
         </div>
 
-        <div className="bg-[#05080f] border border-gray-800 rounded-lg overflow-hidden font-mono text-sm relative">
+        <div className="bg-gray-50 dark:bg-[#05080f] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden font-mono text-sm relative shadow-inner">
           {/* Scanline effect overlay */}
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] opacity-20"></div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse table-fixed min-w-[700px]">
               <thead>
-                <tr className="bg-gray-900/50 text-gray-500 text-xs border-b border-gray-800 uppercase tracking-wider">
+                <tr className="bg-gray-100 dark:bg-gray-900/50 text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800 uppercase tracking-wider">
                   <th className="p-3 font-normal w-12 text-center">{t.market.sts}</th>
-                  <th className="p-3 font-normal text-cyan-500">{t.market.symbol}</th>
+                  <th className="p-3 font-normal text-cyan-600 dark:text-cyan-500">{t.market.symbol}</th>
                   <th className="p-3 font-normal text-left">{t.market.numbers}</th>
                   <th className="p-3 font-normal text-right">{t.market.special}</th>
                   <th className="p-3 font-normal text-right">{t.market.jackpot}</th>
                   <th className="p-3 font-normal text-right w-10"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/50">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-800/50">
                 {loading && (
                   <tr>
                     <td colSpan={6} className="p-4 text-center text-gray-500">
@@ -95,7 +95,7 @@ export function MarketDataTable() {
                   results.map((row, idx) => (
                     <tr
                       key={idx}
-                      className="hover:bg-gray-800/30 transition-colors group cursor-pointer text-gray-300"
+                      className="hover:bg-white dark:hover:bg-gray-800/30 transition-colors group cursor-pointer text-gray-700 dark:text-gray-300"
                     >
                       <td className="p-3 text-center">
                         <div
@@ -104,7 +104,7 @@ export function MarketDataTable() {
                       </td>
                       <td className="p-3">
                         <div className="flex flex-col">
-                          <span className="font-bold text-cyan-400 group-hover:text-cyan-300">
+                          <span className="font-bold text-cyan-600 dark:text-cyan-400 group-hover:text-cyan-500 dark:group-hover:text-cyan-300">
                             {row.code}
                           </span>
                           <span className="text-fs-badge text-gray-600 uppercase">
@@ -112,15 +112,15 @@ export function MarketDataTable() {
                           </span>
                         </div>
                       </td>
-                      <td className="p-3 tracking-wider text-gray-400 group-hover:text-white transition-colors">
+                      <td className="p-3 tracking-wider text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                         {row.numbers}
                       </td>
-                      <td className="p-3 text-right text-gold-500 group-hover:text-yellow-300">
+                      <td className="p-3 text-right text-gold-600 dark:text-gold-500 group-hover:text-gold-500 dark:group-hover:text-yellow-300">
                         {row.special || "-"}
                       </td>
                       <td className="p-3 text-right">
                         <div className="flex flex-col items-end">
-                          <span className="font-bold text-white group-hover:text-green-400 transition-colors">
+                          <span className="font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                             {row.jackpot}
                           </span>
                           <span className="text-fs-badge text-gray-600">
@@ -128,7 +128,7 @@ export function MarketDataTable() {
                           </span>
                         </div>
                       </td>
-                      <td className="p-3 text-right text-gray-600 group-hover:text-white">
+                      <td className="p-3 text-right text-gray-400 dark:text-gray-600 group-hover:text-gray-900 dark:group-hover:text-white">
                         <ArrowUpRight className="w-4 h-4 ml-auto" />
                       </td>
                     </tr>
@@ -137,7 +137,7 @@ export function MarketDataTable() {
             </table>
           </div>
 
-          <div className="p-2 border-t border-gray-800 bg-gray-900/30 flex justify-between items-center text-fs-badge text-gray-600 uppercase tracking-widest">
+          <div className="p-2 border-t border-gray-200 dark:border-gray-800 bg-gray-100/50 dark:bg-gray-900/30 flex justify-between items-center text-fs-badge text-gray-500 dark:text-gray-600 uppercase tracking-widest">
             <span>{t.market.providedBy}</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-green-900 rounded-full animate-ping"></span>

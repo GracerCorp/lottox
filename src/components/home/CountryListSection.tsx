@@ -26,7 +26,7 @@ export function CountryListSection({
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           {t.countryList.title}
         </h2>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           {t.countryList.subtitle || t.countryList.seeAll}
         </p>
       </div>

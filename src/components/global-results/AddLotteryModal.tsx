@@ -91,12 +91,12 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
     >
       <div
         ref={modalRef}
-        className="bg-neutral-900 border border-white/10 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[85vh]"
+        className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 rounded-2xl w-full max-w-md mx-4 shadow-2xl flex flex-col max-h-[85vh]"
       >
         {/* Header */}
         <div className="flex items-start justify-between px-5 pt-5 pb-2">
           <div>
-            <h3 className="text-white font-bold text-lg">{mb.pinYourLotteries}</h3>
+            <h3 className="text-gray-900 dark:text-white font-bold text-lg">{mb.pinYourLotteries}</h3>
             <p className="text-gray-500 text-xs mt-1 leading-relaxed">
               {mb.pinLotteryHint}
             </p>
@@ -105,7 +105,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
             ref={closeRef}
             onClick={onClose}
             aria-label={mb.close}
-            className="text-gray-400 hover:text-white transition-colors text-2xl leading-none ml-3 shrink-0"
+            className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-2xl leading-none ml-3 shrink-0"
             data-testid="modal-close"
           >
             &#x2297;
@@ -114,7 +114,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
 
         {/* Scrollable Lottery List */}
         <div
-          className="overflow-y-auto flex-1 mx-4 my-3 rounded-xl bg-neutral-950/60 border border-white/5"
+          className="overflow-y-auto flex-1 mx-4 my-3 rounded-xl bg-gray-50/50 dark:bg-neutral-950/60 border border-gray-200 dark:border-white/5"
           data-testid="lottery-list"
         >
           {loading && (
@@ -127,7 +127,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
             data?.countries.map((country) => (
               <div key={country.code}>
                 {/* Country Header */}
-                <div className="px-4 py-2 text-gray-400 text-xs font-medium tracking-wide">
+                <div className="px-4 py-2 text-gray-500 dark:text-gray-400 text-xs font-medium tracking-wide">
                   {country.name}
                 </div>
 
@@ -150,7 +150,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
                       className={`w-full flex items-center gap-3 px-4 py-3 transition-colors text-left ${
                         disabled
                           ? "opacity-40 cursor-not-allowed"
-                          : "hover:bg-white/5 cursor-pointer"
+                          : "hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer"
                       }`}
                       disabled={disabled}
                       data-testid={`lottery-option-${lottery.id}`}
@@ -160,13 +160,13 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
                         className={`w-5 h-5 rounded shrink-0 flex items-center justify-center border transition-colors ${
                           checked
                             ? "bg-amber-400 border-amber-400"
-                            : "border-gray-600 bg-transparent"
+                            : "border-gray-300 dark:border-gray-600 bg-transparent"
                         }`}
                         data-testid={`lottery-checkbox-${lottery.id}`}
                       >
                         {checked && (
                           <svg
-                            className="w-3 h-3 text-neutral-950"
+                            className="w-3 h-3 text-white dark:text-neutral-950"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -183,7 +183,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
 
                       {/* Logo */}
                       {lottery.logo && (
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-white/10">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-gray-200 dark:bg-white/10">
                           <Image
                             src={lottery.logo}
                             alt={lottery.name}
@@ -194,7 +194,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
                       )}
 
                       {/* Name */}
-                      <span className="text-white text-sm font-semibold">
+                      <span className="text-gray-900 dark:text-white text-sm font-semibold">
                         {lottery.name}
                       </span>
                     </button>
@@ -207,7 +207,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
         {/* Selected Lotteries Strip */}
         {selected.length > 0 && (
           <div className="px-5 pb-2">
-            <p className="text-gray-400 text-xs font-medium mb-2">
+            <p className="text-gray-500 dark:text-gray-400 text-xs font-medium mb-2">
               {mb.selectedLotteries}
             </p>
             <div
@@ -216,7 +216,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
             >
               {selected.map((s) => (
                 <div key={s.lotteryId} className="relative shrink-0">
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 border-2 border-white/20">
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200 dark:bg-white/10 border-2 border-white/20">
                     {s.logo ? (
                       <Image
                         src={s.logo}
@@ -226,7 +226,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <span className="flex items-center justify-center w-full h-full text-white text-xs font-bold">
+                      <span className="flex items-center justify-center w-full h-full text-gray-900 dark:text-white text-xs font-bold">
                         {s.lotteryName.charAt(0)}
                       </span>
                     )}
@@ -262,7 +262,7 @@ export function AddLotteryModal({ pinned, onConfirm, onClose }: AddLotteryModalP
         <div className="px-5 pb-5 pt-2">
           <button
             onClick={() => onConfirm(selected)}
-            className="w-full py-3 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold rounded-xl text-sm transition-colors"
+            className="w-full py-3 bg-amber-400 hover:bg-amber-300 text-white dark:text-neutral-950 font-bold rounded-xl text-sm transition-colors"
             data-testid="confirm-button"
           >
             {mb.confirm}

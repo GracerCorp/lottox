@@ -131,6 +131,7 @@ model countries {
   id              Int               @id @default(autoincrement())
   code            String            @unique(map: "countries_code_unique")
   name            String
+  region          String?
   flag            String?
   draw_schedule   String?
   odds            String?

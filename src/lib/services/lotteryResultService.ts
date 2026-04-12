@@ -11,8 +11,8 @@ type LotteryResultWithIncludes = {
   lottery: {
     name: string;
     showing_prizes?: string[];
-    how_to_play_text?: string | null;
     how_to_play_image?: string | null;
+    logo?: string | null;
     countries: { code: string } | null;
   } | null;
   result_verifications_result_verifications_lottery_result_idTolottery_results?: {
@@ -66,6 +66,7 @@ function formatLotteryResult(
     showingPrizes: res.lottery?.showing_prizes || [],
     howToPlayText: res.lottery?.how_to_play_text || null,
     howToPlayImage: res.lottery?.how_to_play_image || null,
+    logo: res.lottery?.logo || null,
   };
 }
 
@@ -73,16 +74,25 @@ class ApiClient {
   // --- Public Spec API Methods ---
 
   // Results
-  async getLatestResults(type?: string) {
+  async getLatestResults(type?: string | string[]) {
     const whereClause: Prisma.lottery_resultsWhereInput = {};
     if (type) {
-      const countryCode = await resolveCountryCode(type);
-      if (countryCode) {
+      if (Array.isArray(type)) {
+        // Assume array means direct country codes to filter by
         whereClause.lottery = {
           countries: {
-            code: { equals: countryCode, mode: "insensitive" },
+            code: { in: type, mode: "insensitive" },
           },
         };
+      } else {
+        const countryCode = await resolveCountryCode(type);
+        if (countryCode) {
+          whereClause.lottery = {
+            countries: {
+              code: { equals: countryCode, mode: "insensitive" },
+            },
+          };
+        }
       }
     }
 
@@ -111,6 +121,7 @@ class ApiClient {
             showing_prizes: true,
             how_to_play_text: true,
             how_to_play_image: true,
+            logo: true,
             countries: { select: { code: true } },
           },
         },
@@ -171,6 +182,7 @@ class ApiClient {
               showing_prizes: true,
               how_to_play_text: true,
               how_to_play_image: true,
+              logo: true,
               countries: { select: { code: true } },
             },
           },
@@ -253,6 +265,7 @@ class ApiClient {
               showing_prizes: true,
               how_to_play_text: true,
               how_to_play_image: true,
+              logo: true,
               countries: { select: { code: true } },
             },
           },

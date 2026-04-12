@@ -100,6 +100,9 @@ const en = {
       betterLuckNextTime: "Better luck next time! Keep trying.",
       checkAnother: "Check Another Number",
       tryOtherLotteries: "Try Other Lotteries",
+      winningNumbers: "Winning Numbers",
+      prize: "Prize",
+      drawOn: "Draw on (GMT+7)",
 
       // Result States
       jackpotTitle: "JACKPOT!",
@@ -262,6 +265,7 @@ const en = {
       running_number_back_3: "3-Digit Back",
       running_number_back_2: "2-Digit Back",
       nearby_prize_1: "Adjacent to 1st Prize",
+      bonusNumber: "Bonus Number",
     },
     selector: {
       all: "All",

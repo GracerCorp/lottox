@@ -6,6 +6,12 @@ import { prisma } from "@/lib/prisma";
  * New countries don't need entries here — they use their country code directly.
  */
 const LEGACY_ALIASES: Record<string, string> = {
+  th: "th",
+  la: "la",
+  vn: "vn",
+  au: "au",
+  my: "my",
+  sg: "sg",
   thai: "th",
   lao: "la",
   laos: "la",

@@ -150,7 +150,7 @@ export function RecentGlobalDraws({
             <Link
               key={draw.id}
               href={href}
-              className="flex items-center gap-6 rounded-2xl bg-[#4F4F4F] px-5 py-4 transition-colors hover:bg-[#5a5a5a] group"
+              className="flex items-center gap-6 rounded-2xl bg-gray-50 dark:bg-[#4F4F4F] px-5 py-4 transition-colors hover:bg-gray-100 dark:hover:bg-[#5a5a5a] group"
             >
               {/* Left Identity Section */}
               <div className="w-[180px] flex-shrink-0">
@@ -162,11 +162,11 @@ export function RecentGlobalDraws({
                     height={14}
                     className="h-3.5 w-5 rounded-sm flex-shrink-0"
                   />
-                  <div className="text-sm font-medium text-white truncate transition-colors">
+                  <div className="text-sm font-medium text-gray-900 dark:text-white truncate transition-colors">
                     {draw.lotteryName}
                   </div>
                 </div>
-                <div className="text-xs text-[#a3a3a3]">
+                <div className="text-xs text-gray-500 dark:text-[#a3a3a3]">
                   {formatDateDisplay(draw.dateDisplay || draw.date, language)}
                 </div>
               </div>
@@ -175,8 +175,8 @@ export function RecentGlobalDraws({
               <div className="flex-1 flex flex-wrap items-center gap-x-6 gap-y-2">
                 {columns.map((col, idx) => (
                   <div key={idx} className="flex flex-col">
-                    <span className="mb-1 text-[11px] text-[#a3a3a3]">{col.label}</span>
-                    <span className={`font-mono text-[15px] font-bold tracking-wider ${col.highlight ? "text-[#eab308]" : "text-white"}`}>
+                    <span className="mb-1 text-[11px] text-gray-500 dark:text-[#a3a3a3]">{col.label}</span>
+                    <span className={`font-mono text-[15px] font-bold tracking-wider ${col.highlight ? "text-amber-500 dark:text-[#eab308]" : "text-gray-900 dark:text-white"}`}>
                       {col.value}
                     </span>
                   </div>
@@ -184,7 +184,7 @@ export function RecentGlobalDraws({
               </div>
 
               {/* Right Chevron */}
-              <div className="text-white opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 pl-2">
+              <div className="text-gray-400 dark:text-white opacity-80 group-hover:opacity-100 transition-opacity flex-shrink-0 pl-2">
                 <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1.5 1.5L6.5 7L1.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

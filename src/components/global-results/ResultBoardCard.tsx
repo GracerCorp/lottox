@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useCallback } from "react";
+import { BadgeCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import { getFlagUrl } from "@/lib/flags";
@@ -33,67 +34,76 @@ interface ResultBoardCardProps {
 
 const PAGE_SIZE = 2;
 
-function extractNumbers(data: unknown): {
-  digits6: string;
-  digits3First: string;
-  digits3Last: string;
-  digits2Last: string;
-} {
-  const empty = { digits6: "", digits3First: "", digits3Last: "", digits2Last: "" };
-  if (!data || typeof data !== "object") return empty;
-  const d = data as unknown as Record<string, unknown>;
+function extractNumbers(data: unknown, t: any): { label: string; value: string; main?: boolean }[] {
+  if (!data || typeof data !== "object") return [];
+  const d = data as Record<string, unknown>;
   const prizes = Array.isArray(d.prizes) ? (d.prizes as Record<string, unknown>[]) : [];
-  let digits6 = "";
-  let digits3First = "";
-  let digits3Last = "";
-  let digits2Last = "";
 
-  for (const p of prizes) {
-    if (!p.winningNumbers) continue;
-    const cat = String(p.category ?? "").toLowerCase();
-    const nums = Array.isArray(p.winningNumbers) ? (p.winningNumbers as unknown[]).map(String) : [];
+  const results: { label: string; value: string; main?: boolean }[] = [];
+  const gd = t.staticParams.globalDraws;
 
-    // TH & LA main prizes
-    if (["prize_1", "prize_4_digits", "firstprize", "prize_1_thai"].includes(cat)) {
-      digits6 = nums[0] ?? "";
-    }
-    // TH front-3, back-3, back-2
-    if (["running_number_front_3", "prize3front"].includes(cat)) digits3First = nums.slice(0, 2).join(", ");
-    if (["running_number_back_3", "prize3back", "prize_3_digits"].includes(cat)) digits3Last = nums.slice(0, 2).join(", ");
-    if (["running_number_back_2", "prize2", "prize_2_digits"].includes(cat)) digits2Last = nums[0] ?? "";
+  const thLaCategories = ["prize_1", "prize_1_thai", "prize_4_digits", "firstprize", "running_number_front_3", "prize3front", "running_number_back_3", "prize3back", "prize_3_digits", "running_number_back_2", "prize2", "prize_2_digits"];
+  
+  const isThaiLaos = prizes.some(p => thLaCategories.includes(String(p.category ?? "").toLowerCase()));
 
-    // AU — Main Numbers → show as primary, Powerball → digits2Last, Supplementary → digits3Last
-    if (cat === "main numbers" || cat === "main_numbers") {
-      digits6 = nums.join(" ");
+  if (isThaiLaos) {
+    let digits6 = "", digits3First = "", digits3Last = "", digits2Last = "";
+    for (const p of prizes) {
+      if (!p.winningNumbers) continue;
+      const cat = String(p.category ?? "").toLowerCase();
+      const nums = Array.isArray(p.winningNumbers) ? (p.winningNumbers as unknown[]).map(String) : [];
+      if (["prize_1", "prize_4_digits", "firstprize", "prize_1_thai"].includes(cat)) { digits6 = nums[0] ?? ""; }
+      else if (["running_number_front_3", "prize3front"].includes(cat)) digits3First = nums.slice(0, 2).join(", ");
+      else if (["running_number_back_3", "prize3back", "prize_3_digits"].includes(cat)) digits3Last = nums.slice(0, 2).join(", ");
+      else if (["running_number_back_2", "prize2", "prize_2_digits"].includes(cat)) digits2Last = nums[0] ?? "";
     }
-    if (cat === "powerball") {
-      digits2Last = nums[0] ?? "";
-    }
-    if (cat === "supplementary" || cat === "supplementary numbers") {
-      digits3Last = nums.join(", ");
-    }
-
-    // JP — number_selection_1 through 6 or similar
-    if (cat.startsWith("number_selection") || cat === "honban" || cat === "selected_numbers") {
-      digits6 = nums.join(" ");
-    }
-    if (cat === "bonus" || cat === "bonus_number") {
-      digits2Last = nums[0] ?? "";
-    }
+    
+    results.push({ label: gd.digits6, value: digits6, main: true });
+    results.push({ label: gd.digits3First, value: digits3First });
+    results.push({ label: gd.digits3Last, value: digits3Last });
+    results.push({ label: gd.digits2Last, value: digits2Last });
+    return results;
   }
 
-  // Fallback: if nothing matched, use the first prize's numbers as the main display
-  if (!digits6 && prizes.length > 0) {
+  // Other formats (AU, JP, SG, etc.)
+  if (Array.isArray(d.mainNumbers) && d.mainNumbers.length > 0) {
+    results.push({ label: t.common?.winningNumbers || "Main Numbers", value: d.mainNumbers.join(" "), main: true });
+  }
+
+  if (d.powerball) {
+    results.push({ label: "Powerball", value: String(d.powerball) });
+  } else if (Array.isArray(d.powerball) && d.powerball.length > 0) {
+    results.push({ label: "Powerball", value: d.powerball.join(", ") });
+  }
+
+  if (Array.isArray(d.bonusNumbers) && d.bonusNumbers.length > 0) {
+    results.push({ label: t.results?.bonusNumber || "Bonus", value: d.bonusNumbers.join(", ") });
+  } else if (d.bonusNumber) {
+    results.push({ label: t.results?.bonusNumber || "Bonus", value: String(d.bonusNumber) });
+  }
+
+  if (Array.isArray(d.supplementary) && d.supplementary.length > 0) {
+    results.push({ label: "Supplementary", value: d.supplementary.join(", ") });
+  }
+
+  if (d.superball) {
+    results.push({ label: "Superball", value: String(d.superball) });
+  }
+
+  // Fallback: check prizes for ones containing winningNumbers explicitly
+  if (results.length === 0 && prizes.length > 0) {
     for (const p of prizes) {
       const nums = Array.isArray(p.winningNumbers) ? (p.winningNumbers as unknown[]).map(String) : [];
       if (nums.length > 0) {
-        digits6 = nums.join(" ");
-        break;
+        const pName = String(p.prizeName || p.category || t.common?.winningNumbers || "Main Numbers");
+        if (!results.some(r => r.label === pName)) {
+          results.push({ label: pName, value: nums.join(" "), main: results.length === 0 });
+        }
       }
     }
   }
 
-  return { digits6, digits3First, digits3Last, digits2Last };
+  return results;
 }
 
 
@@ -113,7 +123,8 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
   const paginated = draws.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const first = draws[0];
-  const { digits6 } = first ? extractNumbers(first.data) : { digits6: "" };
+  const latestResults = first ? extractNumbers(first.data, t) : [];
+  const mainNumberValue = latestResults.find(r => r.main)?.value || latestResults[0]?.value || "";
 
   const handlePrev = useCallback(() => setPage((p) => Math.max(1, p - 1)), []);
   const handleNext = useCallback(() => setPage((p) => Math.min(totalPages, p + 1)), [totalPages]);
@@ -134,11 +145,8 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
             <Image src={logo || getFlagUrl(countryCode)} alt={lotteryName} fill className={logo ? "object-contain" : "object-cover"} />
           </div>
           <span className="text-gray-900 dark:text-white text-sm font-bold truncate">{lotteryName}</span>
+          <BadgeCheck className="w-4 h-4 text-green-500 fill-green-50 shrink-0 dark:fill-green-900/30 dark:text-green-400" aria-label="Verified" />
         </div>
-        {/* Latest main number */}
-        {digits6 && (
-          <span className="text-amber-600 dark:text-amber-400 font-black text-sm tabular-nums ml-2">{digits6}</span>
-        )}
         {onRemove && (
           <button
             onClick={onRemove}
@@ -211,8 +219,8 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
           </div>
         )}
 
-        {!loading && !error && page < totalPages && paginated.map((draw, idx) => {
-          const row = extractNumbers(draw.data);
+          {!loading && !error && page < totalPages && paginated.map((draw, idx) => {
+          const resultsArray = extractNumbers(draw.data, t);
           let drawTime = "";
           let drawDate = "";
           let rawDateSlug = "";
@@ -239,11 +247,7 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
               href={href}
               drawTime={drawTime}
               drawDate={drawDate}
-              digits6={row.digits6}
-              digits3First={row.digits3First}
-              digits3Last={row.digits3Last}
-              digits2Last={row.digits2Last}
-              labels={{ digits6: gd.digits6, digits3First: gd.digits3First, digits3Last: gd.digits3Last, digits2Last: gd.digits2Last }}
+              results={resultsArray}
             />
           );
         })}

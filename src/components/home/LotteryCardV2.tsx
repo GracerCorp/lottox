@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LotteryCardV2Props {
   name: string;
@@ -29,7 +30,8 @@ export function LotteryCardV2({
   prizes,
   isHoverable = false,
 }: LotteryCardV2Props) {
-  const fallbackLabel = "1st Prize";
+  const { t } = useLanguage();
+  const fallbackLabel = t.lotteryCard.firstPrize;
   const displayPrizes = prizes || [{ label: fallbackLabel, amount: jackpot }];
 
   const firstPrize = displayPrizes[0];
@@ -38,7 +40,7 @@ export function LotteryCardV2({
   return (
     <Link href={href} className={cn("block group/card w-full mb-4 md:mb-6", isHoverable && "hover-enabled")}>
       <div className={cn(
-        "relative overflow-hidden rounded-[20px] aspect-[9/11] bg-neutral-900 border border-white/5 shadow-2xl transition-all duration-300",
+        "relative overflow-hidden rounded-[20px] aspect-[9/11] bg-neutral-900 border border-gray-200 dark:border-white/5 shadow-2xl transition-all duration-300",
         isHoverable && "group-hover/card:scale-[1.02] group-hover/card:ring-1 group-hover/card:ring-gold-new/50 group-hover/card:shadow-[0_0_20px_rgba(216,176,95,0.4)]"
       )}>
         
@@ -112,7 +114,7 @@ export function LotteryCardV2({
           <div className="mt-auto pt-2 flex justify-center">
             <div className="bg-neutral-950/70 backdrop-blur-md rounded-2xl border border-white/5 px-4 py-2.5 text-center w-full">
               <span className="block text-[10px] text-white/40 uppercase tracking-widest mb-0.5">
-                Draw on (GMT+7)
+                {t.common.drawOn}
               </span>
               <span className="block text-[13px] font-semibold text-gold-new">
                 {nextDraw}

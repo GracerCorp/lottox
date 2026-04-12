@@ -50,10 +50,10 @@ export function CountryMarqueeSection({
           />
         </div>
         <div className="flex flex-col min-w-[8rem]">
-          <span className="font-bold text-base text-white tracking-wide truncate group-hover:text-gold-400 transition-colors">
+          <span className="font-bold text-base text-neutral-900 dark:text-white tracking-wide truncate group-hover:text-gold-500 dark:group-hover:text-gold-400 transition-colors">
             {localizedName}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-neutral-500 dark:text-gray-400">
             {country.count} {t.countryList?.lotteries || "lottery"}
           </span>
         </div>

@@ -99,6 +99,9 @@ const th = {
       betterLuckNextTime: "งวดหน้าเอาใหม่! ยังมีลุ้นในงวดต่อไป",
       checkAnother: "ตรวจเลขอื่น",
       tryOtherLotteries: "ลองลอตเตอรี่อื่นๆ",
+      winningNumbers: "หมายเลขที่ออก",
+      prize: "รางวัล",
+      drawOn: "ออกรางวัล (GMT+7)",
 
       // Result States
       jackpotTitle: "แจ็กพ็อต!",
@@ -261,6 +264,7 @@ const th = {
       running_number_back_3: "เลขท้าย 3 ตัว",
       running_number_back_2: "เลขท้าย 2 ตัว",
       nearby_prize_1: "รางวัลข้างเคียงรางวัลที่ 1",
+      bonusNumber: "หมายเลขโบนัส",
     },
     selector: {
       all: "ทั้งหมด",

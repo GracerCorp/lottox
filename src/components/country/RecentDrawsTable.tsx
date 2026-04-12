@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DrawResult {
   date: string;
@@ -21,22 +22,24 @@ export function RecentDrawsTable({
   countrySlug,
   lotterySlug,
 }: RecentDrawsTableProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-xl mt-8">
       <div className="p-6 border-b border-gray-200 dark:border-white/5 flex justify-between items-center">
         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-          Recent Official Results
+          {t.drawDetail.officialResults}
         </h3>
         {countrySlug && lotterySlug ? (
           <Link
             href={`/${countrySlug}/${lotterySlug}`}
-            className="text-sm text-gold-400 hover:text-white transition-colors"
+            className="text-sm text-gold-600 dark:text-gold-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            View All Archive
+            {t.drawDetail.previousDraws}
           </Link>
         ) : (
-          <button className="text-sm text-gold-400 hover:text-white transition-colors">
-            View All Archive
+          <button className="text-sm text-gold-600 dark:text-gold-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+            {t.drawDetail.previousDraws}
           </button>
         )}
       </div>
@@ -44,10 +47,10 @@ export function RecentDrawsTable({
         <table className="w-full text-left">
           <thead>
             <tr className="bg-gray-50 dark:bg-neutral-950/50 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
-              <th className="p-4">Date</th>
-              <th className="p-4">Draw #</th>
-              <th className="p-4">Winning Numbers</th>
-              <th className="p-4 text-right">Prize</th>
+              <th className="p-4">{t.common.date}</th>
+              <th className="p-4">{t.common.draw} #</th>
+              <th className="p-4">{t.common.winningNumbers}</th>
+              <th className="p-4 text-right">{t.common.prize}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-white/5">
@@ -74,7 +77,7 @@ export function RecentDrawsTable({
                     ))}
                   </div>
                 </td>
-                <td className="p-4 text-right text-gold-400 font-bold">
+                <td className="p-4 text-right text-gold-600 dark:text-gold-400 font-bold">
                   {draw.topPrize}
                 </td>
               </tr>

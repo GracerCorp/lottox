@@ -15,6 +15,7 @@ export async function GET() {
         code: c.code,
         name: c.name,
         flag: c.flag,
+        region: c.region, // Included region from the database
         lotteries: c.lotteries.map((l) => ({
           id: l.id,
           name: l.name,

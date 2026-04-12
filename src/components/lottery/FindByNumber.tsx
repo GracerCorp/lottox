@@ -80,20 +80,21 @@ export function FindByNumber({ countryCode, prizes }: FindByNumberProps) {
           <option value="2">2</option>
         </select>
 
-        <div className="relative flex-1 min-w-[200px]">
+        <div className="relative flex-1 min-w-[200px] group">
+          <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-gold-500 transition-colors pointer-events-none" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={dd.enterNumber}
-            className="w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-neutral-800/60 px-4 py-2.5 pr-10 text-fs-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none focus:border-amber-400"
+            className="w-full bg-gray-100 dark:bg-white/5 border border-gold-400/50 hover:border-gold-500 rounded-full py-2.5 pl-11 pr-4 text-fs-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 caret-gold-500 transition-all"
             data-testid="find-number-input"
           />
         </div>
 
         <button
           type="submit"
-          className="flex items-center gap-2 rounded-xl bg-amber-400 hover:bg-amber-300 px-5 py-2.5 text-fs-sm font-bold text-neutral-950 transition-colors"
+          className="flex items-center gap-2 rounded-full bg-amber-400 hover:bg-amber-300 px-5 py-2.5 text-fs-sm font-bold text-neutral-950 transition-colors"
           data-testid="find-number-search-btn"
         >
           <SearchIcon className="h-4 w-4" />

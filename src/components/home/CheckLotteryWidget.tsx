@@ -265,15 +265,15 @@ export function CheckLotteryWidget({
           <div ref={panelRef} className="absolute left-0 right-0 mt-2 max-h-[360px] overflow-hidden rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col">
             {/* Search Input */}
             <div className="p-3 border-b border-gray-100 dark:border-white/5 flex-shrink-0">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <div className="relative group">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-gold-500 transition-colors pointer-events-none" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t.common.searchLotteryPlaceholder}
-                  className="w-full bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-gold-400/50"
+                  className="w-full bg-gray-100 dark:bg-white/5 border border-gold-400/50 hover:border-gold-500 rounded-full py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 caret-gold-500 transition-all"
                 />
               </div>
             </div>

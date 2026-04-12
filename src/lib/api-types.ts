@@ -30,6 +30,7 @@ export interface LatestResult {
   data: ThaiResultData | LaoResultData | VietnamResultData;
   lotteryName?: string;
   countryCode?: string;
+  logo?: string | null;
   showingPrizes?: string[];
 }
 
@@ -154,6 +155,7 @@ export interface LotteriesListResponse {
 export interface LotteryCountryGroup {
   code: string;
   name: string;
+  region?: string | null;
   flag: string | null;
   lotteries: LotteryItem[];
 }

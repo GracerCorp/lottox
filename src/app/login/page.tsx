@@ -18,7 +18,7 @@ export default function LoginPage() {
         </div>
 
         <div className="space-y-4">
-          <button className="w-full py-3 px-4 bg-white text-neutral-900 font-bold rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center gap-3">
+          <button className="w-full py-3 px-4 bg-white border border-gray-200 dark:border-transparent text-neutral-900 font-bold rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center gap-3">
             <Image
               src="https://www.google.com/favicon.ico"
               alt="Google"

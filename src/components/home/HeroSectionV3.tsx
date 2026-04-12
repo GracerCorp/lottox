@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LotteryCardV2 } from "./LotteryCardV2";
 import { Compass } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { HeroItem } from "./HeroSection";
 
 // Helper for scrolling columns
@@ -31,6 +32,16 @@ const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = fal
 
 export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
   const { t } = useLanguage();
+  const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/regions")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.regions) setRegions(data.regions);
+      })
+      .catch((err) => console.error("Failed to load regions:", err));
+  }, []);
 
   // Ensure we have enough items to display a full grid
   const minimumItems = 12;
@@ -49,11 +60,7 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
 
   const actionChips = [
     { label: t.regions?.trending || "Trending", href: "?tab=trending#latest-results" },
-    { label: t.regions?.southeastAsia || "Southeast Asia", href: "?tab=southeast-asia#latest-results" },
-    { label: t.regions?.asia || "Asia", href: "?tab=asia#latest-results" },
-    { label: t.regions?.europe || "Europe", href: "?tab=europe#latest-results" },
-    { label: t.regions?.america || "America", href: "?tab=america#latest-results" },
-    { label: t.regions?.oceania || "Oceania", href: "?tab=oceania#latest-results" },
+    ...regions.map(r => ({ label: r.name, href: `?tab=${r.id}#latest-results` }))
   ];
 
   return (
@@ -90,7 +97,7 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
       </div>
 
       {/* Bottom text overlay */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#111111] via-[#111111]/80 to-transparent flex flex-col justify-end pointer-events-none">
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/90 dark:from-[#111111] dark:via-[#111111]/80 to-transparent flex flex-col justify-end pointer-events-none">
         <div className="container mx-auto px-4 pb-8 md:pb-16 pointer-events-auto">
           <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6">
             

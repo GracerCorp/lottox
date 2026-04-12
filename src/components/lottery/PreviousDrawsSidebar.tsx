@@ -45,11 +45,11 @@ export function PreviousDrawsSidebar({
 
   return (
     <div
-      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-[#1a1a1a] p-6 shadow-sm dark:shadow-none"
+      className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a] p-6 shadow-sm dark:shadow-none"
       data-testid="previous-draws-sidebar"
     >
       <h3 className="mb-4 flex items-center gap-2 text-fs-lg font-bold text-gray-900 dark:text-white">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-[#2a2418] text-amber-500">
+        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gold-50 dark:bg-[#2a2418] text-amber-500">
           <Coins className="h-4 w-4" />
         </div>
         {dd.previousDraws}
@@ -63,16 +63,16 @@ export function PreviousDrawsSidebar({
             <Link
               key={i}
               href={`/${countryCode}/${lotterySlug}/${historyItems[i]?.date || ""}`}
-              className="block rounded-xl border border-white/10 bg-[#222222] p-4 transition-colors hover:bg-white/5"
+              className="block rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-[#222222] p-4 transition-colors hover:bg-gray-100 dark:hover:bg-white/5"
             >
-              <div className="mb-3 text-sm text-gray-400">
+              <div className="mb-3 text-sm text-gray-500 dark:text-gray-400">
                 {item.date}
               </div>
               
               <div className="flex flex-wrap gap-4">
                 {/* First Prize */}
                 <div className="flex flex-col">
-                  <span className="mb-1 text-[10px] text-gray-400">{prizeLabels?.firstPrize || t.results.prize1}</span>
+                  <span className="mb-1 text-[10px] text-gray-500 dark:text-gray-400">{prizeLabels?.firstPrize || t.results.prize1}</span>
                   <span className="font-mono text-base font-bold tracking-wider text-gold-400">{item.firstPrize}</span>
                 </div>
                 
@@ -80,16 +80,16 @@ export function PreviousDrawsSidebar({
                 {!isNonThai && (
                   <>
                     <div className="flex flex-col">
-                      <span className="mb-1 text-[10px] text-gray-400">{prizeLabels?.last3f || t.results.prize3Front}</span>
-                      <span className="font-mono text-base font-bold tracking-wider text-white">{item.last3f}</span>
+                      <span className="mb-1 text-[10px] text-gray-500 dark:text-gray-400">{prizeLabels?.last3f || t.results.prize3Front}</span>
+                      <span className="font-mono text-base font-bold tracking-wider text-gray-900 dark:text-white">{item.last3f}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="mb-1 text-[10px] text-gray-400">{prizeLabels?.last3b || t.results.prize3Back}</span>
-                      <span className="font-mono text-base font-bold tracking-wider text-white">{item.last3b}</span>
+                      <span className="mb-1 text-[10px] text-gray-500 dark:text-gray-400">{prizeLabels?.last3b || t.results.prize3Back}</span>
+                      <span className="font-mono text-base font-bold tracking-wider text-gray-900 dark:text-white">{item.last3b}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="mb-1 text-[10px] text-gray-400">{prizeLabels?.last2 || t.results.prize2}</span>
-                      <span className="font-mono text-base font-bold tracking-wider text-white">{item.last2}</span>
+                      <span className="mb-1 text-[10px] text-gray-500 dark:text-gray-400">{prizeLabels?.last2 || t.results.prize2}</span>
+                      <span className="font-mono text-base font-bold tracking-wider text-gray-900 dark:text-white">{item.last2}</span>
                     </div>
                   </>
                 )}

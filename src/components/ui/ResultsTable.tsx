@@ -20,6 +20,7 @@ export interface ResultRow {
   date: string;
   time: string;
   flag: string;
+  logo?: string | null;
   country: string;
   countryId: string;
   name: string;
@@ -64,8 +65,7 @@ export function mapApiResultToRow(
 
   const countryId = cc;
   let countryName = t.lottery?.thai?.country || "Thailand";
-  let lottoName =
-    result.lotteryName || t.lottery?.thai?.subName || "Thai Lottery";
+  let lottoName = result.lotteryName || t.lottery?.thai?.subName || "Thai Lottery";
   const lottoHref = `/${cc}/${lotterySlug}`;
   const flagCode = cc;
   let currency = "B";
@@ -78,10 +78,19 @@ export function mapApiResultToRow(
     defaultP1 = "1,200,000";
   } else if (cc === "vn") {
     countryName = t.lottery?.vietnam?.country || "Vietnam";
-    lottoName =
-      result.lotteryName || t.lottery?.vietnam?.subName || "Vietnam Lottery";
+    lottoName = result.lotteryName || t.lottery?.vietnam?.subName || "Vietnam Lottery";
     currency = "VND";
     defaultP1 = "500,000";
+  } else if (cc !== "th") {
+    const lotData = t.lottery?.[cc];
+    if (lotData) {
+      countryName = lotData.country || t.countryList?.countries?.[cc] || cc.toUpperCase();
+    } else {
+      countryName = t.countryList?.countries?.[cc] || cc.toUpperCase();
+    }
+    lottoName = result.lotteryName || lotData?.name || `${cc.toUpperCase()} Lottery`;
+    currency = ""; // Depending on country
+    defaultP1 = "-";
   }
 
   let numbers: PrizeItem[] = [];
@@ -145,12 +154,11 @@ export function mapApiResultToRow(
         if (!cat) return defaultName || t.results?.prize1 || `Prize ${idx + 1}`;
         // Map category properly if translation exists
         const key = cat as keyof typeof t.results;
-        return (
-          t.results?.[key] ||
-          defaultName ||
-          t.results?.prize1 ||
-          `Prize ${idx + 1}`
-        );
+        if (t.results?.[key]) return t.results[key];
+        if (defaultName) return defaultName;
+        
+        // Formats raw categories (e.g. "main_numbers" -> "Main Numbers", "powerball" -> "Powerball")
+        return cat.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       };
 
       return {
@@ -268,6 +276,7 @@ export function mapApiResultToRow(
     date: dateStr,
     time: timeStr,
     flag: getFlagUrl(flagCode),
+    logo: result.logo || null,
     country: countryName,
     name: lottoName,
     href: finalHref,
@@ -277,9 +286,24 @@ export function mapApiResultToRow(
 
 export function ResultsTable({ filter = "all" }: ResultsTableProps) {
   const { t, language } = useLanguage();
-  const { data, loading, error } = useApi<LatestResultsResponse>(
-    "/api/results/latest",
-  );
+  const continentMappings: Record<string, string[]> = {
+    'southeast-asia': ['th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'kh', 'mm', 'bn', 'tl'],
+    'asia': ['jp', 'tw', 'hk', 'kr', 'th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'in', 'cn', 'kh', 'mm', 'bn', 'tl'],
+    'europe': ['gb', 'fr', 'de', 'it', 'es', 'pt', 'ru', 'nl', 'se', 'pl', 'uk', 'ie', 'ch', 'no', 'dk', 'fi'],
+    'america': ['us', 'ca', 'br', 'ar', 'mx', 'cl', 'co', 'pe'],
+    'oceania': ['au', 'nz', 'fj'],
+  };
+
+  let url = "/api/results/latest";
+  if (filter !== "all") {
+    if (continentMappings[filter]) {
+      url = `/api/results/latest?countries=${continentMappings[filter].join(",")}`;
+    } else {
+      url = `/api/results/latest?countries=${filter}`;
+    }
+  }
+
+  const { data, loading, error } = useApi<LatestResultsResponse>(url);
 
   // Map API data to ResultRow format
   const rawResults: ResultRow[] = [];
@@ -292,19 +316,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
     }
   }
 
-  const continentMappings: Record<string, string[]> = {
-    'southeast-asia': ['th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'kh', 'mm', 'bn', 'tl'],
-    'asia': ['jp', 'tw', 'hk', 'kr', 'th', 'la', 'vn', 'sg', 'my', 'id', 'ph', 'in', 'cn', 'kh', 'mm', 'bn', 'tl'],
-    'europe': ['gb', 'fr', 'de', 'it', 'es', 'pt', 'ru', 'nl', 'se', 'pl', 'uk', 'ie', 'ch', 'no', 'dk', 'fi'],
-    'america': ['us', 'ca', 'br', 'ar', 'mx', 'cl', 'co', 'pe'],
-    'oceania': ['au', 'nz', 'fj'],
-  };
-
-  const results = filter === "all"
-    ? rawResults
-    : continentMappings[filter]
-      ? rawResults.filter((r) => continentMappings[filter].includes(r.countryId))
-      : rawResults.filter((r) => r.countryId === filter);
+  const results = rawResults;
 
   if (loading) {
     return (
@@ -312,7 +324,7 @@ export function ResultsTable({ filter = "all" }: ResultsTableProps) {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-xl bg-neutral-900/60 border border-white/5 h-16"
+            className="animate-pulse rounded-xl bg-gray-100 dark:bg-neutral-900/60 border border-gray-200 dark:border-white/5 h-16"
           />
         ))}
       </div>
@@ -388,8 +400,8 @@ export function SingleLineRow({ item }: { item: ResultRow }) {
                     key={vi}
                     className={
                       prize.isMain
-                        ? "text-sm md:text-base font-black tracking-wider text-gold-400"
-                        : "text-sm md:text-base font-bold tracking-wide text-red-400"
+                        ? "text-sm md:text-base font-black tracking-wider text-gold-600 dark:text-gold-400"
+                        : "text-sm md:text-base font-bold tracking-wide text-red-500 dark:text-red-400"
                     }
                   >
                     {v}

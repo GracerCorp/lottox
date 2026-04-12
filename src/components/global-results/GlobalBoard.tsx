@@ -5,7 +5,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import type { LotteriesListResponse, PinnedLottery } from "@/lib/api-types";
 import { ResultBoardCard } from "./ResultBoardCard";
-import { getRegionForCountry, GLOBAL_REGIONS } from "@/lib/constants/regions";
 import { getPinnedLotteries, togglePinnedLottery as togglePinHelper, movePinnedLotteryToTop as movePinToTopHelper } from "@/lib/utils/cookies";
 import { useIntersection } from "react-use";
 
@@ -16,6 +15,12 @@ interface FlattenedLottery {
   countryCode: string;
   countryName: string;
   region: string;
+}
+
+interface RegionData {
+  id: string;
+  name: string;
+  countries: string[];
 }
 
 const PAGE_SIZE = 12;
@@ -30,10 +35,19 @@ export function GlobalBoard() {
   const [selectedRegion, setSelectedRegion] = useState("All");
   
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [regions, setRegions] = useState<RegionData[]>([]);
 
   // Load pinned state initially
   useEffect(() => {
     setPinned(getPinnedLotteries());
+    
+    // Fetch active regions
+    fetch("/api/regions")
+      .then(res => res.json())
+      .then(d => {
+        if (d.regions) setRegions(d.regions);
+      })
+      .catch(err => console.error(err));
   }, []);
 
   const togglePin = (l: FlattenedLottery) => {
@@ -57,7 +71,9 @@ export function GlobalBoard() {
     if (!data?.countries) return result;
     
     for (const c of data.countries) {
-      const region = getRegionForCountry(c.code);
+      // Find region from fetched regions
+      const foundRegion = regions.find(r => r.countries.includes(c.code.toLowerCase()));
+      const region = foundRegion ? foundRegion.name : "Other";
       for (const lot of c.lotteries) {
         result.push({
           id: lot.id,
@@ -73,7 +89,7 @@ export function GlobalBoard() {
     // Sort A-Z by default as requested
     result.sort((a, b) => a.name.localeCompare(b.name));
     return result;
-  }, [data]);
+  }, [data, regions]);
 
   // Apply Search and Region Filters
   const filteredLotteries = useMemo(() => {
@@ -144,24 +160,24 @@ export function GlobalBoard() {
       </div>
 
       {/* Search */}
-      <div className="relative w-full max-w-[466px] mx-auto mb-4">
-        <input 
-          type="text" 
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-white dark:bg-neutral-800 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-amber-400 dark:focus:border-amber-400 transition-colors text-black dark:text-white placeholder:text-gray-400"
-        />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="relative w-full max-w-[466px] mx-auto mb-4 group">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gold-500 transition-colors pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
+        <input 
+          type="text" 
+          placeholder="Search lotteries or countries..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full bg-gray-100 dark:bg-white/5 border border-gold-400/50 hover:border-gold-500 rounded-full pl-11 pr-4 py-3 text-sm outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 caret-gold-500 transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400"
+        />
       </div>
 
       {/* Region Filter Pills */}
       <div className="flex flex-wrap justify-center gap-2 mb-8">
-        {GLOBAL_REGIONS.map(region => (
+        {["All", ...regions.map(r => r.name)].map(region => (
           <button
             key={region}
             onClick={() => setSelectedRegion(region)}

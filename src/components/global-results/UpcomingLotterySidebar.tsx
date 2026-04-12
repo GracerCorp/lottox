@@ -19,7 +19,7 @@ export function UpcomingLotterySidebar() {
       {loading && (
         <div className="flex flex-col gap-6 animate-pulse" data-testid="upcoming-loading">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 rounded-2xl bg-[#242424]" />
+            <div key={i} className="h-32 rounded-2xl bg-gray-100 dark:bg-[#242424]" />
           ))}
         </div>
       )}
@@ -37,12 +37,12 @@ export function UpcomingLotterySidebar() {
       {!loading && !error && data?.upcoming && data.upcoming.map((item, i) => (
         <div
           key={i}
-          className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col gap-5 shadow-lg w-full flex-1 justify-center"
+          className="bg-white dark:bg-[#242424] border border-gray-100 dark:border-transparent rounded-2xl p-6 flex flex-col gap-5 shadow-lg w-full flex-1 justify-center"
           data-testid="upcoming-item"
         >
           {/* Header Row */}
           <div className="flex items-center gap-3">
-            <div className="relative h-10 w-10 overflow-hidden bg-white rounded-full shrink-0 flex items-center justify-center p-1">
+            <div className="relative h-10 w-10 overflow-hidden bg-gray-50 dark:bg-white rounded-full shrink-0 flex items-center justify-center p-1">
               <Image
                 src={getFlagUrl(item.countryCode)}
                 alt={item.countryCode}
@@ -52,20 +52,20 @@ export function UpcomingLotterySidebar() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-white font-semibold text-lg">{item.name}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e" stroke="white" strokeWidth="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span className="text-gray-900 dark:text-white font-semibold text-lg">{item.name}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e" stroke="currentColor" className="text-white" strokeWidth="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
               </div>
-              <span className="text-gray-400 text-sm">
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
                 {item.countryCode === 'th' ? 'Thailand' : item.countryCode.toUpperCase()}
               </span>
             </div>
           </div>
 
           {/* Countdown Area */}
-          <div className="bg-[#1f1f1f] rounded-full border border-[#333] px-6 py-3.5 flex flex-col items-center justify-center w-full mt-2">
+          <div className="bg-gray-50 dark:bg-[#1f1f1f] rounded-full border border-gray-200 dark:border-[#333] px-6 py-3.5 flex flex-col items-center justify-center w-full mt-2">
             <CountdownTimer
               targetDate={item.nextDrawAt}
-              className="text-white text-2xl font-bold tracking-[0.1em] tabular-nums mb-0.5"
+              className="text-gray-900 dark:text-white text-2xl font-bold tracking-[0.1em] tabular-nums mb-0.5"
             />
             <div className="flex justify-between w-[200px] text-[10px] uppercase text-gray-500 font-bold tracking-widest mt-1">
               <span>day</span>

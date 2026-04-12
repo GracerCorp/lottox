@@ -59,6 +59,11 @@ function rateLimit(request: NextRequest): NextResponse | null {
     ? 300 // higher limit for results endpoints
     : 100;
 
+  // Bypass rate limiting in development mode
+  if (process.env.NODE_ENV === "development") {
+    return null;
+  }
+
   const now = Date.now();
   const entry = inMemoryCache.get(ip);
   let count = 1;

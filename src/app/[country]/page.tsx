@@ -145,7 +145,7 @@ export default async function CountryPage({ params }: PageProps) {
 
 
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative min-h-screen text-gray-900 dark:text-white">
       {/* Background — dark: deep navy radial, light: soft sky-to-white radial */}
       {/* Dark mode */}
       <div
@@ -191,13 +191,13 @@ export default async function CountryPage({ params }: PageProps) {
       {/* Main Content */}
       <div className="mx-auto max-w-7xl px-4 pt-4 pb-10 sm:px-6 lg:px-8">
         {/* Separator */}
-        <div className="mb-8 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="mb-8 h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/20 to-transparent" />
 
 
         {/* Section heading */}
         <div className="mb-8 flex items-center gap-3">
           <Trophy className="h-6 w-6 text-amber-400" aria-hidden />
-          <h2 className="text-2xl font-bold tracking-tight text-white">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {availableLotteriesLabel}
           </h2>
         </div>
@@ -207,12 +207,12 @@ export default async function CountryPage({ params }: PageProps) {
         {cardData.length === 0 ? (
           <div
             data-testid="no-lotteries"
-            className="rounded-xl border border-white/10 bg-slate-800/50 py-16 text-center"
+            className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/50 py-16 text-center"
           >
-            <p className="text-lg text-slate-400">{noLotteriesLabel}</p>
+            <p className="text-lg text-gray-500 dark:text-slate-400">{noLotteriesLabel}</p>
             <Link
               href="/"
-              className="mt-4 inline-block text-sm text-blue-400 hover:underline"
+              className="mt-4 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline"
             >
               ← Return Home
             </Link>

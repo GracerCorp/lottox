@@ -5,42 +5,39 @@ import { handleApiError } from "@/lib/utils/apiErrorHandler";
 import { z } from "zod";
 
 const querySchema = z.object({
-  type: z
-    .enum([
-      "THAI",
-      "LAO",
-      "LAOS",
-      "VIETNAM",
-      "VIETNAM_SPECIFIC",
-      "VIETNAM_SPECIAL",
-      "VIETNAM_NORMAL",
-      "VIETNAM_VIP",
-    ])
-    .optional(),
+  type: z.string().optional(),
+  countries: z.string().optional(), // Comma-separated list of country IDs
 });
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const typeParam = searchParams.get("type") || undefined;
+    const countriesParam = searchParams.get("countries") || undefined;
 
     // Validate input
-    const parseResult = querySchema.safeParse({ type: typeParam });
+    const parseResult = querySchema.safeParse({ type: typeParam, countries: countriesParam });
 
     if (!parseResult.success) {
       return NextResponse.json(
-        { error: "Invalid type parameter" },
+        { error: "Invalid parameters" },
         { status: 400 },
       );
     }
 
-    const { type } = parseResult.data;
-    const data = await apiClient.getLatestResults(type);
+    const { type, countries } = parseResult.data;
+    
+    // Choose what to pass: array of countries or just type
+    let apiArgs: string | string[] | undefined = type;
+    if (countries) {
+        apiArgs = countries.split(",").map(c => c.trim().toLowerCase()).filter(Boolean);
+    }
+    
+    const data = await apiClient.getLatestResults(apiArgs);
     return NextResponse.json(data);
   } catch (error: unknown) {
     return handleApiError(error, "Results/Latest");
   }
 }
-
 
 export const revalidate = 300;

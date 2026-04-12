@@ -147,22 +147,22 @@ export function DrawResult({
 
   if (isAustraliaUI) {
     return (
-      <section className="relative overflow-hidden rounded-[1.5rem] bg-[#1d1d1d] border border-white/5 shadow-2xl p-6 sm:p-8">
+      <section className="relative overflow-hidden rounded-[1.5rem] bg-gray-50 dark:bg-[#1d1d1d] border border-gray-200 dark:border-white/5 shadow-2xl p-6 sm:p-8">
         {/* Date Pill */}
         <div className="flex justify-center mb-8">
-          <div className="border border-[#786134] rounded-full px-6 py-2 text-[#C0A062] text-sm font-medium tracking-wide">
+          <div className="border border-gold-500/50 dark:border-[#786134] rounded-full px-6 py-2 text-gold-600 dark:text-[#C0A062] text-sm font-medium tracking-wide">
             {date}
           </div>
         </div>
 
         {/* Labels Row */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
-          <div className="flex items-center gap-3 bg-[#382b13]/40 rounded-xl px-5 py-3 border border-[#6b5526]/30">
-            <Trophy className="w-6 h-6 text-[#DFC38E]" />
-            <span className="text-[#DFC38E] font-bold text-lg tracking-wide">Winning No.</span>
+          <div className="flex items-center gap-3 bg-gold-50/50 dark:bg-[#382b13]/40 rounded-xl px-5 py-3 border border-gold-200 dark:border-[#6b5526]/30">
+            <Trophy className="w-6 h-6 text-gold-500 dark:text-[#DFC38E]" />
+            <span className="text-gold-600 dark:text-[#DFC38E] font-bold text-lg tracking-wide">{t.common.winningNumbers}</span>
           </div>
-          <div className="text-gray-400 font-medium text-sm sm:text-base">
-            1st Prize - <span className="text-[#DFC38E] font-bold">{(useDynamic ? dynamicFirst?.prizeAmount?.toLocaleString() : firstPrizeAmount) || 0} {displayCurrency}</span>
+          <div className="text-gray-500 dark:text-gray-400 font-medium text-sm sm:text-base">
+            {t.lotteryCard.firstPrize} - <span className="text-gold-600 dark:text-[#DFC38E] font-bold">{(useDynamic ? dynamicFirst?.prizeAmount?.toLocaleString() : firstPrizeAmount) || 0} {displayCurrency}</span>
           </div>
         </div>
 
@@ -175,7 +175,7 @@ export function DrawResult({
               size="xl"
               shape="squircle"
               color="gold"
-              className="!bg-gradient-to-b !from-[#ECD299] !to-[#D5AB63] !text-[#181818] shadow-[0_4px_10px_rgba(0,0,0,0.5)] border-none"
+              className="!bg-gradient-to-b !from-gold-300 !to-gold-500 dark:!from-[#ECD299] dark:!to-[#D5AB63] !text-gray-900 dark:!text-[#181818] shadow-[0_4px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_10px_rgba(0,0,0,0.5)] border-none"
             />
           ))}
         </div>
@@ -183,8 +183,8 @@ export function DrawResult({
         {/* Bonus Section inside the hero */}
         {useDynamic && dynamicRest.length > 0 && (
           <div className="flex justify-center mt-10">
-            <div className="border border-white/10 bg-white/[0.04] rounded-2xl px-12 py-6">
-              <div className="text-center text-white font-bold text-base mb-5 tracking-wide">Bonus Number</div>
+            <div className="border border-gray-200 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] rounded-2xl px-12 py-6">
+              <div className="text-center text-gray-900 dark:text-white font-bold text-base mb-5 tracking-wide">{t.results.bonusNumber}</div>
               <div className="flex flex-row justify-center gap-4">
                 {dynamicRest.map((prize) => getBalls(prize.winningNumbers).map((num, i) => (
                   <LotteryBall
@@ -193,7 +193,7 @@ export function DrawResult({
                     size="lg"
                     shape="squircle"
                     color="dark-gray"
-                    className="!w-[3.5rem] !h-[3rem] sm:!w-[4.25rem] sm:!h-[3.5rem] !bg-[#535353] !border-[#666] !rounded-2xl !text-xl"
+                    className="!w-[3.5rem] !h-[3rem] sm:!w-[4.25rem] sm:!h-[3.5rem] !bg-gray-100 dark:!bg-[#535353] !border-gray-300 dark:!border-[#666] !rounded-2xl !text-xl !text-gray-800 dark:!text-white"
                   />
                 )))}
               </div>

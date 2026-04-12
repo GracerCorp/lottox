@@ -3,6 +3,7 @@ import { LotteryBall } from "@/components/ui/LotteryBall";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LotteryCardProps {
   country: string;
@@ -64,6 +65,8 @@ export function LotteryCard({
     blue: "text-blue-600 dark:text-blue-200",
     purple: "text-purple-600 dark:text-purple-200",
   };
+
+  const { t } = useLanguage();
 
   return (
     <Link
@@ -143,7 +146,7 @@ export function LotteryCard({
       {/* Jackpot */}
       <div className="relative z-10 mt-8">
         <div className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-300">
-          Esminated Jackpot
+          {t.hero.estimatedJackpot}
         </div>
         <div
           className={cn(
@@ -186,7 +189,7 @@ export function LotteryCard({
       {/* Action */}
       <div className="relative z-10 mt-8 border-t border-gray-200 dark:border-white/5 pt-4">
         <div className="flex items-center justify-between text-sm font-semibold text-gray-700 dark:text-white/80 transition-colors group-hover:text-gray-900 dark:group-hover:text-white">
-          <span>View Details</span>
+          <span>{t.common.viewDetails}</span>
           <ArrowRight className="h-4 w-4 text-gold-600 dark:text-gold-500 transition-transform group-hover:translate-x-1" />
         </div>
       </div>

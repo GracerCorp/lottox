@@ -6,21 +6,28 @@ import { LatestUpdateCard } from "./LatestUpdateCard";
 import { mapApiResultToRow, ResultRow } from "@/components/ui/ResultsTable";
 import type { LatestResultsResponse } from "@/lib/api-types";
 
+import type { RegionData } from "./LatestUpdateSection";
+
 interface LatestUpdateGridProps {
   filter?: string;
+  regions?: RegionData[];
 }
 
-const CONTINENT_MAPPINGS: Record<string, string[]> = {
-  "southeast-asia": ["th", "la", "vn", "sg", "my", "id", "ph", "kh", "mm", "bn", "tl"],
-  asia: ["jp", "tw", "hk", "kr", "th", "la", "vn", "sg", "my", "id", "ph", "in", "cn", "kh", "mm", "bn", "tl"],
-  europe: ["gb", "fr", "de", "it", "es", "pt", "ru", "nl", "se", "pl", "uk", "ie", "ch", "no", "dk", "fi"],
-  america: ["us", "ca", "br", "ar", "mx", "cl", "co", "pe"],
-  oceania: ["au", "nz", "fj"],
-};
-
-export function LatestUpdateGrid({ filter = "trending" }: LatestUpdateGridProps) {
+export function LatestUpdateGrid({ filter = "trending", regions }: LatestUpdateGridProps) {
   const { t, language } = useLanguage();
-  const { data, loading, error } = useApi<LatestResultsResponse>("/api/results/latest");
+  let url = "/api/results/latest";
+  
+  if (filter !== "trending" && filter !== "all") {
+    const region = regions?.find((r) => r.id === filter);
+    if (region && region.countries.length > 0) {
+      url = `/api/results/latest?countries=${region.countries.join(",")}`;
+    } else if (!region) {
+      // In case the filter is just directly a country code instead of a region
+      url = `/api/results/latest?countries=${filter}`;
+    }
+  }
+
+  const { data, loading, error } = useApi<LatestResultsResponse>(url);
 
   const rawResults: ResultRow[] = [];
   if (data?.results) {
@@ -32,12 +39,7 @@ export function LatestUpdateGrid({ filter = "trending" }: LatestUpdateGridProps)
     }
   }
 
-  const results =
-    filter === "trending" || filter === "all"
-      ? rawResults
-      : CONTINENT_MAPPINGS[filter]
-      ? rawResults.filter((r) => CONTINENT_MAPPINGS[filter].includes(r.countryId))
-      : rawResults.filter((r) => r.countryId === filter);
+  const results = rawResults;
 
   if (loading) {
     return (
@@ -45,7 +47,7 @@ export function LatestUpdateGrid({ filter = "trending" }: LatestUpdateGridProps)
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
-            className="animate-pulse rounded-2xl bg-[#171717] border border-white/5 h-[180px]"
+            className="animate-pulse rounded-2xl bg-gray-100 dark:bg-[#171717] border border-gray-200 dark:border-white/5 h-[180px]"
           />
         ))}
       </div>
@@ -62,7 +64,7 @@ export function LatestUpdateGrid({ filter = "trending" }: LatestUpdateGridProps)
 
   if (results.length === 0) {
     return (
-      <div className="rounded-xl border border-white/10 bg-[#171717] p-8 text-center text-sm text-gray-400">
+      <div className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#171717] p-8 text-center text-sm text-gray-500 dark:text-gray-400">
         No results found for this region.
       </div>
     );
@@ -77,6 +79,7 @@ export function LatestUpdateGrid({ filter = "trending" }: LatestUpdateGridProps)
           name={item.name}
           country={item.country}
           flag={item.flag}
+          logo={item.logo}
           date={item.date}
           time={item.time}
           href={item.href}

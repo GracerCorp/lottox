@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import { getFlagUrl } from "@/lib/flags";
@@ -19,6 +20,7 @@ interface PrizeNumbers {
 interface LatestDrawData {
   name: string;
   countryCode: string;
+  logo: string | null;
   drawTime: string;
   drawDate: string;
   mainNumbers: string[];
@@ -92,7 +94,7 @@ function extractLatestDrawData(result: LatestResultsResponse["results"][0]): Lat
   // Pad to 6 balls minimum (fill with "–" if less than 6 digits)
   while (mainNumbers.length < 6) mainNumbers.unshift("–");
 
-  return { name, countryCode: cc, drawTime, drawDate, mainNumbers, firstPrizeAmount, prizes: prizeRows, detailHref };
+  return { name, countryCode: cc, logo: result.logo ?? null, drawTime, drawDate, mainNumbers, firstPrizeAmount, prizes: prizeRows, detailHref };
 }
 
 export function LatestDrawCard() {
@@ -141,17 +143,17 @@ export function LatestDrawCard() {
   const draw = extractedDraws[activeIndex];
 
   return (
-    <div className="bg-[#242424] border border-transparent rounded-2xl p-6 flex flex-col shadow-lg w-full h-full relative group" data-testid="latest-draw-card">
+    <div className="bg-white dark:bg-[#242424] border border-gray-100 dark:border-transparent rounded-2xl p-6 flex flex-col shadow-lg w-full h-full relative group" data-testid="latest-draw-card">
       
       {/* Header */}
-      <div className="flex items-center justify-between text-sm text-gray-400 font-medium mb-4 z-10 relative">
+      <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 font-medium mb-4 z-10 relative">
         <span className="tracking-wide">{gd.latestDraw}</span>
         {extractedDraws.length > 1 && (
           <div className="flex gap-6">
-            <button onClick={handlePrev} className="hover:text-white transition-colors" aria-label="Previous">
+            <button onClick={handlePrev} className="hover:text-gray-900 dark:hover:text-white transition-colors" aria-label="Previous">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6" /></svg>
             </button>
-            <button onClick={handleNext} className="hover:text-white transition-colors" aria-label="Next">
+            <button onClick={handleNext} className="hover:text-gray-900 dark:hover:text-white transition-colors" aria-label="Next">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" /></svg>
             </button>
           </div>
@@ -160,20 +162,22 @@ export function LatestDrawCard() {
 
       {/* Lottery Name Row */}
       <div className="flex items-center gap-3 z-10 relative">
-        <div className="relative h-10 w-10 overflow-hidden bg-white rounded-full shrink-0 flex items-center justify-center p-1">
+        <div className="relative h-10 w-10 overflow-hidden bg-neutral-100 dark:bg-white rounded-full shrink-0 flex items-center justify-center p-1">
           <Image
-            src={getFlagUrl(draw.countryCode)}
-            alt={draw.countryCode}
+            src={draw.logo || getFlagUrl(draw.countryCode)}
+            alt={draw.name}
             fill
             className="object-contain"
           />
         </div>
         <div>
           <Link href={draw.detailHref} className="flex items-center gap-1.5 hover:underline decoration-white underline-offset-4 cursor-pointer">
-            <span className="text-white font-semibold text-lg">{draw.name}</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#22c55e" stroke="white" strokeWidth="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span className="text-gray-900 dark:text-white font-semibold text-lg">{draw.name}</span>
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-white fill-[#22c55e] opacity-90 rounded-full" />
           </Link>
-          <span className="text-gray-400 text-sm">{draw.countryCode === 'th' ? 'Thailand' : draw.countryCode.toUpperCase()}</span>
+          <span className="text-gray-500 dark:text-gray-400 text-sm">
+            {t.countryList?.countries?.[draw.countryCode] || draw.countryCode.toUpperCase()}
+          </span>
         </div>
       </div>
 
@@ -192,7 +196,7 @@ export function LatestDrawCard() {
             {gd.digits6}
           </div>
           <div className="text-sm">
-            <span className="text-gray-400 mr-1">{gd.firstPrize} -</span>
+            <span className="text-gray-500 dark:text-gray-400 mr-1">{gd.firstPrize} -</span>
             <span className="text-[#e2c179] font-bold">฿{draw.firstPrizeAmount}</span>
           </div>
         </div>
@@ -215,19 +219,20 @@ export function LatestDrawCard() {
           <div className="grid grid-cols-3 gap-4">
             {draw.prizes.map((p, i) => {
               const key = p.label as keyof typeof gd;
-              const label = (gd as Record<string, string>)[key] ?? p.label;
+              const formatCategoryStr = (str: string) => str.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+              const label = (gd as Record<string, string>)[key] ?? formatCategoryStr(p.label);
               return (
-                <div key={i} className="bg-[#1f1f1f] rounded-xl border border-[#333] p-4 flex flex-col items-center">
-                  <span className="text-sm font-medium text-white mb-4">{label}</span>
+                <div key={i} className="bg-gray-50 dark:bg-[#1f1f1f] rounded-xl border border-gray-200 dark:border-[#333] p-4 flex flex-col items-center">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white mb-4">{label}</span>
                   <div className="flex gap-2">
                     {p.values.map((v, vi) => (
-                      <div key={vi} className="bg-[#333] text-gray-300 px-3 py-1.5 rounded-lg font-bold text-lg tracking-wider">
+                      <div key={vi} className="bg-gray-200 dark:bg-[#333] text-gray-800 dark:text-gray-300 px-3 py-1.5 rounded-lg font-bold text-lg tracking-wider">
                         {v}
                       </div>
                     ))}
                   </div>
                   {p.amount && (
-                    <div className="text-sm text-gray-400 font-medium mt-3">
+                    <div className="text-sm text-gray-500 dark:text-gray-400 font-medium mt-3">
                       ฿{Number(p.amount).toLocaleString()}
                     </div>
                   )}
@@ -245,7 +250,7 @@ export function LatestDrawCard() {
             key={i}
             onClick={() => setActiveIndex(i)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === activeIndex ? "w-6 bg-gray-300" : "w-1.5 bg-[#444]"
+              i === activeIndex ? "w-6 bg-gray-400 dark:bg-gray-300" : "w-1.5 bg-gray-200 dark:bg-[#444]"
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />

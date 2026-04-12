@@ -4,15 +4,18 @@ import Link from "next/link";
 import { Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { RegionData } from "./LatestUpdateSection";
 
 interface LatestUpdateFilterProps {
   activeFilter: string;
   onFilterChange: (filter: string) => void;
+  regions?: RegionData[];
 }
 
 export function LatestUpdateFilter({
   activeFilter,
   onFilterChange,
+  regions,
 }: LatestUpdateFilterProps) {
   const { t } = useLanguage();
 
@@ -21,11 +24,10 @@ export function LatestUpdateFilter({
 
   const tabs = [
     { id: "trending", label: tAny.selector?.trending || "Trending" },
-    { id: "southeast-asia", label: tAny.selector?.southeastAsia || "Southeast Asia" },
-    { id: "asia", label: tAny.selector?.asia || "Asia" },
-    { id: "europe", label: tAny.selector?.europe || "Europe" },
-    { id: "america", label: tAny.selector?.america || "America" },
-    { id: "oceania", label: tAny.selector?.oceania || "Oceania" },
+    ...(regions || []).map((r) => ({
+      id: r.id,
+      label: r.name,
+    })),
   ];
 
   return (
@@ -33,7 +35,7 @@ export function LatestUpdateFilter({
       <div className="flex flex-nowrap items-center gap-3 w-max mx-auto md:mx-0">
         <Link
           href="/global-results"
-          className="flex shrink-0 items-center gap-2 px-4 py-2 rounded-full text-sm transition-all duration-200 border border-white/20 bg-transparent text-white hover:bg-white/10"
+          className="flex shrink-0 items-center gap-2 px-4 py-2 rounded-full text-sm transition-all duration-200 border border-neutral-200 dark:border-white/20 bg-transparent text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10"
         >
           <Compass className="h-4 w-4 shrink-0" />
           <span>{tAny.common?.exploreGlobalResults || "Explore Global Results"}</span>
@@ -48,7 +50,7 @@ export function LatestUpdateFilter({
                 "flex shrink-0 items-center gap-2 px-5 py-2 rounded-full text-sm transition-all duration-300 border focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500",
                 isActive
                   ? "border-[rgba(212,175,55,0.4)] text-[#D4AF37] bg-[rgba(212,175,55,0.05)]"
-                  : "text-white border-white/20 bg-transparent hover:bg-white/10 hover:border-white/30",
+                  : "text-neutral-900 dark:text-white border-neutral-200 dark:border-white/20 bg-transparent hover:bg-neutral-100 dark:hover:bg-white/10 hover:border-neutral-300 dark:hover:border-white/30",
               )}
             >
               {tab.label}

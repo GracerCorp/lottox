@@ -24,7 +24,7 @@ export function CountryHeroSection({
   return (
     <section
       data-testid="country-hero"
-      className="relative overflow-hidden py-14 text-white"
+      className="relative overflow-hidden py-14 text-gray-900 dark:text-white"
     >
       {/* Dark mode background */}
       <div
@@ -80,7 +80,7 @@ export function CountryHeroSection({
           {flag ? (
             <div
               data-testid="country-flag"
-              className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-white/20 shadow-xl flex items-center justify-center bg-white/5"
+              className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border-2 border-gray-200 dark:border-white/20 shadow-xl flex items-center justify-center bg-gray-100 dark:bg-white/5"
             >
               {!flag.includes("/") ? (
                 <span className="text-4xl">{flag}</span>
@@ -97,7 +97,7 @@ export function CountryHeroSection({
           ) : (
             <div
               data-testid="country-flag-placeholder"
-              className="flex h-16 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-white/20 bg-slate-700 text-xl font-bold shadow-xl"
+              className="flex h-16 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-gray-200 dark:border-white/20 bg-gray-200 dark:bg-slate-700 text-xl font-bold text-gray-900 dark:text-white shadow-xl"
               aria-label={`${countryCode.toUpperCase()} flag`}
             >
               {countryCode.toUpperCase().slice(0, 2)}
@@ -114,7 +114,7 @@ export function CountryHeroSection({
             </h1>
             <p
               data-testid="official-results-label"
-              className="text-sm font-medium text-blue-300"
+              className="text-sm font-medium text-blue-600 dark:text-blue-300"
             >
               {officialResults}
             </p>
