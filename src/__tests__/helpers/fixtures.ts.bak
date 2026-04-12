@@ -12,7 +12,8 @@ export const createMockCountry = (overrides?: Partial<countries>): countries => 
   is_active: true,
   created_at: new Date(),
   ...overrides,
-} as countries);
+});
+
 
 export const createMockLottery = (overrides?: Partial<lotteries>): lotteries => ({
   id: 1,

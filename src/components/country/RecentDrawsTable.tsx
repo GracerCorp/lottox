@@ -28,18 +28,18 @@ export function RecentDrawsTable({
     <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-xl mt-8">
       <div className="p-6 border-b border-gray-200 dark:border-white/5 flex justify-between items-center">
         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-          {t.drawDetail.officialResults}
+          {"Official Results"}
         </h3>
         {countrySlug && lotterySlug ? (
           <Link
             href={`/${countrySlug}/${lotterySlug}`}
             className="text-sm text-gold-600 dark:text-gold-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            {t.drawDetail.previousDraws}
+            {"Previous Draws"}
           </Link>
         ) : (
           <button className="text-sm text-gold-600 dark:text-gold-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-            {t.drawDetail.previousDraws}
+            {"Previous Draws"}
           </button>
         )}
       </div>

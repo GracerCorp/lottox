@@ -93,6 +93,7 @@ export function LotteryCard({
           <Image
             src={bgImage}
             alt=""
+            aria-hidden="true"
             fill
             className="object-cover opacity-80 transition-transform duration-700 group-hover:scale-110"
             unoptimized

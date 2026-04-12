@@ -52,11 +52,11 @@ export function MarketDataTable() {
           </div>
         </div>
 
-        <div className="bg-gray-50 dark:bg-[#05080f] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden font-mono text-sm relative shadow-inner">
+        <div className="bg-gray-50 dark:bg-[#05080f] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden font-mono text-sm relative shadow-inner max-w-full">
           {/* Scanline effect overlay */}
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] opacity-20"></div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse table-fixed min-w-[700px]">
               <thead>
                 <tr className="bg-gray-100 dark:bg-gray-900/50 text-gray-500 text-xs border-b border-gray-200 dark:border-gray-800 uppercase tracking-wider">

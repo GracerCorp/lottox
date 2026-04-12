@@ -16,6 +16,26 @@ export function LatestUpdateSection() {
   const [activeFilter, setActiveFilter] = useState("trending");
   const [regions, setRegions] = useState<RegionData[]>([]);
 
+  // Sync initial tab from URL
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab) {
+        setActiveFilter(tab);
+      }
+    }
+  }, []);
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", filter);
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
   useEffect(() => {
     fetch("/api/regions")
       .then((res) => res.json())
@@ -42,7 +62,7 @@ export function LatestUpdateSection() {
 
       {/* Region / Category Filter */}
       <div className="mb-10">
-        <LatestUpdateFilter activeFilter={activeFilter} onFilterChange={setActiveFilter} regions={regions} />
+        <LatestUpdateFilter activeFilter={activeFilter} onFilterChange={handleFilterChange} regions={regions} />
       </div>
 
       {/* Grid Results */}

@@ -137,7 +137,7 @@ class ApiClient {
 
     return {
       results: latestResults.map((r) =>
-        formatLotteryResult(r as LotteryResultWithIncludes, Array.isArray(type) ? type[0] : type),
+        formatLotteryResult(r as LotteryResultWithIncludes, type),
       ),
     };
   }
@@ -203,7 +203,7 @@ class ApiClient {
           ? formatLotteryResult(results[0] as LotteryResultWithIncludes, type)
           : null,
       history: results.map((r) =>
-        formatLotteryResult(r as LotteryResultWithIncludes, Array.isArray(type) ? type[0] : type),
+        formatLotteryResult(r as LotteryResultWithIncludes, type),
       ),
       total,
     };

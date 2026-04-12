@@ -15,11 +15,12 @@ describe("DrawHistoryRow", () => {
       <DrawHistoryRow
         drawTime="09:00"
         drawDate="01 Jan 25"
-        digits6="123456"
-        digits3First="123"
-        digits3Last="456"
-        digits2Last="56"
-        labels={defaultLabels}
+        results={[
+          { label: "6-Digit", value: "123456", main: true },
+          { label: "Front 3", value: "123" },
+          { label: "Back 3", value: "456" },
+          { label: "Last 2", value: "56" }
+        ]}
       />,
     );
     expect(screen.getByText("6-Digit")).toBeDefined();
@@ -34,11 +35,7 @@ describe("DrawHistoryRow", () => {
       <DrawHistoryRow
         drawTime="09:00"
         drawDate="01 Jan 25"
-        digits6=""
-        digits3First=""
-        digits3Last=""
-        digits2Last=""
-        labels={defaultLabels}
+        results={[]}
       />,
     );
     expect(screen.getByText(/09:00/)).toBeDefined();
@@ -50,11 +47,9 @@ describe("DrawHistoryRow", () => {
       <DrawHistoryRow
         drawTime="09:00"
         drawDate="01 Jan 25"
-        digits6=""
-        digits3First=""
-        digits3Last=""
-        digits2Last=""
-        labels={defaultLabels}
+        results={[
+          { label: "6-Digit", value: "" }
+        ]}
       />,
     );
     const dashes = screen.getAllByText("–");
@@ -66,11 +61,9 @@ describe("DrawHistoryRow", () => {
       <DrawHistoryRow
         drawTime=""
         drawDate="01 Jan 25"
-        digits6="000000"
-        digits3First="000"
-        digits3Last="000"
-        digits2Last="00"
-        labels={defaultLabels}
+        results={[
+          { label: "6-Digit", value: "000000" }
+        ]}
       />,
     );
     expect(screen.getByTestId("draw-history-row")).toBeDefined();

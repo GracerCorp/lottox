@@ -176,7 +176,7 @@ export function LatestDrawCard() {
             <CheckCircle2 className="h-4 w-4 shrink-0 text-white fill-[#22c55e] opacity-90 rounded-full" />
           </Link>
           <span className="text-gray-500 dark:text-gray-400 text-sm">
-            {t.countryList?.countries?.[draw.countryCode] || draw.countryCode.toUpperCase()}
+            {(t.countryList?.countries as Record<string, string>)?.[draw.countryCode] || draw.countryCode.toUpperCase()}
           </span>
         </div>
       </div>

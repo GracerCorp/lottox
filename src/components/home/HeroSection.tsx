@@ -74,6 +74,7 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
               <Image
                 src={item.bgImage}
                 alt=""
+                aria-hidden="true"
                 fill
                 className="object-cover"
                 priority={index === 0}

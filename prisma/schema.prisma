@@ -166,6 +166,8 @@ model lotteries {
   lottery_subscriptions   lottery_subscriptions[]
   prediction_feedback     prediction_feedback[]
   scraper_logs            scraper_logs[]
+
+  @@index([country_id], map: "idx_lotteries_country_id")
 }
 
 model email_logs {
@@ -237,6 +239,7 @@ model lottery_results {
 
   @@index([draw_date], map: "draw_date_idx")
   @@index([lottery_id, draw_date], map: "lottery_draw_date_idx")
+  @@index([country_id], map: "idx_lottery_results_country_id")
 }
 
 model lottery_subscriptions {

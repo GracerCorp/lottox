@@ -162,6 +162,7 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
             <button
               onClick={onMoveToTop}
               title="Move to top"
+              aria-label="Move to top"
               className="p-1 rounded text-amber-500 hover:text-amber-600 dark:text-amber-400 dark:hover:text-amber-300 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

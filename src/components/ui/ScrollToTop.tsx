@@ -5,14 +5,21 @@ import { useEffect, useState, useCallback } from "react";
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
 
-  const handleScroll = useCallback(() => {
-    setVisible(window.scrollY > 300);
-  }, []);
-
   useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setVisible(window.scrollY > 300);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+  }, []);
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });

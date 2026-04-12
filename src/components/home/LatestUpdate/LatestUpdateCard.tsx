@@ -17,6 +17,7 @@ export interface LatestUpdateCardProps {
   date: string;
   time: string;
   href: string;
+  name?: string;
   numbers: PrizeItem[];
 }
 
@@ -71,7 +72,7 @@ export function LatestUpdateCard({
           </div>
 
           {/* Values Grid */}
-          <div className="flex flex-wrap gap-x-4 gap-y-3 mt-auto">
+          <div className="flex flex-wrap gap-x-4 gap-y-3 mt-1">
             {numbers.map((prize, idx) => (
               <div key={idx} className="flex flex-col min-w-0">
                 <span className="text-[10px] sm:text-xs font-semibold text-neutral-500 dark:text-gray-400 mb-1 leading-none uppercase translate-y-0.5">
