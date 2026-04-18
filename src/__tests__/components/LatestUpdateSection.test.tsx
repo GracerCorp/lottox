@@ -3,6 +3,17 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { LatestUpdateSection } from "@/components/home/LatestUpdate/LatestUpdateSection";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
+// Mock UserLocationContext to return no location so auto-tab-select doesn't interfere
+vi.mock("@/contexts/UserLocationContext", () => ({
+  useUserLocation: vi.fn(() => ({
+    countryCode: "",
+    countryName: "",
+    city: "",
+    region: "",
+    isLoading: false,
+  })),
+}));
+
 vi.mock("@/lib/hooks/useApi", () => ({
   useApi: vi.fn(() => ({
     data: {
@@ -62,7 +73,8 @@ describe("LatestUpdateSection", () => {
     });
     const buttons = screen.getAllByRole("button"); // The tabs are buttons
     const link = screen.getByRole("link", { name: /explore global results/i });
-    expect(buttons.length).toBeGreaterThanOrEqual(6); // 6 region tabs
+    // Trending + region tabs from MSW mock (southeast-asia, east-asia)
+    expect(buttons.length).toBeGreaterThanOrEqual(3);
     expect(link).toBeDefined();
   });
 
@@ -80,13 +92,14 @@ describe("LatestUpdateSection", () => {
     });
     
     const trendingTab = screen.getByRole("button", { name: /trending/i });
-    const asiaTab = screen.getByRole("button", { name: /^asia$/i });
+    const seaTab = screen.getByRole("button", { name: /southeast asia/i });
     
-    // Switch to Asia
-    fireEvent.click(asiaTab);
+    // Switch to Southeast Asia
+    fireEvent.click(seaTab);
 
-    // Now Asia should be active and have golden text
-    expect(asiaTab.className).toContain("text-[#D4AF37]");
+    // Now Southeast Asia should be active and have golden text
+    expect(seaTab.className).toContain("text-[#D4AF37]");
     expect(trendingTab.className).not.toContain("text-[#D4AF37]");
   });
 });
+

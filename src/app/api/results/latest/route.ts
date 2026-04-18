@@ -7,6 +7,7 @@ import { z } from "zod";
 const querySchema = z.object({
   type: z.string().optional(),
   countries: z.string().optional(), // Comma-separated list of country IDs
+  priorityCountry: z.string().max(10).optional(), // User's detected country for sorting
 });
 
 export async function GET(request: NextRequest) {
@@ -14,9 +15,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const typeParam = searchParams.get("type") || undefined;
     const countriesParam = searchParams.get("countries") || undefined;
+    const priorityCountryParam = searchParams.get("priorityCountry") || undefined;
 
     // Validate input
-    const parseResult = querySchema.safeParse({ type: typeParam, countries: countriesParam });
+    const parseResult = querySchema.safeParse({ type: typeParam, countries: countriesParam, priorityCountry: priorityCountryParam });
 
     if (!parseResult.success) {
       return NextResponse.json(
@@ -25,7 +27,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { type, countries } = parseResult.data;
+    const { type, countries, priorityCountry } = parseResult.data;
     
     // Choose what to pass: array of countries or just type
     let apiArgs: string | string[] | undefined = type;
@@ -33,7 +35,7 @@ export async function GET(request: NextRequest) {
         apiArgs = countries.split(",").map(c => c.trim().toLowerCase()).filter(Boolean);
     }
     
-    const data = await apiClient.getLatestResults(apiArgs);
+    const data = await apiClient.getLatestResults(apiArgs, priorityCountry);
     return NextResponse.json(data);
   } catch (error: unknown) {
     return handleApiError(error, "Results/Latest");
@@ -41,3 +43,4 @@ export async function GET(request: NextRequest) {
 }
 
 export const revalidate = 300;
+

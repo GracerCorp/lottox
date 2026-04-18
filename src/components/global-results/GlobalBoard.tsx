@@ -39,6 +39,7 @@ export function GlobalBoard() {
 
   // Load pinned state initially
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPinned(getPinnedLotteries());
     
     // Fetch active regions
@@ -67,7 +68,7 @@ export function GlobalBoard() {
 
   // Flatten the grouped structure
   const allLotteries = useMemo(() => {
-    let result: FlattenedLottery[] = [];
+    const result: FlattenedLottery[] = [];
     if (!data?.countries) return result;
     
     for (const c of data.countries) {
@@ -129,6 +130,7 @@ export function GlobalBoard() {
 
   // Reset pagination on filter change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [searchQuery, selectedRegion, pageSize]);
 

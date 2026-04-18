@@ -2,17 +2,20 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Globe, Menu, X } from "lucide-react";
+import { Globe, MapPin, Menu, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useFeatureToggles } from "@/contexts/FeatureToggleContext";
+import { getFlagUrl } from "@/lib/flags";
 
 export function Header() {
   const { t, language, toggleLanguage } = useLanguage();
   const { isFeatureEnabled, toggles } = useFeatureToggles();
+  const { countryCode, countryName, isLoading: locationLoading } = useUserLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -78,6 +81,26 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* User Location Indicator */}
+          {!locationLoading && countryCode && (
+            <div
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-xs font-medium text-gray-600 dark:text-gray-300"
+              title={`Detected location: ${countryName}`}
+            >
+              <MapPin className="h-3 w-3 text-gold-500 shrink-0" />
+              <div className="relative h-3 w-4 overflow-hidden rounded-sm shrink-0">
+                <Image
+                  src={getFlagUrl(countryCode)}
+                  alt={`${countryName} flag`}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <span className="truncate max-w-[80px]">{countryName}</span>
+            </div>
+          )}
+
           {toggles["localization_toggle"] !== false && (
             <button
               onClick={toggleLanguage}

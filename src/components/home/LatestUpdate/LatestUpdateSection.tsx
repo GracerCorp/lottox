@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserLocation } from "@/contexts/UserLocationContext";
 import { LatestUpdateFilter } from "./LatestUpdateFilter";
 import { LatestUpdateGrid } from "./LatestUpdateGrid";
 
@@ -13,8 +14,10 @@ export interface RegionData {
 
 export function LatestUpdateSection() {
   const { t } = useLanguage();
+  const { countryCode, isLoading: locationLoading } = useUserLocation();
   const [activeFilter, setActiveFilter] = useState("trending");
   const [regions, setRegions] = useState<RegionData[]>([]);
+  const hasAutoSelected = useRef(false);
 
   // Sync initial tab from URL
   useEffect(() => {
@@ -22,7 +25,9 @@ export function LatestUpdateSection() {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get("tab");
       if (tab) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setActiveFilter(tab);
+        hasAutoSelected.current = true; // URL tab takes precedence
       }
     }
   }, []);
@@ -47,6 +52,20 @@ export function LatestUpdateSection() {
       .catch((err) => console.error("Failed to load regions:", err));
   }, []);
 
+  // Auto-select the region tab that contains the user's country
+  useEffect(() => {
+    if (hasAutoSelected.current || locationLoading || !countryCode || regions.length === 0) {
+      return;
+    }
+    const matchedRegion = regions.find((r) =>
+      r.countries.includes(countryCode.toLowerCase()),
+    );
+    if (matchedRegion) {
+      setActiveFilter(matchedRegion.id);
+      hasAutoSelected.current = true;
+    }
+  }, [countryCode, locationLoading, regions]);
+
   return (
     <section id="latest-results" className="container mx-auto px-4 py-16 fade-in-up">
       {/* Header Container */}
@@ -66,7 +85,8 @@ export function LatestUpdateSection() {
       </div>
 
       {/* Grid Results */}
-      <LatestUpdateGrid filter={activeFilter} regions={regions} />
+      <LatestUpdateGrid filter={activeFilter} regions={regions} userCountry={countryCode} />
     </section>
   );
 }
+

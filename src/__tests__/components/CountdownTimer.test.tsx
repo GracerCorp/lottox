@@ -9,20 +9,25 @@ describe("useCountdown", () => {
 
   it("returns 0 when no targetDate provided", () => {
     const { result } = renderHook(() => useCountdown(undefined));
-    expect(result.current).toEqual({ hours: 0, minutes: 0, seconds: 0 });
+    // Initial state is always zeros (to prevent hydration mismatch)
+    expect(result.current).toEqual({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   });
 
-  it("returns correct remaining time", () => {
-    const future = new Date(Date.now() + 3_661_000).toISOString(); // 1h 1m 1s
+  it("returns correct remaining time after initial tick", () => {
+    const future = new Date(Date.now() + 90_061_000).toISOString(); // 1d 1h 1m 1s
     const { result } = renderHook(() => useCountdown(future));
+    // The hook uses setTimeout(…, 0) for initial value, so advance timers
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(result.current.days).toBe(1);
     expect(result.current.hours).toBe(1);
     expect(result.current.minutes).toBe(1);
     expect(result.current.seconds).toBe(1);
   });
 
-  it("decrements every second", async () => {
+  it("decrements every second", () => {
     const future = new Date(Date.now() + 5000).toISOString(); // 5 seconds
     const { result } = renderHook(() => useCountdown(future));
+    act(() => { vi.advanceTimersByTime(1); }); // trigger initial setTimeout
     expect(result.current.seconds).toBe(5);
     act(() => { vi.advanceTimersByTime(1000); });
     expect(result.current.seconds).toBe(4);
@@ -31,7 +36,8 @@ describe("useCountdown", () => {
   it("clamps to 0 when target is past", () => {
     const past = new Date(Date.now() - 10_000).toISOString();
     const { result } = renderHook(() => useCountdown(past));
-    expect(result.current).toEqual({ hours: 0, minutes: 0, seconds: 0 });
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(result.current).toEqual({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   });
 });
 
@@ -39,16 +45,18 @@ describe("CountdownTimer", () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it("renders HH : MM : SS format", () => {
-    const future = new Date(Date.now() + 3_661_000).toISOString();
+  it("renders DD : HH : MM : SS format", () => {
+    const future = new Date(Date.now() + 90_061_000).toISOString(); // 1d 1h 1m 1s
     render(<CountdownTimer targetDate={future} />);
-    expect(screen.getByTestId("countdown-timer").textContent).toMatch(/01 : 01 : 01/);
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(screen.getByTestId("countdown-timer").textContent).toMatch(/01 : 01 : 01 : 01/);
   });
 
-  it("renders 00 : 00 : 00 for past target", () => {
+  it("renders 00 : 00 : 00 : 00 for past target", () => {
     const past = new Date(Date.now() - 10_000).toISOString();
     render(<CountdownTimer targetDate={past} />);
-    expect(screen.getByTestId("countdown-timer").textContent).toMatch(/00 : 00 : 00/);
+    act(() => { vi.advanceTimersByTime(1); });
+    expect(screen.getByTestId("countdown-timer").textContent).toMatch(/00 : 00 : 00 : 00/);
   });
 
   it("applies className prop", () => {

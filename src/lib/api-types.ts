@@ -87,14 +87,14 @@ export interface ResultsByTypeResponse {
     drawNo: string;
     daysAgo: string;
     data: ThaiResultData | LaoResultData | VietnamResultData;
-    fullData?: any;
+    fullData?: Record<string, unknown>;
   };
   history: {
     date: string;
     dateDisplay: string;
     drawNo: string;
     data: ThaiResultData | LaoResultData | VietnamResultData;
-    fullData?: any;
+    fullData?: Record<string, unknown>;
   }[];
   total: number;
 }

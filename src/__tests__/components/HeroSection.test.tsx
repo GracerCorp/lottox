@@ -88,11 +88,16 @@ describe("HeroSection (V3)", () => {
     expect(title?.textContent?.toLowerCase()).toContain("result");
   });
 
-  it("renders the action chips and Explore Global Results button", () => {
+  it("renders the action chips and Explore Global Results button", async () => {
+    // Use real timers for this test — findByText needs real setTimeout for polling
+    vi.useRealTimers();
     renderHero();
     expect(screen.getByText("Explore Global Results")).toBeDefined();
     expect(screen.getByText("Trending")).toBeDefined();
-    expect(screen.getByText("Southeast Asia")).toBeDefined();
+    // "Southeast Asia" loads asynchronously from /api/regions
+    await screen.findByText("Southeast Asia");
+    // Re-enable fake timers for afterEach cleanup
+    vi.useFakeTimers();
   });
 
   it("renders background images for items with bgImage", () => {

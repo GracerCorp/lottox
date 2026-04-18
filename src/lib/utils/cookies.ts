@@ -62,7 +62,7 @@ export function togglePinnedLottery(lottery: PinnedLottery, maxPinned: number = 
  * Moves an already pinned lottery to the beginning of the pinned array.
  */
 export function movePinnedLotteryToTop(lotteryId: number): PinnedLottery[] {
-  let pinned = getPinnedLotteries();
+  const pinned = getPinnedLotteries();
   const index = pinned.findIndex(p => p.lotteryId === lotteryId);
   
   if (index > 0) {

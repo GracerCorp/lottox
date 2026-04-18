@@ -553,3 +553,17 @@ model webhooks {
   is_active  Boolean?  @default(true)
   created_at DateTime? @default(now()) @db.Timestamp(6)
 }
+
+model visitor_analytics {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  country_code String?
+  country_name String?
+  city         String?
+  region       String?
+  ip_address   String?
+  user_agent   String?
+  visited_at   DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([country_code])
+  @@index([visited_at])
+}

@@ -10,6 +10,7 @@ import { getFlagUrl } from "@/lib/flags";
 import { DrawHistoryRow } from "./DrawHistoryRow";
 import { BoardPagination } from "./BoardPagination";
 import { slugify } from "@/lib/utils/lotteryUtils";
+import type { Dictionary } from "@/lib/i18n";
 import type { LatestResultsResponse } from "@/lib/api-types";
 
 /** Shape of our formatLotteryResult responses. Extended from the LatestResult contract. */
@@ -34,7 +35,7 @@ interface ResultBoardCardProps {
 
 const PAGE_SIZE = 2;
 
-function extractNumbers(data: unknown, t: any): { label: string; value: string; main?: boolean }[] {
+function extractNumbers(data: unknown, t: Dictionary): { label: string; value: string; main?: boolean }[] {
   if (!data || typeof data !== "object") return [];
   const d = data as Record<string, unknown>;
   const prizes = Array.isArray(d.prizes) ? (d.prizes as Record<string, unknown>[]) : [];
@@ -67,7 +68,7 @@ function extractNumbers(data: unknown, t: any): { label: string; value: string; 
 
   // Other formats (AU, JP, SG, etc.)
   if (Array.isArray(d.mainNumbers) && d.mainNumbers.length > 0) {
-    results.push({ label: t.common?.winningNumbers || "Main Numbers", value: d.mainNumbers.join(" "), main: true });
+    results.push({ label: t.common?.winningNumbers ?? "Main Numbers", value: (d.mainNumbers as string[]).join(" "), main: true });
   }
 
   if (d.powerball) {
@@ -77,9 +78,9 @@ function extractNumbers(data: unknown, t: any): { label: string; value: string; 
   }
 
   if (Array.isArray(d.bonusNumbers) && d.bonusNumbers.length > 0) {
-    results.push({ label: t.results?.bonusNumber || "Bonus", value: d.bonusNumbers.join(", ") });
+    results.push({ label: (t.results as Record<string, string>)?.bonusNumber || "Bonus", value: (d.bonusNumbers as string[]).join(", ") });
   } else if (d.bonusNumber) {
-    results.push({ label: t.results?.bonusNumber || "Bonus", value: String(d.bonusNumber) });
+    results.push({ label: (t.results as Record<string, string>)?.bonusNumber || "Bonus", value: String(d.bonusNumber) });
   }
 
   if (Array.isArray(d.supplementary) && d.supplementary.length > 0) {
@@ -95,7 +96,7 @@ function extractNumbers(data: unknown, t: any): { label: string; value: string; 
     for (const p of prizes) {
       const nums = Array.isArray(p.winningNumbers) ? (p.winningNumbers as unknown[]).map(String) : [];
       if (nums.length > 0) {
-        const pName = String(p.prizeName || p.category || t.common?.winningNumbers || "Main Numbers");
+        const pName = String(p.prizeName || p.category || (t.common?.winningNumbers ?? "Main Numbers"));
         if (!results.some(r => r.label === pName)) {
           results.push({ label: pName, value: nums.join(" "), main: results.length === 0 });
         }

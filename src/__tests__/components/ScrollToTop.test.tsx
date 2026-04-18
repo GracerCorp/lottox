@@ -1,11 +1,16 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ScrollToTop } from '../../components/ui/ScrollToTop';
 
 describe('ScrollToTop', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    Object.defineProperty(window, 'scrollY', { value: 0, writable: true });
+    Object.defineProperty(window, 'scrollY', { value: 0, writable: true, configurable: true });
+    // Mock requestAnimationFrame to fire callbacks synchronously in JSDOM
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
   });
 
   it('renders the button', () => {
@@ -18,8 +23,10 @@ describe('ScrollToTop', () => {
     const btn = screen.getByLabelText('Scroll to top');
     expect(btn.className).toContain('opacity-0');
 
-    Object.defineProperty(window, 'scrollY', { value: 400, writable: true });
-    fireEvent.scroll(window);
+    Object.defineProperty(window, 'scrollY', { value: 400, writable: true, configurable: true });
+    act(() => {
+      fireEvent.scroll(window);
+    });
     expect(btn.className).toContain('opacity-100');
   });
 

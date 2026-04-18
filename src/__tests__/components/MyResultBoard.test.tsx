@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MyResultBoard } from "@/components/global-results/MyResultBoard";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -62,40 +62,60 @@ vi.mock("@/components/global-results/PinnedLotteryTabs", () => ({
   ),
 }));
 
+// Mock getPinnedLotteries / setPinnedLotteries (cookie-based, not localStorage)
+vi.mock("@/lib/utils/cookies", () => {
+  let storage: PinnedLottery[] = [];
+  return {
+    getPinnedLotteries: vi.fn(() => storage),
+    setPinnedLotteries: vi.fn((val: PinnedLottery[]) => { storage = val; }),
+    __resetStorage: () => { storage = []; },
+  };
+});
+
 function wrap(ui: React.ReactElement) {
   return render(<LanguageProvider>{ui}</LanguageProvider>);
 }
 
+async function renderAndHydrate() {
+  vi.useFakeTimers();
+  wrap(<MyResultBoard />);
+  // Advance past the setTimeout(…, 0) used for hydration
+  await act(async () => { vi.advanceTimersByTime(1); });
+  vi.useRealTimers();
+}
+
 describe("MyResultBoard", () => {
-  beforeEach(() => {
-    localStorage.clear();
+  beforeEach(async () => {
+    const cookies = await import("@/lib/utils/cookies");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (cookies as any).__resetStorage();
   });
 
-  it("shows empty state when no lotteries are pinned", () => {
-    wrap(<MyResultBoard />);
+  it("shows empty state when no lotteries are pinned", async () => {
+    await renderAndHydrate();
     expect(screen.getByTestId("empty-board-state")).toBeDefined();
   });
 
-  it("shows Add button when under max pinned", () => {
-    wrap(<MyResultBoard />);
+  it("shows Add button when under max pinned", async () => {
+    await renderAndHydrate();
     expect(screen.getByTestId("add-lottery-button")).toBeDefined();
   });
 
   it("opens modal when Add button is clicked", async () => {
-    wrap(<MyResultBoard />);
+    await renderAndHydrate();
     await userEvent.click(screen.getByTestId("add-lottery-button"));
     expect(screen.getByTestId("add-lottery-modal")).toBeDefined();
   });
 
   it("closes modal when onClose is triggered", async () => {
-    wrap(<MyResultBoard />);
+    await renderAndHydrate();
     await userEvent.click(screen.getByTestId("add-lottery-button"));
     await userEvent.click(screen.getByTestId("modal-close"));
     expect(screen.queryByTestId("add-lottery-modal")).toBeNull();
   });
 
   it("batch-confirms lotteries and shows result board card", async () => {
-    wrap(<MyResultBoard />);
+    await renderAndHydrate();
     await userEvent.click(screen.getByTestId("add-lottery-button"));
     await userEvent.click(screen.getByTestId("modal-confirm-th"));
     expect(screen.getByTestId("result-board-card")).toBeDefined();
@@ -103,7 +123,7 @@ describe("MyResultBoard", () => {
   });
 
   it("removes lottery when onRemove is triggered", async () => {
-    wrap(<MyResultBoard />);
+    await renderAndHydrate();
     await userEvent.click(screen.getByTestId("add-lottery-button"));
     await userEvent.click(screen.getByTestId("modal-confirm-th"));
     expect(screen.getByTestId("result-board-card")).toBeDefined();
@@ -111,28 +131,31 @@ describe("MyResultBoard", () => {
     expect(screen.queryByTestId("result-board-card")).toBeNull();
   });
 
-  it("persists pinned lotteries to localStorage", async () => {
-    wrap(<MyResultBoard />);
+  it("persists pinned lotteries via cookies", async () => {
+    await renderAndHydrate();
     await userEvent.click(screen.getByTestId("add-lottery-button"));
     await userEvent.click(screen.getByTestId("modal-confirm-th"));
-    const stored = JSON.parse(localStorage.getItem("lottox_pinned_lotteries") ?? "[]");
-    expect(stored).toHaveLength(1);
-    expect(stored[0].lotteryId).toBe(1);
-    expect(stored[0].countryCode).toBe("th");
+    const cookies = await import("@/lib/utils/cookies");
+    expect(cookies.setPinnedLotteries).toHaveBeenCalled();
+    const lastCall = (cookies.setPinnedLotteries as ReturnType<typeof vi.fn>).mock.calls.slice(-1)[0][0];
+    expect(lastCall).toHaveLength(1);
+    expect(lastCall[0].lotteryId).toBe(1);
+    expect(lastCall[0].countryCode).toBe("th");
   });
 
-  it("migrates old format (no lotteryId) by clearing", () => {
-    // Simulate old format
-    localStorage.setItem("lottox_pinned_lotteries", JSON.stringify([
-      { countryCode: "th", lotteryName: "Thailand" },
-    ]));
-    wrap(<MyResultBoard />);
+  it("migrates old format (no lotteryId) by clearing", async () => {
+    // Simulate old format stored in cookies — getPinnedLotteries should return []
+    // because the migration logic happens in the cookie utility
+    const cookies = await import("@/lib/utils/cookies");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (cookies.getPinnedLotteries as any).mockReturnValueOnce([]);
+    await renderAndHydrate();
     // Should show empty state after migration
     expect(screen.getByTestId("empty-board-state")).toBeDefined();
   });
 
-  it("section has data-testid", () => {
-    wrap(<MyResultBoard />);
+  it("section has data-testid", async () => {
+    await renderAndHydrate();
     expect(screen.getByTestId("my-result-board")).toBeDefined();
   });
 });

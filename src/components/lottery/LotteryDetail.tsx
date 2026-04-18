@@ -160,10 +160,17 @@ export default function LotteryDetail({
   const isNonThai = countryCode !== "th";
 
   /* ---------- Dynamic Prizes for Non-Thai ---------- */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dynamicHeroPrizes: any[] = [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dynamicTierPrizes: any[] = [];
+  interface DynamicPrize {
+    prizeName: string;
+    prizeAmount: number;
+    winningNumbers: string[];
+    order?: number;
+    category?: string;
+    prizeCount?: number;
+    [key: string]: unknown;
+  }
+  const dynamicHeroPrizes: DynamicPrize[] = [];
+  const dynamicTierPrizes: { title: string; count: number; amount: string; numbers: string[] }[] = [];
 
   if (isNonThai && rawPrizes.length > 0) {
     const sorted = [...rawPrizes].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
@@ -250,7 +257,12 @@ export default function LotteryDetail({
       }
 
       if (isHero) {
-        dynamicHeroPrizes.push({ ...p, winningNumbers: nums });
+        dynamicHeroPrizes.push({
+          ...p,
+          prizeName: p.prizeName || p.category || "Prize",
+          prizeAmount: Number(p.amount || p.prizeAmount || p.reward || 0),
+          winningNumbers: nums,
+        } as DynamicPrize);
       } else {
         dynamicTierPrizes.push({
           title: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
@@ -346,7 +358,7 @@ export default function LotteryDetail({
 
     if (isNonThai && d.prizes && d.prizes.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const sorted = [...d.prizes].sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99));
+      const sorted = [...d.prizes].sort((a: Record<string, any>, b: Record<string, any>) => (a.order ?? 99) - (b.order ?? 99));
       const p1Nums = sorted[0].winningNumbers || sorted[0].number || [];
       rFirstPrize = (Array.isArray(p1Nums) ? p1Nums.join(" ") : String(p1Nums)) || "-";
     } else {
@@ -389,8 +401,8 @@ export default function LotteryDetail({
           <DrawResult {...drawResultProps} />
 
           {/* Lao Animal List (Dynamic rendering if animals data is available) */}
-          {((rawData as any)?.animals || fullData?.animals) && (((rawData as any)?.animals || fullData?.animals).length > 0) && (
-            <LaoAnimalList animals={(rawData as any)?.animals || fullData?.animals} />
+          {((rawData as Record<string, unknown>)?.animals || fullData?.animals) && (((rawData as Record<string, unknown>)?.animals || fullData?.animals).length > 0) && (
+            <LaoAnimalList animals={(rawData as Record<string, unknown>)?.animals || fullData?.animals} />
           )}
 
           {/* 3. Prize Grids (2nd–5th) */}

@@ -28,7 +28,7 @@ describe('GET /api/results/latest', () => {
     const body = await response.json();
 
     expect(body).toEqual(mockData);
-    expect(apiClient.getLatestResults).toHaveBeenCalledWith(undefined);
+    expect(apiClient.getLatestResults).toHaveBeenCalledWith(undefined, undefined);
   });
 
   it('passes type param when provided', async () => {
@@ -37,12 +37,16 @@ describe('GET /api/results/latest', () => {
     (apiClient.getLatestResults as any).mockResolvedValue(mockData);
 
     await GET(mockRequest('http://localhost:3001/api/results/latest?type=THAI'));
-    expect(apiClient.getLatestResults).toHaveBeenCalledWith('THAI');
+    expect(apiClient.getLatestResults).toHaveBeenCalledWith('THAI', undefined);
   });
 
-  it('returns 400 for invalid type', async () => {
+  it('returns results for unknown type (no enum validation)', async () => {
+    const mockData = { results: [] };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (apiClient.getLatestResults as any).mockResolvedValue(mockData);
+
     const response = await GET(mockRequest('http://localhost:3001/api/results/latest?type=INVALID'));
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(200);
   });
 
   it('handles service errors', async () => {

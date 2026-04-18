@@ -11,9 +11,10 @@ import type { RegionData } from "./LatestUpdateSection";
 interface LatestUpdateGridProps {
   filter?: string;
   regions?: RegionData[];
+  userCountry?: string;
 }
 
-export function LatestUpdateGrid({ filter = "trending", regions }: LatestUpdateGridProps) {
+export function LatestUpdateGrid({ filter = "trending", regions, userCountry }: LatestUpdateGridProps) {
   const { t, language } = useLanguage();
   let url = "/api/results/latest";
   
@@ -25,6 +26,12 @@ export function LatestUpdateGrid({ filter = "trending", regions }: LatestUpdateG
       // In case the filter is just directly a country code instead of a region
       url = `/api/results/latest?countries=${filter}`;
     }
+  }
+
+  // Append priorityCountry so the API sorts this country's lotteries first
+  if (userCountry) {
+    const separator = url.includes("?") ? "&" : "?";
+    url += `${separator}priorityCountry=${userCountry.toLowerCase()}`;
   }
 
   const { data, loading, error } = useApi<LatestResultsResponse>(url);
@@ -78,7 +85,7 @@ export function LatestUpdateGrid({ filter = "trending", regions }: LatestUpdateG
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {results.map((item) => (
         <LatestUpdateCard
-          key={item.href}
+          key={item.id}
           id={item.id}
           name={item.name}
           country={item.country}

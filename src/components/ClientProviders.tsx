@@ -1,6 +1,7 @@
 "use client";
 
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { UserLocationProvider } from "@/contexts/UserLocationContext";
 import { ThemeProvider } from "next-themes";
 import { FeatureToggleProvider } from "@/contexts/FeatureToggleContext";
 import type { ReactNode } from "react";
@@ -14,10 +15,13 @@ export function ClientProviders({ children, featureToggles }: ClientProvidersPro
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <LanguageProvider>
-        <FeatureToggleProvider initialToggles={featureToggles}>
-          {children}
-        </FeatureToggleProvider>
+        <UserLocationProvider>
+          <FeatureToggleProvider initialToggles={featureToggles}>
+            {children}
+          </FeatureToggleProvider>
+        </UserLocationProvider>
       </LanguageProvider>
     </ThemeProvider>
   );
 }
+

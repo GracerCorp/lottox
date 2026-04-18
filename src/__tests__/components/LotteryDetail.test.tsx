@@ -9,24 +9,45 @@ vi.mock('@/contexts/LanguageContext', () => ({
   useLanguage: vi.fn(),
 }));
 
-vi.mock('@/components/lottery/ResultBoardCard', () => ({
-  ResultBoardCard: () => <div data-testid="result-board-card" />
+// Mock all child components that do their own API calls or complex rendering
+vi.mock('@/components/lottery/DrawResult', () => ({
+  DrawResult: () => <div data-testid="draw-result" />
 }));
 
-vi.mock('@/components/lottery/PreviousDrawsTable', () => ({
-  PreviousDrawsTable: () => <div data-testid="previous-draws-table" />
+vi.mock('@/components/lottery/DrawPageHeader', () => ({
+  DrawPageHeader: ({ lotteryName }: { lotteryName: string }) => <div data-testid="draw-page-header">{lotteryName}</div>
 }));
 
-vi.mock('@/components/lottery/CountryResultVerifier', () => ({
-  CountryResultVerifier: () => <div data-testid="country-result-verifier" />
+vi.mock('@/components/lottery/PrizeTierSection', () => ({
+  PrizeTierSection: () => <div data-testid="prize-tier-section" />
 }));
 
-vi.mock('@/components/ui/SubscribeButton', () => ({
-  SubscribeButton: () => <button data-testid="subscribe-button">Subscribe</button>
+vi.mock('@/components/lottery/PreviousDrawsSidebar', () => ({
+  PreviousDrawsSidebar: () => <div data-testid="previous-draws-sidebar" />
 }));
 
-vi.mock('@/components/ui/Breadcrumbs', () => ({
-  Breadcrumbs: () => <nav data-testid="breadcrumbs" />
+vi.mock('@/components/lottery/FindByNumber', () => ({
+  FindByNumber: () => <div data-testid="find-by-number" />
+}));
+
+vi.mock('@/components/lottery/RecentGlobalDraws', () => ({
+  RecentGlobalDraws: () => <div data-testid="recent-global-draws" />
+}));
+
+vi.mock('@/components/lottery/InteractiveTicketVerifier', () => ({
+  InteractiveTicketVerifier: () => <div data-testid="interactive-ticket-verifier" />
+}));
+
+vi.mock('@/components/lottery/LaoAnimalList', () => ({
+  LaoAnimalList: () => <div data-testid="lao-animal-list" />
+}));
+
+vi.mock('@/components/ui/NewsSidebar', () => ({
+  NewsSidebar: () => <div data-testid="news-sidebar" />
+}));
+
+vi.mock('react-markdown', () => ({
+  default: ({ children }: { children: string }) => <div>{children}</div>
 }));
 
 vi.mock('@/lib/hooks/useApi', () => ({
@@ -35,7 +56,7 @@ vi.mock('@/lib/hooks/useApi', () => ({
 
 vi.mock('@/lib/utils/lotteryUtils', () => ({
   formatDateDisplay: vi.fn(() => 'March 1, 2026'),
-  getLocalizedLottery: vi.fn((l, lang) => ({
+  getLocalizedLottery: vi.fn((l: Record<string, unknown>, lang: string) => ({
     name: lang === 'th' ? l.name : l.name_en,
     description: lang === 'th' ? l.description : l.description_en,
     howToPlay: lang === 'th' ? l.how_to_play : l.how_to_play_en,
@@ -46,6 +67,8 @@ vi.mock('@/lib/utils/lotteryUtils', () => ({
   getPrizeAmount: vi.fn(() => 1000000),
   getPrizeName: vi.fn(() => '1st Prize'),
   getPrizeNumber: vi.fn(() => ['123456']),
+  slugify: vi.fn((name: string) => name.toLowerCase().replace(/\s+/g, '-')),
+  GenericPrizeData: {},
 }));
 
 vi.mock('lucide-react', () => ({
@@ -68,6 +91,8 @@ vi.mock('lucide-react', () => ({
   CalendarDays: () => <span data-testid="calendar-days-icon" />,
   CheckCircle: () => <span data-testid="check-circle-icon" />,
   XCircle: () => <span data-testid="x-circle-icon" />,
+  ArrowRight: () => <span data-testid="arrow-right-icon" />,
+  Award: () => <span data-testid="award-icon" />,
 }));
 
 vi.mock('next/navigation', () => ({
@@ -76,136 +101,146 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/th/thai-lottery'
 }));
 
+vi.mock('next/image', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: (props: any) => {
+    const { fill, priority, ...rest } = props;
+    return <img {...rest} data-fill={fill ? "true" : undefined} />;
+  }
+}));
+
+vi.mock('next/link', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  default: ({ children, href }: any) => <a href={href}>{children}</a>
+}));
+
+vi.mock('@/lib/flags', () => ({
+  getFlagUrl: (c: string) => `/flags/${c}.svg`,
+}));
+
+function makeMockT(language: string) {
+  return {
+    language,
+    t: {
+      common: {
+        loading: 'Loading...',
+        currency: 'THB',
+        date: 'Date',
+        winningNumbers: 'Winning Numbers',
+        current: 'Current',
+      },
+      header: {
+        verified: 'Verified',
+      },
+      ticketVerifier: {
+        title: 'Verify',
+        description: 'Verify your ticket',
+        placeholder: 'Enter numbers',
+        button: 'Check',
+        verifyAnother: 'Verify Another',
+        win: 'You won!',
+        noWin: 'Better luck next time',
+        verificationDescription: 'Desc',
+      },
+      lottery: {
+        latestResult: 'Latest Result',
+        checkResult: 'Check Result',
+        previousDraws: 'Previous Draws',
+        about: 'About',
+        howToPlay: 'How to Play',
+        prizeStructure: 'Prize Structure',
+        nextDraw: 'Next Draw',
+      },
+      staticParams: {
+        drawDetail: {
+          disclaimer: 'Disclaimer text',
+          verified: 'Verified',
+          officialResults: 'Official Results',
+          recentGlobalDraws: 'Recent',
+        },
+      },
+      results: {
+        prize1: '1st Prize',
+        prize2: '2nd Prize',
+        prize2rank: 'Prize 2',
+        prize3rank: 'Prize 3',
+        prize4rank: 'Prize 4',
+        prize5rank: 'Prize 5',
+        prize2adj: 'Adjacent 2',
+        prize3adj: 'Adjacent 3',
+        prize3Front: '3 Front',
+        prize3Back: '3 Back',
+        firstPrize: '1st Prize',
+        history: 'History',
+      },
+      countryList: {
+        countries: { th: 'Thailand' },
+      },
+    },
+  };
+}
+
+// Mock API response matching ResultsByTypeResponse shape
+const mockApiData = {
+  latest: {
+    date: '2026-03-01',
+    dateDisplay: 'March 1, 2026',
+    data: {
+      prizes: [
+        { category: 'prize_1', winningNumbers: ['123456'], prizeAmount: '6000000' },
+      ],
+    },
+    fullData: null,
+  },
+  history: [],
+};
+
 describe('LotteryDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (useLanguage as any).mockReturnValue({
-      language: 'en',
-      t: {
-        common: {
-          loading: 'Loading...',
-          currency: 'THB'
-        },
-        header: {
-          verified: 'Verified'
-        },
-        ticketVerifier: {
-          title: 'Verify',
-          description: 'Verify your ticket',
-          placeholder: 'Enter numbers',
-          button: 'Check',
-          verifyAnother: 'Verify Another',
-          win: 'You won!',
-          noWin: 'Better luck next time',
-          verificationDescription: 'Desc'
-        },
-        lottery: {
-          latestResult: 'Latest Result',
-          checkResult: 'Check Result',
-          previousDraws: 'Previous Draws',
-          about: 'About',
-          howToPlay: 'How to Play',
-          prizeStructure: 'Prize Structure',
-          nextDraw: 'Next Draw',
-        },
-        staticParams: {
-          drawDetail: { disclaimer: 'Disclaimer text', verified: 'Verified', officialResults: 'Official Results', recentGlobalDraws: 'Recent' },
-        },
-        results: {
-          prize2rank: 'Prize 2',
-          prize3rank: 'Prize 3',
-          prize4rank: 'Prize 4',
-          prize5rank: 'Prize 5',
-          prize2adj: 'Adjacent 2',
-          prize3adj: 'Adjacent 3',
-          firstPrize: '1st Prize',
-        }
-      },
-    });
-
+    (useLanguage as any).mockReturnValue(makeMockT('en'));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (useApi as any).mockReturnValue({
-      data: mockResults,
-      isLoading: false,
+      data: mockApiData,
+      loading: false,
       error: null,
     });
   });
 
-  const mockLottery = {
-    id: 1,
-    name: 'Thai Lottery',
-    name_en: 'Thai Lottery En',
-    slug: 'thai-lottery',
-    country_id: 1,
-    draw_schedule: 'Twice a month',
-    logo_url: '/logo.png',
-    bg_color: 'bg-blue-500',
-    description: 'Description',
-    description_en: 'Description En',
-    how_to_play: 'How to play',
-    how_to_play_en: 'How to play En',
-    prize_structure: 'Prizes',
-    prize_structure_en: 'Prizes En',
-    countries: {
-      name: 'Thailand',
-      name_en: 'Thailand En',
-      code: 'th',
-      flag_url: '/flag.png'
-    }
-  };
-
-  const mockResults = [
-    {
-      id: 1,
-      draw_date: new Date('2026-03-01'),
-      full_data: { number: '123456', meta: {}, prizes: [] },
-      lottery: mockLottery
-    }
-  ];
-
   it('renders lottery details correctly in English', () => {
-    render(<LotteryDetail lotteryId={1} countryCode="th" country="Thailand" lotteryName="Thai Lottery En" lotterySlug="thai-lottery" apiEndpoint="/api/test" />);
-    
-    // Title
-    expect(screen.getAllByText('Thai Lottery En')[0]).toBeInTheDocument();
-    
-    // Content sections
+    render(
+      <LotteryDetail
+        lotteryId={1}
+        countryCode="th"
+        country="Thailand"
+        lotteryName="Thai Lottery En"
+        lotterySlug="thai-lottery"
+        apiEndpoint="/api/test"
+      />
+    );
+
+    // Header renders the lottery name
+    expect(screen.getByTestId('draw-page-header')).toHaveTextContent('Thai Lottery En');
+    // Main sub-components rendered
+    expect(screen.getByTestId('draw-result')).toBeInTheDocument();
   });
 
   it('renders lottery details correctly in Thai', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (useLanguage as any).mockReturnValue({
-      language: 'th',
-      t: { 
-        common: { currency: 'THB' },
-        header: { verified: 'Verified' },
-        ticketVerifier: {
-          title: 'Verify',
-          description: 'Verify your ticket',
-          placeholder: 'Enter numbers',
-          button: 'Check',
-          verifyAnother: 'Verify Another',
-          win: 'You won!',
-          noWin: 'Better luck next time',
-          verificationDescription: 'Desc'
-        },
-        lottery: { latestResult: 'Latest', about: 'About' },
-        staticParams: { drawDetail: { disclaimer: 'Disclaimer text', verified: 'Verified', officialResults: 'Official Results', recentGlobalDraws: 'Recent' } },
-        results: {
-          prize2rank: 'Prize 2',
-          prize3rank: 'Prize 3',
-          prize4rank: 'Prize 4',
-          prize5rank: 'Prize 5',
-          prize2adj: 'Adjacent 2',
-          prize3adj: 'Adjacent 3',
-          firstPrize: '1st Prize',
-        }
-      },
-    });
+    (useLanguage as any).mockReturnValue(makeMockT('th'));
 
-    render(<LotteryDetail lotteryId={1} countryCode="th" country="Thailand" lotteryName="Thai Lottery" lotterySlug="thai-lottery" apiEndpoint="/api/test" />);
-    
-    expect(screen.getAllByText('Thai Lottery')[0]).toBeInTheDocument();
+    render(
+      <LotteryDetail
+        lotteryId={1}
+        countryCode="th"
+        country="Thailand"
+        lotteryName="Thai Lottery"
+        lotterySlug="thai-lottery"
+        apiEndpoint="/api/test"
+      />
+    );
+
+    expect(screen.getByTestId('draw-page-header')).toHaveTextContent('Thai Lottery');
   });
 });

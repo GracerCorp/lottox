@@ -74,7 +74,7 @@ class ApiClient {
   // --- Public Spec API Methods ---
 
   // Results
-  async getLatestResults(type?: string | string[]) {
+  async getLatestResults(type?: string | string[], priorityCountry?: string) {
     const whereClause: Prisma.lottery_resultsWhereInput = {};
     if (type) {
       if (Array.isArray(type)) {
@@ -110,10 +110,13 @@ class ApiClient {
       },
     ];
 
+    // Fetch a larger pool when priorityCountry is set so we don't miss local results
+    const fetchLimit = priorityCountry ? 30 : 10;
+
     const latestResults = await prisma.lottery_results.findMany({
       where: whereClause,
       orderBy: { draw_date: "desc" },
-      take: 10,
+      take: fetchLimit,
       include: {
         lottery: {
           select: {
@@ -135,10 +138,31 @@ class ApiClient {
       },
     });
 
+    let formatted = latestResults.map((r) =>
+      formatLotteryResult(r as LotteryResultWithIncludes, Array.isArray(type) ? type[0] : type),
+    );
+
+    // Deduplicate: keep only the most recent result per lottery (by lotteryName + countryCode)
+    // Results are already ordered by draw_date desc, so first occurrence wins
+    const seen = new Set<string>();
+    formatted = formatted.filter((r) => {
+      const key = `${r.countryCode}-${r.lotteryName}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Sort: prioritize user's country results to the top while preserving
+    // chronological order within each group (priority vs non-priority)
+    if (priorityCountry) {
+      const pc = priorityCountry.toLowerCase();
+      const priority = formatted.filter((r) => r.countryCode === pc);
+      const rest = formatted.filter((r) => r.countryCode !== pc);
+      formatted = [...priority, ...rest];
+    }
+
     return {
-      results: latestResults.map((r) =>
-        formatLotteryResult(r as LotteryResultWithIncludes, Array.isArray(type) ? type[0] : type),
-      ),
+      results: formatted.slice(0, 10),
     };
   }
 

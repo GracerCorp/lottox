@@ -61,7 +61,7 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
       // Find the localized region name from dictionary if it exists. Fall back to r.name
       const dictKey = r.id.toLowerCase().replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
       return { 
-        label: (t.regions as any)[dictKey] || r.name, 
+        label: (t.regions as Record<string, string>)[dictKey] || r.name, 
         href: `?tab=${r.id}#latest-results` 
       };
     })

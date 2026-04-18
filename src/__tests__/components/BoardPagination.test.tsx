@@ -6,7 +6,11 @@ import { BoardPagination } from "@/components/global-results/BoardPagination";
 describe("BoardPagination", () => {
   it("renders page indicator", () => {
     render(<BoardPagination page={2} totalPages={5} onPrev={vi.fn()} onNext={vi.fn()} />);
-    expect(screen.getByTestId("pagination-info").textContent).toBe("2 / 5");
+    // Component uses dot indicators rather than text "2 / 5"
+    const dots = screen.getByTestId("pagination-dots");
+    expect(dots).toBeDefined();
+    // 5 dots should be rendered
+    expect(dots.children.length).toBe(5);
   });
 
   it("calls onPrev when Prev button is clicked", async () => {
