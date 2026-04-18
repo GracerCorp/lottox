@@ -43,7 +43,7 @@ export function LatestUpdateCard({
                 src={logo || flag}
                 alt={`${name || country} logo`}
                 fill
-                className="object-contain rounded-full"
+                className="object-cover rounded-full"
               />
             ) : (
               <div className="w-full h-full bg-neutral-200 dark:bg-neutral-800 rounded-full" />

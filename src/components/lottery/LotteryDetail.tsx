@@ -434,7 +434,7 @@ export default function LotteryDetail({
                         alt={`How to play ${lotteryName}`} 
                         width={600} 
                         height={800} 
-                        className="object-contain w-full"
+                        className="object-cover w-full"
                       />
                     </div>
                   </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
 import type { LotteriesListResponse, PinnedLottery } from "@/lib/api-types";
 import { ResultBoardCard } from "./ResultBoardCard";
+import { BoardPagination } from "./BoardPagination";
 import { getPinnedLotteries, togglePinnedLottery as togglePinHelper, movePinnedLotteryToTop as movePinToTopHelper } from "@/lib/utils/cookies";
-import { useIntersection } from "react-use";
 
 interface FlattenedLottery {
   id: number;
@@ -23,7 +23,6 @@ interface RegionData {
   countries: string[];
 }
 
-const PAGE_SIZE = 12;
 
 export function GlobalBoard() {
   const { t } = useLanguage();
@@ -34,7 +33,8 @@ export function GlobalBoard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("All");
   
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
   const [regions, setRegions] = useState<RegionData[]>([]);
 
   // Load pinned state initially
@@ -120,30 +120,17 @@ export function GlobalBoard() {
     });
   }, [allLotteries, searchQuery, selectedRegion, pinned]);
 
-  const visibleLotteries = useMemo(() => {
-    return filteredLotteries.slice(0, visibleCount);
-  }, [filteredLotteries, visibleCount]);
+  const totalPages = Math.ceil(filteredLotteries.length / pageSize) || 1;
 
-  // Intersection Observer for Infinite Scroll
-  const intersectionRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
-  const intersection = useIntersection(intersectionRef, {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.5,
-  });
-
-  useEffect(() => {
-    if (intersection && intersection.isIntersecting) {
-      if (visibleCount < filteredLotteries.length) {
-        setVisibleCount(v => v + PAGE_SIZE);
-      }
-    }
-  }, [intersection, filteredLotteries.length, visibleCount]);
+  const paginatedLotteries = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredLotteries.slice(start, start + pageSize);
+  }, [filteredLotteries, currentPage, pageSize]);
 
   // Reset pagination on filter change
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [searchQuery, selectedRegion]);
+    setCurrentPage(1);
+  }, [searchQuery, selectedRegion, pageSize]);
 
 
   const isPinned = (id: number) => pinned.some(p => p.lotteryId === id);
@@ -159,20 +146,37 @@ export function GlobalBoard() {
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative w-full max-w-[466px] mx-auto mb-4 group">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gold-500 transition-colors pointer-events-none">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+      {/* Action Bar: Search & Page Size */}
+      <div className="flex flex-col sm:flex-row items-center justify-between w-full max-w-[600px] mx-auto mb-4 gap-4">
+        {/* Search */}
+        <div className="relative w-full group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gold-500 transition-colors pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            placeholder="Search lotteries or countries..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-gray-100 dark:bg-white/5 border border-gold-400/50 hover:border-gold-500 rounded-full pl-11 pr-4 py-3 text-sm outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 caret-gold-500 transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400"
+          />
         </div>
-        <input 
-          type="text" 
-          placeholder="Search lotteries or countries..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-gray-100 dark:bg-white/5 border border-gold-400/50 hover:border-gold-500 rounded-full pl-11 pr-4 py-3 text-sm outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 caret-gold-500 transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400"
-        />
+
+        {/* Page Size Selector */}
+        <div className="shrink-0 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <span>Show:</span>
+          <select 
+            value={pageSize} 
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-2 outline-none focus:border-gold-500"
+          >
+            <option value={12}>12</option>
+            <option value={24}>24</option>
+            <option value={48}>48</option>
+          </select>
+        </div>
       </div>
 
       {/* Region Filter Pills */}
@@ -248,7 +252,7 @@ export function GlobalBoard() {
 
       {/* Grid of Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {visibleLotteries.map(lot => (
+        {paginatedLotteries.map(lot => (
           <ResultBoardCard 
             key={lot.id}
             lotteryName={lot.name}
@@ -261,11 +265,32 @@ export function GlobalBoard() {
         ))}
       </div>
 
-      {/* Infinite Scroll Sentinel */}
-      {visibleCount < filteredLotteries.length && (
-         <div ref={intersectionRef} className="py-10 flex justify-center mt-6">
-            <div className="inline-block w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
-         </div>
+      {/* Pagination & Options */}
+      {!loading && !error && filteredLotteries.length > 0 && (
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 py-4 border-t border-gray-200 dark:border-white/10">
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <span>Results per page:</span>
+            <select 
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="bg-gray-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg px-2 py-1 outline-none focus:border-amber-400 transition-colors cursor-pointer text-gray-900 dark:text-white"
+            >
+              <option value={12}>12</option>
+              <option value={24}>24</option>
+              <option value={48}>48</option>
+              <option value={96}>96</option>
+            </select>
+          </div>
+          
+          {totalPages > 1 && (
+            <BoardPagination 
+              page={currentPage}
+              totalPages={totalPages}
+              onPrev={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onNext={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            />
+          )}
+        </div>
       )}
 
     </section>

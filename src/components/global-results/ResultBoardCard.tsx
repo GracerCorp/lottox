@@ -141,9 +141,15 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
       {/* Card header */}
       <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-neutral-800/60 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-2 min-w-0">
-          <div className={`relative shrink-0 overflow-hidden rounded ${logo ? 'h-6 w-6' : 'h-4 w-6 shadow'}`}>
-            <Image src={logo || getFlagUrl(countryCode)} alt={lotteryName} fill className={logo ? "object-contain" : "object-cover"} />
-          </div>
+          {logo ? (
+            <div className="relative shrink-0 flex items-center justify-center h-6 w-8">
+              <Image src={logo} alt={lotteryName} fill className="object-cover" />
+            </div>
+          ) : (
+            <div className="relative shrink-0 overflow-hidden rounded-full h-6 w-6">
+              <Image src={getFlagUrl(countryCode)} alt={lotteryName} fill className="object-cover scale-110" />
+            </div>
+          )}
           <span className="text-gray-900 dark:text-white text-sm font-bold truncate">{lotteryName}</span>
           <BadgeCheck className="w-4 h-4 text-green-500 fill-green-50 shrink-0 dark:fill-green-900/30 dark:text-green-400" aria-label="Verified" />
         </div>

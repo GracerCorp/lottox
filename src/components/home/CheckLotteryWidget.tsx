@@ -42,8 +42,10 @@ export interface CheckResult {
 /* ---------- Component ---------- */
 export function CheckLotteryWidget({
   lotteryGroups = [],
+  variant = "default",
 }: {
   lotteryGroups?: LotteryGroup[];
+  variant?: "default" | "hero";
 }) {
   const { t } = useLanguage();
   const [number, setNumber] = useState("");
@@ -174,17 +176,22 @@ export function CheckLotteryWidget({
     setError(null);
   };
 
+  const ContainerWrapper = variant === "hero" ? "div" : "section";
+  const containerClasses = variant === "hero" ? "w-full" : "container mx-auto px-4 py-10";
+
   return (
-    <section className="container mx-auto px-4 py-10">
+    <ContainerWrapper className={containerClasses}>
       {/* Title */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          {t.common.findByNumber}
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          {t.common.findByNumberDesc}
-        </p>
-      </div>
+      {variant === "default" && (
+        <div className="text-center mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            {t.common.findByNumber}
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+            {t.common.findByNumberDesc}
+          </p>
+        </div>
+      )}
 
       {/* Compact search form */}
       <div className="max-w-2xl mx-auto relative">
@@ -200,14 +207,25 @@ export function CheckLotteryWidget({
               className="flex items-center gap-2 border-r border-gray-200 dark:border-white/10 pr-3 py-1 cursor-pointer hover:opacity-80 transition-opacity"
             >
               {selected && (
-                <div className="relative h-6 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
-                  <Image
-                    src={selected.logo ?? getFlagUrl(selected.countryCode)}
-                    alt={selected.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                selected.logo ? (
+                  <div className="relative h-6 w-8 shrink-0 flex items-center justify-center">
+                    <Image
+                      src={selected.logo}
+                      alt={selected.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full">
+                    <Image
+                      src={getFlagUrl(selected.countryCode)}
+                      alt={selected.name}
+                      fill
+                      className="object-cover scale-110"
+                    />
+                  </div>
+                )
               )}
 
               <span className="text-sm font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap">
@@ -307,14 +325,25 @@ export function CheckLotteryWidget({
                           : "text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10",
                       )}
                     >
-                      <div className="relative h-6 w-6 overflow-hidden rounded shadow-sm flex-shrink-0">
-                        <Image
-                          src={lottery.logo ?? getFlagUrl(lottery.countryCode)}
-                          alt={lottery.name}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
+                      {lottery.logo ? (
+                        <div className="relative h-6 w-8 shrink-0 flex items-center justify-center">
+                          <Image
+                            src={lottery.logo}
+                            alt={lottery.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full">
+                          <Image
+                            src={getFlagUrl(lottery.countryCode)}
+                            alt={lottery.name}
+                            fill
+                            className="object-cover scale-110"
+                          />
+                        </div>
+                      )}
 
                       <span
                         className={cn(
@@ -340,28 +369,50 @@ export function CheckLotteryWidget({
         )}
       </div>
 
-      {/* Results feedback — aria-live for screen reader announcements */}
+      {/* Results feedback — Modal Overlay */}
       {(result || error) && (
-        <div className="w-full" aria-live="polite" aria-atomic="true" role="status">
-          {error ? (
-            <div className="max-w-2xl mx-auto mt-6">
-              <div className="p-5 rounded-xl border text-center animate-in fade-in slide-in-from-bottom-4 duration-500 bg-red-500/10 border-red-500/20 text-red-400">
-                <div className="flex flex-col items-center gap-2">
-                  <XCircle className="w-8 h-8 opacity-80" />
-                  <p className="font-bold">{t.common.somethingWrong}</p>
-                  <p className="text-sm opacity-80">{error}</p>
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in duration-300"
+          aria-live="polite" 
+          aria-atomic="true" 
+          role="status"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) handleReset();
+          }}
+        >
+          <div className="relative w-full max-w-2xl max-h-[95vh] overflow-y-auto no-scrollbar scroll-smooth pb-10 pt-4">
+            {/* Close Button top right (absolute to the viewport wrapper) */}
+            <button
+              onClick={handleReset}
+              className="absolute top-6 right-6 z-50 p-2 bg-neutral-950/40 hover:bg-neutral-950/80 text-white/80 hover:text-white rounded-full transition-all"
+              aria-label="Close dialog"
+            >
+              <XCircle className="w-6 h-6" />
+            </button>
+
+            {error ? (
+              <div className="max-w-2xl mx-auto mt-6">
+                <div className="p-8 rounded-2xl border text-center animate-in fade-in zoom-in-95 duration-500 bg-red-500/10 border-red-500/20 text-red-400 backdrop-blur-md shadow-2xl relative overflow-hidden">
+                  <div className="flex flex-col items-center gap-3 relative z-10">
+                    <XCircle className="w-12 h-12 opacity-80" />
+                    <p className="font-bold text-xl">{t.common.somethingWrong}</p>
+                    <p className="text-sm opacity-80">{error}</p>
+                    <button onClick={handleReset} className="mt-4 px-6 py-2 bg-white/10 hover:bg-white/20 transition-colors rounded-full font-medium text-white shadow-sm border border-white/10">
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : isJackpot ? (
-            <JackpotResult result={result!} number={searchedNumber} onReset={handleReset} />
-          ) : isWinner ? (
-            <StandardWinResult result={result!} number={searchedNumber} onReset={handleReset} />
-          ) : (
-            <NoWinResult number={searchedNumber} onReset={handleReset} />
-          )}
+            ) : isJackpot ? (
+              <JackpotResult result={result!} number={searchedNumber} onReset={handleReset} />
+            ) : isWinner ? (
+              <StandardWinResult result={result!} number={searchedNumber} onReset={handleReset} />
+            ) : (
+              <NoWinResult number={searchedNumber} onReset={handleReset} />
+            )}
+          </div>
         </div>
       )}
-    </section>
+    </ContainerWrapper>
   );
 }

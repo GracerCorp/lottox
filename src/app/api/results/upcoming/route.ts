@@ -29,6 +29,9 @@ export interface UpcomingDraw {
   name: string;
   countryCode: string;
   nextDrawAt: string;
+  logo?: string | null;
+  expectedPrize?: string;
+  currency?: string;
 }
 
 export interface UpcomingDrawsResponse {
@@ -63,10 +66,30 @@ export async function GET(request: NextRequest) {
 
     const upcoming: UpcomingDraw[] = activeLotteries.map((l) => {
       const cc = l.countries?.code?.toLowerCase() ?? "th";
+      
+      let expectedPrize: string | undefined;
+      // Extract top prize from default amounts if available
+      try {
+        if (l.default_prize_amounts) {
+          const prizes = l.default_prize_amounts as Record<string, string | number>;
+          const prize1 = prizes["prize_1"] || prizes["jackpot"] || prizes["firstPrize"] || Object.values(prizes)[0];
+          if (prize1) expectedPrize = Number(prize1).toLocaleString();
+        }
+      } catch (e) {
+        // ignore JSON parse errors or other issues
+      }
+      
+      const currencyMap: Record<string, string> = {
+        th: "฿", la: "₭", jp: "¥", au: "A$", us: "$", eu: "€", uk: "£", vn: "₫"
+      };
+
       return {
         name: l.name,
         countryCode: cc,
         nextDrawAt: getNextDrawAt(cc),
+        logo: l.logo,
+        expectedPrize,
+        currency: currencyMap[cc] || "฿"
       };
     });
 

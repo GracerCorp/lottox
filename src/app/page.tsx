@@ -268,7 +268,7 @@ export default async function Home() {
 
 
       {/* Section 1: Hero Carousel */}
-      <HeroSectionV3 items={heroItems} />
+      <HeroSectionV3 items={heroItems} lotteryGroups={lotteryGroups} />
 
       {/* Section 2: Lottery By Country Marquee */}
       <CountryMarqueeSection countries={countryListItems} />

@@ -52,7 +52,7 @@ export function DrawPageHeader({
                 src={logo}
                 alt={`${lotteryName} logo`}
                 fill
-                className="object-contain p-1.5"
+                className="object-cover p-1.5"
               />
             </div>
           ) : (

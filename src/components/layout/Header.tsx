@@ -78,14 +78,16 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-4">
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-black dark:hover:text-white"
-            aria-label={`Switch language to ${language === "en" ? "Thai" : "English"}`}
-          >
-            <Globe className="h-4 w-4" />
-            <span>{language.toUpperCase()}</span>
-          </button>
+          {toggles["localization_toggle"] !== false && (
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-black dark:hover:text-white"
+              aria-label={`Switch language to ${language === "en" ? "Thai" : "English"}`}
+            >
+              <Globe className="h-4 w-4" />
+              <span>{language.toUpperCase()}</span>
+            </button>
+          )}
 
           <ThemeToggle />
 

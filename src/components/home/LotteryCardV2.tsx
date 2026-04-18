@@ -40,7 +40,7 @@ export function LotteryCardV2({
   return (
     <Link href={href} className={cn("block group/card w-full mb-4 md:mb-6", isHoverable && "hover-enabled")}>
       <div className={cn(
-        "relative overflow-hidden rounded-[20px] aspect-[9/11] bg-neutral-900 border border-gray-200 dark:border-white/5 shadow-2xl transition-all duration-300",
+        "relative overflow-hidden rounded-[24px] aspect-square bg-neutral-900 border border-gray-200 dark:border-white/5 shadow-2xl transition-all duration-300",
         isHoverable && "group-hover/card:scale-[1.02] group-hover/card:ring-1 group-hover/card:ring-gold-new/50 group-hover/card:shadow-[0_0_20px_rgba(216,176,95,0.4)]"
       )}>
         
@@ -62,13 +62,19 @@ export function LotteryCardV2({
           {/* Top: Flag + Country + Lottery Name */}
           <div className="mb-auto text-center flex flex-col justify-center items-center">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="relative h-[18px] w-7 overflow-hidden rounded-sm shadow-sm flex-shrink-0 flex items-center justify-center bg-white/5">
-                {!flag.includes("/") ? (
+              {!flag.includes("/") ? (
+                <div className="relative h-5 w-7 shrink-0 flex items-center justify-center">
                   <span className="text-sm leading-none">{flag}</span>
-                ) : (
+                </div>
+              ) : flag.includes("flag") ? (
+                <div className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full bg-white/5">
+                  <Image src={flag} alt={`${country} flag`} fill className="object-cover scale-110" />
+                </div>
+              ) : (
+                <div className="relative h-5 w-7 shrink-0 flex items-center justify-center">
                   <Image src={flag} alt={`${country} flag`} fill className="object-cover" />
-                )}
-              </div>
+                </div>
+              )}
               <span className="text-[13px] font-semibold text-white/90 uppercase tracking-wider truncate">
                 {country}
               </span>

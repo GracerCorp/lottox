@@ -27,7 +27,7 @@ export function DrawHistoryRow({
       }`}
       data-testid="draw-history-row"
     >
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 w-full">
+      <div className="flex flex-col gap-y-2 w-full min-w-0 pr-2">
         {/* Date + time */}
         <span className="text-sm text-gray-500 dark:text-gray-400 shrink-0 font-medium">
           {drawTime && <>{drawTime} | </>}
@@ -35,22 +35,24 @@ export function DrawHistoryRow({
         </span>
 
         {/* Prize columns */}
-        {results.map((col, i) => (
-          <div key={`${col.label}-${i}`} className="shrink-0">
-            <span className="block text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide leading-none mb-1">
-              {col.label}
-            </span>
-            <span
-              className={
-                col.main
-                  ? "text-lg font-black text-amber-500 dark:text-amber-400 tracking-wider tabular-nums"
-                  : "text-base font-bold text-red-500 dark:text-red-400 tracking-wide tabular-nums"
-              }
-            >
-              {col.value || "–"}
-            </span>
-          </div>
-        ))}
+        <div className="flex flex-wrap items-start gap-x-6 gap-y-3 mt-1">
+          {results.map((col, i) => (
+            <div key={`${col.label}-${i}`} className="min-w-0 max-w-full flex-1">
+              <span className="block text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide leading-none mb-1">
+                {col.label}
+              </span>
+              <span
+                className={
+                  col.main
+                    ? "block text-lg font-black text-amber-500 dark:text-amber-400 tracking-wider tabular-nums break-words leading-tight"
+                    : "block text-base font-bold text-red-500 dark:text-red-400 tracking-wide tabular-nums break-words leading-tight"
+                }
+              >
+                {col.value || "–"}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
       
       {/* Chevron at the end */}

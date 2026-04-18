@@ -102,7 +102,7 @@ export function LotteryCard({
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-2xl aspect-[3/4] group cursor-pointer border transition-all duration-500",
+          "relative overflow-hidden rounded-[24px] aspect-square group cursor-pointer border transition-all duration-500",
           isActive
             ? "border-gold-400/40 shadow-2xl"
             : "border-white/10 shadow-lg",
@@ -151,18 +151,19 @@ export function LotteryCard({
           {/* Header — Flag + Country + Name */}
           <div className="mb-1">
             <div className="flex items-center gap-2 mb-1">
-              <div className="relative h-4 w-6 overflow-hidden rounded shadow-sm flex-shrink-0 flex items-center justify-center bg-white/5">
-                {!flag.includes("/") ? (
+              {!flag.includes("/") ? (
+                <div className="relative h-5 w-7 shrink-0 flex items-center justify-center">
                   <span className="text-xs leading-none">{flag}</span>
-                ) : (
-                  <Image
-                    src={flag}
-                    alt={`${country} flag`}
-                    fill
-                    className="object-cover"
-                  />
-                )}
-              </div>
+                </div>
+              ) : flag.includes("flag") ? (
+                <div className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full bg-white/5">
+                  <Image src={flag} alt={`${country} flag`} fill className="object-cover scale-110" />
+                </div>
+              ) : (
+                <div className="relative h-5 w-7 shrink-0 flex items-center justify-center">
+                  <Image src={flag} alt={`${country} flag`} fill className="object-cover" />
+                </div>
+              )}
               <span className="text-[11px] font-semibold text-white/70 uppercase tracking-wider truncate">
                 {country}
               </span>

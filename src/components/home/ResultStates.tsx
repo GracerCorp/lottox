@@ -108,7 +108,7 @@ export const JackpotResult = ({
   }, []);
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto mt-8 animate-in zoom-in-95 duration-500">
+    <div className="relative w-full max-w-2xl mx-auto animate-in zoom-in-95 duration-500">
       {/* Full screen confetti — disabled for reduced-motion users */}
       {!reducedMotion && (
         <div className="fixed inset-0 pointer-events-none z-50">
@@ -199,7 +199,7 @@ export const StandardWinResult = ({
   const { t } = useLanguage();
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto mt-8 animate-in slide-in-from-bottom-8 duration-500">
+    <div className="relative w-full max-w-2xl mx-auto animate-in slide-in-from-bottom-8 duration-500">
       <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-emerald-500/30 shadow-xl overflow-hidden">
         {/* Top green accent bar */}
         <div className="h-2 w-full bg-gradient-to-r from-emerald-400 to-green-500" />
@@ -273,7 +273,7 @@ export const NoWinResult = ({
   const { t } = useLanguage();
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto mt-8 animate-in fade-in duration-300">
+    <div className="relative w-full max-w-2xl mx-auto animate-in fade-in duration-300">
       <div className="rounded-2xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-white/10 shadow-lg p-6 md:p-8 flex flex-col items-center text-center">
         <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
           <Ticket className="w-8 h-8 text-gray-400" />

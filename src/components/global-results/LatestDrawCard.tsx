@@ -24,18 +24,24 @@ interface LatestDrawData {
   drawTime: string;
   drawDate: string;
   mainNumbers: string[];
-  firstPrizeAmount: string;
+  firstPrizeAmount: string | null;
   prizes: PrizeNumbers[];
   detailHref: string;
+  currency: string;
 }
 
 function extractLatestDrawData(result: LatestResultsResponse["results"][0]): LatestDrawData | null {
   if (!result) return null;
 
-  const cc = result.countryCode ?? "th";
-  const name = result.lotteryName ?? "Government Lottery (GLO)";
+  const cc = result.countryCode ?? "-";
+  const name = result.lotteryName ?? "Unknown Lottery";
   
   const detailHref = `/${cc.toLowerCase()}/${slugify(name)}/${result.date || result.drawDate}`;
+
+  const currencyMap: Record<string, string> = {
+    th: "฿", la: "₭", jp: "¥", au: "A$", us: "$", eu: "€", uk: "£", vn: "₫"
+  };
+  const currency = currencyMap[cc] || "฿";
 
   let drawTime = "";
   let drawDate = "";
@@ -61,7 +67,7 @@ function extractLatestDrawData(result: LatestResultsResponse["results"][0]): Lat
   const prizes = (Array.isArray(data?.prizes) ? data.prizes : []) as Record<string, unknown>[];
 
   let mainNumbers: string[] = [];
-  let firstPrizeAmount = "0";
+  let firstPrizeAmount: string | null = null;
   const prizeRows: PrizeNumbers[] = [];
 
   for (const p of prizes) {
@@ -78,8 +84,8 @@ function extractLatestDrawData(result: LatestResultsResponse["results"][0]): Lat
       cat === "prize_1_thai"
     ) {
       const mainNum = nums[0] ?? "";
-      mainNumbers = mainNum.split("");
-      firstPrizeAmount = amount ? Number(amount).toLocaleString() : firstPrizeAmount;
+      mainNumbers = mainNum ? mainNum.split("") : [];
+      firstPrizeAmount = amount && amount !== "0" ? Number(amount).toLocaleString() : firstPrizeAmount;
     }
     // ── Sub-prize rows ────────────────────────────────────────────────────
     else if (cat === "running_number_front_3" || cat === "prize3Front") {
@@ -91,10 +97,7 @@ function extractLatestDrawData(result: LatestResultsResponse["results"][0]): Lat
     }
   }
 
-  // Pad to 6 balls minimum (fill with "–" if less than 6 digits)
-  while (mainNumbers.length < 6) mainNumbers.unshift("–");
-
-  return { name, countryCode: cc, logo: result.logo ?? null, drawTime, drawDate, mainNumbers, firstPrizeAmount, prizes: prizeRows, detailHref };
+  return { name, countryCode: cc, logo: result.logo ?? null, drawTime, drawDate, mainNumbers, firstPrizeAmount, prizes: prizeRows, detailHref, currency };
 }
 
 export function LatestDrawCard() {
@@ -105,25 +108,28 @@ export function LatestDrawCard() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Extract up to 5 latest draws
-  const rawDraws = data?.results?.slice(0, 5) || [];
-  const extractedDraws = rawDraws.map(extractLatestDrawData).filter(Boolean) as LatestDrawData[];
+  const rawDraws = data?.results || [];
+  const extractedDraws = rawDraws.map(extractLatestDrawData).filter((d) => d !== null && d.mainNumbers.length > 0) as LatestDrawData[];
+  
+  // limit to 5 after filtering valid draws
+  const displayDraws = extractedDraws.slice(0, 5);
 
   useEffect(() => {
-    if (extractedDraws.length <= 1) return;
+    if (displayDraws.length <= 1) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % extractedDraws.length);
+      setActiveIndex((prev) => (prev + 1) % displayDraws.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [extractedDraws.length]);
+  }, [displayDraws.length]);
 
   const handleNext = () => {
-    if (extractedDraws.length <= 1) return;
-    setActiveIndex((prev) => (prev + 1) % extractedDraws.length);
+    if (displayDraws.length <= 1) return;
+    setActiveIndex((prev) => (prev + 1) % displayDraws.length);
   };
 
   const handlePrev = () => {
-    if (extractedDraws.length <= 1) return;
-    setActiveIndex((prev) => (prev - 1 + extractedDraws.length) % extractedDraws.length);
+    if (displayDraws.length <= 1) return;
+    setActiveIndex((prev) => (prev - 1 + displayDraws.length) % displayDraws.length);
   };
 
   if (loading) {
@@ -132,7 +138,7 @@ export function LatestDrawCard() {
     );
   }
 
-  if (error || extractedDraws.length === 0) {
+  if (error || displayDraws.length === 0) {
     return (
       <div className="bg-white dark:bg-neutral-900/80 border border-slate-200 dark:border-white/10 rounded-2xl p-6 text-red-500 text-sm shadow-sm dark:shadow-none" data-testid="latest-draw-card-error">
         {gd.errorLoading}
@@ -140,7 +146,7 @@ export function LatestDrawCard() {
     );
   }
 
-  const draw = extractedDraws[activeIndex];
+  const draw = displayDraws[activeIndex];
 
   return (
     <div className="bg-white dark:bg-[#242424] border border-gray-100 dark:border-transparent rounded-2xl p-6 flex flex-col shadow-lg w-full h-full relative group" data-testid="latest-draw-card">
@@ -148,7 +154,7 @@ export function LatestDrawCard() {
       {/* Header */}
       <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 font-medium mb-4 z-10 relative">
         <span className="tracking-wide">{gd.latestDraw}</span>
-        {extractedDraws.length > 1 && (
+        {displayDraws.length > 1 && (
           <div className="flex gap-6">
             <button onClick={handlePrev} className="hover:text-gray-900 dark:hover:text-white transition-colors" aria-label="Previous">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6" /></svg>
@@ -162,21 +168,32 @@ export function LatestDrawCard() {
 
       {/* Lottery Name Row */}
       <div className="flex items-center gap-3 z-10 relative">
-        <div className="relative h-10 w-10 overflow-hidden bg-neutral-100 dark:bg-white rounded-full shrink-0 flex items-center justify-center p-1">
-          <Image
-            src={draw.logo || getFlagUrl(draw.countryCode)}
-            alt={draw.name}
-            fill
-            className="object-contain"
-          />
-        </div>
+        {draw.logo ? (
+          <div className="relative h-10 w-12 shrink-0 flex items-center justify-center">
+            <Image
+              src={draw.logo}
+              alt={draw.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="relative h-10 w-10 overflow-hidden rounded-full shrink-0 flex items-center justify-center bg-white/5">
+            <Image
+              src={getFlagUrl(draw.countryCode)}
+              alt={draw.name}
+              fill
+              className="object-cover scale-110"
+            />
+          </div>
+        )}
         <div>
           <Link href={draw.detailHref} className="flex items-center gap-1.5 hover:underline decoration-white underline-offset-4 cursor-pointer">
             <span className="text-gray-900 dark:text-white font-semibold text-lg">{draw.name}</span>
             <CheckCircle2 className="h-4 w-4 shrink-0 text-white fill-[#22c55e] opacity-90 rounded-full" />
           </Link>
           <span className="text-gray-500 dark:text-gray-400 text-sm">
-            {(t.countryList?.countries as Record<string, string>)?.[draw.countryCode] || draw.countryCode.toUpperCase()}
+            {(t.countryList?.countries as Record<string, string>)?.[draw.countryCode.toLowerCase()] || draw.countryCode.toUpperCase()}
           </span>
         </div>
       </div>
@@ -189,29 +206,33 @@ export function LatestDrawCard() {
       </div>
 
       {/* Main Prize Row */}
-      <div className="mt-8 flex flex-col gap-3 z-10 relative transition-opacity duration-300">
-        <div className="flex justify-between items-end">
-          <div className="flex items-center gap-2 text-lg font-bold text-[#e2c179]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-            {gd.digits6}
+      {draw.mainNumbers.length > 0 && (
+        <div className="mt-8 flex flex-col gap-3 z-10 relative transition-opacity duration-300">
+          <div className="flex justify-between items-end">
+            <div className="flex items-center gap-2 text-lg font-bold text-[#e2c179]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+              {t.common.winningNumbers}
+            </div>
+            {draw.firstPrizeAmount && (
+              <div className="text-sm">
+                <span className="text-gray-500 dark:text-gray-400 mr-1">{'Winning Prize'} -</span>
+                <span className="text-[#e2c179] font-bold">{draw.currency}{draw.firstPrizeAmount}</span>
+              </div>
+            )}
           </div>
-          <div className="text-sm">
-            <span className="text-gray-500 dark:text-gray-400 mr-1">{gd.firstPrize} -</span>
-            <span className="text-[#e2c179] font-bold">฿{draw.firstPrizeAmount}</span>
-          </div>
-        </div>
         
-        <div className="flex gap-2.5 justify-center w-full" data-testid="main-numbers">
-          {draw.mainNumbers.slice(0, 6).map((digit, i) => (
+        <div className="flex gap-2.5 justify-center w-full flex-wrap" data-testid="main-numbers">
+          {draw.mainNumbers.map((digit, i) => (
             <div
               key={i}
-              className="bg-[#e2c179] text-[#1a1a1a] flex-1 max-w-[60px] aspect-[4/5] rounded-xl flex items-center justify-center text-3xl font-bold shadow-sm"
+              className="bg-[#e2c179] text-[#1a1a1a] flex-1 max-w-[60px] min-w-[40px] aspect-[4/5] rounded-xl flex items-center justify-center text-3xl font-bold shadow-sm"
             >
               {digit}
             </div>
           ))}
         </div>
       </div>
+      )}
 
       {/* Sub Prizes */}
       <div className="min-h-[140px] mt-8 z-10 relative transition-opacity duration-300">
@@ -231,9 +252,9 @@ export function LatestDrawCard() {
                       </div>
                     ))}
                   </div>
-                  {p.amount && (
+                  {p.amount && p.amount !== "0" && (
                     <div className="text-sm text-gray-500 dark:text-gray-400 font-medium mt-3">
-                      ฿{Number(p.amount).toLocaleString()}
+                      {draw.currency}{Number(p.amount).toLocaleString()}
                     </div>
                   )}
                 </div>
@@ -245,7 +266,7 @@ export function LatestDrawCard() {
 
       {/* Carousel Dots */}
       <div className="flex justify-center items-center gap-2.5 mt-auto mb-2 z-10 relative min-h-[6px]">
-        {extractedDraws.length > 1 && extractedDraws.map((_, i) => (
+        {displayDraws.length > 1 && displayDraws.map((_, i) => (
           <button
             key={i}
             onClick={() => setActiveIndex(i)}

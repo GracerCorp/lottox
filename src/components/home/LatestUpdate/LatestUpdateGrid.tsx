@@ -39,7 +39,11 @@ export function LatestUpdateGrid({ filter = "trending", regions }: LatestUpdateG
     }
   }
 
-  const results = rawResults;
+  const results = rawResults.filter((item) => 
+    item.numbers && item.numbers.some((prize) => 
+      prize.value && prize.value.some((v) => v && v.trim() !== "-" && v.trim() !== "")
+    )
+  );
 
   if (loading) {
     return (

@@ -6,6 +6,7 @@ import { Compass } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { HeroItem } from "./HeroSection";
+import { CheckLotteryWidget, type LotteryGroup } from "./CheckLotteryWidget";
 
 // Helper for scrolling columns
 const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = false }: { colItems: HeroItem[], speedStr: string, className?: string, isHoverable?: boolean }) => {
@@ -30,7 +31,7 @@ const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = fal
   );
 };
 
-export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
+export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: HeroItem[], lotteryGroups?: LotteryGroup[] }) {
   const { t } = useLanguage();
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
 
@@ -64,7 +65,7 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
   ];
 
   return (
-    <section className="group relative w-full h-[600px] md:h-[700px] overflow-hidden bg-neutral-50 dark:bg-neutral-950 transition-all duration-700 hover:shadow-[inset_0_0_100px_rgba(216,176,95,0.05)]">
+    <section className="group relative z-20 w-full h-[100svh] min-h-[600px] bg-neutral-50 dark:bg-neutral-950 transition-all duration-700 hover:shadow-[inset_0_0_100px_rgba(216,176,95,0.05)]">
       {/* Required Keyframes for scrolling */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scrollUp {
@@ -75,7 +76,7 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
       `}} />
 
       {/* Masonry Background layer*/}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="container mx-auto px-4 h-full relative">
           {/* Top mask */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-50 via-neutral-50/80 dark:from-neutral-950 dark:via-neutral-950/80 to-transparent z-10 pointer-events-none" />
@@ -84,9 +85,9 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
           <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-new/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-screen" />
 
           {/* Grid layout */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 h-full items-start opacity-80 md:opacity-100">
-            {/* Mobile single column */}
-            <ScrollingColumn colItems={displayItems} speedStr="60s" className="mt-4 md:hidden" isHoverable={true} />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 h-full items-start opacity-100">
+            {/* Mobile single column (combination of col1 and col2 for reasonable loop length) */}
+            <ScrollingColumn colItems={[...col1, ...col2]} speedStr="100s" className="mt-4 md:hidden" isHoverable={true} />
             {/* Desktop columns */}
             <ScrollingColumn colItems={col1} speedStr="45s" className="mt-8 hidden md:flex" isHoverable={true} />
             <ScrollingColumn colItems={col2} speedStr="55s" className="-mt-12 hidden md:flex" isHoverable={true} />
@@ -97,7 +98,7 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
       </div>
 
       {/* Bottom text overlay */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/90 dark:from-[#111111] dark:via-[#111111]/80 to-transparent flex flex-col justify-end pointer-events-none">
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/70 dark:from-[#111111] dark:via-[#111111]/70 to-transparent flex flex-col justify-end pointer-events-none">
         <div className="container mx-auto px-4 pb-8 md:pb-16 pointer-events-auto">
           <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6">
             
@@ -110,9 +111,13 @@ export function HeroSectionV3({ items = [] }: { items?: HeroItem[] }) {
                   {t.hero?.titleSuffix || "Lottery Result"}
                 </span>
               </h1>
-              <p className="text-sm md:text-lg text-neutral-600 dark:text-white/90 max-w-2xl mx-auto font-medium">
+              <p className="text-sm md:text-lg text-neutral-800 dark:text-white max-w-2xl mx-auto font-bold tracking-wide drop-shadow-sm">
                 {t.hero?.subtitle || "Fast, Accurate, and reliable worldwide lottery results platform"}
               </p>
+            </div>
+
+            <div className="w-full max-w-2xl mx-auto pt-2 pb-4">
+              <CheckLotteryWidget lotteryGroups={lotteryGroups} variant="hero" />
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
