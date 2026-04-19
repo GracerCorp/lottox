@@ -1,7 +1,7 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
-import { DrawResult } from "./DrawResult";
+import { DrawResult, type DrawResultProps } from "./DrawResult";
 import { DrawPageHeader } from "./DrawPageHeader";
 import { PrizeTierSection } from "./PrizeTierSection";
 import { PreviousDrawsSidebar } from "./PreviousDrawsSidebar";
@@ -276,7 +276,7 @@ export default function LotteryDetail({
   }
 
   /* ---------- DrawResult Props ---------- */
-  const drawResultProps = {
+  const drawResultProps: DrawResultProps = {
     country,
     lotteryName,
     date: formattedDate,
@@ -336,10 +336,10 @@ export default function LotteryDetail({
     );
   } else {
     if (firstPrize && firstPrize !== "-") allPrizes.push({ name: prizeLabels?.firstPrize || t.results.prize1, amount: drawResultProps.firstPrizeAmount, numbers: [String(firstPrize)] });
-    if (front3.length > 0) allPrizes.push({ name: prizeLabels?.last3f || t.results.prize3Front, amount: drawResultProps.front3Amount, numbers: front3.map(String) });
-    if (back3.length > 0) allPrizes.push({ name: prizeLabels?.last3b || t.results.prize3Back, amount: drawResultProps.back3Amount, numbers: back3.map(String) });
-    if (last2 && last2 !== "-") allPrizes.push({ name: prizeLabels?.last2 || t.results.prize2, amount: drawResultProps.last2Amount, numbers: [String(last2)] });
-    if (drawResultProps.adjacent?.length > 0) allPrizes.push({ name: "รางวัลข้างเคียงรางวัลที่ 1", amount: drawResultProps.adjacentAmount, numbers: drawResultProps.adjacent });
+    if (front3.length > 0) allPrizes.push({ name: prizeLabels?.last3f || t.results.prize3Front, amount: drawResultProps.front3Amount || "0", numbers: front3.map(String) });
+    if (back3.length > 0) allPrizes.push({ name: prizeLabels?.last3b || t.results.prize3Back, amount: drawResultProps.back3Amount || "0", numbers: back3.map(String) });
+    if (last2 && last2 !== "-") allPrizes.push({ name: prizeLabels?.last2 || t.results.prize2, amount: drawResultProps.last2Amount || "0", numbers: [String(last2)] });
+    if ((drawResultProps.adjacent?.length ?? 0) > 0) allPrizes.push({ name: "รางวัลข้างเคียงรางวัลที่ 1", amount: drawResultProps.adjacentAmount || "0", numbers: drawResultProps.adjacent || [] });
     prizeTiers.forEach((p) => {
       if (p.numbers && p.numbers.length > 0) {
         allPrizes.push({ name: p.title, amount: p.amount, numbers: p.numbers.map(String) });

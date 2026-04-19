@@ -39,7 +39,7 @@ interface DynamicPrize {
   prizeCount?: number;
 }
 
-interface DrawResultProps {
+export interface DrawResultProps {
   country?: string;
   lotteryName?: string;
   date: string;
