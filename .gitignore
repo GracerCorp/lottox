@@ -47,5 +47,21 @@ next-env.d.ts
 # Sentry Config File
 .env.sentry-build-plugin
 
+# test / coverage / lint output
 playwright-report
 test-results
+coverage
+*.log
+coverage*.txt
+test_output.txt
+test_results.txt
+lint*.txt
+lint*.json
+eslint_errors.json
+tsc_errors.log
+
+# IDE agent artifacts
+.gemini_docs
+
+# stale lock files
+bun.lockb
