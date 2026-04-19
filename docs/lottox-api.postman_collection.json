@@ -1,0 +1,345 @@
+{
+  "info": {
+    "name": "LOTTOX API",
+    "description": "Multi-country lottery results platform API collection.\n\nBase URL: http://localhost:4001 (dev) or https://lottox.today (prod)\n\nAll API routes return JSON and are protected by rate limiting (100 req/min general, 300 req/min results, 10 req/min subscribe) and CSRF origin validation on mutating requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "lottox"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Results & Number Checking",
+      "description": "Lottery results endpoints — latest, global, upcoming, by type, by date, and number checking.",
+      "item": [
+        {
+          "name": "Get Latest Results",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results/latest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "results", "latest"]
+            },
+            "description": "Returns the most recent lottery results across all types."
+          }
+        },
+        {
+          "name": "Get Global Results",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results/global?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "results", "global"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number (1-1000, default: 1)" },
+                { "key": "limit", "value": "20", "description": "Items per page (1-100, default: 20)" },
+                { "key": "country", "value": "", "description": "Country code filter (e.g., th, la, vn)", "disabled": true },
+                { "key": "period", "value": "", "description": "Period filter", "disabled": true },
+                { "key": "date", "value": "", "description": "Date filter (YYYY-MM-DD)", "disabled": true }
+              ]
+            },
+            "description": "Paginated global lottery results with optional country, period, and date filters.\n\nRevalidation: 5 minutes (ISR)."
+          }
+        },
+        {
+          "name": "Get Upcoming Draws",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results/upcoming?limit=3",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "results", "upcoming"],
+              "query": [
+                { "key": "limit", "value": "3", "description": "Number of upcoming draws (1-20, default: 3)" }
+              ]
+            },
+            "description": "List of upcoming lottery draws with expected prizes and currency.\n\nResponse: { upcoming: [{ name, countryCode, nextDrawAt, logo, expectedPrize, currency }] }\n\nRevalidation: 60 seconds."
+          }
+        },
+        {
+          "name": "Get Results by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results/thai-government-lottery",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "results", "thai-government-lottery"]
+            },
+            "description": "Historical results for a specific lottery type.\n\nReplace 'thai-government-lottery' with the lottery type slug."
+          }
+        },
+        {
+          "name": "Get Results by Type & Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/results/thai-government-lottery/2026-04-16",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "results", "thai-government-lottery", "2026-04-16"]
+            },
+            "description": "Results for a specific lottery type on a specific date.\n\nReplace the type slug and date (YYYY-MM-DD) as needed."
+          }
+        },
+        {
+          "name": "Check Ticket Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/check?number=123456&type=thai-government-lottery",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "check"],
+              "query": [
+                { "key": "number", "value": "123456", "description": "Ticket number (numeric, 1-7 digits) — REQUIRED" },
+                { "key": "type", "value": "thai-government-lottery", "description": "Lottery type identifier — REQUIRED" },
+                { "key": "drawDate", "value": "", "description": "Specific draw date to check (YYYY-MM-DD)", "disabled": true }
+              ]
+            },
+            "description": "Check if a specific ticket number has won in a given lottery.\n\nValidation: Zod schema + country-specific number length validation."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Data & Configuration",
+      "description": "Country, lottery, region, and statistics data.",
+      "item": [
+        {
+          "name": "Get Countries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/countries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "countries"]
+            },
+            "description": "Returns a list of all active countries with their lotteries.\n\nRevalidation: 5 minutes."
+          }
+        },
+        {
+          "name": "Get Lotteries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/lotteries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "lotteries"]
+            },
+            "description": "All active lotteries grouped by country, including region data.\n\nResponse: { countries: [{ code, name, flag, region, lotteries: [{ id, name, logo }] }] }\n\nRevalidation: 5 minutes."
+          }
+        },
+        {
+          "name": "Get Regions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/regions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "regions"]
+            },
+            "description": "Active regions with their associated country codes.\n\nResponse: { regions: [{ id, name, countries: ['th', 'la', ...] }] }\n\nRevalidation: 5 minutes."
+          }
+        },
+        {
+          "name": "Get Statistics (Overview)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/statistics?type=overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "statistics"],
+              "query": [
+                { "key": "type", "value": "overview", "description": "Type: overview | frequency | thai | lao | vietnam (default: overview)" },
+                { "key": "draws", "value": "30", "description": "Number of draws to analyse (1-100, default: 30)", "disabled": true }
+              ]
+            },
+            "description": "Draw statistics overview (counts from database).\n\nRevalidation: 5 minutes."
+          }
+        },
+        {
+          "name": "Get Statistics (Frequency)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/statistics?type=thai&draws=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "statistics"],
+              "query": [
+                { "key": "type", "value": "thai", "description": "Lottery type for frequency analysis" },
+                { "key": "draws", "value": "30", "description": "Number of draws to analyse" }
+              ]
+            },
+            "description": "Number frequency analysis for a specific lottery type."
+          }
+        }
+      ]
+    },
+    {
+      "name": "News & Content",
+      "description": "News articles and article analytics.",
+      "item": [
+        {
+          "name": "Get News Articles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news?page=1&limit=10&lang=th",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number (default: 1)" },
+                { "key": "limit", "value": "10", "description": "Items per page (max: 50, default: 10)" },
+                { "key": "lang", "value": "th", "description": "Language: th or en (default: th)" },
+                { "key": "category", "value": "", "description": "Category/tag filter", "disabled": true },
+                { "key": "search", "value": "", "description": "Text search on article title", "disabled": true }
+              ]
+            },
+            "description": "Paginated news articles with optional category filtering and text search."
+          }
+        },
+        {
+          "name": "Get News Article by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/news/example-article-slug?lang=th",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "news", "example-article-slug"],
+              "query": [
+                { "key": "lang", "value": "th", "description": "Language: th or en (default: th)" }
+              ]
+            },
+            "description": "Full article detail for a specific slug.\n\nReplace 'example-article-slug' with an actual article slug."
+          }
+        },
+        {
+          "name": "Track Article Analytics",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"view\",\n  \"duration\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/articles/example-article-slug/track",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "articles", "example-article-slug", "track"]
+            },
+            "description": "Track article analytics (views, reading time).\n\nReplace 'example-article-slug' with an actual article slug."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users & Subscriptions",
+      "description": "Email subscriptions and visitor analytics.",
+      "item": [
+        {
+          "name": "Subscribe to Lottery",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"lotteryId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/subscribe",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "subscribe"]
+            },
+            "description": "Subscribe an email to lottery result notifications.\n\nValidation:\n- email: valid email format (required)\n- lotteryId: positive integer (required)\n\nProxied to external CMS API."
+          }
+        },
+        {
+          "name": "Track Visitor Analytics",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"countryCode\": \"TH\",\n  \"countryName\": \"Thailand\",\n  \"city\": \"Bangkok\",\n  \"region\": \"Bangkok\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/analytics/track",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "analytics", "track"]
+            },
+            "description": "Track visitor analytics with geo data.\n\nAll fields are optional (max lengths enforced).\nIP address and user agent are auto-captured from headers.\n\nReturns: { success: true } with status 201."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin & System",
+      "description": "System administration and diagnostics.",
+      "item": [
+        {
+          "name": "Revalidate Feature Toggles (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/revalidate-toggles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "revalidate-toggles"]
+            },
+            "description": "Revalidate the feature toggles cache tag.\n\nReturns: { revalidated: true, now: <timestamp> }"
+          }
+        },
+        {
+          "name": "Revalidate Feature Toggles (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/revalidate-toggles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "revalidate-toggles"]
+            },
+            "description": "Revalidate the feature toggles cache tag (POST variant).\n\nReturns: { revalidated: true, now: <timestamp> }"
+          }
+        },
+        {
+          "name": "Sentry Diagnostic",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sentry-example-api",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sentry-example-api"]
+            },
+            "description": "Diagnostic endpoint that intentionally throws an error to test Sentry backend integration.\n\n⚠️ Will return a 500 error by design."
+          }
+        }
+      ]
+    }
+  ]
+}

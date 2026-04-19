@@ -1,6 +1,6 @@
 # LOTTOX — UX/UI Audit Report
 
-> Senior UX/UI review · March 2026
+> Updated: April 2026
 
 ---
 
@@ -8,52 +8,52 @@
 
 | Area | Details |
 |------|---------|
-| **Design System** | Solid [design-guidelines.md](file:///Users/kvivek/Documents/lottox/docs/design-guidelines.md) with 11 sections covering tokens, cards, typography, spacing |
-| **Dual Theme** | Dark/light mode fully implemented with consistent token mapping |
+| **Design System** | Comprehensive `design-guidelines.md` with 11 sections covering tokens, cards, typography, spacing |
+| **Dual Theme** | Dark/light mode fully implemented with consistent CSS custom properties |
 | **Fluid Typography** | `clamp()`-based scaling system (`text-fs-*`) — responsive without breakpoints |
-| **Loading States** | Skeleton (`animate-pulse`) loaders on cards, tables, and sidebar — good perceived perf |
-| **SEO Foundation** | Metadata, Open Graph, Twitter cards, JSON-LD on homepage + news, sitemap.xml, robots.txt |
-| **i18n** | EN/TH dictionaries, no hardcoded strings in components, Noto Sans Thai loaded |
-| **PWA** | Web manifest present, service worker registered, theme-color meta tags |
+| **Semantic Typography** | `typographyUtils.ts` provides preset classes (pageTitle, sectionTitle, body, label, prizeMain) |
+| **Loading States** | Skeleton (`animate-pulse`) loaders on cards, tables, sidebar, plus root `loading.tsx` |
+| **SEO Foundation** | Metadata, Open Graph, Twitter cards, JSON-LD, dynamic sitemap, robots.txt |
+| **i18n** | EN/TH split dictionaries, `HtmlLangSync` for dynamic `<html lang>`, Noto Sans Thai loaded |
+| **PWA** | Web manifest, service worker (Serwist), theme-color meta tags |
 | **Cookie Consent** | GDPR-compliant consent banner implemented |
 | **Scroll to Top** | Floating button for long pages — good for mobile UX |
-| **Error Handling** | [error.tsx](file:///Users/kvivek/Documents/lottox/src/app/error.tsx), [global-error.tsx](file:///Users/kvivek/Documents/lottox/src/app/global-error.tsx), `notFound()` calls on invalid routes |
+| **Skip to Content** | `SkipToContent.tsx` — keyboard users can bypass header navigation |
+| **Error Handling** | `error.tsx`, `global-error.tsx`, `not-found.tsx`, `ErrorBoundary` component |
+| **Breadcrumbs** | `Breadcrumb.tsx` for navigation context on deep pages |
 | **Card Design** | Consistent `rounded-2xl`, `shadow-sm`, glassmorphic dark mode — premium feel |
 | **Color Palette** | Navy/gold brand is distinctive and lottery-appropriate |
+| **Custom 404** | Branded not-found page with navigation links |
+| **Rate Protection** | API endpoints protected against abuse (100/300/10 req/min tiers) |
 
 ---
 
-## ❌ What's Bad / Needs Fixing
+## ❌ Needs Fixing
 
-### Critical
+### High Priority
 
 | Issue | Impact | Location |
 |-------|--------|----------|
-| **`maximumScale: 1`** blocks pinch-to-zoom | WCAG 1.4.4 failure — users with low vision can't zoom | `layout.tsx:100` |
-| **`lang="en"` hardcoded** | Screen readers and search engines see Thai content as English | `layout.tsx:110` |
-| **No skip-to-content link** | Keyboard users must tab through entire header on every page | [layout.tsx](file:///Users/kvivek/Documents/lottox/src/app/layout.tsx) |
-| **Only 1 `sr-only` usage** across entire codebase | Screen reader support is minimal | `ThemeToggle.tsx` only |
-| **No `focus-visible` styles** | Keyboard users see no focus indicator on interactive elements | All components |
+| **`maximumScale: 1`** may block pinch-to-zoom | WCAG 1.4.4 — users with low vision can't zoom | `layout.tsx` viewport config |
+| **No `focus-visible` styles** | Keyboard users see no focus indicator on interactive elements | Global styles needed |
 | **No `prefers-reduced-motion`** | Users with vestibular disorders see all animations (confetti, bouncing, pulse) | All animated components |
+| **Confetti particles (500)** fire unconditionally | Performance hit on low-end mobile, no opt-out for motion-sensitive users | `ResultStates.tsx` |
 
-### Major
+### Medium Priority
 
 | Issue | Impact | Location |
 |-------|--------|----------|
-| **No breadcrumbs** | Users lose context in `/th/government-lottery-glo/2025-03-16` deep pages | Country/lottery/date pages |
-| **No custom 404 page** | Users hitting bad URLs see Next.js default — no brand, no navigation | Missing `not-found.tsx` |
-| **No error boundaries** in components | One broken card crashes the whole page instead of degrading gracefully | All component groups |
-| **Confetti particles (500)** fire unconditionally | Performance hit on low-end mobile, no opt-out for motion-sensitive users | [ResultStates.tsx](file:///Users/kvivek/Documents/lottox/src/components/home/ResultStates.tsx) |
-| **share URLs hardcoded** to `https://lottox.today` before hydration | OG share previews may use wrong URL during SSR | [ResultStates.tsx](file:///Users/kvivek/Documents/lottox/src/components/home/ResultStates.tsx) |
+| Some hardcoded Thai in `InteractiveTicketVerifier` result messages | Inconsistent i18n for EN users | `InteractiveTicketVerifier.tsx` |
+| `text-sm`/`text-xs` still used in some components alongside `text-fs-*` | Inconsistent scaling | Various components |
+| No `aria-live` regions for dynamic lottery check results | Screen readers don't announce results | `CheckLotteryWidget.tsx` |
+| No `<time>` tags on date displays | Screen readers can't interpret dates semantically | Multiple components |
 
-### Minor
+### Low Priority
 
 | Issue | Impact |
 |-------|--------|
-| No `alt` text on decorative SVG icons (only `aria-hidden` on some) | Screen reader noise |
-| No `<time>` tags on dates | Screen readers can't interpret dates semantically |
-| CookieConsent `aria-label="ปิด"` is Thai-only — should match current language | Inconsistent i18n |
-| `text-sm`/`text-xs` still used alongside `text-fs-*` in some components | Inconsistent scaling |
+| No `alt` text on some decorative SVG icons (only `aria-hidden` on some) | Screen reader noise |
+| CookieConsent close label is Thai-only — should match current language | Inconsistent i18n |
 
 ---
 
@@ -63,71 +63,69 @@
 
 | Feature | Status | WCAG |
 |---------|--------|------|
-| Skip-to-content link | ❌ Missing | 2.4.1 |
+| Skip-to-content link | ✅ Done | 2.4.1 |
 | Focus indicators (`focus-visible`) | ❌ Missing | 2.4.7 |
 | `prefers-reduced-motion` respect | ❌ Missing | 2.3.3 |
-| Zoom: `maximumScale` must be ≥ 5 | ❌ Blocked at 1 | 1.4.4 |
+| Zoom: `maximumScale` should be ≥ 5 | ⚠️ Check | 1.4.4 |
 | `aria-live` for dynamic results | ❌ Missing | 4.1.3 |
-| Landmark roles (`<nav>`, `<aside>`) on sidebar/nav | ⚠️ Partial | 1.3.1 |
+| Dynamic `lang` attribute | ✅ Done (`HtmlLangSync`) | 3.1.1 |
+| Landmark roles (`<nav>`, `<aside>`) | ⚠️ Partial | 1.3.1 |
 | Color contrast for `text-fs-badge` (9px) | ⚠️ Check | 1.4.3 |
 | Form error announcements | ❌ Missing | 3.3.1 |
-| Dynamic `lang` attribute based on selected language | ❌ Hardcoded [en](file:///Users/kvivek/Documents/lottox/src/lib/i18n.ts#8-9) | 3.1.1 |
 
 ### GEO / SEO
 
 | Feature | Status |
 |---------|--------|
 | `hreflang` tags for TH/EN language alternates | ❌ Missing |
-| JSON-LD structured data for lottery results (LotteryResult schema) | ❌ Missing |
+| JSON-LD `LotteryResult` schema on draw pages | ❌ Missing |
 | JSON-LD breadcrumb on deep pages | ❌ Missing |
-| Per-page `<title>` on country and draw pages | ⚠️ Check template |
 | Schema.org `FAQPage` on `/faq` | ❌ Missing |
-| Google Search Console verification | ❌ Commented out |
-| Geo-meta tags (`geo.region`, `geo.placename`) | ❌ Missing |
-| Open Graph images per country/lottery | ❌ Uses single `og-image.png` |
+| Per-page `<title>` on country and draw pages | ✅ Done |
+| Dynamic sitemap | ✅ Done |
+| Robots.txt | ✅ Done |
+| JSON-LD on homepage + news | ✅ Done |
+| Per-lottery OG images | ❌ Uses single `og-image.png` |
 
 ### UX Features
 
 | Feature | Status |
 |---------|--------|
-| Breadcrumb navigation | ❌ Missing |
-| Custom 404 page with search + suggested links | ❌ Missing |
-| Number search on homepage (exposed) | ⚠️ Hidden in widget |
+| Breadcrumb navigation | ✅ Done |
+| Custom 404 page | ✅ Done |
+| Number search on homepage | ✅ Exposed in `CheckLotteryWidget` |
+| Cookie consent | ✅ Done |
+| Scroll to top | ✅ Done |
 | Result notification / push alerts | ❌ No web push |
 | Print-friendly result view | ❌ Missing |
-| Share to Line app (popular in TH) | ❌ Only FB/Twitter |
+| Share to LINE app (popular in TH) | ❌ Only FB/Twitter |
 | Keyboard shortcuts (e.g., `/` to search) | ❌ Missing |
-| Offline result caching (SW) | ⚠️ SW registered, no caching strategy |
+| Offline result caching (SW) | ⚠️ SW registered, limited caching strategy |
 
 ---
 
 ## 💡 Prioritized Recommendations
 
-### 🔴 P0 — Do Now (Accessibility + Legal)
+### 🔴 P0 — Do Now (Accessibility)
 
-1. **Remove `maximumScale: 1`** → set to `5` or remove entirely
-2. **Add skip-to-content** → `<a href="#main" className="sr-only focus:not-sr-only ...">Skip to content</a>` + `<main id="main">`
-3. **Dynamic `lang`** → read from [LanguageContext](file:///Users/kvivek/Documents/lottox/src/contexts/LanguageContext.tsx#12-18) and set `<html lang={language}>`
-4. **Add `focus-visible` ring** → global style: `*:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }`
-5. **Add `prefers-reduced-motion`** → wrap confetti, bouncing icons, and pulse in `motion-safe:`
+1. **Check `maximumScale`** → set to `5` or remove entirely
+2. **Add `focus-visible` ring** → global style: `*:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }`
+3. **Add `prefers-reduced-motion`** → wrap confetti, bouncing icons, and pulse in `motion-safe:`
 
 ### 🟡 P1 — High Impact UX
 
-6. **Breadcrumb component** → `Home > Thailand > Government Lottery > 16 Mar 2025` with JSON-LD
-7. **Custom 404 page** → brand-themed with search bar and popular lottery links
-8. **Share to Line** → add LINE share button (dominant messaging app in TH/JP/LA markets)
-9. **`aria-live="polite"` region** for lottery check results → screen readers announce results
-10. **`hreflang` tags** → `<link rel="alternate" hreflang="th" href="..." />`
+4. **Share to LINE** → add LINE share button (dominant messaging app in TH/JP/LA markets)
+5. **`aria-live="polite"` region** for lottery check results → screen readers announce results
+6. **`hreflang` tags** → `<link rel="alternate" hreflang="th" href="..." />`
+7. **JSON-LD `LotteryResult`** schema on draw result pages
 
 ### 🟢 P2 — Nice to Have
 
-11. **Keyboard shortcut** → `/` to focus search, `Esc` to close modal
-12. **Print stylesheet** → `@media print` to show clean results for users who print winning numbers
-13. **Per-lottery OG images** → dynamic OG image per country flag + lottery name
-14. **JSON-LD [LotteryResult](file:///Users/kvivek/Documents/lottox/src/lib/services/lotteryResultService.ts#21-50)** schema on draw result pages
-15. **Offline caching** → cache recent results in service worker for offline viewing
-16. **Error boundary wrapper** → `ErrorBoundary` component around each card section
-17. **`<time datetime="...">` tags** on all date displays for semantic HTML
+8. **Keyboard shortcut** → `/` to focus search, `Esc` to close modal
+9. **Print stylesheet** → `@media print` for clean result printing
+10. **Per-lottery OG images** → dynamic OG image per country flag + lottery name
+11. **Offline caching** → cache recent results in service worker
+12. **`<time datetime="...">` tags** on all date displays
 
 ---
 
@@ -136,11 +134,11 @@
 | Category | Score | Notes |
 |----------|-------|-------|
 | Visual Design | **8/10** | Premium feel, good dark mode, consistent tokens |
-| Accessibility | **3/10** | Critical gaps in keyboard nav, zoom, screen readers |
-| SEO / GEO | **6/10** | Good foundation but missing structured data + hreflang |
-| Performance | **7/10** | Good loading states, fluid type; confetti is heavy |
-| i18n | **7/10** | Dictionaries work well, but `lang` tag is wrong |
-| Mobile UX | **6/10** | Responsive layout, but zoom blocked + no touch affordances |
-| Error Handling | **5/10** | `notFound()` works, but no graceful degradation in components |
+| Accessibility | **5/10** | Skip-to-content + lang sync done; focus/motion gaps remain |
+| SEO / GEO | **7/10** | Good foundation with sitemap, robots, JSON-LD; missing hreflang + breadcrumb LD |
+| Performance | **7/10** | ISR, fluid type, loading states; confetti is heavy |
+| i18n | **8/10** | Split dictionaries, dynamic lang; some hardcoded Thai in verifier |
+| Mobile UX | **7/10** | Responsive layout, breadcrumbs; check zoom + touch affordances |
+| Error Handling | **8/10** | error.tsx, global-error, ErrorBoundary, notFound — solid coverage |
 
-**Overall: 6.0/10** — Strong visual design, but accessibility is the biggest gap.
+**Overall: 7.1/10** — Significant improvements since initial audit (was 6.0). Main gaps are accessibility (focus/motion) and advanced SEO (hreflang, structured data).
