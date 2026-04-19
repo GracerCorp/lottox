@@ -399,12 +399,29 @@ export default function LotteryDetail({
         {/* -------- Main Content (2/3) -------- */}
         <div className="space-y-6 lg:col-span-2">
           {/* 2. Hero — Draw Result */}
-          <DrawResult {...drawResultProps} />
+          <DrawResult
+            country={drawResultProps.country}
+            lotteryName={drawResultProps.lotteryName}
+            date={drawResultProps.date}
+            currency={drawResultProps.currency}
+            firstPrize={drawResultProps.firstPrize}
+            firstPrizeAmount={drawResultProps.firstPrizeAmount}
+            dynamicPrizes={drawResultProps.dynamicPrizes}
+            front3={drawResultProps.front3}
+            front3Amount={drawResultProps.front3Amount}
+            back3={drawResultProps.back3}
+            back3Amount={drawResultProps.back3Amount}
+            last2={drawResultProps.last2}
+            last2Amount={drawResultProps.last2Amount}
+            adjacent={drawResultProps.adjacent}
+            adjacentAmount={drawResultProps.adjacentAmount}
+          />
 
           {/* Lao Animal List (Dynamic rendering if animals data is available) */}
-          {((rawData as Record<string, unknown>)?.animals || fullData?.animals) && (((rawData as Record<string, unknown>)?.animals || fullData?.animals).length > 0) && (
-            <LaoAnimalList animals={(rawData as Record<string, unknown>)?.animals || fullData?.animals} />
-          )}
+          {(() => {
+            const animals = ((rawData as Record<string, unknown>)?.animals || fullData?.animals) as (string | import("./LaoAnimalList").ArrayAnimal)[] | undefined;
+            return animals && animals.length > 0 ? <LaoAnimalList animals={animals} /> : null;
+          })()}
 
           {/* 3. Prize Grids (2nd–5th) */}
           {prizeTiers

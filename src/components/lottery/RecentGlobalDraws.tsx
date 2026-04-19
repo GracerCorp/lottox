@@ -58,7 +58,8 @@ export function RecentGlobalDraws({
   }, [excludeCountry, limit]);
 
   // Use a heuristic to extract values specifically adapted to each lottery type
-  function getDisplayPrizes(draw: GlobalDraw, tContext: Record<string, Record<string, string>>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function getDisplayPrizes(draw: GlobalDraw, tContext: Record<string, any>) {
     const p = [];
     const c = draw.countryCode?.toLowerCase();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
