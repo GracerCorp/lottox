@@ -167,7 +167,6 @@ export default function LotteryDetail({
     order?: number;
     category?: string;
     prizeCount?: number;
-    [key: string]: unknown;
   }
   const dynamicHeroPrizes: DynamicPrize[] = [];
   const dynamicTierPrizes: { title: string; count: number; amount: string; numbers: string[] }[] = [];
@@ -258,11 +257,13 @@ export default function LotteryDetail({
 
       if (isHero) {
         dynamicHeroPrizes.push({
-          ...p,
           prizeName: p.prizeName || p.category || "Prize",
           prizeAmount: Number(p.amount || p.prizeAmount || p.reward || 0),
           winningNumbers: nums,
-        } as DynamicPrize);
+          order: p.order,
+          category: p.category,
+          prizeCount: p.prizeCount,
+        });
       } else {
         dynamicTierPrizes.push({
           title: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
