@@ -58,7 +58,7 @@ export function LatestUpdateCard({
               </span>
               <CheckCircle2 className="h-4 w-4 shrink-0 text-white fill-[#22c55e] opacity-90 rounded-full" />
             </div>
-            <span className="text-xs text-neutral-500 dark:text-gray-500 leading-none mt-1 truncate">
+            <span className="text-xs text-neutral-500 dark:text-gray-400 leading-none mt-1 truncate">
               {country}
             </span>
           </div>

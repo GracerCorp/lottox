@@ -118,7 +118,7 @@ export interface GlobalDraw {
   jackpot: string;
   drawDate: string;
   status: string;
-  fullData?: any;
+  fullData?: Record<string, unknown>;
 }
 
 // GET /api/check

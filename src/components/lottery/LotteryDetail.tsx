@@ -121,7 +121,7 @@ export default function LotteryDetail({
   const historyItems = activeData?.history ?? [];
   const latestData = latest?.data as ThaiResultData | undefined;
   const rawData = latestData as unknown as GenericPrizeData;
-  const fullData = latest?.fullData as any;
+  const fullData = latest?.fullData as Record<string, unknown> | undefined;
 
   // 1st Prize
   const p1Names = ["Prize 1", "รางวัลที่ 1", "Special Prize", "First Prize", "First Prize (4 Digits)"];

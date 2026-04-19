@@ -61,6 +61,7 @@ export function LatestUpdateSection() {
       r.countries.includes(countryCode.toLowerCase()),
     );
     if (matchedRegion) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveFilter(matchedRegion.id);
       hasAutoSelected.current = true;
     }

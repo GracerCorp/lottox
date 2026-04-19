@@ -9,7 +9,7 @@ import { HeroItem } from "./HeroSection";
 import { CheckLotteryWidget, type LotteryGroup } from "./CheckLotteryWidget";
 
 // Helper for scrolling columns
-const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = false }: { colItems: HeroItem[], speedStr: string, className?: string, isHoverable?: boolean }) => {
+const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = false, priorityCount = 0 }: { colItems: HeroItem[], speedStr: string, className?: string, isHoverable?: boolean, priorityCount?: number }) => {
   // Duplicate the items for seamless infinite scrolling
   const doubleItems = [...colItems, ...colItems];
 
@@ -23,7 +23,7 @@ const ScrollingColumn = ({ colItems, speedStr, className = "", isHoverable = fal
       >
         {doubleItems.map((item, idx) => (
           <div key={`${item.id}-${idx}`} className="w-full flex-shrink-0">
-            <LotteryCardV2 {...item} isHoverable={isHoverable} />
+            <LotteryCardV2 {...item} isHoverable={isHoverable} imgPriority={idx < priorityCount} />
           </div>
         ))}
       </div>
@@ -87,10 +87,10 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
           {/* Grid layout */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 h-full items-start opacity-100">
             {/* Mobile single column (combination of col1 and col2 for reasonable loop length) */}
-            <ScrollingColumn colItems={[...col1, ...col2]} speedStr="100s" className="mt-4 md:hidden" isHoverable={true} />
+            <ScrollingColumn colItems={[...col1, ...col2]} speedStr="100s" className="mt-4 md:hidden" isHoverable={true} priorityCount={2} />
             {/* Desktop columns */}
-            <ScrollingColumn colItems={col1} speedStr="45s" className="mt-8 hidden md:flex" isHoverable={true} />
-            <ScrollingColumn colItems={col2} speedStr="55s" className="-mt-12 hidden md:flex" isHoverable={true} />
+            <ScrollingColumn colItems={col1} speedStr="45s" className="mt-8 hidden md:flex" isHoverable={true} priorityCount={1} />
+            <ScrollingColumn colItems={col2} speedStr="55s" className="-mt-12 hidden md:flex" isHoverable={true} priorityCount={1} />
             <ScrollingColumn colItems={col3} speedStr="65s" className="mt-4 hidden md:flex" isHoverable={true} />
             <ScrollingColumn colItems={col4} speedStr="50s" className="mt-16 hidden md:flex" isHoverable={true} />
           </div>

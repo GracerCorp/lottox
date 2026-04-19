@@ -1,16 +1,20 @@
-import { HeroSection, HeroItem } from "@/components/home/HeroSection";
-import { HeroSectionV2 } from "@/components/home/HeroSectionV2";
+import { type HeroItem } from "@/components/home/HeroSection";
 import { HeroSectionV3 } from "@/components/home/HeroSectionV3";
-import { LiveTicker } from "@/components/home/LiveTicker";
-import { CheckLotteryWidget, LotteryGroup } from "@/components/home/CheckLotteryWidget";
+import { type LotteryGroup } from "@/components/home/CheckLotteryWidget";
 import { CountryMarqueeSection } from "@/components/home/CountryMarqueeSection";
-import { LatestUpdateSection } from "@/components/home/LatestUpdate/LatestUpdateSection";
-import { GlobalStatsBanner } from "@/components/home/GlobalStatsBanner";
+import dynamic from "next/dynamic";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 import { slugify } from "@/lib/utils/lotteryUtils";
 import { JsonLd } from "@/components/seo/JsonLd";
+
+const GlobalStatsBanner = dynamic(
+  () => import("@/components/home/GlobalStatsBanner").then(m => ({ default: m.GlobalStatsBanner })),
+);
+const LatestUpdateSection = dynamic(
+  () => import("@/components/home/LatestUpdate/LatestUpdateSection").then(m => ({ default: m.LatestUpdateSection })),
+);
 
 
 
@@ -279,12 +283,16 @@ export default async function Home() {
       {/* Section 4: Find By Number
       <CheckLotteryWidget lotteryGroups={lotteryGroups} /> */}
 
-      <GlobalStatsBanner 
-        countriesCount={countryListItems.length}
-        lotteriesCount={lotteryGroups.reduce((acc, curr) => acc + curr.lotteries.length, 0)}
-      />
+      <div style={{ minHeight: '400px', contain: 'layout' }}>
+        <GlobalStatsBanner 
+          countriesCount={countryListItems.length}
+          lotteriesCount={lotteryGroups.reduce((acc, curr) => acc + curr.lotteries.length, 0)}
+        />
+      </div>
 
-      <LatestUpdateSection />
+      <div style={{ minHeight: '600px', contain: 'layout' }}>
+        <LatestUpdateSection />
+      </div>
 
     </div>
   );

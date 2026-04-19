@@ -37,16 +37,18 @@ export function GlobalStatsBanner({
 
   return (
     <section 
-      className="relative w-full py-20 my-10 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/cosmic-bg.png')" }}
+      className="relative w-full py-20 my-10 bg-gradient-to-br from-neutral-950 via-[#0f0f0f] to-neutral-900"
     >
       {/* Dark overlay to ensure it matches the mood of the image */}
       <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
       {/* Dots/Constellation Overlay */}
       <div 
-        className="absolute inset-0 z-0 pointer-events-none bg-center bg-no-repeat opacity-60 mix-blend-screen"
-        style={{ backgroundImage: "url('/images/stats-dots-overlay.png')", backgroundSize: "cover" }}
+        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)",
+          backgroundSize: "20px 20px"
+        }}
       />
 
       <div className="container relative z-10 mx-auto px-6 max-w-6xl">

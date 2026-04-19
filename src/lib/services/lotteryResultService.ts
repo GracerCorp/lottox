@@ -64,7 +64,7 @@ function formatLotteryResult(
     lotteryName: res.lottery?.name || "",
     countryCode: countryCode,
     showingPrizes: res.lottery?.showing_prizes || [],
-    howToPlayText: (res.lottery as any)?.how_to_play_text || null,
+    howToPlayText: (res.lottery as Record<string, unknown>)?.how_to_play_text as string | null || null,
     howToPlayImage: res.lottery?.how_to_play_image || null,
     logo: res.lottery?.logo || null,
   };

@@ -58,7 +58,7 @@ export function RecentGlobalDraws({
   }, [excludeCountry, limit]);
 
   // Use a heuristic to extract values specifically adapted to each lottery type
-  function getDisplayPrizes(draw: GlobalDraw, tContext: Record<string, any>) {
+  function getDisplayPrizes(draw: GlobalDraw, tContext: Record<string, Record<string, string>>) {
     const p = [];
     const c = draw.countryCode?.toLowerCase();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,11 +94,10 @@ export function RecentGlobalDraws({
     }
 
     if (d.prizes && Array.isArray(d.prizes)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const sorted = [...d.prizes].sort((a: Record<string, any>, b: Record<string, any>) => (a.order || 99) - (b.order || 99));
+      const sorted = [...d.prizes].sort((a: Record<string, unknown>, b: Record<string, unknown>) => ((a.order as number) || 99) - ((b.order as number) || 99));
       // Try to intelligently extract Main and Bonus
-      const mainPrize = sorted.find((pr: Record<string, any>) => (pr.prizeName || pr.category)?.match(/winning|main|first/i)) || sorted[0];
-      const bonusPrize = sorted.find((pr: Record<string, any>) => (pr.prizeName || pr.category)?.match(/bonus|powerball|lucky/i)) || sorted[1];
+      const mainPrize = sorted.find((pr: Record<string, unknown>) => ((pr.prizeName || pr.category) as string)?.match(/winning|main|first/i)) || sorted[0];
+      const bonusPrize = sorted.find((pr: Record<string, unknown>) => ((pr.prizeName || pr.category) as string)?.match(/bonus|powerball|lucky/i)) || sorted[1];
       
       if (mainPrize) {
         let nums = mainPrize.winningNumbers || mainPrize.number || [];

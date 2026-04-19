@@ -257,6 +257,7 @@ export function CheckLotteryWidget({
           <button
             type="submit"
             disabled={loading || !isNumberValid}
+            aria-label={loading ? (t.common.loading || "Loading...") : (t.common.searchBtn || "Search")}
             className="flex items-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-neutral-950 font-bold text-sm py-2.5 px-3 md:px-5 rounded-full shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:pointer-events-none flex-shrink-0"
           >
             {loading ? (

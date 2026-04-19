@@ -17,6 +17,7 @@ interface LotteryCardV2Props {
   href?: string;
   prizes?: { label: string; amount: string }[];
   isHoverable?: boolean;
+  imgPriority?: boolean;
 }
 
 export function LotteryCardV2({
@@ -29,6 +30,7 @@ export function LotteryCardV2({
   bgImage,
   prizes,
   isHoverable = false,
+  imgPriority = false,
 }: LotteryCardV2Props) {
   const { t } = useLanguage();
   const fallbackLabel = t.lotteryCard.firstPrize;
@@ -51,7 +53,9 @@ export function LotteryCardV2({
               src={bgImage}
               alt={name}
               fill
-              className="object-cover opacity-60 mix-blend-luminosity" 
+              className="object-cover opacity-60 mix-blend-luminosity"
+              priority={imgPriority}
+              sizes="(max-width: 768px) 90vw, 25vw"
             />
           </div>
         )}
