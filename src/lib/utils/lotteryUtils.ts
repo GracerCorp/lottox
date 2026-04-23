@@ -71,15 +71,23 @@ export const getPrizeAmount = (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getPrizeName = (pName: string, pCat: string | undefined, t: Record<string, any>): string => {
+export const getPrizeName = (pName: string, pCat: string | undefined, t: Record<string, any>, isLao?: boolean): string => {
   const name = pName || "";
   const cat = pCat || "";
 
   // Lao mappings
-  if (cat === "prize_2_digits" || name === "prize_2_digits") return t.results.prize_2_digits;
-  if (cat === "prize_3_digits" || name === "prize_3_digits") return t.results.prize_3_digits;
-  if (cat === "prize_4_digits" || name === "prize_4_digits") return t.results.prize_4_digits;
-  if (cat === "prize_modern_5" || name === "prize_modern_5") return t.results.prize_modern_5;
+  if (isLao) {
+    if (cat === "prize_1" || name === "prize_1" || cat === "prize_4_digits" || name === "prize_4_digits")
+      return "Match 4 (6,000x Bet)";
+    if (cat === "prize_2_digits" || name === "prize_2_digits") return "Match 2 (60x Bet)";
+    if (cat === "prize_3_digits" || name === "prize_3_digits") return "Match 3 (500x Bet)";
+    if (cat === "prize_modern_5" || name === "prize_modern_5") return t.results.prize_modern_5;
+  } else {
+    if (cat === "prize_2_digits" || name === "prize_2_digits") return t.results.prize_2_digits;
+    if (cat === "prize_3_digits" || name === "prize_3_digits") return t.results.prize_3_digits;
+    if (cat === "prize_4_digits" || name === "prize_4_digits") return t.results.prize_4_digits;
+    if (cat === "prize_modern_5" || name === "prize_modern_5") return t.results.prize_modern_5;
+  }
 
   // Thai mappings
   if (cat === "prize_1" || name === "prize_1") return t.results.prize_1_thai;

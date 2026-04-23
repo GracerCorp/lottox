@@ -111,7 +111,7 @@ class ApiClient {
     ];
 
     // Fetch a larger pool when priorityCountry is set so we don't miss local results
-    const fetchLimit = priorityCountry ? 30 : 10;
+    const fetchLimit = priorityCountry ? 100 : 50;
 
     const latestResults = await prisma.lottery_results.findMany({
       where: whereClause,
@@ -146,6 +146,39 @@ class ApiClient {
     // Results are already ordered by draw_date desc, so first occurrence wins
     const seen = new Set<string>();
     formatted = formatted.filter((r) => {
+      // Must have some data to be considered a valid latest result for the UI
+      let hasData = false;
+      const d = r.data as Record<string, unknown>;
+      if (d && typeof d === "object") {
+        if (Array.isArray(d.prizes)) {
+          hasData = d.prizes.some((p: Record<string, unknown>) => 
+            (Array.isArray(p.winningNumbers) && p.winningNumbers.some((v: unknown) => v && String(v).trim() !== "" && v !== "-")) ||
+            (Array.isArray(p.number) && p.number.some((v: unknown) => v && String(v).trim() !== "" && v !== "-"))
+          );
+        } else if (d.prizeResult) {
+          hasData = true;
+        } else {
+          const checkVals = [d.first, d.firstPrize, d.digit4, d.digit3, d.main_numbers, d.winningNumbers, d.winning_numbers];
+          for (const val of checkVals) {
+             if (val) {
+                const arr = Array.isArray(val) ? val : [val];
+                if (arr.some((v: unknown) => v && String(v).trim() !== "" && v !== "-")) {
+                   hasData = true;
+                   break;
+                }
+             }
+          }
+          if (!hasData) {
+            const str = JSON.stringify(d);
+            if (/\d/.test(str)) {
+               hasData = true;
+            }
+          }
+        }
+      }
+
+      if (!hasData) return false;
+
       const key = `${r.countryCode}-${r.lotteryName}`;
       if (seen.has(key)) return false;
       seen.add(key);

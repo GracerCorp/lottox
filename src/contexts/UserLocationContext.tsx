@@ -47,7 +47,7 @@ export function UserLocationProvider({ children }: { children: ReactNode }) {
         const parsed: UserLocationData = JSON.parse(cached);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setLocation(parsed);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setIsLoading(false);
         return;
       } catch {

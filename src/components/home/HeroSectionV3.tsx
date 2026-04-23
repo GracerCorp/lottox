@@ -79,7 +79,7 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="container mx-auto px-4 h-full relative">
           {/* Top mask */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-50 via-neutral-50/80 dark:from-neutral-950 dark:via-neutral-950/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-50/90 via-neutral-50/40 dark:from-neutral-950/90 dark:via-neutral-950/40 to-transparent z-10 pointer-events-none" />
 
           {/* Ambient Golden Glow on Hover */}
           <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-new/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-screen" />
@@ -98,7 +98,7 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
       </div>
 
       {/* Bottom text overlay */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/70 dark:from-[#111111] dark:via-[#111111]/70 to-transparent flex flex-col justify-end pointer-events-none">
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white/95 via-white/40 dark:from-[#111111]/95 dark:via-[#111111]/40 to-transparent flex flex-col justify-end pointer-events-none">
         <div className="container mx-auto px-4 pb-8 md:pb-16 pointer-events-auto">
           <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6">
             

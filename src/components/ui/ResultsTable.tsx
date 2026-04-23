@@ -108,7 +108,12 @@ export function mapApiResultToRow(
 
     // Filter by showingPrizes if available
     let displayPrizes = sortedPrizes.filter(
-      (p) => p.winningNumbers && p.winningNumbers.length > 0,
+      (p) => {
+        const vals = p.winningNumbers || p.number || [];
+        const finalVals = Array.isArray(vals) ? vals : [vals];
+        const validVals = finalVals.filter(v => v !== undefined && v !== null && v !== "" && String(v).trim() !== "" && v !== "-");
+        return validVals.length > 0;
+      }
     );
 
     if (result.showingPrizes && result.showingPrizes.length > 0) {
@@ -141,9 +146,9 @@ export function mapApiResultToRow(
         ? `${Number(p.prizeAmount).toLocaleString()} ${currency}`
         : `- ${currency}`;
 
-      if (type.includes("LAO")) {
+      if (cc === "la") {
         formattedPrize = p.prizeAmount
-          ? `1 Kip x ${Number(p.prizeAmount).toLocaleString()}`
+          ? (idx === 0 ? `${Number(p.prizeAmount).toLocaleString()}x Payout` : `${Number(p.prizeAmount).toLocaleString()}x`)
           : formattedPrize;
       }
 
@@ -172,23 +177,45 @@ export function mapApiResultToRow(
 
   // Fallback if numbers is empty (Handle flat mapping for Thai, Lao, VN)
   if (numbers.length === 0 && d) {
-    // Determine if flat format exists
-    if (d?.firstPrize || d?.first || d?.first3 || d?.last2 || d?.digit4 || d?.firstPrizeAmount) {
-      const rp1Num = [d?.first || d?.firstPrize || d?.digit4 || d?.digit3].flat().filter(Boolean);
+      // Determine if flat format exists
+    if (d?.firstPrize || d?.first || d?.first3 || d?.last2 || d?.digit4 || d?.firstPrizeAmount || d?.mainNumbers || d?.main_numbers) {
+      const mainNumsRaw = d?.mainNumbers || d?.main_numbers;
+      const rp1Num = [d?.first || d?.firstPrize || d?.digit4 || d?.digit3 || mainNumsRaw].flat().filter(Boolean);
       const rFirstPrize = rp1Num.length > 0 ? rp1Num : ["-"];
       const rFirstPrizeAmount = d?.firstPrizeAmount || d?.firstAmount || d?.digit4Multiplier || d?.digit3Multiplier || defaultP1;
       
       let formattedFirstPrize = `${rFirstPrizeAmount} ${currency}`;
-      if (type.includes("LAO")) {
-        formattedFirstPrize = `1 Kip x ${rFirstPrizeAmount}`;
+      let firstPrizeLabel = t.results?.prize1 || "Prize 1";
+
+      if (cc === "la") {
+        formattedFirstPrize = `${rFirstPrizeAmount}x Payout`;
+        firstPrizeLabel = `Match 4 (${rFirstPrizeAmount}x Bet)`;
+      } else if (mainNumsRaw) {
+        firstPrizeLabel = t.common?.winningNumbers || "Winning Numbers";
       }
 
       numbers.push({
-        label: t.results?.prize1 || "Prize 1",
+        label: firstPrizeLabel,
         value: rFirstPrize,
         prize: formattedFirstPrize,
         isMain: true,
       });
+
+      if (d?.powerball) {
+        numbers.push({
+          label: "Powerball",
+          value: [d.powerball].flat().filter(Boolean).map(String),
+          prize: "-",
+          isMain: false,
+        });
+      } else if (d?.supplementary) {
+        numbers.push({
+          label: "Supplementary",
+          value: [d.supplementary].flat().filter(Boolean).map(String),
+          prize: "-",
+          isMain: false,
+        });
+      }
 
       // Front 3
       const rf3 = d?.first3?.number || d?.last3f || d?.front3 || [];
@@ -230,19 +257,21 @@ export function mapApiResultToRow(
       if (numbers.length < 4 && d?.digit3 && !d?.digit4) { 
         // if digit4 wasn't matched above, we don't duplicate it. Here handled naturally. 
       }
-      if (numbers.length < 4 && type.includes("LAO") && d?.digit3) {
+      if (numbers.length < 4 && cc === "la" && d?.digit3) {
+        const mult = d?.digit3Multiplier || "500";
         numbers.push({
-          label: t.results?.prize3 || "3 Digits",
+          label: `Match 3 (${mult}x Bet)`,
           value: [String(d.digit3)],
-          prize: `1 Kip x ${d?.digit3Multiplier || "500"}`,
+          prize: `${mult}x`,
           isMain: false,
         });
       }
-      if (numbers.length < 4 && type.includes("LAO") && d?.digit2) {
+      if (numbers.length < 4 && cc === "la" && d?.digit2) {
+        const mult = d?.digit2Multiplier || "60";
         numbers.push({
-          label: t.results?.prize2 || "2 Digits",
+          label: `Match 2 (${mult}x Bet)`,
           value: [String(d.digit2)],
-          prize: `1 Kip x ${d?.digit2Multiplier || "60"}`,
+          prize: `${mult}x`,
           isMain: false,
         });
       }
@@ -251,12 +280,14 @@ export function mapApiResultToRow(
     // Absolute fallback
     if (numbers.length === 0) {
       let formattedDefaultP1 = `${defaultP1} ${currency}`;
-      if (type.includes("LAO")) {
-        formattedDefaultP1 = `1 Kip x ${defaultP1}`;
+      let defaultLabel = t.results?.prize1 || "Prize 1";
+      if (cc === "la") {
+        formattedDefaultP1 = `${defaultP1}x Payout`;
+        defaultLabel = `Match 4 (${defaultP1}x Bet)`;
       }
       numbers = [
         {
-          label: t.results?.prize1 || "Prize 1",
+          label: defaultLabel,
           value: ["-"],
           prize: formattedDefaultP1,
           isMain: true,
@@ -269,6 +300,15 @@ export function mapApiResultToRow(
   const parsedDrawDate = new Date(result.drawDate || result.date);
   const pathDate = parsedDrawDate.toISOString().split("T")[0];
   const finalHref = `${lottoHref}/${pathDate}`;
+
+  // Check if there are any actual values. If all are "-" or empty, filter this result out.
+  const hasValues = numbers.some((n) =>
+    n.value.some((v) => v !== "-" && v.trim() !== "")
+  );
+
+  if (!hasValues) {
+    return null;
+  }
 
   return {
     id: `${countryId}-${result.id}`,

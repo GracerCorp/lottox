@@ -32,11 +32,11 @@ const JACKPOT_DATA: Record<string, { main: string; prizes: { label: string; amou
     ],
   },
   la: {
-    main: "6,000X",
+    main: "6,000x Payout",
     prizes: [
-      { label: "1st Prize", amount: "6,000X" },
-      { label: "2nd Prize", amount: "500X" },
-      { label: "3rd Prize", amount: "60X" },
+      { label: "Match 4 (6,000x Bet)", amount: "6,000x" },
+      { label: "Match 3 (500x Bet)", amount: "500x" },
+      { label: "Match 2 (60x Bet)", amount: "60x" },
     ],
   },
   jp: {

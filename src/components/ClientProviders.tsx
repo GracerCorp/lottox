@@ -12,8 +12,15 @@ interface ClientProvidersProps {
 }
 
 export function ClientProviders({ children, featureToggles }: ClientProvidersProps) {
+  const isThemeToggleEnabled = featureToggles["theme_toggle"] !== false;
+
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+    <ThemeProvider 
+      attribute="class" 
+      defaultTheme="dark" 
+      enableSystem={isThemeToggleEnabled}
+      forcedTheme={isThemeToggleEnabled ? undefined : "dark"}
+    >
       <LanguageProvider>
         <UserLocationProvider>
           <FeatureToggleProvider initialToggles={featureToggles}>

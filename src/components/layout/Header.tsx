@@ -112,7 +112,7 @@ export function Header() {
             </button>
           )}
 
-          <ThemeToggle />
+          {toggles["theme_toggle"] !== false && <ThemeToggle />}
 
           {/* Mobile Menu Toggle */}
           <button

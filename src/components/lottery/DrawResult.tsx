@@ -9,7 +9,8 @@ const getBalls = (numbersStrOrArr: string[] | string): string[] => {
   if (Array.isArray(numbersStrOrArr)) {
     if (numbersStrOrArr.length > 1) return numbersStrOrArr;
     if (numbersStrOrArr.length === 1) {
-      const item = String(numbersStrOrArr[0]);
+      const item = String(numbersStrOrArr[0]).trim();
+      if (item === "-") return ["-"];
       if (item.includes(",")) return item.split(",").map(s => s.trim()).filter(Boolean);
       if (item.includes(" ")) return item.split(" ").map(s => s.trim()).filter(Boolean);
       if (item.includes("-")) return item.split("-").map(s => s.trim()).filter(Boolean);
@@ -17,7 +18,8 @@ const getBalls = (numbersStrOrArr: string[] | string): string[] => {
     }
     return [];
   }
-  const s = String(numbersStrOrArr || "");
+  const s = String(numbersStrOrArr || "").trim();
+  if (s === "-") return ["-"];
   if (s.includes(",")) return s.split(",").map(x => x.trim()).filter(Boolean);
   if (s.includes(" ")) return s.split(" ").map(x => x.trim()).filter(Boolean);
   if (s.includes("-")) return s.split("-").map(x => x.trim()).filter(Boolean);
@@ -89,20 +91,34 @@ export function DrawResult({
   // Determine if we should use dynamic rendering (non-Thai lotteries)
   const useDynamic = dynamicPrizes.length > 0;
 
+  const isLao = country?.toLowerCase().includes("lao") || lotteryName?.toLowerCase().includes("lao") || country?.includes("ลาว") || lotteryName?.includes("ลาว");
+  const isAustraliaUI = country?.toLowerCase() === "au" || country?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("powerball") || lotteryName?.toLowerCase().includes("oz lotto");
+
   // Helper to get localized prize names based on category or raw prize name
   const getPrizeName = (prize: DynamicPrize) => {
     const cat = prize.category || "";
     const name = prize.prizeName || "";
 
     // Lao mappings
-    if (cat === "prize_2_digits" || name === "prize_2_digits")
-      return t.results.prize_2_digits;
-    if (cat === "prize_3_digits" || name === "prize_3_digits")
-      return t.results.prize_3_digits;
-    if (cat === "prize_4_digits" || name === "prize_4_digits")
-      return t.results.prize_4_digits;
-    if (cat === "prize_modern_5" || name === "prize_modern_5")
-      return t.results.prize_modern_5;
+    if (isLao) {
+      if (cat === "prize_1" || name === "prize_1" || cat === "prize_4_digits" || name === "prize_4_digits")
+        return "Match 4 (6,000x Bet)";
+      if (cat === "prize_2_digits" || name === "prize_2_digits")
+        return "Match 2 (60x Bet)";
+      if (cat === "prize_3_digits" || name === "prize_3_digits")
+        return "Match 3 (500x Bet)";
+      if (cat === "prize_modern_5" || name === "prize_modern_5")
+        return t.results.prize_modern_5;
+    } else {
+      if (cat === "prize_2_digits" || name === "prize_2_digits")
+        return t.results.prize_2_digits;
+      if (cat === "prize_3_digits" || name === "prize_3_digits")
+        return t.results.prize_3_digits;
+      if (cat === "prize_4_digits" || name === "prize_4_digits")
+        return t.results.prize_4_digits;
+      if (cat === "prize_modern_5" || name === "prize_modern_5")
+        return t.results.prize_modern_5;
+    }
 
     // Thai mappings
     if (cat === "prize_1" || name === "prize_1") return t.results.prize_1_thai;
@@ -143,8 +159,6 @@ export function DrawResult({
   const dynamicFirst = sortedDynamic[0];
   const dynamicRest = sortedDynamic.slice(1);
 
-  const isAustraliaUI = country?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("australia") || lotteryName?.toLowerCase().includes("powerball") || lotteryName?.toLowerCase().includes("oz lotto");
-
   if (isAustraliaUI) {
     return (
       <section className="relative overflow-hidden rounded-[1.5rem] bg-gray-50 dark:bg-[#1d1d1d] border border-gray-200 dark:border-white/5 shadow-2xl p-6 sm:p-8">
@@ -184,18 +198,29 @@ export function DrawResult({
         {useDynamic && dynamicRest.length > 0 && (
           <div className="flex justify-center mt-10">
             <div className="border border-gray-200 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] rounded-2xl px-12 py-6">
-              <div className="text-center text-gray-900 dark:text-white font-bold text-base mb-5 tracking-wide">{t.results.bonusNumber}</div>
-              <div className="flex flex-row justify-center gap-4">
-                {dynamicRest.map((prize) => getBalls(prize.winningNumbers).map((num, i) => (
-                  <LotteryBall
-                    key={`${prize.prizeName}-${i}`}
-                    number={num}
-                    size="lg"
-                    shape="squircle"
-                    color="dark-gray"
-                    className="!w-[3.5rem] !h-[3rem] sm:!w-[4.25rem] sm:!h-[3.5rem] !bg-gray-100 dark:!bg-[#535353] !border-gray-300 dark:!border-[#666] !rounded-2xl !text-xl !text-gray-800 dark:!text-white"
-                  />
-                )))}
+              <div className="flex flex-row flex-wrap justify-center gap-8 sm:gap-12">
+                {dynamicRest.map((prize, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div className="text-center text-gray-900 dark:text-white font-bold text-base mb-4 tracking-wide uppercase">
+                      {getPrizeName(prize)}
+                    </div>
+                    <div className="flex flex-row justify-center gap-3 sm:gap-4">
+                      {getBalls(prize.winningNumbers).map((num, i) => {
+                        const isSpecial = prize.prizeName?.toLowerCase().includes("power") || prize.prizeName?.toLowerCase().includes("mega") || prize.prizeName?.toLowerCase().includes("bonus");
+                        return (
+                          <LotteryBall
+                            key={`${prize.prizeName}-${i}`}
+                            number={num}
+                            size="lg"
+                            shape={isSpecial ? "circle" : "squircle"}
+                            color={isSpecial ? "blue" : "dark-gray"}
+                            className={!isSpecial ? "!w-[3.5rem] !h-[3rem] sm:!w-[4.25rem] sm:!h-[3.5rem] !bg-gray-100 dark:!bg-[#535353] !border-gray-300 dark:!border-[#666] !rounded-2xl !text-xl !text-gray-800 dark:!text-white" : "shadow-[0_4px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_10px_rgba(0,0,0,0.5)]"}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -235,14 +260,20 @@ export function DrawResult({
           <div className="mb-4 text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/15 px-5 py-2 text-fs-sm font-bold uppercase tracking-wider text-gold-400">
               <Trophy className="h-4 w-4" />
-              {useDynamic ? getPrizeName(dynamicFirst!) : (prizeLabels?.firstPrize || t.results.prize1)} (
-              {t.common.perPrize}{" "}
-              <span className="text-gray-900 dark:text-white ml-1">
-                {useDynamic
-                  ? `${dynamicFirst?.prizeAmount?.toLocaleString() || firstPrizeAmount}`
-                  : firstPrizeAmount}{" "}
-                {displayCurrency})
-              </span>
+              {useDynamic && isLao ? (
+                t.lotteryCard.firstPrize
+              ) : (
+                <>
+                  {useDynamic ? getPrizeName(dynamicFirst!) : (prizeLabels?.firstPrize || t.results.prize1)} (
+                  {t.common.perPrize}{" "}
+                  <span className="text-gray-900 dark:text-white ml-1">
+                    {useDynamic
+                      ? `${dynamicFirst?.prizeAmount?.toLocaleString() || firstPrizeAmount}`
+                      : firstPrizeAmount}{" "}
+                    {displayCurrency})
+                  </span>
+                </>
+              )}
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
@@ -288,7 +319,7 @@ export function DrawResult({
                     );
                   })}
                 </div>
-                {prize.prizeAmount > 0 && (
+                {prize.prizeAmount > 0 && !isLao && (
                   <span className="mt-1 block text-fs-badge text-gold-600 dark:text-gold-400">
                     {prize.prizeAmount.toLocaleString()} {displayCurrency}
                   </span>

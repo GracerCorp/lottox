@@ -82,10 +82,15 @@ export function RecentGlobalDraws({
     }
     
     if (c === "la") {
-      p.push({ label: "4 Digits", value: draw.firstPrize || d.first || d.digit4 || "-", highlight: true });
-      p.push({ label: "Animal", value: d.animal?.name || d.animal || "-", highlight: false });
-      if (d.additional || d.development) {
-        let dev = d.additional || d.development;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const fullData = (draw as any).fullData || {};
+      const pr = fullData.prizeResult || d.prizeResult || {};
+      p.push({ label: "4 Digits", value: pr.last4Prize || draw.firstPrize || d.first || d.digit4 || "-", highlight: true });
+      p.push({ label: "Animal", value: pr.animalName || d.animal?.name || d.animal || "-", highlight: false });
+      
+      const devJSON = pr.devNumberSet?.json;
+      if (devJSON || d.additional || d.development) {
+        let dev = devJSON || d.additional || d.development;
         if (Array.isArray(dev)) dev = dev.join(" ");
         p.push({ label: "Development Lottery", value: dev || "00 00 00 00 00", highlight: false });
       } else {

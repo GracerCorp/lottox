@@ -67,7 +67,7 @@ export function PrizeTierSection({
   const { t } = useLanguage();
   const displayCurrency = currency || t.common.currency;
 
-  if (!numbers || numbers.length === 0) return null;
+  if (!numbers) return null;
 
   return (
     <section
@@ -80,14 +80,14 @@ export function PrizeTierSection({
           {title}
         </h3>
         <div className="text-fs-sm text-gray-500 dark:text-gray-400">
-          {count} {t.common.perPrize}{" "}
+          {count > 0 && `${count} ${t.common.perPrize} `}
           <span className="font-bold text-amber-600 dark:text-gold-300">
             {amount} {displayCurrency}
           </span>
         </div>
       </div>
       {/* Number Grid */}
-      <PrizeGrid numbers={numbers} columns={columns} />
+      {numbers.length > 0 && <PrizeGrid numbers={numbers} columns={columns} />}
     </section>
   );
 }

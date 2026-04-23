@@ -66,9 +66,22 @@ export function LatestUpdateCard({
 
         {/* Data Box */}
         <div className="mt-4 flex-1 rounded-xl border border-neutral-200 dark:border-white/5 bg-neutral-50 dark:bg-[#202020] p-4 flex flex-col">
-          {/* Top Line: Time & Date */}
-          <div className="text-xs text-neutral-500 dark:text-gray-400 mb-3 font-medium">
-            {time && <>{time} <span className="opacity-50 px-0.5">|</span> </>}{date}
+          {/* Top Line: Time & Date & Prize */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-xs text-neutral-500 dark:text-gray-400 font-medium">
+              {time && <>{time} <span className="opacity-50 px-0.5">|</span> </>}{date}
+            </div>
+            {(() => {
+              const mainPrize = numbers.find((p) => p.isMain);
+              if (mainPrize && mainPrize.prize && !mainPrize.prize.startsWith("-")) {
+                return (
+                  <div className="text-[10px] font-bold text-amber-600 dark:text-gold-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    {mainPrize.prize}
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </div>
 
           {/* Values Grid */}

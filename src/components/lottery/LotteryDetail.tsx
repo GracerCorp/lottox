@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { DrawResult, type DrawResultProps } from "./DrawResult";
 import { DrawPageHeader } from "./DrawPageHeader";
@@ -7,12 +8,10 @@ import { PrizeTierSection } from "./PrizeTierSection";
 import { PreviousDrawsSidebar } from "./PreviousDrawsSidebar";
 import { FindByNumber } from "./FindByNumber";
 import { RecentGlobalDraws } from "./RecentGlobalDraws";
-import { NewsSidebar } from "@/components/ui/NewsSidebar";
 import { InteractiveTicketVerifier } from "./InteractiveTicketVerifier";
 import { LaoAnimalList } from "./LaoAnimalList";
-import { NewspaperIcon, ArrowRight, AlertTriangle, Calendar, Award } from "lucide-react";
+import { AlertTriangle, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import Link from "next/link";
 import { useApi } from "@/lib/hooks/useApi";
 import { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
 import { getFlagUrl } from "@/lib/flags";
@@ -72,6 +71,7 @@ export default function LotteryDetail({
   howToPlayImage,
   hideVerification = false,
 }: LotteryDetailProps) {
+  const [isImageOpen, setIsImageOpen] = useState(false);
   const { t, language } = useLanguage();
   const dd = t.staticParams.drawDetail;
   const {
@@ -128,7 +128,7 @@ export default function LotteryDetail({
   const p1Cats = ["prize_1", "prizeFirst", "prizeSpecial", "prize_4_digits"];
   const p1Num = getPrizeNumber(rawData, p1Names, p1Cats, 1) || [rawData?.first || rawData?.firstPrize];
   const firstPrize = p1Num && p1Num.length > 0 && p1Num[0] !== undefined ? p1Num[0] : "-";
-  const firstPrizeAmount = getPrizeAmount(rawData, p1Names, p1Cats, 1) || rawData?.firstPrizeAmount || "6000000";
+  const firstPrizeAmount = getPrizeAmount(rawData, p1Names, p1Cats, 1) || rawData?.firstPrizeAmount || (countryCode !== "th" ? "-" : "6000000");
 
   // 3-digit front
   const pFront3Names = ["3 Front", "เลขหน้า 3 ตัว", "รางวัลเลขหน้า 3 ตัว"];
@@ -156,7 +156,19 @@ export default function LotteryDetail({
 
   // Dynamic prizes for non-Thai
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawPrizes = (rawData?.prizes || []) as any[];
+  let rawPrizes = (rawData?.prizes || []) as any[];
+  
+  if (rawPrizes.length === 0 && rawData?.prizeResult) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pr = rawData.prizeResult as any;
+    rawPrizes = [
+      ...(pr.last4Prize ? [{ prizeName: "4 Digits", winningNumbers: [pr.last4Prize], order: 1 }] : []),
+      ...(pr.last3Prize1 || pr.last3Prize2 ? [{ prizeName: "3 Digits", winningNumbers: [pr.last3Prize1, pr.last3Prize2].filter(Boolean), order: 2 }] : []),
+      ...(pr.last2Prize ? [{ prizeName: "2 Digits", winningNumbers: [pr.last2Prize], order: 3 }] : []),
+      ...(pr.devNumberSet?.json ? [{ prizeName: "Development Lottery", winningNumbers: pr.devNumberSet.json, order: 4 }] : []),
+    ];
+  }
+
   const isNonThai = countryCode !== "th";
 
   /* ---------- Dynamic Prizes for Non-Thai ---------- */
@@ -174,105 +186,95 @@ export default function LotteryDetail({
   if (isNonThai && rawPrizes.length > 0) {
     const sorted = [...rawPrizes].sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
-    sorted.forEach((p) => {
-      const name = (p.prizeName || p.category || "").toLowerCase();
+    if (countryCode === "au" && fullData) {
+      // For Australia, forcefully build hero prizes from fullData to avoid scraper artifacts
+      dynamicHeroPrizes.push({
+        prizeName: t.common?.winningNumbers || "Winning Numbers",
+        prizeAmount: Number(sorted[0]?.amount || sorted[0]?.prizeAmount || sorted[0]?.reward || 0),
+        winningNumbers: Array.isArray(fullData.mainNumbers) ? (fullData.mainNumbers as unknown[]).map(String) : (fullData.main_numbers ? (Array.isArray(fullData.main_numbers) ? fullData.main_numbers.map(String) : [String(fullData.main_numbers)]) : []),
+      });
 
-      let pNumbers = p.winningNumbers || p.number || [];
-      
-      // Forcefully pull correct numbers natively from fullData for Australia to avoid verification artifact bugs
-      if (countryCode === "au" && fullData) {
-        if (name.includes("main") || name.includes("winning")) {
-          pNumbers = fullData.mainNumbers || pNumbers;
-        } else if (name.includes("supp") || name.includes("bonus")) {
-          pNumbers = fullData.supplementary || pNumbers;
-        } else if (name.includes("powerball")) {
-          pNumbers = fullData.powerball || pNumbers;
-        }
-      }
-
-      let nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers])
-        .map(String)
-        .filter((s) => s !== "undefined" && s !== "null" && s !== "");
-
-      // Protect against scraper bugs where Australia supplementary arrays contain 40+ previous historical balls
-      if (countryCode === "au") {
-        const lowerLottoName = lotteryName?.toLowerCase() || "";
-        if (
-          name.includes("supp") ||
-          name.includes("bonus") ||
-          name.includes("powerball")
-        ) {
-          let maxSupps = 1;
-          if (lowerLottoName.includes("oz lotto")) maxSupps = 3;
-          else if (
-            lowerLottoName.includes("saturday") ||
-            lowerLottoName.includes("monday") ||
-            lowerLottoName.includes("wednesday") ||
-            lowerLottoName.includes("set for life") ||
-            lowerLottoName.includes("weekday windfall")
-          ) {
-            maxSupps = 2;
-          }
-          if (nums.length > maxSupps) nums = nums.slice(0, maxSupps);
-        } else if (name.includes("main") || name.includes("winning")) {
-          let maxMain = 6;
-          if (
-            lowerLottoName.includes("oz lotto") ||
-            lowerLottoName.includes("powerball") ||
-            lowerLottoName.includes("set for life")
-          ) {
-            maxMain = 7;
-          }
-          if (nums.length > maxMain) nums = nums.slice(0, maxMain);
-        }
-      }
-      let isHero = false;
-
-      if (dynamicHeroPrizes.length === 0) {
-        isHero = true;
-      } else {
-        switch(countryCode) {
-          case 'la':
-            isHero = true;
-            break;
-          case 'vn':
-            if (name.includes("jackpot")) isHero = true;
-            break;
-          case 'sg':
-            if (name.includes("2nd") || name.includes("3rd") || name.includes("additional")) isHero = true;
-            break;
-          case 'jp':
-            if (name.includes("bonus") || name.includes("carry")) isHero = true;
-            break;
-          case 'au': case 'ca': case 'gb': case 'uk': case 'eu': case 'us':
-            if (name.includes("bonus") || name.includes("powerball") || name.includes("mega") || name.includes("lucky") || name.includes("supplementary")) isHero = true;
-            break;
-          default:
-            if (nums.length <= 3 && dynamicHeroPrizes.length < 4 && !name.includes("tier") && !name.includes("division") && !name.includes("group") && !name.includes("consolation") && !name.includes("starter")) {
-              isHero = true;
-            }
-            break;
-        }
-      }
-
-      if (isHero) {
+      if (fullData.powerball) {
         dynamicHeroPrizes.push({
-          prizeName: p.prizeName || p.category || "Prize",
-          prizeAmount: Number(p.amount || p.prizeAmount || p.reward || 0),
-          winningNumbers: nums,
-          order: p.order,
-          category: p.category,
-          prizeCount: p.prizeCount,
+          prizeName: "Powerball",
+          prizeAmount: 0,
+          winningNumbers: Array.isArray(fullData.powerball) ? (fullData.powerball as unknown[]).map(String) : [String(fullData.powerball)],
         });
-      } else {
-        dynamicTierPrizes.push({
-          title: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
-          count: nums.length,
-          amount: formatAmount(p.amount || p.prizeAmount || p.reward || p.prize_amount || "0"),
-          numbers: nums,
+      } else if (fullData.supplementary) {
+        dynamicHeroPrizes.push({
+          prizeName: "Supplementary",
+          prizeAmount: 0,
+          winningNumbers: Array.isArray(fullData.supplementary) ? fullData.supplementary : [fullData.supplementary],
         });
       }
-    });
+
+      // Tier prizes
+      sorted.forEach((p) => {
+        dynamicTierPrizes.push({
+          title: getPrizeName(p.prizeName || p.category || p.match || "Prize", p.category, t, false),
+          count: 0,
+          amount: formatAmount(p.amount || p.prizeAmount || p.reward || p.prize_amount || "0"),
+          numbers: [],
+        });
+      });
+    } else {
+      sorted.forEach((p) => {
+        const name = (p.prizeName || p.category || p.match || "").toLowerCase();
+
+        const pNumbers = p.winningNumbers || p.number || [];
+        
+        const nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers])
+          .map(String)
+          .filter((s) => s !== "undefined" && s !== "null" && s !== "");
+
+        let isHero = false;
+
+        if (dynamicHeroPrizes.length === 0) {
+          isHero = true;
+        } else {
+          switch(countryCode) {
+            case 'la':
+              isHero = true;
+              break;
+            case 'vn':
+              if (name.includes("jackpot")) isHero = true;
+              break;
+            case 'sg':
+              if (name.includes("2nd") || name.includes("3rd") || name.includes("additional")) isHero = true;
+              break;
+            case 'jp':
+              if (name.includes("bonus") || name.includes("carry")) isHero = true;
+              break;
+            case 'ca': case 'gb': case 'uk': case 'eu': case 'us':
+              if (name.includes("bonus") || name.includes("powerball") || name.includes("mega") || name.includes("lucky") || name.includes("supplementary")) isHero = true;
+              break;
+            default:
+              if (nums.length <= 3 && dynamicHeroPrizes.length < 4 && !name.includes("tier") && !name.includes("division") && !name.includes("group") && !name.includes("consolation") && !name.includes("starter")) {
+                isHero = true;
+              }
+              break;
+          }
+        }
+
+        if (isHero) {
+          dynamicHeroPrizes.push({
+            prizeName: p.prizeName || p.category || p.match || "Prize",
+            prizeAmount: Number(p.amount || p.prizeAmount || p.reward || 0),
+            winningNumbers: nums,
+            order: p.order,
+            category: p.category,
+            prizeCount: p.prizeCount,
+          });
+        } else {
+          dynamicTierPrizes.push({
+            title: getPrizeName(p.prizeName || p.category || p.match || "Prize", p.category, t, countryCode === "la"),
+            count: nums.length,
+            amount: formatAmount(p.amount || p.prizeAmount || p.reward || p.prize_amount || "0"),
+            numbers: nums,
+          });
+        }
+      });
+    }
   }
 
   /* ---------- DrawResult Props ---------- */
@@ -328,7 +330,7 @@ export default function LotteryDetail({
         const pNumbers = p.winningNumbers || p.number || [];
         const nums = (Array.isArray(pNumbers) ? pNumbers : [pNumbers]).map(String).filter((s: string) => s !== "undefined" && s !== "null");
         allPrizes.push({
-          name: getPrizeName(p.prizeName || p.category || "Prize", p.category, t),
+          name: getPrizeName(p.prizeName || p.category || "Prize", p.category, t, countryCode === "la"),
           amount: formatAmount(p.amount || p.prizeAmount || p.reward || "0"),
           numbers: nums,
         });
@@ -363,7 +365,9 @@ export default function LotteryDetail({
       const p1Nums = sorted[0].winningNumbers || sorted[0].number || [];
       rFirstPrize = (Array.isArray(p1Nums) ? p1Nums.join(" ") : String(p1Nums)) || "-";
     } else {
-      const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || [d?.first || d?.firstPrize];
+      const pr = d.prizeResult || {};
+      const fallbackFirst = pr.last4Prize ? [pr.last4Prize] : [d?.first || d?.firstPrize];
+      const rp1Num = getPrizeNumber(d, p1Names, p1Cats, 1) || fallbackFirst;
       rFirstPrize = rp1Num && rp1Num.length > 0 && rp1Num[0] !== undefined ? rp1Num[0] : "-";
       const rf3 = getPrizeNumber(d, pFront3Names, pFront3Cats) || d?.first3?.number || d?.last3f || d?.front3 || [];
       rFront3 = String(Array.isArray(rf3) ? rf3.join(" ") : rf3) || "-";
@@ -425,7 +429,7 @@ export default function LotteryDetail({
 
           {/* 3. Prize Grids (2nd–5th) */}
           {prizeTiers
-            .filter((tier) => tier.numbers.length > 0)
+            .filter((tier) => tier.numbers.length > 0 || (countryCode === "au" && tier.amount && tier.amount !== "0"))
             .map((tier, i) => (
               <PrizeTierSection
                 key={i}
@@ -455,22 +459,26 @@ export default function LotteryDetail({
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                 How to Play {lotteryName}
               </h3>
-              <div className="flex flex-col lg:flex-row gap-8">
+              <div className="flex flex-col gap-6">
                 {howToPlayImage && (
-                  <div className="lg:w-1/3 flex-shrink-0">
-                    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50">
+                  <div className="w-full flex-shrink-0 cursor-pointer" onClick={() => setIsImageOpen(true)}>
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 h-[254px] group">
                       <Image 
                         src={howToPlayImage} 
                         alt={`How to play ${lotteryName}`} 
-                        width={600} 
-                        height={800} 
-                        className="object-cover w-full"
+                        fill
+                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                       />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                        <span className="opacity-0 group-hover:opacity-100 text-white font-medium px-4 py-2 bg-black/50 rounded-full backdrop-blur-sm transition-opacity">
+                          View full image
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}
                 {howToPlayText && (
-                  <div className="lg:flex-1 prose prose-slate dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
+                  <div className="prose prose-slate dark:prose-invert max-w-none text-gray-600 dark:text-gray-300">
                     <ReactMarkdown>{howToPlayText}</ReactMarkdown>
                   </div>
                 )}
@@ -613,6 +621,30 @@ export default function LotteryDetail({
           /> */}
         </aside>
       </div>
+
+      {/* Image Modal */}
+      {isImageOpen && howToPlayImage && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 sm:p-8 backdrop-blur-sm" onClick={() => setIsImageOpen(false)}>
+          <div className="relative w-full max-w-6xl h-[85vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-end mb-4">
+              <button 
+                className="text-white hover:text-gray-300 bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors focus:outline-none"
+                onClick={() => setIsImageOpen(false)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="relative w-full flex-1">
+              <Image
+                src={howToPlayImage}
+                alt={`How to play ${lotteryName} full size`}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

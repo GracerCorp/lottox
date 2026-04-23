@@ -42,7 +42,7 @@ export function LotteryCardV2({
   return (
     <Link href={href} className={cn("block group/card w-full mb-4 md:mb-6", isHoverable && "hover-enabled")}>
       <div className={cn(
-        "relative overflow-hidden rounded-[24px] aspect-square bg-neutral-900 border border-gray-200 dark:border-white/5 shadow-2xl transition-all duration-300",
+        "relative overflow-hidden rounded-[24px] aspect-[9/16] bg-neutral-900 border border-gray-200 dark:border-white/5 shadow-2xl transition-all duration-300",
         isHoverable && "group-hover/card:scale-[1.02] group-hover/card:ring-1 group-hover/card:ring-gold-new/50 group-hover/card:shadow-[0_0_20px_rgba(216,176,95,0.4)]"
       )}>
         
@@ -53,14 +53,14 @@ export function LotteryCardV2({
               src={bgImage}
               alt={name}
               fill
-              className="object-cover opacity-60 mix-blend-luminosity"
+              className="object-cover opacity-80 mix-blend-luminosity"
               priority={imgPriority}
               sizes="(max-width: 768px) 90vw, 25vw"
             />
           </div>
         )}
         
-        <div className="absolute inset-0 z-0 bg-gradient-to-t from-neutral-950/95 via-neutral-950/80 to-neutral-950/40" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/60 to-neutral-950/20" />
 
         <div className="relative z-10 flex flex-col h-full p-4 sm:p-5">
           {/* Top: Flag + Country + Lottery Name */}
@@ -89,30 +89,30 @@ export function LotteryCardV2({
           </div>
 
           {/* Middle: Prizes */}
-          <div className="flex flex-col flex-1 justify-center items-center py-4 space-y-4">
+          <div className="flex flex-col flex-1 justify-center items-center py-4 space-y-4 sm:space-y-6">
             {firstPrize && (
               <div className="text-center w-full">
-                <span className="block text-[11px] font-medium text-white/50 mb-1 tracking-widest uppercase">
+                <span className="block text-xs sm:text-sm font-medium text-white/60 mb-2 tracking-widest uppercase">
                   {firstPrize.label}
                 </span>
-                <span className="block text-2xl sm:text-3xl font-bold tracking-tight text-white drop-shadow-md">
+                <span className="block text-4xl sm:text-5xl font-extrabold tracking-tighter text-white drop-shadow-lg">
                   {firstPrize.amount}
                 </span>
               </div>
             )}
             
             {pairPrizes.length > 0 && (
-              <div className="flex w-full justify-center gap-6">
+              <div className="flex w-full justify-center gap-8">
                 {pairPrizes.map((prize, idx) => (
                   <div key={idx} className="text-center relative">
-                    <span className="block text-[10px] text-white/50 mb-0.5 tracking-wider uppercase">
+                    <span className="block text-[11px] sm:text-xs text-white/60 mb-1 tracking-wider uppercase">
                       {prize.label}
                     </span>
-                    <span className="block text-[13px] font-semibold text-white/90">
+                    <span className="block text-lg sm:text-xl font-bold text-white/90 tracking-tight">
                       {prize.amount}
                     </span>
                     {idx === 0 && pairPrizes.length > 1 && (
-                      <div className="absolute right-[-12px] top-1/2 -translate-y-1/2 w-px h-6 bg-white/10" />
+                      <div className="absolute right-[-16px] top-1/2 -translate-y-1/2 w-px h-8 bg-white/20" />
                     )}
                   </div>
                 ))}
