@@ -5,7 +5,7 @@ import { Trophy } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const getBalls = (numbersStrOrArr: string[] | string): string[] => {
-  if (!numbersStrOrArr) return [];
+  if (!numbersStrOrArr) return ["-"];
   if (Array.isArray(numbersStrOrArr)) {
     if (numbersStrOrArr.length > 1) return numbersStrOrArr;
     if (numbersStrOrArr.length === 1) {
@@ -16,9 +16,10 @@ const getBalls = (numbersStrOrArr: string[] | string): string[] => {
       if (item.includes("-")) return item.split("-").map(s => s.trim()).filter(Boolean);
       return item.split("");
     }
-    return [];
+    return ["-"];
   }
   const s = String(numbersStrOrArr || "").trim();
+  if (s === "") return ["-"];
   if (s === "-") return ["-"];
   if (s.includes(",")) return s.split(",").map(x => x.trim()).filter(Boolean);
   if (s.includes(" ")) return s.split(" ").map(x => x.trim()).filter(Boolean);

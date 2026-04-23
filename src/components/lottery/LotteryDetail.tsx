@@ -462,7 +462,7 @@ export default function LotteryDetail({
               <div className="flex flex-col gap-6">
                 {howToPlayImage && (
                   <div className="w-full flex-shrink-0 cursor-pointer" onClick={() => setIsImageOpen(true)}>
-                    <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 h-[254px] group">
+                    <div className="relative w-full aspect-video max-h-[254px] rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 mx-auto group">
                       <Image 
                         src={howToPlayImage} 
                         alt={`How to play ${lotteryName}`} 
