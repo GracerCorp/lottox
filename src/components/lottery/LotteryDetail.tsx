@@ -23,10 +23,6 @@ import {
   formatDateDisplay,
   GenericPrizeData,
 } from "@/lib/utils/lotteryUtils";
-import AISummary from "./ai/AISummary";
-import AIFaqs from "./ai/AIFaqs";
-import AITrends from "./ai/AITrends";
-import AdSenseSlot from "../ads/AdSenseSlot";
 
 const formatAmount = (val: string | number | undefined | null): string => {
   if (!val) return "0";
@@ -427,9 +423,6 @@ export default function LotteryDetail({
             adjacentAmount={drawResultProps.adjacentAmount}
           />
 
-          {/* Ad Top */}
-          <AdSenseSlot position="top" />
-
           {/* Lao Animal List (Dynamic rendering if animals data is available) */}
           {(() => {
             const animals = ((rawData as Record<string, unknown>)?.animals || fullData?.animals) as (string | import("./LaoAnimalList").ArrayAnimal)[] | undefined;
@@ -450,10 +443,6 @@ export default function LotteryDetail({
                 columns={5}
               />
             ))}
-
-          {/* Ad Middle */}
-          <AdSenseSlot position="middle" />
-
 
           {/* 4. Inline Ticket Verifier */}
           {!hideVerification && (
