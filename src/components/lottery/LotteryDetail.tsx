@@ -430,11 +430,6 @@ export default function LotteryDetail({
           {/* Ad Top */}
           <AdSenseSlot position="top" />
 
-          {/* AI Summary */}
-          {aiContent?.summary && (
-            <AISummary summary={aiContent.summary} />
-          )}
-
           {/* Lao Animal List (Dynamic rendering if animals data is available) */}
           {(() => {
             const animals = ((rawData as Record<string, unknown>)?.animals || fullData?.animals) as (string | import("./LaoAnimalList").ArrayAnimal)[] | undefined;
@@ -464,10 +459,6 @@ export default function LotteryDetail({
           {/* Ad Middle */}
           <AdSenseSlot position="middle" />
 
-          {/* AI FAQs */}
-          {aiContent?.faqs && aiContent.faqs.length > 0 && (
-            <AIFaqs faqs={aiContent.faqs} />
-          )}
 
           {/* 4. Inline Ticket Verifier */}
           {!hideVerification && (
