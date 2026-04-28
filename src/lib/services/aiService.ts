@@ -1,5 +1,3 @@
-import { generateObject } from 'ai';
-import { google } from '@ai-sdk/google';
 import { z } from 'zod';
 import { Redis } from '@upstash/redis';
 import { AIContent } from '../api-types';
