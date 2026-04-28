@@ -65,7 +65,7 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
   ];
 
   return (
-    <section className="group relative z-20 w-full h-[100svh] min-h-[600px] bg-neutral-50 dark:bg-neutral-950 transition-all duration-700 hover:shadow-[inset_0_0_100px_rgba(216,176,95,0.05)]">
+    <section className="group relative z-20 w-full h-[100svh] min-h-[600px] bg-neutral-80 dark:bg-neutral-650 transition-all duration-700 hover:shadow-[inset_0_0_100px_rgba(216,176,95,0.03)]">
       {/* Required Keyframes for scrolling */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes scrollUp {
@@ -79,7 +79,7 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
       <div className="absolute inset-0 z-0 overflow-hidden">
         <div className="container mx-auto px-4 h-full relative">
           {/* Top mask */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-50/90 via-neutral-50/40 dark:from-neutral-950/90 dark:via-neutral-950/40 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-900/95 via-neutral-80/20 dark:from-neutral-650/80 dark:via-neutral-650/30 to-transparent z-10 pointer-events-none" />
 
           {/* Ambient Golden Glow */}
           <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-new/20 via-transparent to-transparent mix-blend-screen opacity-50 dark:opacity-100" />
@@ -98,7 +98,7 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
       </div>
 
       {/* Bottom text overlay */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white/95 via-white/40 dark:from-[#111111]/95 dark:via-[#111111]/40 to-transparent flex flex-col justify-end pointer-events-none">
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-white/95 via-white/40 dark:from-[#111111]/60 dark:via-[#111111]/10 to-transparent flex flex-col justify-end pointer-events-none">
         <div className="container mx-auto px-4 pb-8 md:pb-16 pointer-events-auto">
           <div className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6">
             

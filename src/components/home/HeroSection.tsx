@@ -85,7 +85,7 @@ export function HeroSection({ items = [] }: { items?: HeroItem[] }) {
       )}
 
       {/* Gradient overlay on top of bg image */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-80/80 via-slate-50/90 to-slate-50 dark:from-neutral-950/60 dark:via-neutral-950/60 dark:to-neutral-950 pointer-events-none z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-80/90 via-slate-80/90 to-slate-80 dark:from-neutral-650/60 dark:via-neutral-650/60 dark:to-neutral-650 pointer-events-none z-[1]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
