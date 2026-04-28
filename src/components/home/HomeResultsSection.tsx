@@ -129,7 +129,7 @@ function HomeResultsContent({ tabs }: HomeResultsSectionProps) {
       {/* All Global Results CTA */}
       <div className="flex justify-center mt-8">
         <Link
-          href="/global-results"
+          href="/global_results"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-gold-500/60 text-gold-400 text-sm font-semibold transition-all duration-200 hover:bg-gold-500 hover:text-neutral-950 hover:shadow-md hover:shadow-gold-500/20"
         >
           {t.common.allGlobalResults || "All Global Results"}

@@ -34,7 +34,7 @@ export function LatestUpdateFilter({
     <div className="flex w-full overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
       <div className="flex flex-nowrap items-center gap-3 w-max mx-auto md:mx-0">
         <Link
-          href="/global-results"
+          href="/global_results"
           className="flex shrink-0 items-center gap-2 px-4 py-2 rounded-full text-sm transition-all duration-200 border border-neutral-200 dark:border-white/20 bg-transparent text-neutral-900 dark:text-white hover:bg-neutral-100 dark:hover:bg-white/10"
         >
           <Compass className="h-4 w-4 shrink-0" />

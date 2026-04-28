@@ -6,7 +6,8 @@ import { Breadcrumb, BreadcrumbJsonLd } from "@/components/ui/Breadcrumb";
 import { LotteryResultJsonLd } from "@/components/seo/LotteryResultJsonLd";
 import { getDictionary } from "@/lib/i18n";
 import FAQJsonLd from "@/components/seo/FAQJsonLd";
-import { mockAiContent } from "@/lib/mockAiData";
+import { generateLotteryInsights } from "@/lib/services/aiService";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 interface PageProps {
   params: Promise<{
@@ -68,6 +69,50 @@ export default async function DrawPage({ params }: PageProps) {
     last2: r.prize2 ?? "2 Bottom",
   };
 
+  let initialData;
+  try {
+    const dataByDate = await apiClient.getGlobalResults({
+      limit: 1,
+      country: countryInfo.code,
+      date: date,
+    });
+    
+    const exactMatch = dataByDate.draws[0];
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let historyResults: any[] = [];
+    try {
+      const historyData = await apiClient.getResultsByType(apiType, 10, 0);
+      if (historyData && historyData.history) {
+        historyResults = historyData.history;
+      }
+    } catch {
+      console.error("Failed to fetch history for date route");
+    }
+
+    if (exactMatch) {
+      initialData = {
+        latest: {
+          dateDisplay: exactMatch.drawDate,
+          date: exactMatch.drawDate,
+          drawNo: exactMatch.drawNo,
+          data: exactMatch.data,
+        },
+        history: historyResults,
+      };
+    }
+  } catch (error) {
+    console.error("Failed to prefetch lottery detail for date:", error);
+  }
+
+  const aiContent = await generateLotteryInsights(
+    countryInfo.name, 
+    lotteryInfo.name, 
+    `on ${date}`,
+    lotteryInfo.id.toString(),
+    initialData
+  );
+
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
@@ -78,7 +123,7 @@ export default async function DrawPage({ params }: PageProps) {
         currency={lotteryInfo.currency ?? undefined}
         url={`https://lottox.today/${country}/${lottery}/${date}`}
       />
-      <FAQJsonLd faqs={mockAiContent.faqs} />
+      <FAQJsonLd faqs={aiContent.faqs} />
       <div className="container mx-auto px-4 pt-4 relative z-50">
         <Breadcrumb items={breadcrumbItems} />
       </div>
@@ -95,7 +140,8 @@ export default async function DrawPage({ params }: PageProps) {
         howToPlayImage={lotteryInfo.how_to_play_image}
         prizeLabels={prizeLabels}
         hideVerification={true}
-        aiContent={mockAiContent}
+        initialData={initialData as import("@/lib/api-types").ResultsByTypeResponse | undefined}
+        aiContent={aiContent}
       />
     </>
   );

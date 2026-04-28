@@ -635,6 +635,11 @@ const en = {
           "Running Lower: Pays 4.2 : 1",
         ],
       },
+    },
+    cookieConsent: {
+      message: "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
+      learnMore: "Learn More",
+      accept: "Accept",
     }
 };
 

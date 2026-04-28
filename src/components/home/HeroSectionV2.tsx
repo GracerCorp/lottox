@@ -101,7 +101,7 @@ export function HeroSectionV2({ items = [] }: { items?: HeroItem[] }) {
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <Link 
-                href="/global-results"
+                href="/global_results"
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-neutral-200 dark:border-white/20 bg-white/50 dark:bg-white/5 text-neutral-700 dark:text-white hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm backdrop-blur-md font-medium text-sm"
               >
                 <Compass className="w-4 h-4 text-gold-new" strokeWidth={2.5}/>

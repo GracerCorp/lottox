@@ -81,11 +81,11 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
           {/* Top mask */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-neutral-50/90 via-neutral-50/40 dark:from-neutral-950/90 dark:via-neutral-950/40 to-transparent z-10 pointer-events-none" />
 
-          {/* Ambient Golden Glow on Hover */}
-          <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-new/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 mix-blend-screen" />
+          {/* Ambient Golden Glow */}
+          <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-new/20 via-transparent to-transparent mix-blend-screen opacity-50 dark:opacity-100" />
 
           {/* Grid layout */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 h-full items-start opacity-100">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 h-full items-start opacity-40 dark:opacity-60 transition-opacity duration-700 group-hover:opacity-60 dark:group-hover:opacity-80">
             {/* Mobile single column (combination of col1 and col2 for reasonable loop length) */}
             <ScrollingColumn colItems={[...col1, ...col2]} speedStr="100s" className="mt-4 md:hidden" isHoverable={true} priorityCount={2} />
             {/* Desktop columns */}
@@ -120,9 +120,9 @@ export function HeroSectionV3({ items = [], lotteryGroups = [] }: { items?: Hero
               <CheckLotteryWidget lotteryGroups={lotteryGroups} variant="hero" />
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2 pb-8">
               <Link 
-                href="/global-results"
+                href="/global_results"
                 className="flex items-center gap-2 px-6 py-[10px] rounded-[100px] border border-neutral-200 bg-transparent text-neutral-700 hover:bg-neutral-100 dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:bg-transparent dark:hover:border-gold-new hover:shadow-[0_0_15px_rgba(216,176,95,0.5)] transition-all duration-300 backdrop-blur-md font-medium text-[15px] group/btn"
               >
                 <Compass className="w-4 h-4 text-current transition-transform duration-300 group-hover/btn:rotate-45" strokeWidth={2.5}/>

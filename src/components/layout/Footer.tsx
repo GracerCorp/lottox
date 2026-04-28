@@ -8,7 +8,7 @@ export function Footer() {
   const { t } = useLanguage();
 
   const links = [
-    { title: t.footer.worldDashboard, href: "/global-results" },
+    { title: t.footer.worldDashboard, href: "/global_results" },
     { title: t.footer.faq, href: "/faq" },
     { title: t.footer.contact, href: "/contact" },
     { title: t.footer.disclaimer, href: "/disclaimer" },

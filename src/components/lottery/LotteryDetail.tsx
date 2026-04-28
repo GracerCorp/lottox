@@ -480,11 +480,11 @@ export default function LotteryDetail({
             />
           )}
 
-          {/* 4.5. How to Play */}
+          {/* 4.5. About */}
           {(howToPlayText || howToPlayImage) && (
             <div className="bg-white dark:bg-neutral-900/80 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none mb-8">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                How to Play {lotteryName}
+                About {lotteryName}
               </h3>
               <div className="flex flex-col gap-6">
                 {howToPlayImage && (
@@ -492,7 +492,7 @@ export default function LotteryDetail({
                     <div className="relative w-full aspect-video max-h-[254px] rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-black/50 mx-auto group">
                       <Image 
                         src={howToPlayImage} 
-                        alt={`How to play ${lotteryName}`} 
+                        alt={`About ${lotteryName}`} 
                         fill
                         className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                       />
@@ -664,8 +664,8 @@ export default function LotteryDetail({
             <div className="relative w-full flex-1">
               <Image
                 src={howToPlayImage}
-                alt={`How to play ${lotteryName} full size`}
                 fill
+                alt={`About ${lotteryName} full size`}
                 className="object-contain"
               />
             </div>

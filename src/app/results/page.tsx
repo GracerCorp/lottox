@@ -1,4 +1,4 @@
-import GlobalDrawsPage from "../global-results/page";
+import GlobalDrawsPage from "../global_results/page";
 
 export default function ResultsPage() {
   return <GlobalDrawsPage />;

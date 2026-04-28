@@ -24,7 +24,7 @@ export function Header() {
 
   const allNavItems = [
     { label: t.header.home, href: "/", featureKey: "nav_home" },
-    { label: t.header.results, href: "/global-results", featureKey: "nav_global_result" },
+    { label: t.header.results, href: "/global_results", featureKey: "nav_global_result" },
     { label: t.header.news, href: "/news", featureKey: "nav_articles" },
   ];
 

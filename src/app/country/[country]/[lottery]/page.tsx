@@ -5,7 +5,7 @@ import { getLotteryBySlug } from "@/lib/services/lotteryService";
 import { apiClient } from "@/lib/services/lotteryResultService";
 import { getDictionary } from "@/lib/i18n";
 import FAQJsonLd from "@/components/seo/FAQJsonLd";
-import { mockAiContent } from "@/lib/mockAiData";
+import { generateLotteryInsights } from "@/lib/services/aiService";
 
 interface PageProps {
   params: Promise<{ country: string; lottery: string }>;
@@ -55,10 +55,17 @@ export default async function LotteryPage({ params }: PageProps) {
     last2: r.prize2 ?? "2 Bottom",
   };
 
+  const aiContent = await generateLotteryInsights(
+    countryInfo.name, 
+    lotteryInfo.name, 
+    initialData?.latest?.dateDisplay ? `on ${initialData.latest.dateDisplay}` : "recently",
+    lotteryInfo.id.toString(),
+    initialData
+  );
 
   return (
     <>
-      <FAQJsonLd faqs={mockAiContent.faqs} />
+      <FAQJsonLd faqs={aiContent.faqs} />
       <LotteryDetail
         country={countryInfo.name}
         countryCode={countryInfo.code}
@@ -73,7 +80,7 @@ export default async function LotteryPage({ params }: PageProps) {
         howToPlayImage={lotteryInfo.how_to_play_image}
         prizeLabels={prizeLabels}
         hideVerification={true}
-        aiContent={mockAiContent}
+        aiContent={aiContent}
       />
     </>
   );

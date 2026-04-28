@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import GlobalDrawsPage from "../global-results/page";
+import { GlobalResultsSection } from "@/components/global-results/GlobalResultsSection";
 
 export const metadata: Metadata = {
   title: "Today's Lottery Results - Lottox",
@@ -7,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function ResultTodayPage() {
-  return <GlobalDrawsPage />;
+  return (
+    <main className="container mx-auto px-4 py-12 flex flex-col gap-16 relative">
+      <GlobalResultsSection />
+    </main>
+  );
 }

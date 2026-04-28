@@ -102,7 +102,7 @@ export function LotteryCard({
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-[24px] aspect-square group cursor-pointer border transition-all duration-500",
+          "relative overflow-hidden rounded-[24px] aspect-[9/16] group cursor-pointer border transition-all duration-500",
           isActive
             ? "border-gold-400/40 shadow-2xl"
             : "border-white/10 shadow-lg",
