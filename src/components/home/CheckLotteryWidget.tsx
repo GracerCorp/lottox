@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Search, Loader2, CheckCircle2, XCircle, ChevronDown } from "lucide-react";
+import { Search, Loader2, XCircle, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFlagUrl } from "@/lib/flags";
-import { type Language } from "@/lib/i18n";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import { JackpotResult, StandardWinResult, NoWinResult } from "./ResultStates";
 import { getRule, type LotteryNumberRule } from "@/lib/utils/lotteryValidation";
 

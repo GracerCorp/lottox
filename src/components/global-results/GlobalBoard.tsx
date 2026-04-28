@@ -25,7 +25,7 @@ interface RegionData {
 
 
 export function GlobalBoard() {
-  const { t } = useLanguage();
+  const { } = useLanguage();
   
   const { data, loading, error } = useApi<LotteriesListResponse>("/api/lotteries");
   const [pinned, setPinned] = useState<PinnedLottery[]>([]);
@@ -269,7 +269,7 @@ export function GlobalBoard() {
 
       {/* Pagination & Options */}
       {!loading && !error && filteredLotteries.length > 0 && (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 py-4 border-t border-gray-200 dark:border-white/10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 py-4 border-border-gray-200 dark:border-white/10">
           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <span>Results per page:</span>
             <select 

@@ -52,7 +52,7 @@ export const newsService = {
       if (typeof article.content === "string") {
         try {
           contentData = JSON.parse(article.content);
-        } catch (_e) {
+        } catch {
           console.warn(`[getNews] Failed to parse content for article ${article.slug}`);
           contentData = {};
         }
@@ -115,7 +115,7 @@ export const newsService = {
     if (typeof article.content === "string") {
       try {
         contentData = JSON.parse(article.content);
-      } catch (_e) {
+      } catch {
         console.warn(`[getNewsDetail] Failed to parse content for article ${article.slug}`);
         contentData = {};
       }

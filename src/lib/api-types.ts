@@ -77,6 +77,15 @@ export interface VietnamResultData {
   digit2Bottom: string;
 }
 
+// AI Content shape
+export interface AIContent {
+  summary: string;
+  faqs: { question: string; answer: string }[];
+  trends: string;
+  seoTitle: string;
+  seoDescription: string;
+}
+
 // GET /api/results/{type}
 export interface ResultsByTypeResponse {
   latest: {
@@ -97,6 +106,7 @@ export interface ResultsByTypeResponse {
     fullData?: Record<string, unknown>;
   }[];
   total: number;
+  aiContent?: AIContent;
 }
 
 // GET /api/results/global

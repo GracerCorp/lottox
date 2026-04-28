@@ -2,7 +2,7 @@ import { getLotteryCardData } from "@/lib/services/lotteryService";
 import { getLotteriesByCountry } from "@/lib/services/lotteryService";
 import { CountryHeroSection } from "@/components/country/CountryHeroSection";
 import { LotteryCard } from "@/components/home/LotteryCard";
-import { CheckLotteryWidget, type LotteryGroup } from "@/components/home/CheckLotteryWidget";
+
 import { getDictionary } from "@/lib/i18n";
 import Link from "next/link";
 import { Trophy } from "lucide-react";
@@ -126,22 +126,6 @@ export default async function CountryPage({ params }: PageProps) {
     { from: "#1e3d3d", to: "#06b6d4" },
   ];
 
-  // Build lottery groups for the CheckLotteryWidget dropdown
-  const lotteryGroups: LotteryGroup[] = cardData.length > 0
-    ? [
-        {
-          countryCode: countryKey,
-          countryName,
-          lotteries: cardData.map((c) => ({
-            id: String(c.id),
-            name: c.name,
-            countryCode: c.countryCode,
-            countryName: c.countryName,
-            logo: c.logo ?? null,
-          })),
-        },
-      ]
-    : [];
 
 
   return (

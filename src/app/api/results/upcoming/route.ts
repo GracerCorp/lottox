@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
           const prize1 = prizes["prize_1"] || prizes["jackpot"] || prizes["firstPrize"] || Object.values(prizes)[0];
           if (prize1) expectedPrize = Number(prize1).toLocaleString();
         }
-      } catch (e) {
+      } catch {
         // ignore JSON parse errors or other issues
       }
       
@@ -99,4 +99,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";

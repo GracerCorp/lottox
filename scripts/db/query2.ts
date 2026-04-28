@@ -1,4 +1,4 @@
-import { apiClient } from "./src/lib/services/lotteryResultService";
+import { apiClient } from "@/lib/services/lotteryResultService";
 
 async function main() {
   const data = await apiClient.getGlobalResults({ limit: 5 });

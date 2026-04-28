@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LotteryCard } from '../../components/ui/LotteryCard';
@@ -5,7 +6,7 @@ import { LotteryCard } from '../../components/ui/LotteryCard';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/link', () => ({ default: ({ children, href, ...props }: any) => <a href={href} {...props}>{children}</a> }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} alt="" /> }));
 vi.mock('../../components/ui/LotteryBall', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   LotteryBall: ({ number }: any) => <span data-testid="lottery-ball">{number}</span>,

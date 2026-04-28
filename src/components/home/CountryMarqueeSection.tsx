@@ -30,6 +30,7 @@ export function CountryMarqueeSection({
   const row1 = [...row1Items, ...row1Items];
   const row2 = [...row2Items, ...row2Items];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const Chip = ({ country, index }: { country: CountryListItem; index: number }) => {
     const localizedName =
       t.countryList?.countries?.[
@@ -38,7 +39,7 @@ export function CountryMarqueeSection({
 
     return (
       <Link
-        href={`/${country.id}`}
+        href={`/country/${country.id}`}
         className="marquee-item group flex items-center gap-4 px-5 py-3.5 rounded-2xl border border-white/10 bg-[#1A1A1A] hover:bg-[#262626] hover:border-gold-500/50 transition-all duration-300 hover:scale-[1.02] shadow-sm flex-shrink-0"
       >
         <div className="relative w-10 h-6 flex-shrink-0 overflow-hidden rounded shadow-sm">

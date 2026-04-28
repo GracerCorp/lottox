@@ -21,8 +21,8 @@ import { Breadcrumb, BreadcrumbJsonLd } from "@/components/ui/Breadcrumb";
 describe("Breadcrumb", () => {
   const items = [
     { label: "Home", href: "/" },
-    { label: "Thailand", href: "/th" },
-    { label: "Government Lottery", href: "/th/government-lottery-glo" },
+    { label: "Thailand", href: "/country/th" },
+    { label: "Government Lottery", href: "/country/th/government-lottery-glo" },
     { label: "2025-03-16" },
   ];
 
@@ -73,7 +73,7 @@ describe("Breadcrumb", () => {
 describe("BreadcrumbJsonLd", () => {
   const items = [
     { label: "Home", href: "/" },
-    { label: "Thailand", href: "/th" },
+    { label: "Thailand", href: "/country/th" },
     { label: "Draw Date" },
   ];
 

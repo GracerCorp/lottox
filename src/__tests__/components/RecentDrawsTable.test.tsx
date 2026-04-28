@@ -28,7 +28,7 @@ describe('RecentDrawsTable', () => {
   it('renders "Previous Draws" link when slugs provided', () => {
     wrap(<RecentDrawsTable country="Thailand" draws={draws} countrySlug="th" lotterySlug="thai-lottery" />);
     const link = screen.getAllByText('Previous Draws')[0];
-    expect(link.closest('a')).toHaveAttribute('href', '/th/thai-lottery');
+    expect(link.closest('a')).toHaveAttribute('href', '/country/th/thai-lottery');
   });
 
   it('renders "Previous Draws" button when no slugs', () => {

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LatestDrawCard } from '../../components/global-results/LatestDrawCard';
@@ -24,8 +25,9 @@ vi.mock('../../lib/utils/lotteryUtils', () => ({
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fill, priority, ...rest } = props;
-    return <img {...rest} data-fill={fill ? "true" : undefined} />;
+    return <img {...rest} data-fill={fill ? "true" : undefined} alt="" />;
   }
 }));
 

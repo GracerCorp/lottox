@@ -32,7 +32,7 @@ export function RecentDrawsTable({
         </h3>
         {countrySlug && lotterySlug ? (
           <Link
-            href={`/${countrySlug}/${lotterySlug}`}
+            href={`/country/${countrySlug}/${lotterySlug}`}
             className="text-sm text-gold-600 dark:text-gold-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             {"Previous Draws"}

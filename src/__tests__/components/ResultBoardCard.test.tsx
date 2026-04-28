@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ResultBoardCard } from '../../components/global-results/ResultBoardCard';
@@ -8,8 +9,9 @@ vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/image', () => ({ default: (props: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { fill, priority, ...rest } = props;
-  return <img {...rest} data-fill={fill ? "true" : undefined} />;
+  return <img {...rest} data-fill={fill ? "true" : undefined} alt="" />;
 }}));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/link', () => ({ default: ({ children, href }: any) => <a href={href}>{children}</a> }));
@@ -28,8 +30,7 @@ vi.mock('../../components/global-results/DrawHistoryRow', () => ({
   ),
 }));
 vi.mock('../../components/global-results/BoardPagination', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  BoardPagination: (props: any) => <div data-testid="board-pagination" />,
+  BoardPagination: () => <div data-testid="board-pagination" />,
 }));
 
 describe('ResultBoardCard', () => {

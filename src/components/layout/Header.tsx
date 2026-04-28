@@ -14,6 +14,7 @@ import { getFlagUrl } from "@/lib/flags";
 
 export function Header() {
   const { t, language, toggleLanguage } = useLanguage();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isFeatureEnabled, toggles } = useFeatureToggles();
   const { countryCode, countryName, isLoading: locationLoading } = useUserLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

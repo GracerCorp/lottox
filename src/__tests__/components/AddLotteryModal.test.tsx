@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -42,7 +43,7 @@ vi.mock("@/lib/hooks/useApi", () => ({
 
 vi.mock("next/image", () => ({
   __esModule: true,
-  default: (props: Record<string, unknown>) => <img {...props} />,
+  default: (props: Record<string, unknown>) => <img {...props} alt="" />,
 }));
 
 function wrap(

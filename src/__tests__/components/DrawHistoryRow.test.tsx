@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { DrawHistoryRow } from "@/components/global-results/DrawHistoryRow";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const defaultLabels = {
   digits6: "6-Digit",
   digits3First: "Front 3",

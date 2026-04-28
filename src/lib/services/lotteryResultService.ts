@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "../prisma";
 import type { Prisma } from "@prisma/client";
 import { resolveCountryCode, getDisplayType } from "../utils/countryResolver";
+import cronParser from "cron-parser";
 
 type LotteryResultWithIncludes = {
   id: number;
@@ -744,26 +745,122 @@ class ApiClient {
 
   // Statistics
   async getStatsOverview() {
-    const [totalResults, activeLottos, countries] = await prisma.$transaction([
+    const [totalResults, activeLottos, countries, activeJobs] = await prisma.$transaction([
       prisma.lottery_results.count(),
       prisma.lotteries.count({ where: { is_active: true } }),
       prisma.countries.count({ where: { is_active: true } }),
+      prisma.lottery_jobs.findMany({
+        where: { status: "active", lotteries: { is_active: true } },
+        select: { cron_schedule: true },
+      }),
     ]);
+
+    let upcomingDraws24h = 0;
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    for (const job of activeJobs) {
+      if (job.cron_schedule) {
+        try {
+          const interval = cronParser.parse(job.cron_schedule, { tz: 'Asia/Bangkok' });
+          const nextDate = interval.next().toDate();
+          if (nextDate >= now && nextDate <= tomorrow) {
+            upcomingDraws24h++;
+          }
+        } catch {
+          // Ignore invalid cron expressions
+        }
+      }
+    }
 
     return {
       totalJackpotsTracked: totalResults.toString(), // Approximation based on DB counts
       activeLotteries: activeLottos,
-      upcomingDraws24h: 0, // Need schedule implementation logic to calc properly
+      upcomingDraws24h,
       totalCountries: countries,
     };
   }
 
   async getStatsFrequency(type: string, draws: number = 30) {
+    const res = await this.getResultsByType(type, draws, 0);
+    const results = res.history;
+
+    const frequency: Record<string, number> = {};
+
+    for (const r of results) {
+      const data = r.fullData as Record<string, unknown>;
+      if (!data) continue;
+
+      const collectedNumbers: string[] = [];
+
+      // 1. Standard prizes array
+      if (Array.isArray(data.prizes)) {
+        for (const prize of data.prizes as Record<string, unknown>[]) {
+          if (Array.isArray(prize.winningNumbers)) {
+            collectedNumbers.push(...(prize.winningNumbers as unknown[]).map(String));
+          }
+        }
+      } 
+      // 2. Flat field format
+      else if (data.prizeResult) {
+        const pr = data.prizeResult as Record<string, unknown>;
+        const flatFields = ['last4Prize', 'last3Prize1', 'last3Prize2', 'last2Prize'];
+        for (const field of flatFields) {
+          if (pr[field]) {
+            collectedNumbers.push(String(pr[field]));
+          }
+        }
+        const devSet = pr.devNumberSet as Record<string, unknown> | undefined;
+        if (devSet && Array.isArray(devSet.json)) {
+          collectedNumbers.push(...(devSet.json as unknown[]).map(String));
+        }
+      } 
+      // 3. Fallback generic traversal
+      else {
+        const collectFromTraverse = (obj: unknown): void => {
+          if (Array.isArray(obj)) {
+            obj.forEach((item) => {
+              if (typeof item === "string" || typeof item === "number") {
+                collectedNumbers.push(String(item));
+              } else {
+                collectFromTraverse(item);
+              }
+            });
+          } else if (obj !== null && typeof obj === "object") {
+            const record = obj as Record<string, unknown>;
+            if (record.number) collectedNumbers.push(String(record.number));
+            if (record.winningNumber) collectedNumbers.push(String(record.winningNumber));
+            for (const value of Object.values(record)) {
+              if (typeof value === "object") collectFromTraverse(value);
+            }
+          }
+        };
+        collectFromTraverse(data);
+      }
+
+      // Count the valid numbers
+      for (const num of collectedNumbers) {
+        const str = num.trim();
+        // Ignore single non-numeric/empty strings. Some numbers might be padded with zeros (e.g., "02", "00"), let's allow them.
+        if (str && str !== "-" && !isNaN(Number(str))) { 
+          frequency[str] = (frequency[str] || 0) + 1;
+        }
+      }
+    }
+
+    // Sort frequency map
+    const sortedFreq = Object.entries(frequency).sort((a, b) => b[1] - a[1]);
+    const top5Hot = sortedFreq.slice(0, 5).map(e => ({ number: e[0], count: e[1] }));
+    const bottom5Cold = sortedFreq.slice(-5).reverse().map(e => ({ number: e[0], count: e[1] }));
+
     return {
       type,
       draws,
-      frequency: {}, // Needs complex aggregation logic over JSON fields
-      trends: {},
+      frequency,
+      trends: {
+        hot: top5Hot,
+        cold: bottom5Cold,
+      },
     };
   }
 }

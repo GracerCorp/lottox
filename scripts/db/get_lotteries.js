@@ -1,11 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
   const lotteries = await prisma.lotteries.findMany({
-    where: { id: { in: [1, 5, 16, 19] } } // Thai, Lao, Magnum 4D, Singapore 4D
+    include: { countries: true }
   });
-  
   console.log(JSON.stringify(lotteries, null, 2));
 }
 

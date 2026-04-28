@@ -14,7 +14,7 @@ vi.mock('../../contexts/LanguageContext', () => ({
 
 // Partial mock for mapApiResultToRow to simplify test
 vi.mock('../../components/ui/ResultsTable', () => ({
-  mapApiResultToRow: vi.fn((res, t, lang) => {
+  mapApiResultToRow: vi.fn((res) => {
     if (res.id === 'invalid') return null;
     return {
       id: res.id,

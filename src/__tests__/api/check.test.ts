@@ -17,7 +17,7 @@ vi.mock("@/lib/utils/lotteryValidation", () => ({
 }));
 
 vi.mock("@/lib/utils/apiErrorHandler", () => ({
-  handleApiError: vi.fn((_err: unknown) =>
+  handleApiError: vi.fn(() =>
     NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   ),
 }));

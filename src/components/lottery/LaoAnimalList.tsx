@@ -13,7 +13,7 @@ export interface LaoAnimalListProps {
 }
 
 export function LaoAnimalList({ animals }: LaoAnimalListProps) {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   if (!animals || animals.length === 0) return null;
 

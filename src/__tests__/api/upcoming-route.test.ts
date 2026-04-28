@@ -50,7 +50,7 @@ describe("GET /api/results/upcoming", () => {
   it("respects limit query parameter", async () => {
     vi.mocked(prisma.lotteries.findMany).mockResolvedValue([mockLotteries[0]] as never);
     const response = await GET(makeRequest("?limit=1"));
-    const data = await response.json();
+    await response.json();
     expect(response.status).toBe(200);
     expect(prisma.lotteries.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ take: 1 }),

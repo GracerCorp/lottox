@@ -106,6 +106,7 @@ export default async function Home() {
 
   // Deduplicate by country code
   const seen = new Set<string>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const tabs = [
     { id: "all", label: "all", flag: null },
     ...countries

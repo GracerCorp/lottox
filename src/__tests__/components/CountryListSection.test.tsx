@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { CountryListSection } from "@/components/home/CountryListSection";
@@ -5,8 +6,9 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 
 vi.mock("next/image", () => ({
   default: (props: Record<string, unknown>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fill, priority, ...rest } = props;
-    return <img {...rest} data-fill={fill ? "true" : undefined} />;
+    return <img {...rest} data-fill={fill ? "true" : undefined} alt="" />;
   },
 }));
 
@@ -53,8 +55,8 @@ describe("CountryListSection", () => {
     const { container } = renderSection();
     const links = container.querySelectorAll("a");
     expect(links.length).toBe(mockCountries.length);
-    expect(links[0].getAttribute("href")).toBe("/th");
-    expect(links[1].getAttribute("href")).toBe("/la");
+    expect(links[0].getAttribute("href")).toBe("/country/th");
+    expect(links[1].getAttribute("href")).toBe("/country/la");
   });
 
   it("uses grid layout", () => {

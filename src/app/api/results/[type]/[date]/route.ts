@@ -51,7 +51,7 @@ export async function GET(
       if (historyData && historyData.history) {
         historyResults = historyData.history;
       }
-    } catch (_e) {
+    } catch {
       console.error("Failed to fetch history for date route");
     }
 
@@ -79,4 +79,4 @@ export async function GET(
   }
 }
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";

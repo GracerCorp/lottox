@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { HeroSectionV3 as HeroSection } from "@/components/home/HeroSectionV3";
@@ -27,7 +29,7 @@ const mockItems = [
     nextDraw: "Jan 16, 2026",
     gradientFrom: "#D4AF37",
     gradientTo: "#B8860B",
-    href: "/th/government-lottery",
+    href: "/country/th/government-lottery",
     bgImage: "https://example.com/bg-th.jpg",
     prizes: [{ label: "1st Prize", amount: "฿6,000,000" }],
     nextDrawDate: new Date(Date.now() + 86400000).toISOString(),
@@ -41,7 +43,7 @@ const mockItems = [
     nextDraw: "Jan 16, 2026",
     gradientFrom: "#CE1126",
     gradientTo: "#002868",
-    href: "/la/lao-lotto",
+    href: "/country/la/lao-lotto",
     bgImage: "https://example.com/bg-la.jpg",
     prizes: [{ label: "1st Prize", amount: "6,000X" }],
     nextDrawDate: new Date(Date.now() + 172800000).toISOString(),

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
@@ -14,7 +15,7 @@ vi.mock("next/link", () => ({
 vi.mock("next/image", () => ({
   __esModule: true,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: (props: any) => <img {...props} />,
+  default: (props: any) => <img {...props} alt="" />,
 }));
 
 // Mock lucide-react

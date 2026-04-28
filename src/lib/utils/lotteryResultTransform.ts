@@ -21,8 +21,8 @@ interface RawResultData {
   [key: string]: unknown;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function transformLotteryResult(rawData: RawResultData, t: Record<string, any>) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function transformLotteryResult(rawData: RawResultData, _t?: Record<string, unknown>) {
   if (!rawData || !rawData.data || !rawData.data.prizes) {
     return null;
   }

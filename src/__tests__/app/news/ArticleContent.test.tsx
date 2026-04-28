@@ -1,9 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import NewsArticleContent from '@/app/news/[slug]/NewsArticleContent';
 import { useLanguage } from '@/contexts/LanguageContext';
-import * as navigation from 'next/navigation';
 
 vi.mock('@/contexts/LanguageContext', () => ({
   useLanguage: vi.fn(),
@@ -16,7 +16,7 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: (props: any) => <img {...props} />,
+  default: (props: any) => <img {...props} alt="" />,
 }));
 
 vi.mock('lucide-react', () => ({

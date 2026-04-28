@@ -62,7 +62,7 @@ export function PreviousDrawsSidebar({
           {displayItems.map((item, i) => (
             <Link
               key={i}
-              href={`/${countryCode}/${lotterySlug}/${historyItems[i]?.date || ""}`}
+              href={`/country/${countryCode}/${lotterySlug}/${historyItems[i]?.date || ""}`}
               className="block rounded-xl border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-[#222222] p-4 transition-colors hover:bg-gray-100 dark:hover:bg-white/5"
             >
               <div className="mb-3 text-sm text-gray-500 dark:text-gray-400">

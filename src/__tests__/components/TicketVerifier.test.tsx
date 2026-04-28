@@ -37,6 +37,7 @@ describe('TicketVerifier', () => {
     });
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const mockLottery = { id: 1, slug: 'thai-lottery' };
   
   it('renders correctly', () => {

@@ -13,7 +13,7 @@ import { LaoAnimalList } from "./LaoAnimalList";
 import { AlertTriangle, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useApi } from "@/lib/hooks/useApi";
-import { ResultsByTypeResponse, ThaiResultData } from "@/lib/api-types";
+import { ResultsByTypeResponse, ThaiResultData, AIContent } from "@/lib/api-types";
 import { getFlagUrl } from "@/lib/flags";
 import Image from "next/image";
 import {
@@ -23,6 +23,10 @@ import {
   formatDateDisplay,
   GenericPrizeData,
 } from "@/lib/utils/lotteryUtils";
+import AISummary from "./ai/AISummary";
+import AIFaqs from "./ai/AIFaqs";
+import AITrends from "./ai/AITrends";
+import AdSenseSlot from "../ads/AdSenseSlot";
 
 const formatAmount = (val: string | number | undefined | null): string => {
   if (!val) return "0";
@@ -54,6 +58,7 @@ export interface LotteryDetailProps {
   howToPlayText?: string | null;
   howToPlayImage?: string | null;
   hideVerification?: boolean;
+  aiContent?: AIContent;
 }
 
 export default function LotteryDetail({
@@ -70,6 +75,7 @@ export default function LotteryDetail({
   howToPlayText,
   howToPlayImage,
   hideVerification = false,
+  aiContent,
 }: LotteryDetailProps) {
   const [isImageOpen, setIsImageOpen] = useState(false);
   const { t, language } = useLanguage();
@@ -421,6 +427,14 @@ export default function LotteryDetail({
             adjacentAmount={drawResultProps.adjacentAmount}
           />
 
+          {/* Ad Top */}
+          <AdSenseSlot position="top" />
+
+          {/* AI Summary */}
+          {aiContent?.summary && (
+            <AISummary summary={aiContent.summary} />
+          )}
+
           {/* Lao Animal List (Dynamic rendering if animals data is available) */}
           {(() => {
             const animals = ((rawData as Record<string, unknown>)?.animals || fullData?.animals) as (string | import("./LaoAnimalList").ArrayAnimal)[] | undefined;
@@ -441,6 +455,19 @@ export default function LotteryDetail({
                 columns={5}
               />
             ))}
+
+          {/* AI Trends */}
+          {aiContent?.trends && (
+            <AITrends trends={aiContent.trends} />
+          )}
+
+          {/* Ad Middle */}
+          <AdSenseSlot position="middle" />
+
+          {/* AI FAQs */}
+          {aiContent?.faqs && aiContent.faqs.length > 0 && (
+            <AIFaqs faqs={aiContent.faqs} />
+          )}
 
           {/* 4. Inline Ticket Verifier */}
           {!hideVerification && (

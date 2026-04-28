@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Home, Search, ArrowRight } from "lucide-react";
+import { Home, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const POPULAR_LOTTERIES = [

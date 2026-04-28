@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getFlagUrl } from "@/lib/flags";
 import { formatDateDisplay } from "@/lib/utils/lotteryUtils";
-import { Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { slugify } from "@/lib/utils/lotteryUtils";
@@ -30,6 +29,7 @@ export function RecentGlobalDraws({
   limit = 5,
 }: RecentGlobalDrawsProps) {
   const { t, language } = useLanguage();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dd = t.staticParams.drawDetail;
 
   const [draws, setDraws] = useState<GlobalDraw[]>([]);

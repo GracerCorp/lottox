@@ -109,7 +109,7 @@ export function DashboardTable() {
                 {dateKey}
               </div>
               <div className="flex flex-col gap-0 divide-y divide-gray-100 dark:divide-white/5">
-                {dateRows.map((item, idx) => (
+                {dateRows.map((item) => (
                   <SingleLineRow key={item.href} item={item} />
                 ))}
               </div>

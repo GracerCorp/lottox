@@ -125,6 +125,7 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
 
   const first = draws[0];
   const latestResults = first ? extractNumbers(first.data, t) : [];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const mainNumberValue = latestResults.find(r => r.main)?.value || latestResults[0]?.value || "";
 
   const handlePrev = useCallback(() => setPage((p) => Math.max(1, p - 1)), []);
@@ -219,7 +220,7 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
         {!loading && !error && page === totalPages && (
           <div className="flex-1 flex items-center justify-center p-6 min-h-[140px]">
             <Link 
-              href={`/${countryCode.toLowerCase()}/${slugify(lotteryName)}`}
+              href={`/country/${countryCode.toLowerCase()}/${slugify(lotteryName)}`}
               className="px-6 py-3 bg-amber-400 hover:bg-amber-500 text-neutral-900 font-bold rounded-xl transition-colors shadow-sm"
             >
               View Lottery
@@ -247,7 +248,7 @@ export function ResultBoardCard({ lotteryName, countryCode, logo, onRemove, pinn
             }
           } catch { /* ignore */ }
           
-          const href = rawDateSlug ? `/${countryCode.toLowerCase()}/${slugify(lotteryName)}/${rawDateSlug}` : undefined;
+          const href = rawDateSlug ? `/country/${countryCode.toLowerCase()}/${slugify(lotteryName)}/${rawDateSlug}` : undefined;
           
           return (
             <DrawHistoryRow

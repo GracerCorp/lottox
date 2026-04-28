@@ -39,7 +39,7 @@ export function UpcomingLotterySidebar() {
       {!loading && !error && data?.upcoming && data.upcoming.map((item, i) => (
         <Link
           key={i}
-          href={`/${item.countryCode.toLowerCase()}/${slugify(item.name)}`}
+          href={`/country/${item.countryCode.toLowerCase()}/${slugify(item.name)}`}
           className="bg-white dark:bg-[#242424] border border-gray-100 dark:border-transparent rounded-2xl p-6 flex flex-col gap-5 shadow-lg w-full flex-1 justify-center hover:ring-2 hover:ring-gold-500/50 transition-all cursor-pointer group"
           data-testid="upcoming-item"
         >

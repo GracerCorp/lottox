@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { getLotteryBySlug } from "@/lib/services/lotteryService";
 import { apiClient } from "@/lib/services/lotteryResultService";
 import { getDictionary } from "@/lib/i18n";
+import FAQJsonLd from "@/components/seo/FAQJsonLd";
+import { mockAiContent } from "@/lib/mockAiData";
 
 interface PageProps {
   params: Promise<{ country: string; lottery: string }>;
@@ -55,20 +57,24 @@ export default async function LotteryPage({ params }: PageProps) {
 
 
   return (
-    <LotteryDetail
-      country={countryInfo.name}
-      countryCode={countryInfo.code}
-      lotteryName={lotteryInfo.name}
-      lotteryId={lotteryInfo.id}
-      lotterySlug={lottery}
-      apiEndpoint={`/api/results/${apiType}`}
-      logo={lotteryInfo.logo}
-      currency={lotteryInfo.currency}
-      initialData={initialData as import("@/lib/api-types").ResultsByTypeResponse | undefined}
-      howToPlayText={lotteryInfo.how_to_play_text}
-      howToPlayImage={lotteryInfo.how_to_play_image}
-      prizeLabels={prizeLabels}
-      hideVerification={true}
-    />
+    <>
+      <FAQJsonLd faqs={mockAiContent.faqs} />
+      <LotteryDetail
+        country={countryInfo.name}
+        countryCode={countryInfo.code}
+        lotteryName={lotteryInfo.name}
+        lotteryId={lotteryInfo.id}
+        lotterySlug={lottery}
+        apiEndpoint={`/api/results/${apiType}`}
+        logo={lotteryInfo.logo}
+        currency={lotteryInfo.currency}
+        initialData={initialData as import("@/lib/api-types").ResultsByTypeResponse | undefined}
+        howToPlayText={lotteryInfo.how_to_play_text}
+        howToPlayImage={lotteryInfo.how_to_play_image}
+        prizeLabels={prizeLabels}
+        hideVerification={true}
+        aiContent={mockAiContent}
+      />
+    </>
   );
 }

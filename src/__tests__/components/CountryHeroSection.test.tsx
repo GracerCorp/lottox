@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { CountryHeroSection } from '../../components/country/CountryHeroSection';
@@ -5,7 +6,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} alt="" /> }));
 
 describe('CountryHeroSection', () => {
   beforeEach(() => {

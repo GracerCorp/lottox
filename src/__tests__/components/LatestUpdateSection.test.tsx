@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { LatestUpdateSection } from "@/components/home/LatestUpdate/LatestUpdateSection";
@@ -40,8 +41,9 @@ vi.mock("@/lib/hooks/useApi", () => ({
 
 vi.mock("next/image", () => ({
   default: (props: Record<string, unknown>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { fill, priority, ...rest } = props;
-    return <img {...rest} data-fill={fill ? "true" : undefined} />;
+    return <img {...rest} data-fill={fill ? "true" : undefined} alt="" />;
   },
 }));
 

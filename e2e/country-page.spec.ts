@@ -4,7 +4,7 @@ test.describe("Country Page", () => {
   test("navigates to Thailand country page and shows hero section", async ({
     page,
   }) => {
-    await page.goto("/th");
+    await page.goto("/country/th");
 
     // Hero section should be visible
     const hero = page.getByTestId("country-hero");
@@ -12,7 +12,7 @@ test.describe("Country Page", () => {
   });
 
   test("displays country name in the hero for Thailand", async ({ page }) => {
-    await page.goto("/th");
+    await page.goto("/country/th");
 
     const countryName = page.getByTestId("country-name");
     await expect(countryName).toBeVisible();
@@ -21,13 +21,13 @@ test.describe("Country Page", () => {
   });
 
   test("shows official results label", async ({ page }) => {
-    await page.goto("/th");
+    await page.goto("/country/th");
     const label = page.getByTestId("official-results-label");
     await expect(label).toBeVisible();
   });
 
   test("shows lottery grid or no-lotteries message", async ({ page }) => {
-    await page.goto("/th");
+    await page.goto("/country/th");
 
     const grid = page.getByTestId("lottery-grid");
     const noLotteries = page.getByTestId("no-lotteries");
@@ -40,14 +40,14 @@ test.describe("Country Page", () => {
 
   test("shows flag placeholder for unknown country code", async ({ page }) => {
     // Navigate to a country that likely has no flag in DB
-    await page.goto("/xx");
+    await page.goto("/country/xx");
     // Page should load without crashing — hero may still show
     await expect(page.locator("body")).toBeVisible();
   });
 
   test("country page is responsive on mobile viewport", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/th");
+    await page.goto("/country/th");
     const hero = page.getByTestId("country-hero");
     await expect(hero).toBeVisible();
   });

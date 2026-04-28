@@ -1,10 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('../../contexts/LanguageContext', () => ({ useLanguage: vi.fn() }));
 vi.mock('../../lib/hooks/useApi', () => ({ useApi: vi.fn() }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-vi.mock('next/image', () => ({ default: (props: any) => <img {...props} /> }));
+vi.mock('next/image', () => ({ default: (props: any) => <img {...props} alt="" /> }));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('next/link', () => ({ default: ({ children, href }: any) => <a href={href}>{children}</a> }));
 vi.mock('../../lib/flags', () => ({ getFlagUrl: (c: string) => `/flags/${c}.svg` }));

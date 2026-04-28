@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Header } from '../../components/layout/Header';
@@ -14,7 +15,7 @@ vi.mock('next/link', () => ({
 
 vi.mock('next/image', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default: (props: any) => <img {...props} />,
+  default: (props: any) => <img {...props} alt="" />,
 }));
 
 vi.mock('next/navigation', () => ({

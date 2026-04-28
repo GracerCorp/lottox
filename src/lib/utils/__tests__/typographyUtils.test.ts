@@ -73,6 +73,7 @@ describe("typographyUtils", () => {
     });
 
     it("should have all keys be non-empty strings", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(typography).forEach(([key, value]) => {
         expect(typeof value).toBe("string");
         expect(value.length).toBeGreaterThan(0);

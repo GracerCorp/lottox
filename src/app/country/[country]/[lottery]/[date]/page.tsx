@@ -5,6 +5,8 @@ import { getLotteryBySlug } from "@/lib/services/lotteryService";
 import { Breadcrumb, BreadcrumbJsonLd } from "@/components/ui/Breadcrumb";
 import { LotteryResultJsonLd } from "@/components/seo/LotteryResultJsonLd";
 import { getDictionary } from "@/lib/i18n";
+import FAQJsonLd from "@/components/seo/FAQJsonLd";
+import { mockAiContent } from "@/lib/mockAiData";
 
 interface PageProps {
   params: Promise<{
@@ -76,6 +78,7 @@ export default async function DrawPage({ params }: PageProps) {
         currency={lotteryInfo.currency ?? undefined}
         url={`https://lottox.today/${country}/${lottery}/${date}`}
       />
+      <FAQJsonLd faqs={mockAiContent.faqs} />
       <div className="container mx-auto px-4 pt-4 relative z-50">
         <Breadcrumb items={breadcrumbItems} />
       </div>
@@ -92,6 +95,7 @@ export default async function DrawPage({ params }: PageProps) {
         howToPlayImage={lotteryInfo.how_to_play_image}
         prizeLabels={prizeLabels}
         hideVerification={true}
+        aiContent={mockAiContent}
       />
     </>
   );

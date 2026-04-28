@@ -11,13 +11,13 @@ test.describe('Home Page', () => {
   test('can navigate to country page', async ({ page }) => {
     await page.goto('/');
     
-    const countryLink = page.locator('a[href^="/th"]').first();
+    const countryLink = page.locator('a[href^="/country/th"]').first();
     if (await countryLink.count() > 0) {
       await countryLink.click();
       // Thailand country page uses "Government Lottery (GLO)" or "Thailand"
       await expect(page.locator('h1').first()).toBeVisible();
       // Ensure the page loads without 404
-      expect(page.url()).toContain('/th');
+      expect(page.url()).toContain('/country/th');
     }
   });
 });
