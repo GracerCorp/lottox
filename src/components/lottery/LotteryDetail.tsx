@@ -451,11 +451,6 @@ export default function LotteryDetail({
               />
             ))}
 
-          {/* AI Trends */}
-          {aiContent?.trends && (
-            <AITrends trends={aiContent.trends} />
-          )}
-
           {/* Ad Middle */}
           <AdSenseSlot position="middle" />
 
