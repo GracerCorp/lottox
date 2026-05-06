@@ -71,7 +71,7 @@ export default function LotteryDetail({
   howToPlayText,
   howToPlayImage,
   hideVerification = false,
-  aiContent,
+  _aiContent,
 }: LotteryDetailProps) {
   const [isImageOpen, setIsImageOpen] = useState(false);
   const { t, language } = useLanguage();

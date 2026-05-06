@@ -6,38 +6,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://lottox.today'
 
   // Fetch active lotteries to link to their country page
-  const countries = await prisma.countries.findMany({
-    where: { is_active: true },
-    include: {
-      lotteries: {
-        where: { is_active: true }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let countries: any[] = []
+  try {
+    countries = await prisma.countries.findMany({
+      where: { is_active: true },
+      include: {
+        lotteries: {
+          where: { is_active: true }
+        }
       }
-    }
-  })
+    })
+  } catch (error) {
+    console.error('Sitemap: Failed to fetch countries', error)
+  }
 
   // Query some recent results to generate dynamic URLs for past draws
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recentResults: any[] = await prisma.lottery_results.findMany({
-    take: 1000,
-    orderBy: { draw_date: 'desc' },
-    include: {
-      lottery: {
-        include: {
-          countries: true
+  let recentResults: any[] = []
+  try {
+    recentResults = await prisma.lottery_results.findMany({
+      take: 1000,
+      orderBy: { draw_date: 'desc' },
+      include: {
+        lottery: {
+          include: {
+            countries: true
+          }
+        }
+      },
+      where: {
+        validation_status: 'verified',
+        is_published: true,
+        lottery: {
+          is_active: true,
+          countries: {
+            is_active: true
+          }
         }
       }
-    },
-    where: {
-      validation_status: 'verified',
-      is_published: true,
-      lottery: {
-        is_active: true,
-        countries: {
-          is_active: true
-        }
-      }
-    }
-  })
+    })
+  } catch (error) {
+    console.error('Sitemap: Failed to fetch recent results', error)
+  }
 
   // Basic static routes
   const sitemap: MetadataRoute.Sitemap = [
@@ -110,7 +121,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Add country pages & lottery pages
-  countries.forEach(country => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  countries.forEach((country: any) => {
       const countryCode = country.code.toLowerCase();
       sitemap.push({
           url: `${baseUrl}/${countryCode}`,
@@ -120,7 +132,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       })
 
       // Add individual lotteries: /[country]/[lottery]
-      country.lotteries.forEach(lottery => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      country.lotteries.forEach((lottery: any) => {
           sitemap.push({
               url: `${baseUrl}/${countryCode}/${slugify(lottery.name)}`,
               lastModified: new Date(),
@@ -133,7 +146,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add specific draw dates: /[country]/[lottery]/[date]
   const addedDraws = new Set<string>(); // Prevent adding duplicates if multiple results somehow generated
 
-  recentResults.forEach(result => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recentResults.forEach((result: any) => {
       if (result.lottery && result.lottery.countries) {
           const countryCode = result.lottery.countries.code.toLowerCase();
           

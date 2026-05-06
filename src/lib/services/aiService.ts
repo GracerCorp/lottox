@@ -1,13 +1,9 @@
-import { z } from "zod";
-import { Redis } from "@upstash/redis";
-import { AIContent } from "../api-types";
-
 export async function generateLotteryInsights(
-  countryName: string,
-  lotteryName: string,
-  latestDateDisplay: string = "recently",
-  lotteryId: string,
-  rawResultData?: any, // We can pass the raw data here if we have it, to give the AI context
+  _countryName: string,
+  _lotteryName: string,
+  _latestDateDisplay: string = "recently",
+  _lotteryId: string,
+  _rawResultData?: unknown,
 ) {
   return {
     summary: "",

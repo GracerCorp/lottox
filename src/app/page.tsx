@@ -2,17 +2,19 @@ import { type HeroItem } from "@/components/home/HeroSection";
 import { HeroSectionV3 } from "@/components/home/HeroSectionV3";
 import { type LotteryGroup } from "@/components/home/CheckLotteryWidget";
 import { CountryMarqueeSection } from "@/components/home/CountryMarqueeSection";
-import dynamic from "next/dynamic";
+import NextDynamic from "next/dynamic";
 import { getActiveCountries } from "@/lib/services/lotteryService";
 import { getActiveBanners } from "@/lib/services/bannerService";
 import { getFlagUrl } from "@/lib/flags";
 import { slugify } from "@/lib/utils/lotteryUtils";
 import { JsonLd } from "@/components/seo/JsonLd";
 
-const GlobalStatsBanner = dynamic(
+export const dynamic = 'force-dynamic';
+
+const GlobalStatsBanner = NextDynamic(
   () => import("@/components/home/GlobalStatsBanner").then(m => ({ default: m.GlobalStatsBanner })),
 );
-const LatestUpdateSection = dynamic(
+const LatestUpdateSection = NextDynamic(
   () => import("@/components/home/LatestUpdate/LatestUpdateSection").then(m => ({ default: m.LatestUpdateSection })),
 );
 
