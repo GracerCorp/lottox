@@ -1,15 +1,15 @@
 FROM oven/bun:1 AS base
 
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 
 WORKDIR /app
 COPY package.json bun.lockb* ./
 COPY prisma ./prisma/
-COPY .env ./.env
+
 RUN bun install
 
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN bunx prisma generate
 RUN bun run build
 
