@@ -332,8 +332,4 @@ docker run -p 3000:3000 --env-file .env lottox
 Private project — all rights reserved.
 
 
-<!-- Security scan triggered at 2026-09-05 07:22:05 -->
 
-<!-- Security scan triggered at 2026-10-07 11:46:26 -->
-
-<!-- Security scan triggered at 2026-10-07 14:39:25 -->
